@@ -1,1 +1,1 @@
-import type{MetadataRoute}from"next";export default function sitemap():MetadataRoute.Sitemap{return[{url:"https://www.sthenofitness.com",changeFrequency:"monthly",priority:1}]}
+import type {MetadataRoute} from "next";export default function sitemap():MetadataRoute.Sitemap{return ["","/assessment","/pricing","/tools","/insights","/insights/progressive-overload"].map((path,i)=>({url:`https://www.sthenofitness.com${path}`,changeFrequency:(i?"monthly":"weekly") as "monthly"|"weekly",priority:i?0.7:1}))}

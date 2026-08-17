@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import {FreeAssessment} from "@/components/acquisition/free-assessment";export const metadata:Metadata={title:"Free fitness assessment | STHENO",description:"Get a practical training and nutrition starting blueprint in about two minutes."};export default function Page(){return <main className="public-page shell"><FreeAssessment/></main>}

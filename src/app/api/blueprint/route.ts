@@ -1,0 +1,3 @@
+import {NextResponse} from "next/server"; import {z} from "zod"; import {createBlueprint} from "@/modules/acquisition/blueprint";
+const schema=z.object({goal:z.enum(["strength","muscle","fat_loss","general"]),experience:z.enum(["new","returning","consistent"]),days:z.union([z.literal(2),z.literal(3),z.literal(4),z.literal(5)]),weightKg:z.number().min(40).max(220).optional(),diet:z.enum(["omnivore","vegetarian","vegan"])});
+export async function POST(request:Request){const parsed=schema.safeParse(await request.json().catch(()=>null));if(!parsed.success)return NextResponse.json({error:"Please check your answers."},{status:400});return NextResponse.json({blueprint:createBlueprint(parsed.data)});}
