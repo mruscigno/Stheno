@@ -1,7 +1,7 @@
 "use client";
 import {useState} from "react";import Link from "next/link";import {calculate,METHODOLOGY_VERSION,type ToolInput,type ToolSlug} from "@/modules/library/tools";
 const initial:ToolInput={weightKg:80,heightCm:175,age:35,sex:"female",activity:1.4,goal:"maintain",bodyFat:25,loadKg:60,reps:8,barKg:20,sets:3,distanceKm:5,minutes:30,restingHr:60,days:3};
-const fields:Record<string,(keyof ToolInput)[]>={body:["weightKg","heightCm","age","sex","activity","goal"],composition:["weightKg","bodyFat"],strength:["loadKg","reps"],plates:["loadKg","barKg"],volume:["sets","reps","loadKg"],running:["distanceKm","minutes"],race:["distanceKm","minutes"],heart:["age","restingHr"],schedule:["days"]};
+const fields:Record<string,(keyof ToolInput)[]>={body:["weightKg","heightCm","age","sex","activity","goal"],estimate:["weightKg","heightCm","age","sex"],weight:["weightKg"],composition:["weightKg","bodyFat"],strength:["loadKg","reps"],plates:["loadKg","barKg"],volume:["sets","reps","loadKg"],running:["distanceKm","minutes"],race:["distanceKm","minutes"],heart:["age","restingHr"],schedule:["days"]};
 const labels:Record<keyof ToolInput,string>={weightKg:"Body weight (kg)",heightCm:"Height (cm)",age:"Age",sex:"Sex used by the equation",activity:"Activity estimate",goal:"Goal",bodyFat:"Estimated body fat (%)",loadKg:"Load (kg)",reps:"Repetitions",barKg:"Bar weight (kg)",sets:"Sets",distanceKm:"Distance (km)",minutes:"Time or pace (minutes)",restingHr:"Resting heart rate",days:"Available training days"};
 export function Calculator({slug,kind}:{slug:ToolSlug;kind:string}){
  const[input,setInput]=useState(initial);const[result,setResult]=useState<ReturnType<typeof calculate>|null>(null);
