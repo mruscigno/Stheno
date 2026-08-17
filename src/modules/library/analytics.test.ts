@@ -1,0 +1,1 @@
+import{describe,expect,it}from"vitest";import{allowedLibraryProperties,forbiddenSensitiveProperties}from"./analytics";describe("library analytics privacy",()=>{it("does not permit calculator inputs",()=>forbiddenSensitiveProperties.forEach(x=>expect(allowedLibraryProperties).not.toContain(x)));});

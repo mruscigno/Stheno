@@ -1,0 +1,40 @@
+export type Pillar="getting-started"|"fat-loss"|"muscle-strength"|"nutrition"|"supplements"|"recovery";
+const rows:[string,string,Pillar,string][]=[
+["start-working-out","How to Start Working Out When You Don’t Know Where to Begin","getting-started","Start smaller than your motivation suggests: two repeatable full-body sessions beat an elaborate plan you cannot sustain."],
+["how-many-days-work-out","How Many Days a Week Should You Work Out?","getting-started","Two to four well-designed days cover most goals; the right number is the one your recovery and schedule support."],
+["workout-schedule-you-can-keep","The Best Workout Schedule Is the One You Can Actually Keep","getting-started","A schedule becomes effective through repetition, not novelty."],
+["how-long-should-workout-take","How Long Should a Good Workout Take?","getting-started","Most productive sessions fit in 35–75 minutes when exercise selection and rest are intentional."],
+["how-fat-loss-works","How Fat Loss Actually Works","fat-loss","Fat loss requires an energy deficit over time, while food quality, protein, training, sleep, and environment affect how sustainable it is."],
+["safe-weight-loss-rate","How Fast Should You Lose Weight?","fat-loss","A moderate pace protects training quality and makes course correction easier."],
+["scale-weight-fluctuations","Why Your Weight Can Go Up Even When You’re Losing Fat","fat-loss","Water, food mass, sodium, carbohydrate, and menstrual-cycle changes can hide a real fat-loss trend."],
+["lose-fat-preserve-muscle","How to Lose Fat Without Sacrificing Muscle","fat-loss","Strength training, sufficient protein, and a moderate deficit are the core muscle-retention tools."],
+["training-dose-build-muscle","How Much Training Do You Need to Build Muscle?","muscle-strength","Begin with enough challenging weekly sets to progress, then add only when recovery and performance support it."],
+["train-to-failure","Do You Need to Train to Failure?","muscle-strength","Most growth can happen close to failure; taking every set to failure adds fatigue that is not always useful."],
+["progressive-overload-guide","How Progressive Overload Actually Works","muscle-strength","Progressive overload is a long-term pattern of increased challenge, not an obligation to add weight every workout."],
+["strength-plateau","Why Your Strength Has Stopped Increasing","muscle-strength","Plateaus are diagnostic: review technique, programming, recovery, nutrition, and the time scale before changing everything."],
+["when-change-exercises","Do You Need to Change Exercises to Keep Making Progress?","muscle-strength","Keep useful exercises long enough to learn and measure them; change when fit, pain, equipment, or stagnation gives a reason."],
+["three-four-five-training-days","Three Days vs. Four Days vs. Five Days: How Much Should You Train?","muscle-strength","Frequency distributes work; it does not create results independently of weekly dose and consistency."],
+["how-much-protein","How Much Protein Do You Actually Need?","nutrition","A daily range around 1.6–2.0 g/kg is a practical starting point for many healthy training adults."],
+["calories-and-macros","Calories and Macros: What Matters Most?","nutrition","Energy balance shapes weight trend; protein and food pattern help shape performance, composition, and adherence."],
+["carbs-for-training","Carbs Are Not the Enemy: What They Actually Do for Training","nutrition","Carbohydrate is a useful training fuel, not a moral category."],
+["flexible-fitness-eating","How to Eat for Fitness Without Following a Rigid Meal Plan","nutrition","Use repeatable meal anchors and flexible portions instead of pursuing perfect menus."],
+["creatine-guide","Creatine: What It Does, How Much to Take, and What It Doesn’t Do","supplements","Creatine monohydrate can modestly support repeated high-intensity performance; it does not replace training."],
+["protein-powder","Protein Powder: Useful Tool or Expensive Necessity?","supplements","Protein powder is convenient food, not a requirement or shortcut."],
+["supplements-worth-considering","Which Workout Supplements Are Actually Worth Considering?","supplements","Most people need fewer supplements than marketing suggests; evaluate benefit, dose, testing, cost, and risk."],
+["sleep-fitness-results","How Much Does Sleep Matter for Strength, Muscle, and Fat Loss?","recovery","Sleep affects performance, appetite, learning, and recovery, but one poor night does not erase progress."],
+["missed-workout","What to Do When You Miss a Workout","recovery","Resume the plan without punishment; rearrange only when it improves the rest of the week."],
+["training-while-traveling","How to Keep Training When You Travel","recovery","Preserve the habit with short, equipment-flexible sessions and lower expectations for progression."],
+["fitness-after-40","Fitness After 40: What Actually Needs to Change?","recovery","The principles stay stable; warm-up, recovery, progression rate, and individual constraints deserve closer attention."],
+];
+export const articles=rows.map(([slug,title,pillar,thesis],i)=>({slug,title,pillar,thesis,description:thesis,audience:"Busy adults and fitness beginners",reviewStatus:"editorial_review" as const,methodologyVersion:"2026.08",evidenceVersion:"product-07",relatedTool:i<4?"workout-frequency":i<8?"weight-loss-timeline":i<14?"one-rep-max":i<18?"protein":i===18?"protein":"calorie-tdee"}));
+export const pillars=[
+ {slug:"training",title:"Training",description:"Build a schedule, learn progression, and make each session useful."},
+ {slug:"fat-loss",title:"Fat Loss",description:"Understand weight trends and plan a sustainable rate of change."},
+ {slug:"muscle-strength",title:"Muscle & Strength",description:"Apply useful volume, effort, exercise selection, and progression."},
+ {slug:"nutrition",title:"Nutrition",description:"Use calories, protein, and flexible food structure without rigid rules."},
+ {slug:"supplements",title:"Supplements",description:"Separate useful options from expensive promises."},
+ {slug:"recovery",title:"Recovery",description:"Keep training workable through sleep, missed sessions, travel, and life."},
+ {slug:"exercises",title:"Exercises",description:"Browse reviewed movements with clear setup, cues, and mistakes."},
+ {slug:"tools",title:"Calculators & Tools",description:"Use deterministic calculators that explain what their results mean."},
+] as const;
+export function findArticle(slug:string){return articles.find(a=>a.slug===slug)}
