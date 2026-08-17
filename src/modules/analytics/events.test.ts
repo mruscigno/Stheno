@@ -1,0 +1,1 @@
+import{describe,expect,it}from"vitest";import{eventNames}from"./events";describe("analytics taxonomy",()=>{it("contains stable unique names",()=>{expect(new Set(eventNames).size).toBe(eventNames.length);expect(eventNames).toContain("signup_completed")})})

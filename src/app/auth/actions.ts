@@ -1,0 +1,11 @@
+"use server";
+import { redirect } from "next/navigation";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+function value(data:FormData,key:string){return String(data.get(key)??"").trim()}
+export async function signUp(data:FormData){const client=await createSupabaseServerClient();if(!client)redirect("/signup?error=Configuration+required");const email=value(data,"email");const password=value(data,"password");const {error}=await client.auth.signUp({email,password,options:{emailRedirectTo:`${process.env.NEXT_PUBLIC_APP_URL??"http://localhost:3000"}/auth/callback`}});if(error)redirect(`/signup?error=${encodeURIComponent(error.message)}`);redirect("/login?message=Check+your+email+to+verify+your+account")}
+export async function signIn(data:FormData){const client=await createSupabaseServerClient();if(!client)redirect("/login?error=Configuration+required");const {error}=await client.auth.signInWithPassword({email:value(data,"email"),password:value(data,"password")});if(error)redirect(`/login?error=${encodeURIComponent(error.message)}`);redirect("/app")}
+export async function signOut(){const client=await createSupabaseServerClient();await client?.auth.signOut();redirect("/")}
+export async function requestReset(data:FormData){const client=await createSupabaseServerClient();if(client)await client.auth.resetPasswordForEmail(value(data,"email"),{redirectTo:`${process.env.NEXT_PUBLIC_APP_URL??"http://localhost:3000"}/reset-password`});redirect("/login?message=If+that+account+exists,+a+reset+link+is+on+its+way")}
+export async function updatePassword(data:FormData){const client=await createSupabaseServerClient();const {error}=client?await client.auth.updateUser({password:value(data,"password")}):{error:new Error("Configuration required")};if(error)redirect(`/reset-password?error=${encodeURIComponent(error.message)}`);redirect("/app?message=Password+updated")}
+export async function deleteAccount(){const client=await createSupabaseServerClient();const {data}=await client?.auth.getUser()??{data:{user:null}};if(!data.user)redirect("/login");await client?.from("profiles").update({deletion_requested_at:new Date().toISOString()}).eq("user_id",data.user.id);await client?.auth.signOut();redirect("/?message=Deletion+request+recorded")}

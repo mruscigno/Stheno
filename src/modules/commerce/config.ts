@@ -1,0 +1,1 @@
+import{z}from"zod";const schema=z.object({monthlyPriceId:z.string().startsWith("price_").optional(),annualPriceId:z.string().startsWith("price_").optional(),trialDays:z.literal(14)});export function commerceConfig(){return schema.parse({monthlyPriceId:process.env.STRIPE_MONTHLY_PRICE_ID,annualPriceId:process.env.STRIPE_ANNUAL_PRICE_ID,trialDays:14})}

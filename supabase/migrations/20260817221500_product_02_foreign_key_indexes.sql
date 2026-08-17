@@ -1,0 +1,6 @@
+drop index if exists public.assessment_responses_owner_idx;
+create index interpreted_context_candidates_source_entry_idx on public.interpreted_context_candidates(source_entry_id);
+create index personalization_profile_snapshots_assessment_idx on public.personalization_profile_snapshots(assessment_id);
+create index personalization_profile_snapshots_supersedes_idx on public.personalization_profile_snapshots(supersedes_snapshot_id);
+create index safety_screening_results_source_context_idx on public.safety_screening_results(source_context_entry_id);
+create index safety_screening_results_source_response_idx on public.safety_screening_results(source_response_id);

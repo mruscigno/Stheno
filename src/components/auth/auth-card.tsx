@@ -1,0 +1,3 @@
+import Image from "next/image";import Link from "next/link";import type{ReactNode}from"react";
+export function AuthCard({title,subtitle,children}: {title:string;subtitle:string;children:ReactNode}){return <main className="auth-wrap"><section className="card"><Link href="/"><Image src="/stheno-logo.png" alt="STHENO Fitness" width={150} height={54}/></Link><h1>{title}</h1><p className="muted">{subtitle}</p>{children}</section></main>}
+export function Field({label,name,type="text",autoComplete,required=true}:{label:string;name:string;type?:string;autoComplete?:string;required?:boolean}){return <div className="field"><label htmlFor={name}>{label}</label><input id={name} name={name} type={type} autoComplete={autoComplete} required={required}/></div>}

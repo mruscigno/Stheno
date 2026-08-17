@@ -1,0 +1,1 @@
+import type{EngineDecision}from"@/modules/fitness-engine/contracts";export interface CoachExplanationRequest{decision:EngineDecision;audience:"member"|"coach";locale:string}export interface CoachLanguageAdapter{explain(request:CoachExplanationRequest):Promise<string>}
