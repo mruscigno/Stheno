@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./library.css";
+import "./remediation.css";
+import "./editorial.css";
+import "./process.css";
+import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body><a className="skip-link" href="#main-content">Skip to content</a><div id="main-content">{children}</div></body>
+      <body><a className="skip-link" href="#main-content">Skip to content</a><SiteHeader/><div id="main-content">{children}</div><SiteFooter/></body>
     </html>
   );
 }

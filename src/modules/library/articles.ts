@@ -26,7 +26,7 @@ const rows:[string,string,Pillar,string][]=[
 ["training-while-traveling","How to Keep Training When You Travel","recovery","Preserve the habit with short, equipment-flexible sessions and lower expectations for progression."],
 ["fitness-after-40","Fitness After 40: What Actually Needs to Change?","recovery","The principles stay stable; warm-up, recovery, progression rate, and individual constraints deserve closer attention."],
 ];
-export const articles=rows.map(([slug,title,pillar,thesis],i)=>({slug,title,pillar,thesis,description:thesis,audience:"Busy adults and fitness beginners",reviewStatus:"editorial_review" as const,methodologyVersion:"2026.08",evidenceVersion:"product-07",relatedTool:i<4?"workout-frequency":i<8?"weight-loss-timeline":i<14?"one-rep-max":i<18?"protein":i===18?"protein":"calorie-tdee"}));
+export const articles=rows.map(([slug,title,pillar,thesis],i)=>({slug,title,pillar,thesis,description:thesis,audience:"Busy adults and fitness beginners",reviewStatus:"published" as const,independentReview:false,author:"STHENO Editorial",updatedAt:"2026-08-17",readMinutes:6,methodologyVersion:"2026.08",evidenceVersion:"product-07",relatedTool:i<4?"workout-frequency":i<8?"weight-loss-timeline":i<14?"one-rep-max":i<18?"protein":i===18?"protein":"calorie-tdee"}));
 export const pillars=[
  {slug:"training",title:"Training",description:"Build a schedule, learn progression, and make each session useful."},
  {slug:"fat-loss",title:"Fat Loss",description:"Understand weight trends and plan a sustainable rate of change."},
