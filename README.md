@@ -1,6 +1,6 @@
 # STHENO Fitness
 
-Products 1–2 establish the secure platform, Fitness Intelligence architecture, and versioned assessment/personalization system for STHENO—an evidence-led digital personal trainer, not a generic workout generator.
+Products 1–3 establish the secure platform, versioned assessment/personalization system, and deterministic training intelligence for STHENO—an evidence-led digital personal trainer, not a generic workout generator.
 
 ## Local setup
 
@@ -17,6 +17,8 @@ Authenticated members complete a mobile-first, resumable assessment at `/app/ass
 The bounded context interpreter proposes confirmable context after deterministic safety screening. This sprint does not generate workouts or prescribe calories/macros.
 
 ## Product boundaries
+
+Product 3 adds methodology/ruleset versioning, a reviewed V1 exercise knowledge library, deterministic program generation and validation, substitution scopes, time/equipment workout reconstruction, schedule adaptation, progression, explainability, and immutable Product 4 handoff records. Final workout execution remains Product 4.
 
 Included: auth/account lifecycle, domain schema and RLS, deterministic engine and AI boundaries, subscription/entitlement skeleton, analytics/observability/email configuration foundations, branded responsive shells, CI, and documentation.
 

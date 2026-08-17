@@ -1,5 +1,5 @@
 begin;
-select plan(4);
+select plan(6);
 insert into auth.users(id,instance_id,aud,role,email,encrypted_password,email_confirmed_at,created_at,updated_at) values('11111111-1111-4111-8111-111111111111','00000000-0000-0000-0000-000000000000','authenticated','authenticated','user-a@example.test','',now(),now(),now()),('22222222-2222-4222-8222-222222222222','00000000-0000-0000-0000-000000000000','authenticated','authenticated','user-b@example.test','',now(),now(),now());
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"11111111-1111-4111-8111-111111111111","role":"authenticated"}',true);
@@ -8,5 +8,7 @@ select is_empty($$update public.profiles set display_name='blocked' where user_i
 insert into public.assessments(id,user_id,assessment_version_id,status) select 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','11111111-1111-4111-8111-111111111111',id,'started' from public.assessment_versions where version='initial-v1';
 select results_eq($$select count(*)::bigint from public.assessments where user_id='11111111-1111-4111-8111-111111111111'$$,$$values(1::bigint)$$,'User A sees own Product 2 assessment');
 select is_empty($$select id from public.personalization_profile_snapshots where user_id='22222222-2222-4222-8222-222222222222'$$,'User A cannot see User B personalization snapshots');
+select is_empty($$select id from public.program_prescriptions where user_id='22222222-2222-4222-8222-222222222222'$$,'User A cannot see User B immutable prescriptions');
+select results_eq($$select count(*)::bigint from public.methodology_versions where status='active'$$,$$values(1::bigint)$$,'Authenticated users can read active methodology');
 select * from finish();
 rollback;
