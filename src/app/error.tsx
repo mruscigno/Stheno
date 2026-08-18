@@ -1,1 +1,22 @@
-"use client";export default function ErrorPage({reset}:{error:Error&{digest?:string};reset:()=>void}){return <main className="public-page shell"><p className="eyebrow">Something interrupted the request</p><h1>Your data is safe.</h1><p className="lede">Try again. If the problem continues, return later without repeating a payment.</p><button className="button" onClick={reset}>Try again</button></main>}
+"use client";
+export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  return (
+    <main className="public-page shell">
+      <p className="eyebrow">Something interrupted the request</p>
+      <h1>Your data is safe.</h1>
+      <p className="lede">
+        Try again. If the problem continues, return later without repeating a
+        payment.
+      </p>
+      <button
+        className="button"
+        onClick={() => {
+          reset();
+          window.location.reload();
+        }}
+      >
+        Try again
+      </button>
+    </main>
+  );
+}

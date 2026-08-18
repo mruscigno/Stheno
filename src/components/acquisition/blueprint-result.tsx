@@ -1,19 +1,133 @@
 "use client";
 
 import Link from "next/link";
-import {useState} from "react";
-import type {Blueprint} from "@/modules/acquisition/blueprint";
+import { useState } from "react";
+import {
+  normalizeStoredBlueprint,
+  type StoredBlueprint,
+} from "@/modules/acquisition/blueprint-storage";
 
-type SavedBlueprint=Blueprint&{createdAt?:string};
-function readBlueprint():SavedBlueprint|null{if(typeof window==="undefined")return null;try{return JSON.parse(localStorage.getItem("stheno_blueprint")||"null") as SavedBlueprint|null}catch{return null}}
+function readBlueprint(): StoredBlueprint | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return normalizeStoredBlueprint(
+      JSON.parse(localStorage.getItem("stheno_blueprint") || "null"),
+    );
+  } catch {
+    return null;
+  }
+}
 
-export function BlueprintResult(){const[blueprint]=useState<SavedBlueprint|null>(readBlueprint);if(!blueprint)return <section className="blueprint-empty"><p className="kicker">Your STHENO Blueprint</p><h1>Start with a plan built around your real life.</h1><p>Complete the free assessment and we’ll turn your schedule, experience, equipment, and priorities into a clear starting strategy.</p><Link className="button button-large" href="/assessment">Build my free Blueprint →</Link></section>;return <article className="blueprint-v2">
-  <header className="blueprint-reveal"><div><p className="kicker">Your STHENO Blueprint · {blueprint.version}</p><h1>{blueprint.goalLabel}</h1><p>{blueprint.strategy}</p></div><div className="blueprint-stamp"><span>BUILT FOR</span><strong>{blueprint.training.days}</strong><small>DAYS / WEEK</small></div></header>
-  <section className="blueprint-command"><div><span>01 · Training direction</span><h2>{blueprint.training.focus}</h2><p>{blueprint.training.why}</p></div><dl><div><dt>Structure</dt><dd>{blueprint.training.structure}</dd></div><div><dt>Session</dt><dd>{blueprint.training.duration} minutes</dd></div></dl></section>
-  <section className="blueprint-week"><p className="kicker">Your opening week</p><div>{blueprint.training.week.map((session,index)=><div key={session}><span>0{index+1}</span><strong>{session}</strong></div>)}</div></section>
-  <div className="blueprint-grid"><section><span>02 · Nutrition direction</span><h2>{blueprint.nutrition.proteinGrams[0]}–{blueprint.nutrition.proteinGrams[1]}g</h2><strong>Daily protein range</strong><p>{blueprint.nutrition.calorieDirection}. {blueprint.nutrition.approach}</p><small>{blueprint.nutrition.why}</small></section><section><span>03 · Activity direction</span><h2>Support the work</h2><strong>{blueprint.activity.cardio}</strong><p>{blueprint.activity.daily}.</p></section></div>
-  <section className="blueprint-priorities"><p className="kicker">What matters first</p><ol>{blueprint.priorities.map(item=><li key={item}>{item}</li>)}</ol></section>
-  <section className="blueprint-trajectory"><p className="kicker">How the plan should evolve</p>{blueprint.trajectory.map(item=><p key={item}>{item}</p>)}</section>
-  <aside className="blueprint-cta"><div><p className="kicker">The strategy is only the beginning</p><h2>We’ve built your direction. Now let STHENO run it.</h2><p>Turn this starting point into an adaptive program, guided workouts, nutrition targets, and weekly decisions.</p></div><Link className="button button-large" href="/signup?next=/pricing">Start with STHENO →</Link></aside>
-  <footer><p>{blueprint.disclaimer}</p><Link href="/assessment">Retake assessment</Link></footer>
- </article>}
+export function BlueprintResult() {
+  const [blueprint] = useState<StoredBlueprint | null>(readBlueprint);
+  if (!blueprint)
+    return (
+      <section className="blueprint-empty">
+        <p className="kicker">Your STHENO Blueprint</p>
+        <h1>Start with a plan built around your real life.</h1>
+        <p>
+          Complete the free assessment and we’ll turn your schedule, experience,
+          equipment, and priorities into a clear starting strategy.
+        </p>
+        <Link className="button button-large" href="/assessment">
+          Build my free Blueprint →
+        </Link>
+      </section>
+    );
+  return (
+    <article className="blueprint-v2">
+      <header className="blueprint-reveal">
+        <div>
+          <p className="kicker">Your STHENO Blueprint · {blueprint.version}</p>
+          <h1>{blueprint.goalLabel}</h1>
+          <p>{blueprint.strategy}</p>
+        </div>
+        <div className="blueprint-stamp">
+          <span>BUILT FOR</span>
+          <strong>{blueprint.training.days}</strong>
+          <small>DAYS / WEEK</small>
+        </div>
+      </header>
+      <section className="blueprint-command">
+        <div>
+          <span>01 · Training direction</span>
+          <h2>{blueprint.training.focus}</h2>
+          <p>{blueprint.training.why}</p>
+        </div>
+        <dl>
+          <div>
+            <dt>Structure</dt>
+            <dd>{blueprint.training.structure}</dd>
+          </div>
+          <div>
+            <dt>Session</dt>
+            <dd>{blueprint.training.duration} minutes</dd>
+          </div>
+        </dl>
+      </section>
+      <section className="blueprint-week">
+        <p className="kicker">Your opening week</p>
+        <div>
+          {blueprint.training.week.map((session, index) => (
+            <div key={session}>
+              <span>0{index + 1}</span>
+              <strong>{session}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+      <div className="blueprint-grid">
+        <section>
+          <span>02 · Nutrition direction</span>
+          <h2>
+            {blueprint.nutrition.proteinGrams[0]}–
+            {blueprint.nutrition.proteinGrams[1]}g
+          </h2>
+          <strong>Daily protein range</strong>
+          <p>
+            {blueprint.nutrition.calorieDirection}.{" "}
+            {blueprint.nutrition.approach}
+          </p>
+          <small>{blueprint.nutrition.why}</small>
+        </section>
+        <section>
+          <span>03 · Activity direction</span>
+          <h2>Support the work</h2>
+          <strong>{blueprint.activity.cardio}</strong>
+          <p>{blueprint.activity.daily}.</p>
+        </section>
+      </div>
+      <section className="blueprint-priorities">
+        <p className="kicker">What matters first</p>
+        <ol>
+          {blueprint.priorities.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ol>
+      </section>
+      <section className="blueprint-trajectory">
+        <p className="kicker">How the plan should evolve</p>
+        {blueprint.trajectory.map((item) => (
+          <p key={item}>{item}</p>
+        ))}
+      </section>
+      <aside className="blueprint-cta">
+        <div>
+          <p className="kicker">The strategy is only the beginning</p>
+          <h2>We’ve built your direction. Now let STHENO run it.</h2>
+          <p>
+            Turn this starting point into an adaptive program, guided workouts,
+            nutrition targets, and weekly decisions.
+          </p>
+        </div>
+        <Link className="button button-large" href="/signup?next=/pricing">
+          Start with STHENO →
+        </Link>
+      </aside>
+      <footer>
+        <p>{blueprint.disclaimer}</p>
+        <Link href="/assessment">Retake assessment</Link>
+      </footer>
+    </article>
+  );
+}
