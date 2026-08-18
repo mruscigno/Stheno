@@ -29,7 +29,7 @@ type SetLog = {
 type Performance = { load: number; reps: number } | null;
 type Data = {
   state: string;
-  session?: { id: string };
+  session?: { id: string; started_at?: string };
   workout?: Workout;
   sets?: SetLog[];
   lastPerformance?: Performance;
@@ -385,24 +385,18 @@ function SetLogger({
   onAct: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>;
   onInfo: (exercise: Exercise) => void;
 }) {
-  const next = data.next!,
-    e = next.exercise,
-    last = data.lastPerformance;
-  const [load, setLoad] = useState(last?.load ? String(last.load) : ""),
-    [reps, setReps] = useState(String(last?.reps ?? e.repMin)),
-    [effort, setEffort] = useState(String(e.rir));
-  const completed = (data.sets ?? []).filter(
-    (item) => item.exercise_slug === e.exerciseSlug,
-  );
+  const workout=data.workout!,next=data.next!,totalSets=workout.exercises.reduce((sum,e)=>sum+e.sets,0),completedSets=(data.sets??[]).length;
+  const[elapsed,setElapsed]=useState(0),[drafts,setDrafts]=useState<Record<string,{load:string;reps:string;rir:string}>>(()=>{try{return typeof window==="undefined"?{}:JSON.parse(localStorage.getItem(`stheno-workout-${data.session!.id}`)??"{}")}catch{return{}}}),[collapsed,setCollapsed]=useState<Record<string,boolean>>({});
+  useEffect(()=>{const started=new Date(data.session?.started_at??Date.now()).getTime(),tick=()=>setElapsed(Math.max(0,Math.floor((Date.now()-started)/1000)));tick();const timer=setInterval(tick,1000);return()=>clearInterval(timer)},[data.session?.started_at]);
+  useEffect(()=>{localStorage.setItem(`stheno-workout-${data.session!.id}`,JSON.stringify(drafts))},[data.session!.id,drafts]);
+  const format=(seconds:number)=>`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,"0")}`;
+  const update=(key:string,field:"load"|"reps"|"rir",value:string,exercise:Exercise)=>setDrafts(all=>({...all,[key]:{load:all[key]?.load??"",reps:all[key]?.reps??String(exercise.repMin),rir:all[key]?.rir??String(exercise.rir),[field]:value}}));
   return (
-    <section className="workout-screen active-workout">
+    <section className="workout-screen active-workout full-session">
       <header className="session-context">
         <div>
           <p className="eyebrow">{data.workout!.name}</p>
-          <span>
-            Exercise {next.exerciseIndex + 1} of{" "}
-            {data.workout!.exercises.length} · Set {next.setOrdinal} of {e.sets}
-          </span>
+          <span>{format(elapsed)} elapsed · {completedSets}/{totalSets} sets</span>
         </div>
         <button
           className="text-button"
@@ -417,154 +411,17 @@ function SetLogger({
           Short on time?
         </button>
       </header>
-      <h1>{e.exerciseName}</h1>
-      <div className="plain-target">
-        <strong>
-          Aim for {e.repMin}–{e.repMax} reps.
-        </strong>
-        <span>
-          Stop when you feel like you could still do about {e.rir} good reps.
-        </span>
-      </div>
-      <div className="load-guidance">
-        {last ? (
-          <>
-            <span>
-              Last time{" "}
-              <strong>
-                {last.load} lb × {last.reps}
-              </strong>
-            </span>
-            <span>
-              Today{" "}
-              <strong>
-                Start with {last.load} lb · {e.repMin}–{e.repMax} reps
-              </strong>
-            </span>
-          </>
-        ) : (
-          <p>
-            Choose a weight you think you can lift for about{" "}
-            {Math.min(8, e.repMax)} good reps. Keep the first set
-            conservative—we’ll adjust from there.
-          </p>
-        )}
-      </div>
-      {completed.length ? (
-        <div className="logged-sets" aria-label="Completed sets">
-          {completed.map((item) => (
-            <span key={item.set_ordinal}>
-              ✓ Set {item.set_ordinal} — {Number(item.load_value)} lb ×{" "}
-              {item.repetitions}
-            </span>
-          ))}
-        </div>
-      ) : null}
+      <div className="session-progress" aria-label={`${completedSets} of ${totalSets} sets complete`}><i style={{width:`${completedSets/totalSets*100}%`}}/></div>
       {rest > 0 ? (
         <div className="rest-timer" role="timer">
-          <span>Rest before your next set</span>
-          <strong>
-            {Math.floor(rest / 60)}:{String(rest % 60).padStart(2, "0")}
-          </strong>
-          <small>
-            Next: Set {next.setOrdinal} of {e.sets}
-          </small>
-          <button onClick={() => setRest(0)}>Skip rest</button>
+          <span>Rest</span><strong>{format(rest)}</strong><button onClick={()=>setRest(rest+30)}>+30s</button><button onClick={() => setRest(0)}>Skip</button>
         </div>
       ) : null}
-      <div className="set-entry">
-        <label>
-          Weight{" "}
-          <span>
-            <input
-              aria-label="Weight in pounds"
-              type="number"
-              min="0"
-              inputMode="decimal"
-              value={load}
-              placeholder="—"
-              onChange={(event) => setLoad(event.target.value)}
-            />
-            <small>lb</small>
-          </span>
-        </label>
-        <label>
-          Reps{" "}
-          <input
-            aria-label="Repetitions"
-            type="number"
-            min="1"
-            max="200"
-            inputMode="numeric"
-            value={reps}
-            onChange={(event) => setReps(event.target.value)}
-          />
-        </label>
-      </div>
-      <fieldset className="effort-picker">
-        <legend>How many more good reps could you do?</legend>
-        <div>
-          {["0", "1", "2", "3", "4+"].map((value) => (
-            <button
-              type="button"
-              aria-pressed={effort === value}
-              className={effort === value ? "selected" : ""}
-              key={value}
-              onClick={() => setEffort(value)}
-            >
-              {value}
-            </button>
-          ))}
-        </div>
-        <small>
-          Choose your best estimate. This helps STHENO adjust future sets.
-        </small>
-      </fieldset>
-      <div className="workout-actions">
-        <button
-          className="button log-set"
-          disabled={busy || load === "" || Number(reps) < 1}
-          onClick={async () => {
-            const result = await onAct({
-              action: "set",
-              sessionId: data.session!.id,
-              idempotencyKey: crypto.randomUUID(),
-              exerciseSlug: e.exerciseSlug,
-              setOrdinal: next.setOrdinal,
-              load: Number(load),
-              reps: Number(reps),
-              rir: effort === "4+" ? 4 : Number(effort),
-              state: "completed",
-              prescribed: e,
-            });
-            if (result.saved) setRest(e.restSeconds);
-          }}
-        >
-          Log set
-        </button>
-        <button className="button secondary" onClick={() => onInfo(e)}>
-          Exercise info
-        </button>
-      </div>
-      <AdjustmentMenu
-        exercise={e}
-        onReplace={(reason, scope, replacement) =>
-          onAct({
-            action: "replace",
-            sessionId: data.session!.id,
-            exerciseSlug: e.exerciseSlug,
-            replacementSlug: replacement,
-            reason,
-            scope,
-            confirmedSafety: reason === "discomfort",
-          })
-        }
-      />
+      <div className="exercise-stack">{workout.exercises.map((e,index)=>{const done=(data.sets??[]).filter(s=>s.exercise_slug===e.exerciseSlug),complete=done.length>=e.sets,isCollapsed=collapsed[e.exerciseSlug]??complete;return <article className={`session-exercise ${complete?"complete":""}`} key={e.exerciseSlug}><header><div><span>{complete?"✓":String(index+1).padStart(2,"0")}</span><h2>{e.exerciseName}</h2><p>{e.sets} sets · {e.repMin}–{e.repMax} reps · {e.rir} left</p></div><div><button type="button" onClick={()=>onInfo(e)}>Info</button>{complete?<button type="button" onClick={()=>setCollapsed(c=>({...c,[e.exerciseSlug]:!isCollapsed}))}>{isCollapsed?"Expand":"Collapse"}</button>:null}</div></header>{isCollapsed?<p className="exercise-summary">{done.map(s=>`${Number(s.load_value)}×${s.repetitions}`).join(" · ")}</p>:<><div className="set-table"><div className="set-labels"><span>Set</span><span>lb</span><span>Reps</span><span>Left</span><span/></div>{Array.from({length:e.sets},(_,i)=>i+1).map(ordinal=>{const saved=done.find(s=>s.set_ordinal===ordinal),key=`${e.exerciseSlug}-${ordinal}`,draft=drafts[key]??{load:"",reps:String(e.repMin),rir:String(e.rir)};return <div className={`set-row ${saved?"saved":""}`} key={key}><b>{saved?"✓":ordinal}</b><input aria-label={`${e.exerciseName} set ${ordinal} weight`} inputMode="decimal" type="number" min="0" placeholder="—" value={saved?String(saved.load_value??""):draft.load} disabled={!!saved} onChange={ev=>update(key,"load",ev.target.value,e)}/><input aria-label={`${e.exerciseName} set ${ordinal} reps`} inputMode="numeric" type="number" min="1" value={saved?String(saved.repetitions):draft.reps} disabled={!!saved} onChange={ev=>update(key,"reps",ev.target.value,e)}/><select aria-label={`${e.exerciseName} set ${ordinal} reps left`} value={saved?String(saved.rir):draft.rir} disabled={!!saved} onChange={ev=>update(key,"rir",ev.target.value,e)}>{[0,1,2,3,4].map(v=><option key={v}>{v}</option>)}</select><button type="button" disabled={busy||!!saved||!draft.load||!draft.reps} aria-label={`Log ${e.exerciseName} set ${ordinal}`} onClick={async()=>{const result=await onAct({action:"set",sessionId:data.session!.id,idempotencyKey:crypto.randomUUID(),exerciseSlug:e.exerciseSlug,setOrdinal:ordinal,load:Number(draft.load),reps:Number(draft.reps),rir:Number(draft.rir),state:"completed",prescribed:e});if(result.saved){setRest(e.restSeconds);setDrafts(all=>{const copy={...all};delete copy[key];return copy})}}}>{saved?"Done":"✓"}</button></div>})}</div><AdjustmentMenu exercise={e} onReplace={(reason,scope,replacement)=>onAct({action:"replace",sessionId:data.session!.id,exerciseSlug:e.exerciseSlug,replacementSlug:replacement,reason,scope,confirmedSafety:reason==="discomfort"})}/></>}</article>})}</div>
       {message ? (
-        <p className="safety-note" role="status">
-          {message}
-        </p>
+        <p className="sync-message" role="status">{message} Your entered values remain on this device.</p>
       ) : null}
+      <footer className="finish-session"><button className="button" disabled={busy||completedSets<totalSets} onClick={()=>void onAct({action:"complete",sessionId:data.session!.id})}>Finish workout</button><small>{completedSets<totalSets?`${totalSets-completedSets} sets remaining`:"All prescribed sets complete"}</small></footer>
     </section>
   );
 }
@@ -596,7 +453,7 @@ export function WorkoutExperience() {
   async function act(payload: Record<string, unknown>) {
     setBusy(true);
     setMessage("");
-    const response = await fetch("/api/workouts/today", {
+    try{const response = await fetch("/api/workouts/today", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
@@ -611,6 +468,7 @@ export function WorkoutExperience() {
     if (body.summary) setSummary(body.summary);
     else await load();
     return body;
+    }catch{setBusy(false);setMessage("You appear to be offline. Reconnect and tap the set again to sync.");return{saved:false}}
   }
   async function showInfo(exercise: Exercise) {
     const response = await fetch(`/api/exercises/${exercise.exerciseSlug}`),
