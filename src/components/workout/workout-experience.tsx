@@ -44,6 +44,8 @@ type Education = {
   execution?: string[];
   cues?: string[];
   mistakes?: string[];
+  feel?: string;
+  stopModify?: string;
 };
 type ExerciseInfo = {
   slug: string;
@@ -196,6 +198,14 @@ function ExerciseGuide({
                   ))}
                 </ul>
               </section>
+              <section>
+                <h3>What it should feel like</h3>
+                <p>{education.feel}</p>
+              </section>
+              <section className="exercise-safety">
+                <h3>Stop or modify when</h3>
+                <p>{education.stopModify}</p>
+              </section>
             </div>
           ) : null}
           {tab === "muscles" ? (
@@ -224,10 +234,7 @@ function ExerciseGuide({
                     <span>0{index + 1}</span>
                     <div>
                       <strong>{label(slug.replaceAll("-", " "))}</strong>
-                      <p>
-                        Similar training role, ranked for your available
-                        equipment and program.
-                      </p>
+                      <p>{index===0?"Best match for the same primary muscle and training role.":"Same primary-muscle focus, ranked for your available equipment and program."}</p>
                     </div>
                   </article>
                 ))
@@ -478,7 +485,7 @@ export function WorkoutExperience() {
       setMessage("Exercise guidance isn’t available right now.");
       return;
     }
-    setInfo({ exercise: body.exercise, alternatives: exercise.alternatives });
+    setInfo({ exercise: body.exercise, alternatives: body.alternatives ?? exercise.alternatives });
   }
   if (!data)
     return (

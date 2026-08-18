@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { MovementDemo } from "@/components/exercises/movement-demo";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
+import { completeExerciseGuide } from "@/modules/training/guide-content";
 async function getExercise(slug: string) {
   const db = await createSupabaseServerClient();
   if (!db) return null;
@@ -41,14 +42,15 @@ export default async function Exercise({
   const { slug } = await params,
     e = await getExercise(slug);
   if (!e) notFound();
-  const education = e.education as {
+  const storedEducation = e.education as {
       setup?: string[];
       execution?: string[];
       cues?: string[];
       mistakes?: string[];
     },
     primary = e.primary_muscles as string[],
-    secondary = e.secondary_muscles as string[];
+    secondary = e.secondary_muscles as string[],
+    education = completeExerciseGuide({name:e.name,movementPattern:String(e.movement_pattern),primaryMuscles:primary,equipment:e.required_equipment as string[],education:storedEducation});
   return (
     <main className="exercise-profile shell">
       <nav className="breadcrumbs">
@@ -127,6 +129,12 @@ export default async function Exercise({
           </ul>
         </section>
       </div>
+      <section className="exercise-feel">
+        <h2>What it should feel like</h2>
+        <p>{education.feel}</p>
+        <h3>Stop or modify when</h3>
+        <p>{education.stopModify}</p>
+      </section>
       {(e.caution_tags as string[]).length ? (
         <aside className="exercise-caution">
           <strong>Train within a comfortable range</strong>
