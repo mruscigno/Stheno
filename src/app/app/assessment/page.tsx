@@ -1,2 +1,2 @@
 import{AssessmentExperience}from"@/components/assessment/assessment-experience";
-export default function AssessmentPage(){return <AssessmentExperience/>}
+export default async function AssessmentPage({searchParams}:{searchParams:Promise<{restart?:string}>}){const{restart}=await searchParams;return <AssessmentExperience restart={restart==="1"}/>}
