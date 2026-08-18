@@ -1,0 +1,1 @@
+body:has(.assessment-v2)>.global-header,body:has(.assessment-v2)>.global-footer{display:none}.assessment-v2{min-height:100vh}

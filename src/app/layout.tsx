@@ -5,6 +5,9 @@ import "./library.css";
 import "./remediation.css";
 import "./editorial.css";
 import "./process.css";
+import "./funnel-v2.css";
+import "./home-v2.css";
+import "./chrome-overrides.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 
 const geistSans = Geist({
