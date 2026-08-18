@@ -8,6 +8,8 @@ import "./process.css";
 import "./funnel-v2.css";
 import "./home-v2.css";
 import "./chrome-overrides.css";
+import "./product-13.css";
+import "./article-13.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 
 const geistSans = Geist({
