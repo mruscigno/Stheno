@@ -1,0 +1,2 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";import Link from"next/link";import{useEffect,useState}from"react";export function NutritionSummary(){const[n,setN]=useState<{calories_kcal:number;protein_g:number}|null>(null);useEffect(()=>{void fetch("/api/plan",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(b=>setN(b?.nutrition??null))},[]);return <article className="status">Nutrition<strong>{n?`${n.calories_kcal.toLocaleString()} kcal · ${n.protein_g}g protein`:"Guidance building"}</strong><Link href="/app/nutrition">Open nutrition</Link></article>}
