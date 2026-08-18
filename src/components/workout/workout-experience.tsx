@@ -102,6 +102,7 @@ function ExerciseGuide({
         <MovementDemo
           name={exercise.name}
           pattern={exercise.movement_pattern}
+          equipment={exercise.required_equipment}
           version="current"
         />
         <div className="muscle-summary">

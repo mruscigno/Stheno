@@ -72,7 +72,7 @@ export default async function Exercise({
         </div>
         <AnatomyMap primary={primary} secondary={secondary} />
       </header>
-      <MovementDemo name={e.name} pattern={String(e.movement_pattern)} />
+      <MovementDemo name={e.name} pattern={String(e.movement_pattern)} equipment={e.required_equipment??[]} />
       <dl className="exercise-facts">
         <div>
           <dt>Equipment</dt>

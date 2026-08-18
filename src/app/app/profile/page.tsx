@@ -1,1 +1,1 @@
-import{deleteAccount}from"@/app/auth/actions";export default function Profile(){return <><p className="eyebrow">Account</p><h1>Profile</h1><section className="card"><h2>Account lifecycle</h2><p className="muted">Deletion requests are recorded before identity removal so cleanup can be handled safely.</p><form action={deleteAccount}><button className="button secondary" type="submit">Request account deletion</button></form></section></>}
+import{redirect}from"next/navigation";export default function Profile(){redirect("/app/account")}
