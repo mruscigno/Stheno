@@ -1,0 +1,221 @@
+:root {
+  --brand-black: #050505;
+  --brand-surface: #0d0d0f;
+  --brand-surface-raised: #151517;
+  --brand-white: #f7f7f5;
+  --brand-orange: #ff5a1f;
+  --brand-orange-strong: #ff4713;
+  --brand-orange-readable: #ff7849;
+  --brand-orange-on-light: #b93800;
+  --brand-text-muted: #b7b7bc;
+  --brand-border: #2a2a2e;
+  --brand-paper: #f7f7f5;
+  --brand-paper-raised: #ffffff;
+  --brand-ink: #171719;
+  --brand-muted-on-light: #55555c;
+  --ink: var(--brand-black);
+  --surface: var(--brand-surface-raised);
+  --warm: var(--brand-white);
+  --muted: var(--brand-text-muted);
+  --gold: var(--brand-orange);
+  --gold-bright: var(--brand-orange-readable);
+  --gold2: var(--brand-orange);
+  --p14-gold: var(--brand-orange);
+  --p14-gold-dark: var(--brand-orange-on-light);
+  --p14-cream: var(--brand-paper);
+  color-scheme: dark;
+}
+
+html, body {
+  background: var(--brand-black);
+  color: var(--brand-white);
+}
+
+body {
+  background: radial-gradient(circle at 72% -10%, rgb(255 90 31 / 10%), transparent 30rem), var(--brand-black);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--brand-orange-readable);
+  outline-offset: 4px;
+}
+
+::selection { background: var(--brand-orange); color: var(--brand-black); }
+
+.button,
+.set-row button,
+.calendar-day.today > time,
+.pricing-options .recommended > b {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  color: var(--brand-black);
+}
+
+.button:hover,
+.button:focus-visible { background: var(--brand-orange-strong); color: var(--brand-black); }
+.button:disabled { background: #5d5d62; border-color: #5d5d62; color: #ededed; }
+
+.global-header {
+  background: rgb(5 5 5 / 94%);
+  border-bottom-color: var(--brand-border);
+}
+
+.global-header .chrome-shell { min-height: 88px; height: auto; }
+.global-header nav { color: #d0d0d4; }
+.global-header nav a:hover, .header-auth-link:hover { color: var(--brand-white); }
+
+.brand { min-width: 94px; }
+.brand-logo {
+  display: block;
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  filter: contrast(1.08);
+}
+.footer-logo { width: 132px; height: 132px; }
+.global-footer { background: var(--brand-black); border-top-color: var(--brand-border); }
+.footer-grid nav { color: #c5c5ca; }
+.footer-grid p, .footer-bottom { color: var(--brand-text-muted); }
+.footer-grid strong { color: var(--brand-white); }
+
+.kicker, .eyebrow, .text-link, .section-title > a,
+.curated-tools span, .curated-tools i, .insight-grid b,
+.related-rail span, .article-callout strong, .pricing-benefits li span,
+.exercise-grid span, .tool-grid span, .hub-grid span {
+  color: var(--brand-orange-readable);
+}
+
+.blueprint-preview, .featured-article, .coach-card, .soft,
+.nutrition-board, .process-cards > div, .exercise-proof-grid > a,
+.about-page, .compare-page, .faq-page, .vs-page {
+  background-color: var(--brand-paper);
+}
+
+.price-section, .blueprint-cta { background: var(--brand-orange); color: var(--brand-black); }
+.price-callout > strong, .preview-target strong { color: var(--brand-orange-readable); }
+.editorial-art i { border-color: rgb(255 90 31 / 60%); }
+.editorial-art i:nth-child(2) { background: rgb(255 90 31 / 14%); }
+.editorial-art i:nth-child(3) { background: var(--brand-orange); }
+.bars i { background: linear-gradient(var(--brand-orange), #7b2609); }
+
+.auth-wrap {
+  background: radial-gradient(circle at 50% 0, rgb(255 90 31 / 14%), transparent 30rem), var(--brand-black);
+}
+.auth-wrap .card {
+  background: var(--brand-surface-raised);
+  border-color: var(--brand-border);
+  color: var(--brand-white);
+}
+.auth-wrap .card > a:first-child { width: 150px; height: 150px; margin-inline: auto; }
+.auth-wrap .card > a:first-child img { width: 150px; height: 150px; mix-blend-mode: normal; filter: none; }
+.field label, .auth-wrap h1 { color: var(--brand-white); }
+.field input, .auth-wrap input {
+  background: var(--brand-black);
+  border-color: #4a4a50;
+  color: var(--brand-white);
+}
+.field input::placeholder, .auth-wrap input::placeholder { color: #9b9ba2; }
+.field input:focus, .auth-wrap input:focus { border-color: var(--brand-orange); outline-color: rgb(255 120 73 / 55%); }
+
+.assessment-v2 { background: var(--brand-black); color: var(--brand-white); }
+.assessment-logo { grid-row: 1 / 3; width: 56px; height: 56px; object-fit: contain; }
+.assessment-v2 progress { accent-color: var(--brand-orange); }
+.assessment-v2 progress::-webkit-progress-value { background: var(--brand-orange); }
+.answer-grid button { background: var(--brand-surface-raised); border-color: #3b3b40; color: var(--brand-white); }
+.answer-grid button:hover, .answer-grid button.selected { border-color: var(--brand-orange); background: #20120d; }
+.answer-grid i { color: var(--brand-orange-readable); }
+.number-answer { border-color: var(--brand-orange); }
+
+.app-shell {
+  --surface: #f0f0f2;
+  --warm: var(--brand-ink);
+  --muted: var(--brand-muted-on-light);
+  --line: #d1d1d6;
+  --gold: var(--brand-orange);
+  --gold-bright: var(--brand-orange-on-light);
+  background: var(--brand-paper);
+  color: var(--brand-ink);
+  color-scheme: light;
+}
+.app-nav { background: #ededf0; border-color: #d1d1d6; color: var(--brand-ink); }
+.app-nav > a.member-brand:first-child {
+  justify-content: center;
+  border-color: #d1d1d6;
+  min-height: 150px;
+  padding: 0 0 22px;
+}
+.app-nav > a.member-brand:first-child img { width: 132px; height: 132px; object-fit: contain; mix-blend-mode: multiply; }
+.app-nav nav strong, .app-content .eyebrow, .app-content .kicker { color: var(--brand-orange-on-light); }
+.app-nav nav a { color: #35353a; }
+.app-nav nav a:hover { background: var(--brand-paper-raised); color: var(--brand-black); }
+.member-signout { color: #44444a; }
+.app-content {
+  background: radial-gradient(circle at 88% 0, rgb(255 90 31 / 8%), transparent 28rem), var(--brand-paper);
+  color: var(--brand-ink);
+}
+.app-content .button { color: var(--brand-black); }
+.app-content .button.secondary { background: transparent; border-color: #74747c; color: var(--brand-ink); }
+.app-content .button.secondary:hover { background: #ececef; border-color: var(--brand-orange-on-light); }
+.app-content .status, .app-content .card-wide, .app-content .coach-empty,
+.app-content .coach-message.assistant, .app-content .progress-grid article,
+.app-content .empty-progress, .app-content .nutrition-hero aside,
+.app-content .target-grid article, .app-content .source-grid article,
+.app-content .day-grid article, .app-content .supplements details,
+.app-content .session-exercise, .app-content .adjustment-card,
+.app-content .calendar-empty { background: #ededf0; border-color: #d1d1d6; color: var(--brand-ink); }
+.app-content input:not([type=range]):not([type=checkbox]),
+.app-content select, .app-content textarea { background: #fff; border-color: #85858d; color: var(--brand-ink); }
+.app-content input::placeholder, .app-content textarea::placeholder { color: #686870; }
+.app-content input:focus, .app-content select:focus, .app-content textarea:focus {
+  border-color: var(--brand-orange-on-light);
+  outline-color: rgb(185 56 0 / 24%);
+}
+.app-content .trial-status { border-color: #e57950; background: #fff0ea; color: #54200d; }
+.app-content .trial-status a, .app-content .text-button, .app-content .text-link,
+.app-content .calendar-empty a, .app-content .feedback button,
+.app-content .coach-empty button { color: var(--brand-orange-on-light); }
+.app-content .calendar-day a { background: #fff0ea; border-left-color: var(--brand-orange); }
+.app-content .calendar-day.today > time { color: var(--brand-black); }
+.app-content .coach-compose, .app-content .full-session .session-context { background: rgb(247 247 245 / 97%); }
+.app-content .full-session .rest-timer { background: var(--brand-surface-raised); color: var(--brand-white); }
+
+.article-new .article-layout article, .article-new .article-layout article p,
+.article-new .article-layout article li { color: #dedee1; }
+.article-new .article-lead { color: #f0f0f1; }
+.article-hero > p:not(.kicker) { color: #c5c5ca; }
+.article-layout > aside:first-child { color: var(--brand-text-muted); }
+.article-layout > aside strong { color: var(--brand-white); }
+.article-cta { background: #f0f0f2; color: var(--brand-ink); }
+
+.calculator-shell input, .calculator-shell select {
+  background: var(--brand-surface);
+  border-color: #55555c;
+  color: var(--brand-white);
+}
+.calculator-shell label, .calculator-form label { color: var(--brand-white); }
+.calculator-shell input::placeholder { color: #a7a7ad; }
+.calculator-result { border-color: var(--brand-orange); }
+
+.movement-demo-v2 svg .person, .movement-demo-v2 svg .pose circle:not(.handle) { stroke: var(--brand-orange-readable); }
+.movement-demo-v2 svg .handle { fill: var(--brand-orange); }
+.neutral-movement i, .neutral-movement > span { color: var(--brand-orange-readable); }
+
+@media (max-width: 960px) {
+  .global-header .chrome-shell { min-height: 80px; }
+  .brand-logo { width: 70px; height: 70px; }
+}
+
+@media (max-width: 640px) {
+  .global-header .chrome-shell { min-height: 72px; }
+  .brand { min-width: 62px; }
+  .brand-logo { width: 62px; height: 62px; }
+  .footer-logo { width: 120px; height: 120px; }
+  .app-nav > a.member-brand:first-child { justify-content: flex-start; min-height: 92px; padding-bottom: 14px; }
+  .app-nav > a.member-brand:first-child img { width: 88px; height: 88px; }
+}
+
+@media print {
+  :root { color-scheme: light; }
+  body, .app-content { background: #fff; color: #000; }
+}

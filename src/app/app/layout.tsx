@@ -1,6 +1,7 @@
 import "@/components/brand/member-brand.css";
 import "./member-shell.css";
 import Link from "next/link";
+import Image from "next/image";
 import { signOut } from "@/app/auth/actions";
 import { ClaimPublicAssessment } from "@/components/assessment/claim-public-assessment";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -49,8 +50,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <ClaimPublicAssessment />
       <aside className="app-nav">
         <Link className="member-brand" href="/app" aria-label="STHENO member home">
-          <span className="brand-mark">S</span>
-          <span>STHENO<small>FITNESS</small></span>
+          <Image src="/stheno-logo.png" alt="" width={128} height={128} priority />
         </Link>
         <nav aria-label="Member navigation">
           <strong>Your STHENO</strong>

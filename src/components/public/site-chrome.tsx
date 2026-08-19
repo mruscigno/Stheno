@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { MobileMenu } from "@/components/public/mobile-menu";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
 import { TrackedLink } from "@/components/analytics/tracked-link";
@@ -10,10 +11,7 @@ export function SiteHeader() {
     <header className="global-header">
       <div className="chrome-shell">
         <Link className="brand" href="/" aria-label="STHENO Fitness home">
-          <span className="brand-mark">S</span>
-          <span>
-            STHENO<small>FITNESS</small>
-          </span>
+          <Image className="brand-logo" src="/stheno-logo.png" alt="" width={96} height={96} priority />
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="/how-it-works">How it works</Link>
@@ -51,10 +49,7 @@ export function SiteFooter() {
       <div className="chrome-shell footer-grid">
         <div>
           <Link className="brand" href="/">
-            <span className="brand-mark">S</span>
-            <span>
-              STHENO<small>FITNESS</small>
-            </span>
+            <Image className="brand-logo footer-logo" src="/stheno-logo.png" alt="STHENO Fitness" width={144} height={144} />
           </Link>
           <p>Your fitness. Handled.</p>
         </div>

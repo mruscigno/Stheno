@@ -16,6 +16,7 @@ import "./trial-access.css";
 import "./mobile-navigation.css";
 import "./product-14.css";
 import "./heycatch.css";
+import "./brand-refresh.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 import { defaultSocialImage } from "@/lib/seo";
 import { HeyCatchIdentity } from "@/components/analytics/heycatch-identity";
