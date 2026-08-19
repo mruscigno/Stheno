@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@heycatch/sdk':
+        specifier: ^0.7.0
+        version: 0.7.0(react@19.2.8)
       '@sentry/nextjs':
         specifier: ^10.70.0
         version: 10.70.0(@opentelemetry/core@2.10.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.10.0(@opentelemetry/api@1.9.1))(next@16.3.1(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.9.1)(@types/node@20.19.43)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(supports-color@8.1.1)(webpack@5.109.2(lightningcss@1.33.0)(postcss@8.5.26))
@@ -291,6 +294,17 @@ packages:
       '@noble/hashes': ^1.8.0 || ^2.0.0
     peerDependenciesMeta:
       '@noble/hashes':
+        optional: true
+
+  '@heycatch/sdk@0.7.0':
+    resolution: {integrity: sha512-uGMp54jq8O4Xq0gbVZnQSbTqoDLP0C6rFkIJDQlObIcgyfmY/+qupU5MfIIPsoIHCWy+BfTEcbCc8/E44sJMqg==}
+    peerDependencies:
+      expo-router: '*'
+      react: ^18.2.0 || ^19.0.0
+    peerDependenciesMeta:
+      expo-router:
+        optional: true
+      react:
         optional: true
 
   '@humanfs/core@0.19.2':
@@ -2914,6 +2928,51 @@ packages:
   posthog-js@1.417.1:
     resolution: {integrity: sha512-QpZnHA2PieGq9+W03LBw23DnN9CD1zM37DcXnpZkg+C5iAwYXLiZs8qof0Yi/BhY35PYuhVmv93nhztyHjVaJw==}
 
+  posthog-react-native@4.63.2:
+    resolution: {integrity: sha512-zNJ+zDNigVY6VTxMI42U15XKzfDME6zg+QNKoPktMO9Zzt8oe3eIjBQ2nxN1hQsww2btTQF0WEkPLEmoOCOV4Q==}
+    hasBin: true
+    peerDependencies:
+      '@posthog/react-native-plugin': '>= 2.3.0'
+      '@react-native-async-storage/async-storage': '>=1.0.0'
+      '@react-navigation/native': '>= 5.0.0'
+      expo-application: '>= 4.0.0'
+      expo-device: '>= 4.0.0'
+      expo-file-system: '>= 13.0.0'
+      expo-localization: '>= 11.0.0'
+      posthog-react-native-session-replay: '>= 1.6.0'
+      react-native-device-info: '>= 10.0.0'
+      react-native-localize: '>= 3.0.0'
+      react-native-navigation: '>= 6.0.0'
+      react-native-safe-area-context: '>= 4.0.0'
+      react-native-svg: '>= 15.0.0'
+    peerDependenciesMeta:
+      '@posthog/react-native-plugin':
+        optional: true
+      '@react-native-async-storage/async-storage':
+        optional: true
+      '@react-navigation/native':
+        optional: true
+      expo-application:
+        optional: true
+      expo-device:
+        optional: true
+      expo-file-system:
+        optional: true
+      expo-localization:
+        optional: true
+      posthog-react-native-session-replay:
+        optional: true
+      react-native-device-info:
+        optional: true
+      react-native-localize:
+        optional: true
+      react-native-navigation:
+        optional: true
+      react-native-safe-area-context:
+        optional: true
+      react-native-svg:
+        optional: true
+
   preact@10.29.8:
     resolution: {integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==}
     peerDependencies:
@@ -3784,6 +3843,26 @@ snapshots:
       levn: 0.4.1
 
   '@exodus/bytes@1.15.1': {}
+
+  '@heycatch/sdk@0.7.0(react@19.2.8)':
+    dependencies:
+      posthog-react-native: 4.63.2
+    optionalDependencies:
+      react: 19.2.8
+    transitivePeerDependencies:
+      - '@posthog/react-native-plugin'
+      - '@react-native-async-storage/async-storage'
+      - '@react-navigation/native'
+      - expo-application
+      - expo-device
+      - expo-file-system
+      - expo-localization
+      - posthog-react-native-session-replay
+      - react-native-device-info
+      - react-native-localize
+      - react-native-navigation
+      - react-native-safe-area-context
+      - react-native-svg
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -6352,6 +6431,11 @@ snapshots:
       web-vitals-soft-navs: web-vitals@6.0.0
     transitivePeerDependencies:
       - preact-render-to-string
+
+  posthog-react-native@4.63.2:
+    dependencies:
+      '@posthog/core': 1.48.1
+      '@posthog/types': 1.404.1
 
   preact@10.29.8: {}
 
