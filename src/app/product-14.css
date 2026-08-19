@@ -908,6 +908,40 @@ body:not(:has(.app-shell)) .calculator-result h2 {
   color: var(--p14-gold-dark);
 }
 
+body:not(:has(.app-shell)) .auth-wrap {
+  background:
+    radial-gradient(circle at 50% 8%, rgba(189, 143, 58, 0.14), transparent 27rem),
+    var(--p14-paper);
+}
+body:not(:has(.app-shell)) .auth-wrap .card {
+  background: var(--p14-ivory);
+  border: 1px solid var(--p14-line);
+  color: var(--p14-ink);
+  box-shadow: 0 24px 70px rgba(38, 34, 25, 0.16);
+}
+body:not(:has(.app-shell)) .auth-wrap .card h1 {
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .auth-wrap .card .muted {
+  color: #5f615a;
+}
+body:not(:has(.app-shell)) .auth-wrap .card .field label {
+  color: #373832;
+}
+body:not(:has(.app-shell)) .auth-wrap .card .field input {
+  background: #fff;
+  border-color: #aaa497;
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .auth-wrap .card .field input:focus {
+  border-color: var(--p14-gold-dark);
+  outline: 3px solid rgba(189, 143, 58, 0.18);
+}
+body:not(:has(.app-shell)) .auth-wrap .card a:not(.button) {
+  color: var(--p14-gold-dark);
+  font-weight: 680;
+}
+
 body:not(:has(.app-shell)) .article-new {
   background: var(--p14-paper);
   color: var(--p14-ink);
