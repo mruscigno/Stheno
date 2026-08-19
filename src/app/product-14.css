@@ -1088,6 +1088,24 @@ body:not(:has(.app-shell)) .related-section .insight-grid h3 {
 .exercise-profile .exercise-feel h3 {
   color: var(--p14-gold-dark);
 }
+.exercise-profile .lede {
+  color: #5f615a;
+}
+.exercise-profile .exercise-facts div {
+  background: #f1ece2;
+  border: 1px solid #d8d1c4;
+  color: var(--p14-ink);
+}
+.exercise-profile .exercise-facts dt {
+  color: #66685f;
+}
+.exercise-profile .exercise-facts dd {
+  color: var(--p14-ink);
+}
+.exercise-profile .button.secondary {
+  border-color: #8f8a7e;
+  color: var(--p14-ink);
+}
 
 .methodology-page {
   padding-top: 58px;
