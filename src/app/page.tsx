@@ -4,9 +4,11 @@ import { tools } from "@/modules/library/tools";
 import { articles } from "@/modules/library/articles";
 import type { Metadata } from "next";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { publicMetadata, safeJsonLd, siteUrl } from "@/lib/seo";
+import { organizationId, publicMetadata, safeJsonLd, serviceJsonLd, siteUrl, websiteId } from "@/lib/seo";
 import { membership, annualSavings } from "@/modules/commerce/product";
 import { TrackedLink } from "@/components/analytics/tracked-link";
+import { FaqList } from "@/components/public/faq-list";
+import { homepageFaqItems } from "@/modules/content/faq";
 
 export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | Personalized Fitness Coaching & Training Plans", description: "Personalized workouts, nutrition guidance, and ongoing coaching built around your goals, schedule, equipment, and real life.", path: "/" });
 
@@ -37,8 +39,7 @@ export default async function Home() {
             <span>Handled.</span>
           </h1>
           <p className="p14-lede">
-            Personalized workouts, nutrition, and coaching built around your
-            goals, your schedule, and real life—adapting as you progress.
+            Personalized workouts, nutrition, and coaching built around your goals, schedule, experience, equipment, and real life—adapting as you progress.
           </p>
           <div className="p14-actions">
             <TrackedLink event="hero_primary_cta_click" className="p14-button" href="/assessment">Get my free fitness plan <span>→</span></TrackedLink>
@@ -71,6 +72,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      <section className="consistency-callout p14-shell"><div><p className="p14-kicker">Built to keep you consistent</p><p>When life changes, your plan adapts. Miss a workout, travel, or have a hectic week? You don’t start over.</p></div><TrackedLink event="consistency_callout_click" className="p14-text-link" href="#adaptation">See how adaptation works →</TrackedLink></section>
       <section className="p14-blueprint p14-shell">
         <div className="p14-section-copy">
           <p className="p14-kicker">Your personalized Blueprint</p>
@@ -179,7 +181,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <section className="p14-adapt">
+      <section className="p14-adapt" id="adaptation">
         <div className="p14-shell">
           <div className="p14-adapt-copy">
             <p className="p14-kicker">Real-life adaptation</p>
@@ -345,7 +347,7 @@ export default async function Home() {
                 <div className="p14-article-image">
                   <Image
                     src={`${media}/${["recovery.jpg", "food-composition.jpg", "woman-strength.jpg"][index]}`}
-                    alt=""
+                    alt={["Person recovering after a training session", "Balanced foods supporting practical nutrition", "Woman performing a strength-training exercise"][index]}
                     fill
                     sizes="(max-width: 800px) 100vw, 33vw"
                   />
@@ -385,6 +387,7 @@ export default async function Home() {
           <Link className="p14-button" href="/assessment">
             Start my free plan
           </Link>
+          <TrackedLink event="compare_click" eventProperties={{ location: "home_pricing" }} className="p14-compare-link" href="/compare">Compare STHENO with other options →</TrackedLink>
         </div>
       </section>
       <section className="p14-faq p14-shell">
@@ -392,38 +395,7 @@ export default async function Home() {
           <p className="p14-kicker">Common questions</p>
           <h2>Start with confidence.</h2>
         </div>
-        <div>
-          {[
-            [
-              "Is the assessment really free?",
-              "Yes. Your personalized starting Blueprint is free and does not require a credit card.",
-            ],
-            [
-              "Do I need a gym?",
-              "No. Your available equipment shapes every exercise in your program.",
-            ],
-            [
-              "What happens when I miss a workout?",
-              "Nothing gets punished. STHENO helps you resume, shorten, or adjust the week.",
-            ],
-            [
-              "Can I change my program?",
-              "Yes. Retake the assessment whenever your goal, schedule, or equipment changes.",
-            ],
-            [
-              "Is STHENO medical care?",
-              "No. STHENO provides fitness education and directs health concerns to qualified professionals.",
-            ],
-          ].map(([q, a]) => (
-            <details key={q}>
-              <summary>
-                {q}
-                <span>+</span>
-              </summary>
-              <p>{a}</p>
-            </details>
-          ))}
-        </div>
+        <div><FaqList items={homepageFaqItems}/><Link className="p14-text-link faq-view-all" href="/faq">View all FAQs →</Link></div>
       </section>
       <section className="p14-final">
         <Image
@@ -444,8 +416,9 @@ export default async function Home() {
         </div>
       </section>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html:safeJsonLd([
-        {"@context":"https://schema.org","@type":"Organization",name:"STHENO Fitness",url:siteUrl},
-        {"@context":"https://schema.org","@type":"WebSite",name:"STHENO Fitness",url:siteUrl},
+        {"@context":"https://schema.org","@type":"Organization","@id":organizationId,name:"STHENO Fitness",url:siteUrl},
+        {"@context":"https://schema.org","@type":"WebSite","@id":websiteId,name:"STHENO Fitness",url:siteUrl,publisher:{"@id":organizationId}},
+        serviceJsonLd(),
       ])}} />
     </main>
   );

@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
+import { membership } from "@/modules/commerce/product";
 export const siteUrl = "https://www.sthenofitness.com";
+export const organizationId = `${siteUrl}/#organization`;
+export const websiteId = `${siteUrl}/#website`;
 export const defaultSocialImage = { url: "/opengraph-image", width: 1200, height: 630, alt: "STHENO Fitness — Your fitness. Handled." };
 export function publicMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata { return { title, description, alternates: { canonical: path }, openGraph: { title, description, url: path, siteName: "STHENO Fitness", type: "website", images: [defaultSocialImage] }, twitter: { card: "summary_large_image", title, description, images: [defaultSocialImage.url] } }; }
 export function safeJsonLd(value: unknown) { return JSON.stringify(value).replaceAll("<", "\\u003c"); }
+export function serviceJsonLd(path = "/") { return { "@context": "https://schema.org", "@type": "Service", "@id": `${siteUrl}/#personalized-fitness-coaching`, name: "STHENO Fitness", serviceType: "Personalized fitness coaching", provider: { "@id": organizationId }, url: `${siteUrl}${path}`, description: "Personalized workouts, nutrition guidance, progress tracking, and ongoing fitness coaching built around each member's goals, schedule, experience, and equipment.", offers: [{ "@type": "Offer", price: membership.monthly.amount, priceCurrency: "USD", availability: "https://schema.org/InStock", url: `${siteUrl}/pricing`, name: "Monthly membership" }, { "@type": "Offer", price: membership.annual.amount, priceCurrency: "USD", availability: "https://schema.org/InStock", url: `${siteUrl}/pricing`, name: "Annual membership" }] }; }
+export function breadcrumbJsonLd(items: [string, string][]) { return { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: items.map(([name, path], index) => ({ "@type": "ListItem", position: index + 1, name, item: `${siteUrl}${path}` })) }; }

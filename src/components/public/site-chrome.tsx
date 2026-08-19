@@ -19,6 +19,7 @@ export function SiteHeader() {
           <Link href="/how-it-works">How it works</Link>
           <TrackedLink event="nav_methodology_click" href="/methodology">Methodology</TrackedLink>
           <Link href="/insights">Learn</Link>
+          <Link href="/faq">FAQ</Link>
           <Link href="/tools">Free tools</Link>
           <Link href="/pricing">Pricing</Link>
           <TrackedLink event="nav_about_click" href="/about">About</TrackedLink>
@@ -65,6 +66,8 @@ export function SiteFooter() {
           <Link href="/tools">Tools</Link>
           <Link href="/insights">Learn</Link>
           <Link href="/exercises">Exercises</Link>
+          <Link href="/faq">FAQ</Link>
+          <Link href="/compare">Compare</Link>
           <Link href="/about">About</Link>
         </nav>
         <nav aria-label="Account">

@@ -6,8 +6,10 @@ const links = [
   ["/how-it-works", "How it works"],
   ["/methodology", "Methodology"],
   ["/insights", "Learn"],
+  ["/faq", "FAQ"],
   ["/tools", "Free tools"],
   ["/pricing", "Pricing"],
+  ["/compare", "Compare"],
   ["/about", "About"],
 ] as const;
 export function MobileMenu({ authState }: { authState: PublicAuthState }) {
