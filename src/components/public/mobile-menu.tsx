@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import type { PublicAuthState } from "@/components/public/use-auth-state";
 const links = [
   ["/how-it-works", "How it works"],
   ["/how-it-works#training", "Training"],
@@ -9,7 +10,7 @@ const links = [
   ["/insights", "Learn"],
   ["/pricing", "Pricing"],
 ] as const;
-export function MobileMenu() {
+export function MobileMenu({ authState }: { authState: PublicAuthState }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="mobile-menu">
@@ -36,16 +37,19 @@ export function MobileMenu() {
               {label}
             </Link>
           ))}
-          <Link href="/login" onClick={() => setOpen(false)}>
-            Log in
-          </Link>
-          <Link
-            className="button"
-            href="/assessment"
-            onClick={() => setOpen(false)}
-          >
-            Build my free plan
-          </Link>
+          {authState === "signed-in" ? (
+            <>
+              <Link href="/app" onClick={() => setOpen(false)}>My STHENO</Link>
+              <Link className="button" href="/app/account" onClick={() => setOpen(false)}>Account</Link>
+            </>
+          ) : authState === "signed-out" ? (
+            <>
+              <Link href="/login" onClick={() => setOpen(false)}>Log in</Link>
+              <Link className="button" href="/assessment" onClick={() => setOpen(false)}>Build my free plan</Link>
+            </>
+          ) : (
+            <span className="session-placeholder" aria-label="Checking account status" />
+          )}
         </nav>
       ) : null}
     </div>

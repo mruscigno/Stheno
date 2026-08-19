@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { MobileMenu } from "@/components/public/mobile-menu";
+import { usePublicAuthState } from "@/components/public/use-auth-state";
 export function SiteHeader() {
+  const authState = usePublicAuthState();
   return (
     <header className="global-header">
       <div className="chrome-shell">
@@ -19,17 +23,27 @@ export function SiteHeader() {
           <Link href="/pricing">Pricing</Link>
         </nav>
         <div className="header-actions">
-          <Link href="/login">Sign in</Link>
-          <Link className="button button-compact" href="/assessment">
-            Build my free plan
-          </Link>
+          {authState === "signed-in" ? (
+            <>
+              <Link className="header-auth-link" href="/app">My STHENO</Link>
+              <Link className="button button-compact" href="/app/account">Account</Link>
+            </>
+          ) : authState === "signed-out" ? (
+            <>
+              <Link className="header-auth-link" href="/login">Sign in</Link>
+              <Link className="button button-compact" href="/assessment">Build my free plan</Link>
+            </>
+          ) : (
+            <span className="session-placeholder" aria-label="Checking account status" />
+          )}
         </div>
-        <MobileMenu />
+        <MobileMenu authState={authState} />
       </div>
     </header>
   );
 }
 export function SiteFooter() {
+  const authState = usePublicAuthState();
   return (
     <footer className="global-footer">
       <div className="chrome-shell footer-grid">
@@ -53,8 +67,17 @@ export function SiteFooter() {
         <nav aria-label="Account">
           <strong>Account</strong>
           <Link href="/pricing">Pricing</Link>
-          <Link href="/signup">Create account</Link>
-          <Link href="/login">Sign in</Link>
+          {authState === "signed-in" ? (
+            <>
+              <Link href="/app">My STHENO</Link>
+              <Link href="/app/account">Account settings</Link>
+            </>
+          ) : authState === "signed-out" ? (
+            <>
+              <Link href="/signup">Create account</Link>
+              <Link href="/login">Sign in</Link>
+            </>
+          ) : null}
           <Link href="/contact">Contact</Link>
         </nav>
         <div>

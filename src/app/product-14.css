@@ -851,7 +851,7 @@ body:not(:has(.app-shell)) .global-header .brand small {
 body:not(:has(.app-shell)) .global-header nav {
   color: #d4d3ce;
 }
-body:not(:has(.app-shell)) .global-header .header-actions > a:first-child {
+body:not(:has(.app-shell)) .global-header .header-auth-link {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
@@ -861,9 +861,14 @@ body:not(:has(.app-shell)) .global-header .header-actions > a:first-child {
   color: #fffdf8;
   font-weight: 740;
 }
-body:not(:has(.app-shell)) .global-header .header-actions > a:first-child:hover {
+body:not(:has(.app-shell)) .global-header .header-auth-link:hover {
   border-color: #e8c87d;
   color: #e8c87d;
+}
+.session-placeholder {
+  display: block;
+  width: 210px;
+  min-height: 40px;
 }
 body:not(:has(.app-shell)) .global-footer .brand {
   color: #fffdf8;
