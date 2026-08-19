@@ -871,6 +871,15 @@ body:not(:has(.app-shell)) .global-footer .brand {
 body:not(:has(.app-shell)) .global-footer .brand small {
   color: #e8c87d;
 }
+body:has(.app-shell) .global-footer {
+  display: block;
+}
+body:has(.app-shell) .global-footer .brand {
+  color: #fffdf8;
+}
+body:has(.app-shell) .global-footer .brand small {
+  color: #e8c87d;
+}
 
 body:not(:has(.app-shell)) .calculator-shell {
   align-items: start;
@@ -1065,6 +1074,19 @@ body:not(:has(.app-shell)) .article-page:not(.methodology-page) > p {
 }
 body:not(:has(.app-shell)) .related-section .insight-grid h3 {
   font-size: 1.35rem;
+}
+.exercise-profile .exercise-feel {
+  background: #eee8dc;
+  border-color: #d8d1c4;
+  color: var(--p14-ink);
+}
+.exercise-profile .exercise-feel h2,
+.exercise-profile .exercise-feel h3,
+.exercise-profile .exercise-feel p {
+  color: var(--p14-ink);
+}
+.exercise-profile .exercise-feel h3 {
+  color: var(--p14-gold-dark);
 }
 
 .methodology-page {

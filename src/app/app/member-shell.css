@@ -1,0 +1,33 @@
+.app-shell{--surface:#f1ece2;--warm:#181914;--muted:#66685f;--line:#d8d1c4;--gold-bright:#8b641f;min-height:100vh;background:#fffdf8;color:#181914}
+.app-nav{position:sticky;top:0;height:100vh;padding:30px 22px;border-right:1px solid #d8d1c4;background:#f1ece2;color:#292a25;overflow-y:auto}
+.app-nav>a.member-brand:first-child{display:flex;align-items:center;justify-content:flex-start;gap:12px;min-height:auto;padding:0 8px 27px;border-bottom:1px solid #d8d1c4;color:#181914;font-size:1rem;font-weight:820;letter-spacing:.16em;overflow:visible}
+.member-brand>span:last-child{display:grid;line-height:1}.member-brand small{margin-top:4px;color:#7a581f;font-size:.48rem;letter-spacing:.34em}
+.app-nav nav{display:grid;gap:3px;margin-top:26px}.app-nav nav strong{padding:0 10px 9px;color:#7a581f;font-size:.67rem;letter-spacing:.15em;text-transform:uppercase}
+.app-nav nav a{padding:10px;border-radius:7px;color:#454740;font-weight:650}.app-nav nav a:hover{background:#fffdf8;color:#181914}
+.app-nav .member-explore{padding-top:24px;border-top:1px solid #d8d1c4}.app-nav>form{margin:26px 10px 0}
+.member-signout{padding:0;border:0;border-bottom:1px solid currentColor;background:transparent;color:#5f615a;font:inherit;font-weight:700;cursor:pointer}
+.app-content{min-width:0;padding:clamp(34px,5vw,72px);background:radial-gradient(circle at 85% 0,rgba(189,143,58,.09),transparent 28rem),#fffdf8;color:#181914}
+.app-content h1,.app-content h2,.app-content h3,.app-content h4,.app-content p,.app-content li,.app-content label,.app-content dt,.app-content dd{color:inherit}
+.app-content .eyebrow,.app-content .kicker{color:#7a581f}.app-content .lede,.app-content .muted,.app-content small{color:#66685f}
+.app-content .button.secondary{border-color:#8f8a7e;color:#292a25}.app-content .button.secondary:hover{border-color:#7a581f;background:#f1ece2}
+.app-content .status,.app-content .card-wide,.app-content .coach-empty,.app-content .coach-message.assistant,.app-content .progress-grid article,.app-content .empty-progress,.app-content .nutrition-hero aside,.app-content .target-grid article,.app-content .source-grid article,.app-content .day-grid article,.app-content .supplements details,.app-content .session-exercise,.app-content .adjustment-card,.app-content .calendar-empty{background:#f1ece2;border-color:#d8d1c4;color:#292a25;box-shadow:none}
+.app-content input:not([type=range]):not([type=checkbox]),.app-content select,.app-content textarea{background:#fff;border-color:#aaa497;color:#181914}
+.app-content input:focus,.app-content select:focus,.app-content textarea:focus{border-color:#7a581f;outline:3px solid rgba(189,143,58,.18)}
+.app-content .trial-status{border-color:#d0b777;background:#f1e7ca;color:#413617}
+.app-content .trial-status a,.app-content .text-button,.app-content .text-link,.app-content .calendar-empty a{color:#7a581f}
+.app-content .program-calendar{border-color:#d8d1c4}.app-content .calendar-controls button{border-color:#aaa497;color:#292a25}
+.app-content .calendar-grid,.app-content .weekday,.app-content .calendar-day{border-color:#d8d1c4}.app-content .calendar-day,.app-content .calendar-day.blank{background:#fff}
+.app-content .calendar-day a{background:#f4ead4}.app-content .calendar-day a strong{color:#292a25}
+.app-content .coach-compose,.app-content .full-session .session-context{background:rgba(255,253,248,.96);border-color:#d8d1c4;color:#181914}
+.app-content .coach-compose textarea{background:transparent}.app-content .coach-empty button,.app-content .feedback button,.app-content .adjust-sheet>button:first-child{color:#7a581f}
+.app-content .photo-review,.app-content .adjust-sheet,.app-content .exercise-sheet{background:#fffdf8;border-color:#d8d1c4;color:#181914;box-shadow:-20px 0 60px rgba(38,34,25,.15)}
+.app-content .photo-review label,.app-content .adjust-choice,.app-content .exercise-tabs,.app-content .exercise-tab-panel li,.app-content .exercise-sheet>header{border-color:#d8d1c4}
+.app-content .adjust-choice,.app-content .exercise-tabs button,.app-content .session-exercise>header button{color:#292a25}
+.app-content .exercise-tabs button[aria-selected=true]{color:#7a581f;border-color:#bd8f3a}
+.app-content .target-grid,.app-content .target-grid article,.app-content .nutrition-hero aside,.app-content .source-grid article,.app-content .day-grid article,.app-content .supplements details,.app-content .plan-disclaimer{border-color:#d8d1c4}
+.app-content .nutrition-hero aside{background:#eee5d2}.app-content .nutrition-hero aside span,.app-content .source-grid h3,.app-content .day-grid>article>span,.app-content .target-grid strong,.app-content .supplement-state,.app-content .progress-grid strong{color:#7a581f}
+.app-content .nutrition-hero aside small{color:#292a25}.app-content .session-progress,.app-content .set-row,.app-content .set-labels{border-color:#d8d1c4}
+.app-content .session-exercise>header button{border-color:#aaa497}.app-content .set-row input,.app-content .set-row select{background:#fff;border-color:#aaa497;color:#181914}
+.app-content .exercise-summary{color:#496448}.app-content .full-session .rest-timer{background:#292a25;color:#fffdf8;box-shadow:0 12px 35px rgba(38,34,25,.25)}
+.app-content .full-session .rest-timer *{color:inherit}.app-content .sync-message{background:#f8e8e5;border-color:#d99b92;color:#7a3029}
+@media(max-width:720px){.app-shell{display:block}.app-nav{position:relative;width:100%;height:auto;padding:18px 16px;border-right:0;border-bottom:1px solid #d8d1c4}.app-nav>a.member-brand:first-child{padding:0 2px 17px}.app-nav nav{display:flex;gap:6px;margin-top:15px;overflow-x:auto;padding-bottom:5px}.app-nav nav strong{display:none}.app-nav nav a{flex:0 0 auto;padding:9px 11px;background:#fffdf8;border:1px solid #d8d1c4}.app-nav .member-explore{padding-top:14px}.app-nav>form{position:absolute;right:18px;top:29px;margin:0}.app-content{padding:30px 16px 60px}.coach-flow footer{background:#fffdf8}}
