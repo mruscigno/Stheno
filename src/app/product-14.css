@@ -821,6 +821,296 @@ body:not(:has(.app-shell)):not(:has(.p14-home)) .exercise-grid > a {
   border-color: var(--p14-line);
   color: var(--p14-ink);
 }
+
+/* Product 14 public-system alignment: chrome, tools, and long-form reading. */
+body:not(:has(.app-shell)) .global-header {
+  background: rgba(22, 23, 19, 0.97);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+body:not(:has(.app-shell)) .global-header .chrome-shell {
+  height: 84px;
+}
+body:not(:has(.app-shell)) .global-header .brand {
+  flex: 0 0 auto;
+  gap: 13px;
+  color: #fffdf8;
+  font-size: 1.02rem;
+  font-weight: 820;
+}
+body:not(:has(.app-shell)) .global-header .brand-mark {
+  width: 42px;
+  height: 42px;
+  font-size: 1.65rem;
+  background: rgba(189, 143, 58, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+body:not(:has(.app-shell)) .global-header .brand small {
+  color: #e8c87d;
+  font-size: 0.5rem;
+}
+body:not(:has(.app-shell)) .global-header nav {
+  color: #d4d3ce;
+}
+body:not(:has(.app-shell)) .global-header .header-actions > a:first-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  color: #fffdf8;
+  font-weight: 740;
+}
+body:not(:has(.app-shell)) .global-header .header-actions > a:first-child:hover {
+  border-color: #e8c87d;
+  color: #e8c87d;
+}
+body:not(:has(.app-shell)) .global-footer .brand {
+  color: #fffdf8;
+}
+body:not(:has(.app-shell)) .global-footer .brand small {
+  color: #e8c87d;
+}
+
+body:not(:has(.app-shell)) .calculator-shell {
+  align-items: start;
+  gap: clamp(22px, 4vw, 44px);
+}
+body:not(:has(.app-shell)) .calculator-form,
+body:not(:has(.app-shell)) .calculator-result,
+body:not(:has(.app-shell)) .calculator-shell > aside {
+  background: var(--p14-ivory);
+  border-color: var(--p14-line);
+  color: var(--p14-ink);
+  box-shadow: 0 18px 55px rgba(38, 34, 25, 0.08);
+}
+body:not(:has(.app-shell)) .calculator-form .field {
+  color: #373832;
+  font-weight: 720;
+}
+body:not(:has(.app-shell)) .calculator-shell input,
+body:not(:has(.app-shell)) .calculator-shell select {
+  background: #fff;
+  border-color: #aaa497;
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .calculator-shell input:focus,
+body:not(:has(.app-shell)) .calculator-shell select:focus {
+  border-color: var(--p14-gold-dark);
+  outline: 3px solid rgba(189, 143, 58, 0.18);
+}
+body:not(:has(.app-shell)) .calculator-shell p,
+body:not(:has(.app-shell)) .calculator-result p,
+body:not(:has(.app-shell)) .calculator-shell > aside p {
+  color: #55574f;
+}
+body:not(:has(.app-shell)) .calculator-result h2 {
+  color: var(--p14-gold-dark);
+}
+
+body:not(:has(.app-shell)) .article-new {
+  background: var(--p14-paper);
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .article-hero {
+  padding-top: 78px;
+  padding-bottom: 72px;
+}
+body:not(:has(.app-shell)) .article-hero h1 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(2.9rem, 6vw, 5.45rem);
+  font-weight: 780;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+body:not(:has(.app-shell)) .article-hero > p:not(.kicker) {
+  color: #5f615a;
+}
+body:not(:has(.app-shell)) .article-meta,
+body:not(:has(.app-shell)) .article-layout > aside:first-child {
+  color: #696b64;
+}
+body:not(:has(.app-shell)) .article-layout {
+  grid-template-columns: 160px minmax(0, 720px) 190px;
+  gap: 48px;
+  border-color: var(--p14-line);
+  padding-top: 68px;
+}
+body:not(:has(.app-shell)) .article-layout > aside strong {
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .article-layout article,
+body:not(:has(.app-shell)) .article-new .article-layout article {
+  color: #30312d;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.78;
+}
+body:not(:has(.app-shell)) .article-layout article p,
+body:not(:has(.app-shell)) .article-new .article-layout article p {
+  color: #3f413b;
+  margin: 0 0 1.65rem;
+}
+body:not(:has(.app-shell)) .article-layout article h2,
+body:not(:has(.app-shell)) .article-new .article-layout article h2 {
+  color: var(--p14-ink);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(1.85rem, 3vw, 2.35rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin: 4.75rem 0 1.25rem;
+  scroll-margin-top: 110px;
+}
+body:not(:has(.app-shell)) .article-layout article h3 {
+  color: var(--p14-ink);
+  font-size: 1.15rem;
+  line-height: 1.35;
+  margin: 2.25rem 0 0.75rem;
+}
+body:not(:has(.app-shell)) .article-new .article-lead {
+  color: #262722;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.52rem) !important;
+  font-weight: 540;
+  line-height: 1.58;
+}
+body:not(:has(.app-shell)) .article-callout {
+  background: #eee8dc;
+  border-color: var(--p14-gold);
+  color: var(--p14-ink);
+  margin: 2.75rem 0;
+}
+body:not(:has(.app-shell)) .article-callout strong,
+body:not(:has(.app-shell)) .related-rail span {
+  color: var(--p14-gold-dark);
+}
+body:not(:has(.app-shell)) .related-rail > a {
+  border-color: var(--p14-line);
+  color: var(--p14-ink);
+}
+body:not(:has(.app-shell)) .article-decision-table td {
+  color: #343630;
+  border-color: var(--p14-line);
+}
+body:not(:has(.app-shell)) .article-workbook,
+body:not(:has(.app-shell)) .evidence-notes {
+  margin-top: 4.75rem;
+  padding-top: 0.5rem;
+}
+body:not(:has(.app-shell)) .article-workbook h3 {
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--p14-line);
+}
+body:not(:has(.app-shell)) .article-cta {
+  background: #ebe5d9;
+  color: var(--p14-ink);
+  margin-top: 4.75rem;
+}
+body:not(:has(.app-shell)) .article-page:not(.methodology-page) {
+  padding-top: 72px;
+  padding-bottom: 100px;
+  max-width: 760px;
+}
+body:not(:has(.app-shell)) .article-page:not(.methodology-page) > h1,
+body:not(:has(.app-shell)) .related-section h2,
+body:not(:has(.app-shell)) .related-section h3 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-weight: 760;
+  letter-spacing: -0.045em;
+}
+body:not(:has(.app-shell)) .article-page:not(.methodology-page) > h2 {
+  margin: 3.75rem 0 1rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  letter-spacing: -0.035em;
+}
+body:not(:has(.app-shell)) .article-page:not(.methodology-page) > p {
+  color: #3f413b;
+  font-size: 1.08rem;
+  line-height: 1.78;
+  margin: 0 0 1.55rem;
+}
+body:not(:has(.app-shell)) .related-section .insight-grid h3 {
+  font-size: 1.35rem;
+}
+
+.methodology-page {
+  padding-top: 58px;
+  padding-bottom: 110px;
+  color: var(--p14-ink);
+}
+.methodology-hero {
+  max-width: 930px;
+  padding: 48px 0 76px;
+}
+.methodology-hero h1 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(3.2rem, 7vw, 6.6rem);
+  font-weight: 790;
+  line-height: 0.94;
+  letter-spacing: -0.07em;
+  margin: 20px 0 28px;
+}
+.methodology-hero .lede {
+  color: #50524c;
+  font-size: clamp(1.12rem, 2vw, 1.38rem);
+}
+.methodology-grid {
+  border-top: 1px solid var(--p14-line);
+}
+.methodology-grid section {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 720px);
+  gap: 28px;
+  padding: 38px 0;
+  border-bottom: 1px solid var(--p14-line);
+}
+.methodology-grid section > span {
+  color: var(--p14-gold-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+.methodology-grid h2 {
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+.methodology-grid p {
+  color: #50524c;
+  font-size: 1.05rem;
+  line-height: 1.72;
+  margin: 0;
+}
+.methodology-actions {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-top: 48px;
+}
+.methodology-link {
+  color: var(--p14-ink);
+  font-weight: 750;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+@media (max-width: 640px) {
+  .methodology-page {
+    padding-top: 34px;
+    padding-bottom: 76px;
+  }
+  .methodology-hero {
+    padding: 32px 0 54px;
+  }
+  .methodology-grid section {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+    padding: 28px 0;
+  }
+  .methodology-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 @media (max-width: 960px) {
   .p14-hero {
     grid-template-columns: 1fr;
