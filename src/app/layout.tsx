@@ -15,7 +15,9 @@ import "./guide-quality.css";
 import "./trial-access.css";
 import "./mobile-navigation.css";
 import "./product-14.css";
+import "./heycatch.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
+import { defaultSocialImage } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +31,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://www.sthenofitness.com"),
-  title: { default: "STHENO Fitness", template: "%s | STHENO Fitness" },
-  description: "Evidence-led digital fitness coaching. Your Fitness. Handled.",
+  title: { default: "STHENO Fitness | Personalized Fitness Coaching & Training Plans", template: "%s | STHENO Fitness" },
+  description: "Personalized workouts, nutrition guidance, and ongoing coaching built around your goals, schedule, equipment, and real life.",
   alternates: { canonical: "/" },
-  openGraph: { title: "STHENO Fitness", description: "Your Fitness. Handled.", url: "/", siteName: "STHENO Fitness", type: "website" },
-  twitter: { card: "summary_large_image", title: "STHENO Fitness", description: "Your Fitness. Handled." },
+  openGraph: { title: "STHENO Fitness | Personalized Fitness Coaching", description: "Your fitness. Handled. Personalized training, nutrition, and coaching that adapts to real life.", url: "/", siteName: "STHENO Fitness", type: "website", images: [defaultSocialImage] },
+  twitter: { card: "summary_large_image", title: "STHENO Fitness | Personalized Fitness Coaching", description: "Your fitness. Handled. Personalized training, nutrition, and coaching that adapts to real life.", images: [defaultSocialImage.url] },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MobileMenu } from "@/components/public/mobile-menu";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 export function SiteHeader() {
   const authState = usePublicAuthState();
   return (
@@ -16,11 +17,11 @@ export function SiteHeader() {
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="/how-it-works">How it works</Link>
-          <Link href="/how-it-works#training">Training</Link>
-          <Link href="/how-it-works#nutrition">Nutrition</Link>
-          <Link href="/tools">Free tools</Link>
+          <TrackedLink event="nav_methodology_click" href="/methodology">Methodology</TrackedLink>
           <Link href="/insights">Learn</Link>
+          <Link href="/tools">Free tools</Link>
           <Link href="/pricing">Pricing</Link>
+          <TrackedLink event="nav_about_click" href="/about">About</TrackedLink>
         </nav>
         <div className="header-actions">
           {authState === "signed-in" ? (
@@ -60,9 +61,11 @@ export function SiteFooter() {
           <strong>Explore</strong>
           <Link href="/assessment">Free assessment</Link>
           <Link href="/how-it-works">How it works</Link>
+          <Link href="/methodology">Methodology</Link>
           <Link href="/tools">Tools</Link>
           <Link href="/insights">Learn</Link>
           <Link href="/exercises">Exercises</Link>
+          <Link href="/about">About</Link>
         </nav>
         <nav aria-label="Account">
           <strong>Account</strong>

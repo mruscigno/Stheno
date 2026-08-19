@@ -2,6 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { tools } from "@/modules/library/tools";
 import { articles } from "@/modules/library/articles";
+import type { Metadata } from "next";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { publicMetadata, safeJsonLd, siteUrl } from "@/lib/seo";
+import { membership, annualSavings } from "@/modules/commerce/product";
+import { TrackedLink } from "@/components/analytics/tracked-link";
+
+export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | Personalized Fitness Coaching & Training Plans", description: "Personalized workouts, nutrition guidance, and ongoing coaching built around your goals, schedule, equipment, and real life.", path: "/" });
 
 const media = "/media/product-14";
 const Check = () => (
@@ -10,12 +17,20 @@ const Check = () => (
   </span>
 );
 
-export default function Home() {
+async function exercisePreview() {
+  const db = await createSupabaseServerClient();
+  if (!db) return { count: 0, exercises: [] };
+  const { data, count } = await db.from("exercises").select("slug,name,primary_muscles,required_equipment,education", { count: "exact" }).eq("status", "production").eq("review_status", "reviewed").order("name").limit(6);
+  return { count: count ?? data?.length ?? 0, exercises: data ?? [] };
+}
+
+export default async function Home() {
+  const preview = await exercisePreview();
   return (
     <main className="p14-home">
       <section className="p14-hero">
         <div className="p14-hero-copy">
-          <p className="p14-kicker">Training · Nutrition · Coaching</p>
+          <p className="p14-kicker">Personalized fitness coaching</p>
           <h1>
             Your fitness.
             <br />
@@ -26,12 +41,8 @@ export default function Home() {
             goals, your schedule, and real life—adapting as you progress.
           </p>
           <div className="p14-actions">
-            <Link className="p14-button" href="/assessment">
-              Build my free plan <span>→</span>
-            </Link>
-            <Link className="p14-text-link" href="/how-it-works">
-              See how it works
-            </Link>
+            <TrackedLink event="hero_primary_cta_click" className="p14-button" href="/assessment">Get my free fitness plan <span>→</span></TrackedLink>
+            <TrackedLink event="hero_secondary_cta_click" className="p14-text-link" href="/how-it-works">See how STHENO works</TrackedLink>
           </div>
           <p className="p14-no-card">
             No credit card required · Your complete Blueprint is free
@@ -109,7 +120,7 @@ export default function Home() {
           fill
             sizes="(max-width: 800px) 100vw, 46vw"
           />
-          <span>330 reviewed exercises</span>
+          <span>{preview.count ? `${preview.count} reviewed exercises` : "Reviewed exercise library"}</span>
         </div>
         <div className="p14-section-copy">
           <p className="p14-kicker">Training</p>
@@ -313,6 +324,15 @@ export default function Home() {
           Explore all free tools
         </Link>
       </section>
+      {preview.exercises.length ? <section className="exercise-proof p14-shell">
+        <div className="p14-section-heading"><p className="p14-kicker">Inside the exercise library</p><h2>Real guidance, before you ever start a set.</h2><p>Every public entry below comes directly from the production exercise library.</p></div>
+        <div className="exercise-proof-grid">{preview.exercises.map((exercise) => {
+          const education = exercise.education as { setup?: string[]; execution?: string[]; cues?: string[]; mistakes?: string[] } | null;
+          return <TrackedLink event="exercise_preview_open" eventProperties={{ exercise: exercise.slug }} href={`/exercises/${exercise.slug}`} key={exercise.slug}>
+            <span>{(exercise.primary_muscles as string[]).join(" · ")}</span><h3>{exercise.name}</h3><p><b>Equipment</b> {(exercise.required_equipment as string[]).join(", ")}</p><p><b>Set up</b> {education?.setup?.[0] ?? education?.cues?.[0] ?? "Use a stable, repeatable position."}</p><p><b>Do</b> {education?.execution?.[0] ?? education?.cues?.[1] ?? "Move with a controlled range you can repeat."}</p><p><b>Avoid</b> {education?.mistakes?.[0] ?? "Using load that changes the intended movement."}</p><strong>Open exercise guide →</strong>
+          </TrackedLink>;
+        })}</div><Link className="p14-outline-button" href="/exercises">Browse all {preview.count} movements</Link>
+      </section> : null}
       <section className="p14-learn">
         <div className="p14-shell">
           <div className="p14-section-heading">
@@ -353,9 +373,9 @@ export default function Home() {
         <div className="p14-price-card">
           <span>STHENO membership</span>
           <strong>
-            $14.99<small>/month</small>
+            {membership.monthly.label}<small>/{membership.monthly.interval}</small>
           </strong>
-          <p>or $119 annually · save $60.88</p>
+          <p>or {membership.annual.label} annually · save ${annualSavings}</p>
           <ul>
             <li>Personalized training</li>
             <li>Nutrition guidance</li>
@@ -423,6 +443,10 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:safeJsonLd([
+        {"@context":"https://schema.org","@type":"Organization",name:"STHENO Fitness",url:siteUrl},
+        {"@context":"https://schema.org","@type":"WebSite",name:"STHENO Fitness",url:siteUrl},
+      ])}} />
     </main>
   );
 }

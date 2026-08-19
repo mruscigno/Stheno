@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { TrackView } from "@/components/analytics/tracked-link";
 
 export const metadata: Metadata = {
   title: "Methodology & Editorial Standard",
@@ -33,6 +34,7 @@ const standards = [
 export default function Methodology() {
   return (
     <main className="methodology-page shell">
+      <TrackView event="methodology_view" />
       <nav className="breadcrumbs">
         <Link href="/">Home</Link> / Methodology
       </nav>

@@ -4,11 +4,11 @@ import { useState } from "react";
 import type { PublicAuthState } from "@/components/public/use-auth-state";
 const links = [
   ["/how-it-works", "How it works"],
-  ["/how-it-works#training", "Training"],
-  ["/how-it-works#nutrition", "Nutrition"],
-  ["/tools", "Free tools"],
+  ["/methodology", "Methodology"],
   ["/insights", "Learn"],
+  ["/tools", "Free tools"],
   ["/pricing", "Pricing"],
+  ["/about", "About"],
 ] as const;
 export function MobileMenu({ authState }: { authState: PublicAuthState }) {
   const [open, setOpen] = useState(false);

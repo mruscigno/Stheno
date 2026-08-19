@@ -1,0 +1,3 @@
+import { testimonials, userCountProof } from "@/modules/trust/evidence";
+export function TestimonialsSection() { const published = testimonials.filter((item) => item.published); if (!published.length) return null; return <section aria-label="Member stories">{published.map((item)=><blockquote key={`${item.firstName}-${item.quote}`}><p>“{item.quote}”</p><footer>{item.firstName} · {item.context}</footer></blockquote>)}</section>; }
+export function UserCountProof() { if (!userCountProof.published || userCountProof.count === null || !userCountProof.source) return null; return <p>{userCountProof.count.toLocaleString()} members supported</p>; }
