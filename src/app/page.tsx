@@ -1,5 +1,556 @@
-import Link from"next/link";import{tools}from"@/modules/library/tools";import{articles}from"@/modules/library/articles";
-const Check=()=> <span className="check" aria-hidden="true">✓</span>;
-export default function Home(){return <main><section className="home-hero chrome-shell"><div className="hero-copy"><p className="kicker">Personal training, without the guesswork</p><h1>Your fitness.<br/><em>Handled.</em></h1><p>Tell us where you want to go and what real life looks like. STHENO builds your training and nutrition plan, then keeps it useful as life changes.</p><div className="hero-actions"><Link className="button button-large" href="/assessment">Build my free plan <span>→</span></Link><span>No card · About 4 minutes</span></div><div className="hero-proof"><span><Check/> Built around your schedule</span><span><Check/> Clear reasons, no jargon</span><span><Check/> Adjusts when life happens</span></div></div><BlueprintPreview/></section><section className="trust-strip"><div className="chrome-shell"><span>330 reviewed exercises</span><span>20 free fitness tools</span><span>25 published evidence guides</span></div></section><section className="section chrome-shell split"><div><p className="kicker">Fitness made simpler</p><h2>You don’t need to become a fitness expert.</h2></div><div className="large-copy"><p>You need to know what to do today, why it matters, and what changes when the plan stops fitting your life.</p><p>STHENO handles the planning. You handle the next useful step.</p><Link className="text-link" href="/how-it-works">See how STHENO works →</Link></div></section><section className="section chrome-shell"><div className="section-heading"><p className="kicker">How it works</p><h2>From uncertainty to a plan you can use.</h2></div><div className="home-card-grid process-cards">{[["01","Tell us about real life","Goal, experience, schedule, equipment, preferences, and constraints."],["02","See your starting strategy","A clear training week, nutrition direction, and first priorities—free."],["03","Let STHENO run the plan","Guided workouts, progress decisions, and adjustments when life changes."]].map(([n,h,p])=><div key={n}><span>{n}</span><h3>{h}</h3><p>{p}</p></div>)}</div></section><section className="section chrome-shell"><div className="section-heading"><p className="kicker">Today’s workout</p><h2>Walk in knowing exactly what to do.</h2><p>Every session arrives with exercises, targets, cues, and simple ways to adapt.</p></div><WorkoutDemo/></section><section className="section nutrition-section"><div className="chrome-shell split"><div><p className="kicker">Nutrition that connects</p><h2>Useful targets. Normal food. No invented certainty.</h2><p className="large-copy">STHENO gives you a protein range, calorie direction, and meal structure that fit the same goal as your training. Your real trend—not a one-time equation—guides the next adjustment.</p><Link className="text-link" href="/tools/protein">Estimate your protein range →</Link></div><div className="nutrition-board"><div><span>DAILY DIRECTION</span><strong>125–150g</strong><small>protein range</small></div><div><span>MEAL STRUCTURE</span><p><b>Protein</b> at each meal</p><p><b>Produce</b> most meals</p><p><b>Carbs</b> scaled to training</p></div><footer>Based on your goal and 75 kg starting weight · educational estimate</footer></div></div></section><section className="section contrast"><div className="chrome-shell split"><div><p className="kicker">Real life is part of the plan</p><h2>Going away? Your week changes with you.</h2><p className="large-copy">Tell STHENO you have a hotel gym and 30 minutes. It keeps the purpose of the session while changing the details.</p><div className="change-list"><p><span>Before</span> Barbell squat · Bench press · Cable row</p><p><span>After</span> Goblet squat · Push-up · One-arm dumbbell row</p></div></div><div className="coach-card"><div className="coach-title"><span className="brand-mark small">S</span><div><strong>STHENO Coach</strong><small>Travel adjustment</small></div></div><p>“I kept your full-body day, swapped three exercises for hotel-friendly options, and trimmed one accessory. You’ll still train the same movement patterns in 30 minutes.”</p><div className="coach-actions"><span>Review changes</span><strong>Apply to this week →</strong></div></div></div></section><section className="section chrome-shell"><div className="section-heading"><p className="kicker">Progress without panic</p><h2>Your plan listens to what actually happened.</h2></div><div className="progress-layout"><div className="progress-chart"><div className="chart-top"><span>Training consistency</span><strong>82%</strong></div><div className="bars">{[48,62,58,76,72,88,82].map((h,i)=><i key={i} style={{height:`${h}%`}}/> )}</div><div className="chart-labels"><span>Week 1</span><span>Week 7</span></div></div><div className="weekly-note"><p className="kicker">This week</p><h3>You’re getting stronger without adding more time.</h3><p>Your main lifts moved up while your sessions stayed near 48 minutes. Next week keeps the same schedule and progresses two exercises.</p><Link href="/assessment">Build my starting plan →</Link></div></div></section><section className="section soft"><div className="chrome-shell"><div className="section-heading"><p className="kicker">Free tools</p><h2>Useful answers before you ever pay.</h2><p>Calculate a starting point, understand the result, and learn where the estimate has limits.</p></div><div className="home-card-grid">{tools.slice(0,6).map(t=><Link href={`/tools/${t.slug}`} key={t.slug}><span>Free tool</span><h3>{t.title}</h3><p>{t.summary}</p><b>Use calculator →</b></Link>)}</div><Link className="button secondary-dark" href="/tools">Explore all 20 tools</Link></div></section><section className="section chrome-shell"><div className="section-heading"><p className="kicker">Learn without the noise</p><h2>Fitness guidance for real questions.</h2></div><div className="editorial-grid">{articles.slice(0,3).map((a,i)=><Link href={`/insights/${a.slug}`} key={a.slug} className={i===0?"featured":""}><span>{a.pillar.replaceAll("-"," ")}</span><h3>{a.title}</h3><p>{a.thesis}</p><b>Read guide →</b></Link>)}</div></section><section className="section credibility"><div className="chrome-shell"><p className="kicker">Built with visible standards</p><div className="split"><h2>Evidence where it helps. Honesty where it ends.</h2><div className="large-copy"><p>Tools show equations and limits. Articles identify evidence and editorial status. Exercise profiles display reviewed content versions and original media provenance.</p><p>STHENO is fitness education and coaching—not medical diagnosis or emergency care.</p><Link className="text-link" href="/methodology">Read our methodology →</Link></div></div></div></section><section className="section price-section"><div className="chrome-shell split"><div><p className="kicker">One simple membership</p><h2>Try the full experience for 14 days.</h2><p>Start with your free plan. Upgrade when you’re ready for ongoing workouts, coaching, and adjustments.</p></div><div className="price-callout"><span>From</span><strong>$9.92<small>/month</small></strong><p>$119 billed annually, or $14.99 monthly.</p><Link className="button button-large" href="/pricing">See membership</Link></div></div></section><section className="section chrome-shell faq"><div><p className="kicker">Questions, answered</p><h2>Start without overthinking it.</h2></div><div>{[["Is the assessment really free?","Yes. Your starting Blueprint is free and does not require a card."],["Do I need a gym?","No. Your available equipment shapes the exercises STHENO chooses."],["What if I miss workouts?","Nothing gets punished. STHENO helps you resume or adjust the week."],["Is this medical advice?","No. STHENO provides fitness education and flags situations that need qualified care."]].map(([q,a])=><details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div></section><section className="final-cta"><div className="chrome-shell"><p className="kicker">Your next step is simple</p><h2>Tell us where you want to go.<br/>We’ll handle how you get there.</h2><Link className="button button-large" href="/assessment">Build my free plan →</Link><span>No card · About 4 minutes</span></div></section></main>}
-function BlueprintPreview(){return <div className="blueprint-preview"><div className="preview-bar"><span>YOUR STARTING BLUEPRINT</span><b>01 / 03</b></div><div className="preview-head"><div><small>Built for</small><strong>Build strength</strong></div><span>3 days / week</span></div><div className="preview-week"><span>MON<strong>Full body A</strong><small>45 min</small></span><span>WED<strong>Full body B</strong><small>48 min</small></span><span>FRI<strong>Full body C</strong><small>42 min</small></span></div><div className="preview-target"><span>Daily protein range</span><strong>125–150 g</strong></div><div className="preview-bottom"><span><i/> Beginner-friendly start</span><span><i/> Home + gym options</span></div></div>}
-function WorkoutDemo(){return <div className="workout-demo"><aside><span>STHENO</span><nav><b>Today</b><span>Plan</span><span>Progress</span><span>Coach</span></nav><small>Week 3 of 8</small></aside><div className="workout-main"><div className="workout-top"><div><span>MONDAY · FULL BODY A</span><h3>Build strength</h3></div><span>~48 min</span></div>{[["01","Goblet squat","3 × 8–10","18 kg"],["02","Dumbbell bench press","3 × 8–12","12 kg"],["03","One-arm dumbbell row","3 × 10","14 kg"]].map(([n,name,reps,load])=><div className="exercise-row" key={n}><b>{n}</b><div><strong>{name}</strong><span>{reps}</span></div><span>{load}</span><button aria-label={`Open ${name}`}>→</button></div>)}<div className="workout-footer"><span>Next: Romanian deadlift + 2 accessories</span><b>Start workout →</b></div></div><div className="muscle-panel"><span>MUSCLES TODAY</span><div className="body-map" aria-label="Muscle focus illustration"><i/><i/><i/><i/></div><strong>Full body</strong><small>Legs · Chest · Back</small><hr/><p>Feeling short on time?</p><button>Make it 30 minutes</button></div></div>}
+import Image from "next/image";
+import Link from "next/link";
+import { tools } from "@/modules/library/tools";
+import { articles } from "@/modules/library/articles";
+
+const media = "/media/product-14";
+const Check = () => (
+  <span className="p14-check" aria-hidden="true">
+    ✓
+  </span>
+);
+
+export default function Home() {
+  return (
+    <main className="p14-home">
+      <section className="p14-hero">
+        <div className="p14-hero-copy">
+          <p className="p14-kicker">Training · Nutrition · Coaching</p>
+          <h1>
+            Your fitness.
+            <br />
+            <span>Handled.</span>
+          </h1>
+          <p className="p14-lede">
+            Personalized workouts, nutrition, and coaching built around your
+            goals, your schedule, and real life—adapting as you progress.
+          </p>
+          <div className="p14-actions">
+            <Link className="p14-button" href="/assessment">
+              Build my free plan <span>→</span>
+            </Link>
+            <Link className="p14-text-link" href="/how-it-works">
+              See how it works
+            </Link>
+          </div>
+          <p className="p14-no-card">
+            No credit card required · Your complete Blueprint is free
+          </p>
+        </div>
+        <div className="p14-hero-media">
+          <Image
+            src={`${media}/hero-strength.jpg`}
+            alt="Adult strength training with dumbbells in a gym"
+            fill
+            priority
+            sizes="(max-width: 800px) 100vw, 58vw"
+          />
+          <div className="p14-live-card">
+            <span>MONDAY · FULL BODY</span>
+            <strong>Next: Dumbbell row</strong>
+            <small>3 sets · 8–10 reps · 90 sec rest</small>
+          </div>
+          <div className="p14-hero-badge">
+            <strong>3</strong>
+            <span>
+              workouts
+              <br />
+              this week
+            </span>
+          </div>
+        </div>
+      </section>
+      <section className="p14-blueprint p14-shell">
+        <div className="p14-section-copy">
+          <p className="p14-kicker">Your personalized Blueprint</p>
+          <h2>A plan that starts with you.</h2>
+          <p>
+            Answer a focused assessment and see exactly how your training,
+            nutrition, activity, and progress strategy fit together.
+          </p>
+          <Link className="p14-text-link" href="/assessment">
+            Build your Blueprint →
+          </Link>
+        </div>
+        <BlueprintPreview />
+      </section>
+      <section className="p14-simplicity">
+        <div className="p14-shell">
+          <p className="p14-kicker">Fitness made clear</p>
+          <h2>You don’t need to become a fitness expert.</h2>
+          <div className="p14-three">
+            <article>
+              <b>01</b>
+              <h3>Know exactly what to do.</h3>
+              <p>
+                Your session, sets, reps, cues, and rest—ready when you are.
+              </p>
+            </article>
+            <article>
+              <b>02</b>
+              <h3>Know what to eat.</h3>
+              <p>
+                Useful targets and meal structure without a rigid meal plan.
+              </p>
+            </article>
+            <article>
+              <b>03</b>
+              <h3>Know when to change things.</h3>
+              <p>Your real progress tells STHENO what should happen next.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <section className="p14-training p14-shell">
+        <div className="p14-photo-stack">
+          <Image
+            src={`${media}/gym-training.jpg`}
+          alt="Woman strength training in a commercial gym"
+          fill
+            sizes="(max-width: 800px) 100vw, 46vw"
+          />
+          <span>330 reviewed exercises</span>
+        </div>
+        <div className="p14-section-copy">
+          <p className="p14-kicker">Training</p>
+          <h2>Walk into the gym knowing exactly what to do.</h2>
+          <p>
+            Every workout includes targets, previous performance,
+            beginner-friendly exercise guidance, substitutions, and a rest
+            timer.
+          </p>
+          <WorkoutMini />
+          <Link className="p14-text-link" href="/how-it-works">
+            Explore the training experience →
+          </Link>
+        </div>
+      </section>
+      <section className="p14-nutrition">
+        <div className="p14-shell">
+          <div className="p14-section-copy">
+            <p className="p14-kicker">Nutrition</p>
+            <h2>Know what to eat without living on a meal plan.</h2>
+            <p>
+              Calories, protein, macros, meal timing, and supplements—explained
+              in the context of your goal and normal food.
+            </p>
+            <div className="p14-macros">
+              <span>
+                <b>2,180</b>calories
+              </span>
+              <span>
+                <b>145g</b>protein
+              </span>
+              <span>
+                <b>245g</b>carbs
+              </span>
+              <span>
+                <b>68g</b>fat
+              </span>
+            </div>
+            <Link className="p14-text-link" href="/tools/protein">
+              Estimate your protein range →
+            </Link>
+          </div>
+          <div className="p14-food">
+            <Image
+              src={`${media}/meal-prep.jpg`}
+            alt="A balanced meal with vegetables, eggs, and avocado"
+            fill
+              sizes="(max-width: 800px) 100vw, 48vw"
+            />
+            <div>
+              <strong>Today’s direction</strong>
+              <span>Protein at 3–4 meals</span>
+              <span>Carbs around training</span>
+              <span>Produce twice before dinner</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="p14-adapt">
+        <div className="p14-shell">
+          <div className="p14-adapt-copy">
+            <p className="p14-kicker">Real-life adaptation</p>
+            <h2>Your plan should fit the week you actually have.</h2>
+            <blockquote>
+              “I’m traveling Wednesday through Friday and only have a hotel
+              gym.”
+            </blockquote>
+            <div className="p14-adapt-result">
+              <span>Plan updated</span>
+              <strong>Friday full body · 30 minutes</strong>
+              <small>
+                3 hotel-friendly swaps · same movement patterns · no lost week
+              </small>
+            </div>
+          </div>
+          <div className="p14-adapt-photo">
+            <Image
+              src={`${media}/home-training.jpg`}
+            alt="Woman completing a limited-equipment workout"
+            fill
+              sizes="(max-width: 800px) 100vw, 44vw"
+            />
+          </div>
+        </div>
+      </section>
+      <section className="p14-coach p14-shell">
+        <div className="p14-coach-photo">
+          <Image
+            src={`${media}/phone-training.jpg`}
+          alt="Active adults training together"
+          fill
+            sizes="(max-width: 800px) 100vw, 42vw"
+          />
+        </div>
+        <div className="p14-section-copy">
+          <p className="p14-kicker">STHENO Coach</p>
+          <h2>Ask a question. Leave with a decision.</h2>
+          <div className="p14-chat">
+            <p className="user">
+              I only have 30 minutes today. What should I do?
+            </p>
+            <p className="stheno">
+              <b>STHENO</b>Keep the first four exercises. I shortened rest on
+              the accessories and removed one optional finisher. You’ll preserve
+              the main work and finish in about 28 minutes.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="p14-progress">
+        <div className="p14-shell">
+          <div className="p14-section-copy">
+            <p className="p14-kicker">Progress</p>
+            <h2>See the trend. Understand the next move.</h2>
+            <p>
+              Strength, consistency, body trend, recovery, and weekly check-ins
+              come together in one clear view.
+            </p>
+          </div>
+          <ProgressPanel />
+        </div>
+      </section>
+      <section className="p14-how p14-shell">
+        <div className="p14-section-heading">
+          <p className="p14-kicker">How STHENO works</p>
+          <h2>One connected coaching loop.</h2>
+        </div>
+        <ol>
+          {[
+            [
+              "01",
+              "Assess",
+              "Tell us your goals, experience, schedule, equipment, and constraints.",
+            ],
+            [
+              "02",
+              "Plan",
+              "Get a training and nutrition strategy built around your starting point.",
+            ],
+            [
+              "03",
+              "Train",
+              "Open today’s workout and log the whole session in one focused flow.",
+            ],
+            [
+              "04",
+              "Check in",
+              "Share progress, recovery, adherence, and what real life changed.",
+            ],
+            [
+              "05",
+              "Adapt",
+              "STHENO explains and applies the next useful adjustment.",
+            ],
+          ].map(([n, h, p]) => (
+            <li key={n}>
+              <b>{n}</b>
+              <h3>{h}</h3>
+              <p>{p}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section className="p14-evidence">
+        <div className="p14-shell">
+          <p className="p14-kicker">Built with visible standards</p>
+          <h2>Proven principles. Clear reasons. No invented certainty.</h2>
+          <div>
+            <p>
+              <Check /> Built on established training and nutrition principles
+            </p>
+            <p>
+              <Check /> Every plan change comes with a plain-language reason
+            </p>
+            <p>
+              <Check /> Estimates show their limits instead of pretending to be
+              promises
+            </p>
+          </div>
+          <Link className="p14-text-link" href="/methodology">
+            Read our methodology →
+          </Link>
+        </div>
+      </section>
+      <section className="p14-tools p14-shell">
+        <div className="p14-section-heading">
+          <p className="p14-kicker">Free fitness tools</p>
+          <h2>Useful answers. No account required.</h2>
+        </div>
+        <div className="p14-tool-grid">
+          {tools.slice(0, 6).map((tool, index) => (
+            <Link href={`/tools/${tool.slug}`} key={tool.slug}>
+              <span>0{index + 1}</span>
+              <h3>{tool.title}</h3>
+              <p>{tool.summary}</p>
+              <b>Use tool →</b>
+            </Link>
+          ))}
+        </div>
+        <Link className="p14-outline-button" href="/tools">
+          Explore all free tools
+        </Link>
+      </section>
+      <section className="p14-learn">
+        <div className="p14-shell">
+          <div className="p14-section-heading">
+            <p className="p14-kicker">Learn</p>
+            <h2>Fitness guidance worth reading.</h2>
+          </div>
+          <div className="p14-editorial">
+            {articles.slice(0, 3).map((article, index) => (
+              <Link href={`/insights/${article.slug}`} key={article.slug}>
+                <div className="p14-article-image">
+                  <Image
+                    src={`${media}/${["recovery.jpg", "food-composition.jpg", "woman-strength.jpg"][index]}`}
+                    alt=""
+                    fill
+                    sizes="(max-width: 800px) 100vw, 33vw"
+                  />
+                </div>
+                <span>
+                  {article.pillar.replaceAll("-", " ")} · {6 + index * 2} min
+                  read
+                </span>
+                <h3>{article.title}</h3>
+                <b>Read article →</b>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="p14-pricing p14-shell">
+        <div>
+          <p className="p14-kicker">One membership</p>
+          <h2>Everything connected for less than one training session.</h2>
+          <p>
+            Begin with the complete 14-day trial. No payment method is required
+            to start.
+          </p>
+        </div>
+        <div className="p14-price-card">
+          <span>STHENO membership</span>
+          <strong>
+            $14.99<small>/month</small>
+          </strong>
+          <p>or $119 annually · save $60.88</p>
+          <ul>
+            <li>Personalized training</li>
+            <li>Nutrition guidance</li>
+            <li>Adaptive coaching</li>
+            <li>Progress intelligence</li>
+          </ul>
+          <Link className="p14-button" href="/assessment">
+            Start my free plan
+          </Link>
+        </div>
+      </section>
+      <section className="p14-faq p14-shell">
+        <div>
+          <p className="p14-kicker">Common questions</p>
+          <h2>Start with confidence.</h2>
+        </div>
+        <div>
+          {[
+            [
+              "Is the assessment really free?",
+              "Yes. Your personalized starting Blueprint is free and does not require a credit card.",
+            ],
+            [
+              "Do I need a gym?",
+              "No. Your available equipment shapes every exercise in your program.",
+            ],
+            [
+              "What happens when I miss a workout?",
+              "Nothing gets punished. STHENO helps you resume, shorten, or adjust the week.",
+            ],
+            [
+              "Can I change my program?",
+              "Yes. Retake the assessment whenever your goal, schedule, or equipment changes.",
+            ],
+            [
+              "Is STHENO medical care?",
+              "No. STHENO provides fitness education and directs health concerns to qualified professionals.",
+            ],
+          ].map(([q, a]) => (
+            <details key={q}>
+              <summary>
+                {q}
+                <span>+</span>
+              </summary>
+              <p>{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+      <section className="p14-final">
+        <Image
+          src={`${media}/walking.jpg`}
+        alt="Adults moving outdoors"
+        fill
+          sizes="100vw"
+        />
+        <div>
+          <p className="p14-kicker">Start where you are</p>
+          <h2>Your next plan should fit your life.</h2>
+          <p>
+            Four focused minutes. A complete starting Blueprint. No credit card.
+          </p>
+          <Link className="p14-button" href="/assessment">
+            Build my free plan →
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function BlueprintPreview() {
+  return (
+    <div className="p14-blueprint-card">
+      <header>
+        <span>STHENO BLUEPRINT</span>
+        <b>Ready to begin</b>
+      </header>
+      <div className="p14-bp-goal">
+        <small>PRIMARY GOAL</small>
+        <strong>Build strength</strong>
+        <span>Realistic pace · 12-week first phase</span>
+      </div>
+      <div className="p14-bp-grid">
+        <span>
+          <small>TRAINING</small>
+          <b>3 days</b>
+          <em>Full body</em>
+        </span>
+        <span>
+          <small>NUTRITION</small>
+          <b>2,180 kcal</b>
+          <em>145g protein</em>
+        </span>
+        <span>
+          <small>ACTIVITY</small>
+          <b>8,000</b>
+          <em>steps / day</em>
+        </span>
+        <span>
+          <small>CARDIO</small>
+          <b>2 × 20</b>
+          <em>minutes</em>
+        </span>
+      </div>
+      <footer>
+        <span>
+          <i />
+          Built around a 45-minute session
+        </span>
+        <span>
+          <i />
+          Gym + home backup
+        </span>
+      </footer>
+    </div>
+  );
+}
+function WorkoutMini() {
+  return (
+    <div className="p14-workout-mini">
+      <header>
+        <span>TODAY · FULL BODY A</span>
+        <b>42 min</b>
+      </header>
+      {[
+        ["Goblet squat", "3 × 8–10", "Last: 40 lb"],
+        ["Dumbbell bench press", "3 × 8–12", "Last: 30 lb"],
+        ["One-arm row", "3 × 10", "Last: 35 lb"],
+      ].map(([name, target, last], i) => (
+        <div key={name}>
+          <b>0{i + 1}</b>
+          <span>
+            <strong>{name}</strong>
+            <small>
+              {target} · {last}
+            </small>
+          </span>
+          <button aria-label={`Exercise info for ${name}`}>Info</button>
+        </div>
+      ))}
+      <footer>
+        <span>Rest timer</span>
+        <strong>01:24</strong>
+      </footer>
+    </div>
+  );
+}
+function ProgressPanel() {
+  return (
+    <div className="p14-progress-panel">
+      <div className="p14-trend">
+        <header>
+          <span>STRENGTH TREND</span>
+          <b>+12.4%</b>
+        </header>
+        <svg
+          viewBox="0 0 600 170"
+          role="img"
+          aria-label="Strength trend rising over eight weeks"
+        >
+          <path
+            d="M10 145 C90 138 115 112 170 120 S255 82 310 90 S400 46 455 56 S535 24 590 18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="6"
+          />
+          <path
+            d="M10 145 C90 138 115 112 170 120 S255 82 310 90 S400 46 455 56 S535 24 590 18 L590 170 L10 170Z"
+            fill="url(#fade)"
+          />
+          <defs>
+            <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+              <stop stopColor="currentColor" stopOpacity=".22" />
+              <stop offset="1" stopColor="currentColor" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <footer>
+          <span>WEEK 1</span>
+          <span>WEEK 8</span>
+        </footer>
+      </div>
+      <div className="p14-week-status">
+        <span>THIS WEEK</span>
+        <strong>On track</strong>
+        <p>
+          3 of 3 workouts complete. Recovery is stable. Two exercises progress
+          next week.
+        </p>
+        <div>
+          <b>87%</b>
+          <small>consistency</small>
+        </div>
+      </div>
+    </div>
+  );
+}
