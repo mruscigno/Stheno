@@ -47,18 +47,20 @@ describe("Vital Animations media ingestion", () => {
     }
   });
 
-  it("retains generated fallback for every non-accepted exercise", () => {
+  it("renders instructions only when purchased provider media is unavailable", () => {
     const accepted = new Set(Object.keys(manifest));
     for (const exercise of catalog) {
       if (accepted.has(exercise.slug)) continue;
-      expect(existsSync(path.join(process.cwd(), "public", "exercise-media", "videos", `${exercise.slug}.mp4`))).toBe(true);
-      expect(existsSync(path.join(process.cwd(), "public", "exercise-media", "posters", `${exercise.slug}.webp`))).toBe(true);
+      expect(existsSync(path.join(process.cwd(), "public", "exercise-media", "videos", `${exercise.slug}.mp4`))).toBe(false);
+      expect(existsSync(path.join(process.cwd(), "public", "exercise-media", "posters", `${exercise.slug}.webp`))).toBe(false);
+      expect(renderToStaticMarkup(createElement(ExerciseVideo, { slug: exercise.slug, name: exercise.name }))).toBe("");
     }
   });
 
-  it("prioritizes provider media and keeps the generated source behind it", () => {
+  it("uses only purchased provider media when available", () => {
     const html = renderToStaticMarkup(createElement(ExerciseVideo, { slug: "barbell-back-squat", name: "Barbell Back Squat" }));
-    expect(html.indexOf("/exercise-media/vital/videos/barbell-back-squat.mp4")).toBeLessThan(html.indexOf("/exercise-media/videos/barbell-back-squat.mp4"));
+    expect(html).toContain("/exercise-media/vital/videos/barbell-back-squat.mp4");
+    expect(html).not.toContain("/exercise-media/videos/barbell-back-squat.mp4");
     expect(html).toContain("playsInline");
     expect(html).toContain('preload="none"');
   });

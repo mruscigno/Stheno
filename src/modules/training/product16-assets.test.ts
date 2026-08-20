@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
+import purchasedMedia from "../exercise-media/vital-manifest.json";
 
 type Restored = {
   slug: string;
@@ -40,9 +41,13 @@ describe("Product 16 complete exercise library", () => {
     }
   });
 
-  it("ships a non-empty MP4 and poster for every exercise", () => {
+  it("ships media only when a purchased provider animation exists", () => {
     for (const exercise of catalog) {
-      for (const publicPath of [exercise.videoPath,exercise.posterPath]) {
+      const media = purchasedMedia[exercise.slug as keyof typeof purchasedMedia];
+      expect(existsSync(path.join(root,"public",exercise.videoPath.replace(/^\//,"")))).toBe(false);
+      expect(existsSync(path.join(root,"public",exercise.posterPath.replace(/^\//,"")))).toBe(false);
+      if (!media) continue;
+      for (const publicPath of [media.videoPath,media.posterPath]) {
         const file = path.join(root,"public",publicPath.replace(/^\//,""));
         expect(existsSync(file), file).toBe(true);
         expect(statSync(file).size, file).toBeGreaterThan(1000);

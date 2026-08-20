@@ -4,8 +4,7 @@ type Props = { slug: string; name: string; compact?: boolean };
 
 export function ExerciseVideo({ slug, name, compact = false }: Props) {
   const providerMedia = vitalManifest[slug as keyof typeof vitalManifest];
-  const videoPath = providerMedia?.videoPath ?? `/exercise-media/videos/${slug}.mp4`;
-  const posterPath = providerMedia?.posterPath ?? `/exercise-media/posters/${slug}.webp`;
+  if (!providerMedia) return null;
   return (
     <figure className={`exercise-video${compact ? " compact" : ""}`}>
       <video
@@ -14,11 +13,10 @@ export function ExerciseVideo({ slug, name, compact = false }: Props) {
         muted
         playsInline
         preload="none"
-        poster={posterPath}
+        poster={providerMedia.posterPath}
         aria-label={`${name} movement demonstration`}
       >
-        <source src={videoPath} type="video/mp4" />
-        {providerMedia ? <source src={`/exercise-media/videos/${slug}.mp4`} type="video/mp4" /> : null}
+        <source src={providerMedia.videoPath} type="video/mp4" />
         Your browser does not support embedded video.
       </video>
       <figcaption>
