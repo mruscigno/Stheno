@@ -1,0 +1,2 @@
+import { FoundingFeedbackForm } from "@/components/account/founding-feedback-form";
+export default function FoundingFeedbackPage(){return <section className="account-page founding-feedback-page"><header><p className="eyebrow">Founding members</p><h1>Help shape what changes next.</h1><p>Tell us whether STHENO helped when schedules, travel, equipment, or progress changed. Honest criticism is useful; positive feedback is never required.</p></header><section className="account-card"><FoundingFeedbackForm/></section></section>}

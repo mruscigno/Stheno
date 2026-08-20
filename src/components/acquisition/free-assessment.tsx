@@ -226,9 +226,9 @@ export function FreeAssessment() {
         <progress value={index + 1} max={steps.length} />
       </header>
       <section key={step.key} className="assessment-stage">
-        <p className="kicker">STHENO coaching intake</p>
+        <p className="kicker">{index === 0 ? "A fitness plan that changes when your life does" : "STHENO coaching intake"}</p>
         <h1>{step.question}</h1>
-        <p className="assessment-microcopy">{step.help}</p>
+        <p className="assessment-microcopy">{index === 0 ? "Tell us about your goals and the real-life constraints your plan needs to handle. You do the work. STHENO handles the plan." : step.help}</p>
         {step.type === "single" ? (
           <div className="answer-grid">
             {step.options?.map((option) => (

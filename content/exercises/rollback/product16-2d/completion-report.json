@@ -1,0 +1,15 @@
+{
+  "product": "STHENO Product 16",
+  "generatedAt": "2026-08-19T00:00:00Z",
+  "total": 330,
+  "productionReady": 330,
+  "withDetailedInstructions": 330,
+  "withAnatomy": 330,
+  "withThreeOrMoreAlternatives": 330,
+  "withMotionSpecs": 330,
+  "withMp4": 330,
+  "withPosters": 330,
+  "reviewedApproved": 330,
+  "zeroPaidRuntimeDependencies": true,
+  "renderer": "STHENO deterministic 2D renderer + imageio-ffmpeg"
+}

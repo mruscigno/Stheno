@@ -115,11 +115,11 @@ export function BlueprintResult() {
       </section>
       <aside className="blueprint-cta">
         <div>
-          <p className="kicker">The strategy is only the beginning</p>
-          <h2>We’ve built your direction. Now let STHENO run it.</h2>
+          <p className="kicker">A fitness plan that changes when your life does</p>
+          <h2>You do the work. STHENO handles the plan.</h2>
           <p>
-            Turn this starting point into an adaptive program, guided workouts,
-            nutrition targets, and weekly decisions.
+            Turn this starting point into a program that keeps training,
+            nutrition, and weekly decisions aligned when real life changes.
           </p>
         </div>
         <Link className="button button-large" href="/signup?next=/pricing">

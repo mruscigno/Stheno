@@ -10,7 +10,7 @@ import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
 import { homepageFaqItems } from "@/modules/content/faq";
 
-export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | Personalized Fitness Coaching & Training Plans", description: "Personalized workouts, nutrition guidance, and ongoing coaching built around your goals, schedule, equipment, and real life.", path: "/" });
+export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | A Fitness Plan That Changes When Life Does", description: "Training and nutrition for busy adults, continuously adjusted when schedules, equipment, travel, progress, or life changes.", path: "/" });
 
 const media = "/media/product-14";
 const Check = () => (
@@ -33,22 +33,19 @@ export default async function Home() {
       <TrackView event="landing_viewed" />
       <section className="p14-hero">
         <div className="p14-hero-copy">
-          <p className="p14-kicker">Personalized fitness coaching</p>
-          <h1>
-            Your fitness.
-            <br />
-            <span>Handled.</span>
-          </h1>
+          <p className="p14-kicker">Your fitness. Handled.</p>
+          <h1>A fitness plan that changes when your life does.</h1>
           <p className="p14-lede">
-            Personalized workouts, nutrition, and coaching built around your goals, schedule, experience, equipment, and real life—adapting as you progress.
+            STHENO builds your training and nutrition around your goals—and keeps adjusting when your schedule, equipment, progress, or life changes.
           </p>
           <div className="p14-actions">
-            <TrackedLink event="primary_cta_clicked" eventProperties={{location:"homepage_hero"}} className="p14-button" href="/assessment">Get my free fitness plan <span>→</span></TrackedLink>
+            <TrackedLink event="primary_cta_clicked" eventProperties={{location:"homepage_hero"}} className="p14-button" href="/assessment">Build my free plan <span>→</span></TrackedLink>
             <TrackedLink event="hero_secondary_cta_click" className="p14-text-link" href="/how-it-works">See how STHENO works</TrackedLink>
           </div>
           <p className="p14-no-card">
-            No credit card required · Your complete Blueprint is free
+            No credit card required.
           </p>
+          <p className="p17-handled-line">You do the work. STHENO handles the plan.</p>
         </div>
         <div className="p14-hero-media">
           <Image
@@ -73,7 +70,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <section className="consistency-callout p14-shell"><div><p className="p14-kicker">Built to keep you consistent</p><p>When life changes, your plan adapts. Miss a workout, travel, or have a hectic week? You don’t start over.</p></div><TrackedLink event="consistency_callout_click" className="p14-text-link" href="#adaptation">See how adaptation works →</TrackedLink></section>
+      <ProductProof />
       <section className="p14-blueprint p14-shell">
         <div className="p14-section-copy">
           <p className="p14-kicker">Your personalized Blueprint</p>
@@ -423,6 +420,29 @@ export default async function Home() {
       ])}} />
     </main>
   );
+}
+
+const proofScenarios = [
+  { label: "Short on time", prompt: "I only have 25 minutes today.", before: "Full Body A · 52 min", after: "Priority session · 24 min", detail: "Squat, press, and row preserved; optional volume removed." },
+  { label: "Travel", prompt: "I’m away Wednesday through Friday with a hotel gym.", before: "Wed · Lower / Fri · Upper", after: "Wed + Thu · Hotel / Sat · Full gym", detail: "Friday becomes recovery; the full-gym session moves to Saturday." },
+  { label: "Equipment", prompt: "The cable station is busy.", before: "Cable row · 3 × 10", after: "Chest-supported dumbbell row · 3 × 10", detail: "Same primary muscles and horizontal-pull purpose." },
+  { label: "Missed workout", prompt: "I missed Tuesday’s session.", before: "Tue / Thu / Sat", after: "Thu / Sat · week reorganized", detail: "The week is rebalanced without stacking two demanding days." },
+  { label: "Progress", prompt: "My weight trend is flat, but training is improving.", before: "One noisy weigh-in", after: "No change needed", detail: "STHENO protects a working plan until the trend supports a change." },
+];
+
+function ProductProof() {
+  return <section className="p17-proof" aria-labelledby="product-proof-title">
+    <div className="p14-shell">
+      <header><p className="p14-kicker">Product proof</p><h2 id="product-proof-title">See what happens when life changes.</h2><p>Your week changed. Your plan can too—without making fitness another job.</p></header>
+      <div className="p17-proof-grid">{proofScenarios.map((scenario, index) => <article key={scenario.label}>
+        <div className="p17-proof-number">0{index + 1} · {scenario.label}</div>
+        <blockquote>“{scenario.prompt}”</blockquote>
+        <div className="p17-proof-change"><span><small>Before</small>{scenario.before}</span><b aria-hidden="true">→</b><span><small>STHENO adjusted</small>{scenario.after}</span></div>
+        <p>{scenario.detail}</p>
+      </article>)}</div>
+      <Link className="p14-button" href="/assessment">Build my free plan <span>→</span></Link>
+    </div>
+  </section>;
 }
 
 function BlueprintPreview() {

@@ -1,0 +1,1656 @@
+{
+  "version": "stheno-2d-1.0.0",
+  "retainedBy": "git commit 1c11087",
+  "assets": [
+    {
+      "slug": "alternating-dumbbell-bench-press",
+      "videoSha256": "1899624f85e59a2d5caf74eef71a1bf11fd6327f6e7248a1c844fe85af10455b",
+      "posterSha256": "cc7b8416f1c150315ee1c8ed240fdf7fa52c17797c233f2138d201cdb6aa5c09"
+    },
+    {
+      "slug": "alternating-dumbbell-hammer-curl",
+      "videoSha256": "8bd70e2a50ddbfd6cfc863b49e9b27f0c15c8661bc324197fa60ad64b4988e77",
+      "posterSha256": "a11887348bbd691efe901eed61d618c017826294ef2d55818a54d30437feaea7"
+    },
+    {
+      "slug": "assisted-dip-machine",
+      "videoSha256": "a46437d4119e70662297815c3f73a4414b3a624a8f23bd19be1562c221fb0ddc",
+      "posterSha256": "d717baff8d6f4ee05f39a7d08fa49838c32d5bb94dd2f51a6f4827c7d04f9c0a"
+    },
+    {
+      "slug": "assisted-pull-up-machine",
+      "videoSha256": "039d029356fcfa6ea2d528591a87f752e188330b311656d590a7b8385bd78a59",
+      "posterSha256": "16e7a8df05324d218b9ad8ccda97bb051b822dc79a839eb44097a9b26f81ef2c"
+    },
+    {
+      "slug": "back-extension-45-degree",
+      "videoSha256": "336633408c2a5d994f7128bdce0084efa227a80be292b1d3284fa231ee5dbc73",
+      "posterSha256": "4fcc8f60c49b206fb6c0c1fddaaa4940188a4234e5fee1ff4a117890d9e358b0"
+    },
+    {
+      "slug": "band-assisted-chin-up",
+      "videoSha256": "f8ecca28421b6850e7d7608dc2fc952ca4de9f3e58a54ed4184b536087ad970c",
+      "posterSha256": "5e22adc8b019bbbb4fe270a845387810500c8fdd867875139c391a5e5ade3b6a"
+    },
+    {
+      "slug": "band-assisted-neutral-pull-up",
+      "videoSha256": "9b516f148f0dc5f53052c2d7e2658be8925c02cd5383af22456a55440702a689",
+      "posterSha256": "7017b1524173f6fedbb84fd4e704c90f198b5809c621384b537fff5c186b54ee"
+    },
+    {
+      "slug": "band-overhead-march",
+      "videoSha256": "3b9e4d1cee945b865075cf6fe87a98da9c3204535f4cfc40fff6003ee300c887",
+      "posterSha256": "de521ba07432e45a4200d3a17e4a5ed7fcc8509c4d73ff028550e6e8362c3c24"
+    },
+    {
+      "slug": "band-resisted-march",
+      "videoSha256": "7908c765f3598082cb8ecb84d567b536792d79627754ffa5db6a8e5752045d25",
+      "posterSha256": "349876902e9d566f9653777b1b4551f570eb30561201e31c266e4fda0e1c4319"
+    },
+    {
+      "slug": "banded-biceps-curl",
+      "videoSha256": "a9287c74b1d914f40486910301ccfd6a48dd985a0b713048113f5d8b273c9349",
+      "posterSha256": "4ad6bce76f162e614a48cb11bf3cffa94c5b6195c68f2c97f5fc13892aa6d03e"
+    },
+    {
+      "slug": "banded-calf-raise",
+      "videoSha256": "3b0eb6d0a50f66d59fa6c54b1addea2ae68d830438293e34d9ecd583872e82cf",
+      "posterSha256": "6a40615b8562713f09643f4138a5f36ed9748dda1cb4e83a276e91371cfc1ee5"
+    },
+    {
+      "slug": "banded-face-pull",
+      "videoSha256": "b68b6d9a1bb50a160e8686b95f856b0b05cd77bbdc8d8223069e47a6b15f2111",
+      "posterSha256": "ee9e26e4e6b392246f0fc2d744e87a70e0ef966ba673bad6e52d33b75dbe75fd"
+    },
+    {
+      "slug": "banded-floor-press",
+      "videoSha256": "21f88829bab5f4eb93d4ae40d6d48d7de46196b78de26cfc5b8c9d8be1c31680",
+      "posterSha256": "3b278dd19c53bd0f2167f74be971352681500a2ee1abaa32ae10566e42f1acdc"
+    },
+    {
+      "slug": "banded-glute-bridge",
+      "videoSha256": "47101aad6a4ee1fe4f29f544632ce11e07c0fb0b87f5b9476938571d3e217b03",
+      "posterSha256": "f7ac4dbbeddad153ab5c1b35a7fa0e78524c8e64b794458bbf54165fe27c44ff"
+    },
+    {
+      "slug": "banded-good-morning",
+      "videoSha256": "623a051fdb6c011218808679af89b508ee0fcf1a8f590a8bff751823b02c9c73",
+      "posterSha256": "cb9ba02e143db93bd3839e3af7f3cc3e501a115b8d28b5b0185bb6cfd22af7f1"
+    },
+    {
+      "slug": "banded-lat-pulldown-kneeling",
+      "videoSha256": "f1127a1910d669bd9aebb7431985c659d92c1bd21d09bddb6430f40927358e60",
+      "posterSha256": "c766f87b59b70f624a41115c69d2277147747b00b3217450af928c01571067ed"
+    },
+    {
+      "slug": "banded-lateral-raise",
+      "videoSha256": "2890e5d4a9cb9f86cddb16c3821223a8c394e707d9961795406c15b4c6b280db",
+      "posterSha256": "3127766f04c92ebc9cad557f3c9c13fa2b0905aaad793a41c43e774042720792"
+    },
+    {
+      "slug": "banded-lateral-walk",
+      "videoSha256": "9e0035996be37f8f3d84b9b7e859871b4c61e4d5946e54abf329c8278a2d6f1c",
+      "posterSha256": "9968c734e6606c5db653b86fbfb4e552d57a10a328db5a4c75de2addc8704986"
+    },
+    {
+      "slug": "banded-leg-extension-seated",
+      "videoSha256": "0450485364e46fb3f1abc79c1028c16ba2fd9d6825eb58225b59612b88e56d4c",
+      "posterSha256": "216ec6926ba9c5b29181b0fa206c8d9714bfda2be9c3c1d7efaf39eff4aabeb4"
+    },
+    {
+      "slug": "banded-monster-walk",
+      "videoSha256": "8167eacc2ca115828f8cbcfe4263db81dc37503ca8c904e21421c0a666607f60",
+      "posterSha256": "acfee1f84bfc1c7565da465a0b574824c5b38123d69eeb1c134330d35956cf65"
+    },
+    {
+      "slug": "banded-overhead-press",
+      "videoSha256": "4609d9212e26f1f4da9bf8de481a290048f77e523469be077889e3ebceb00226",
+      "posterSha256": "b5bef719f3559e1e6356437644c56371b6329ab3c978c464d91e21b6254c3cce"
+    },
+    {
+      "slug": "banded-pallof-press",
+      "videoSha256": "75c24d55e2b748472922c1373d386419dea1f52277c3d3601fa798d69e6e86d8",
+      "posterSha256": "b2bf7c14996221c6d41884de6daa432442e7d53d96a87fd8aad156138318885b"
+    },
+    {
+      "slug": "banded-pull-apart",
+      "videoSha256": "0243841f487001cf1fbc3f97754395f96688436c7d4d1cc098939829e5a33f59",
+      "posterSha256": "7a55783a5461527311f9a0c690502ed8be12d74bdcb141932929cbde8882cd1c"
+    },
+    {
+      "slug": "banded-row-seated",
+      "videoSha256": "77ba524bcb709661ee051054a878e75ada41b84137116c2050cb9a72ebb20a84",
+      "posterSha256": "2283c13fa082ff29c95a8451a605ac6842acbed0e28ecb70848c0e24cc48964d"
+    },
+    {
+      "slug": "banded-row-standing",
+      "videoSha256": "800168ab5d44b90674d36c801e424aeeee6f3a30c257397c15105a2de0df1a0f",
+      "posterSha256": "51c0e60777650a920f8fca7d535977bfd60bc7c70d221546d3e37eb82e70f0aa"
+    },
+    {
+      "slug": "banded-squat",
+      "videoSha256": "269634b9c8276cbaccdf49874ecb777f5f94625bc05c8e652ad4b7ef903fad30",
+      "posterSha256": "0a8d0820902074362c4b859551095ff6bc0a09b00cf10ca6529f093bc13c9dd6"
+    },
+    {
+      "slug": "banded-standing-chest-press",
+      "videoSha256": "32886647c0b59f1548cc80161a20401b2d38b8ac32aa69e00b8bf5e32b0751fc",
+      "posterSha256": "7a7d327a8d02be8c15ade744f57dd7557835978563dd9747bc7182ae751eae13"
+    },
+    {
+      "slug": "banded-standing-hamstring-curl",
+      "videoSha256": "a967aca8b50fe044b74dcc696fff97010ea998751d12ac68b5913c31d7c8c8f7",
+      "posterSha256": "acef7845c5afd0a28372906e0ae0a7cc292b6134db5ee113ca9ea42066bbe988"
+    },
+    {
+      "slug": "banded-standing-hip-abduction",
+      "videoSha256": "6f622ffccc918759bcf54c8a1278d711bc1f0fb6b9f17d4a4ffe3fc837eafa8b",
+      "posterSha256": "d8441e1b0b9f4075f080f8bb67fabe9b81f21800061732fa59ce58765a5a09c3"
+    },
+    {
+      "slug": "banded-straight-arm-pulldown",
+      "videoSha256": "fb612d76688f87dd7d973858d0a65b7397037db4f2df6ac118f9306549ab5109",
+      "posterSha256": "a65f288ce18c0ca04543d506e43de64fb1f3d603f3ee9e9c7ecf9b250737c898"
+    },
+    {
+      "slug": "banded-triceps-pressdown",
+      "videoSha256": "cfe928fdbb5e59859c37426de061471c6b3db4b97320da58cee395c9026b9919",
+      "posterSha256": "512f498a1c130a4aafb771719ef361021a81d81360eaa74865a684815a54ede7"
+    },
+    {
+      "slug": "barbell-back-squat",
+      "videoSha256": "13b48c96567f5a52c2b14016a801677868b63cc3f7dc5f80c9cc2996b66544ea",
+      "posterSha256": "8eaa726d8d8c1251a5419bc0596d892733819cdec92413900798822c84e53a16"
+    },
+    {
+      "slug": "barbell-bench-press",
+      "videoSha256": "3b8234150595a4d4e7119cb52634d9b6d493f8634742da6b0706fc8e94cb2436",
+      "posterSha256": "70cb8d57af45296447f66433b0a474ef0b1d9b72bbb7241d6c25226e32323752"
+    },
+    {
+      "slug": "barbell-bent-over-row",
+      "videoSha256": "22505926f892e485afaa6cdaaa591281619da528b2707a851f501e8c8fd5f3ac",
+      "posterSha256": "3ee81230093f866ea1fdca08e22af5433bf402c3fe30cedbf1222a2145bfa127"
+    },
+    {
+      "slug": "barbell-box-squat",
+      "videoSha256": "d0b92020035fba8a47fc26e26586b7307470075207cfa9e7c11f73287278e3a7",
+      "posterSha256": "2cdb43f1d76f1c3df2385b0f46c30f52c6132d5b96b3a00579c85d1335cc17d4"
+    },
+    {
+      "slug": "barbell-bradford-press",
+      "videoSha256": "bc9f9577bdfd909e74bada95dc9546f4dfec7750ca356ec9ea9a5520867f01af",
+      "posterSha256": "059f5f4a9d1197dcd4bbdf8ad0c6651a4d6e6de51e8a418950826fed74524795"
+    },
+    {
+      "slug": "barbell-bulgarian-split-squat",
+      "videoSha256": "d99a0aaced11c999f5f96ebffa3a127549c1400d5cafcdb6aaaefec40a48502a",
+      "posterSha256": "6fff9499544d38ed088a3c8d689ee1f6a954441c332ed1cf7ac3e87f6793adde"
+    },
+    {
+      "slug": "barbell-california-press",
+      "videoSha256": "d57fa1d91641c1a711a445cf93328e4ea0dd6e070b3acce021c8c88e780a2356",
+      "posterSha256": "d37f060d64092b979421a75827a7962c42480ff08a277f6af95a63815b392f3c"
+    },
+    {
+      "slug": "barbell-curl",
+      "videoSha256": "8e3ab2fdb6df45f70e3e2330520262c8759c2ae8c99df55ae726063508375429",
+      "posterSha256": "bd575046067084fb2c5ef9a9fef05f8f7e146e8a9b0f3025d8bdbb3307bb3a7b"
+    },
+    {
+      "slug": "barbell-drag-curl",
+      "videoSha256": "87f359357e295807cff7055808131a980de9c7256422197b4c216836085d6960",
+      "posterSha256": "ae65cf51d77cd5fec0e1276e9f8101b00061b30923451e4ac21eb7f6c24e867a"
+    },
+    {
+      "slug": "barbell-floor-press",
+      "videoSha256": "cbb31b5c9076448e970595f3ea3baa7a0a0469ffd2a196f124302c8e6bab23ff",
+      "posterSha256": "9c4bc23d8083f6bc3f935494a64f31286a4a9deee7151de32c111982c2e23bc3"
+    },
+    {
+      "slug": "barbell-front-squat",
+      "videoSha256": "e624e39268369bd5b3122dfeb7d831e18b0d60afd3d8b9ef95f73f65304b4e05",
+      "posterSha256": "d5608e0f0df90e01efeae116c7b09c3d90746e1a5355283fbded870982f4c3fb"
+    },
+    {
+      "slug": "barbell-glute-bridge",
+      "videoSha256": "774f03c3a1a9c390ca5134ca6c0ff82c1fd25c118250f1f7f8474f5ade0ddbec",
+      "posterSha256": "13600e8861eafa25bad80ba7876005022b953caec4369f1c4cc1bef76fc36a36"
+    },
+    {
+      "slug": "barbell-good-morning",
+      "videoSha256": "61d2edf4d2d09a7162d0cd7a1eced06a386f758155665df6c4277561386e093d",
+      "posterSha256": "8a5108cf2655ad797d9ade7ede90bd4024fb9e080cb59c6b332b523954fe0108"
+    },
+    {
+      "slug": "barbell-hip-thrust-pause",
+      "videoSha256": "63e23a6915479c3574bd5222f752504b3aff3657c3712c7c330c9ee0754646b6",
+      "posterSha256": "5c8ce7bdfc57d446245f4ad553148fbc2e6fdb30ffd2320e0bb9ab3f6ccd8bbf"
+    },
+    {
+      "slug": "barbell-inverted-shrug",
+      "videoSha256": "c2d2ee67a5b5c72824b1e0f3034fb23934613a08f08e4507eacc6a094a43ad7b",
+      "posterSha256": "62150be7819b98d07f8b8a2dd42a894c036ae0cf1c5a409d62c13b91217273d9"
+    },
+    {
+      "slug": "barbell-jm-press",
+      "videoSha256": "c280e8077ebc9ba7e73a2f9ad1b3380955529b6f46bfe56dbbaf0bc357f3cd94",
+      "posterSha256": "cfb6debec56560026bb2b35b543322aae118728399c7a87581b818e70630131c"
+    },
+    {
+      "slug": "barbell-lateral-lunge",
+      "videoSha256": "4b9ea1768c9c1d898e8ad9df64def2154aa67b35d1de16834dcfbce1cccb8769",
+      "posterSha256": "93501fae194ece13c60fdce4c165dc4ddf5b566a765d590bcd61835b26e9b277"
+    },
+    {
+      "slug": "barbell-overhead-press",
+      "videoSha256": "1b6ec1cc90bdb28cb9c4bca887cb4299ce3f544fd0cf5afae689105ecd772693",
+      "posterSha256": "a8864f6a8b2b1f1f585bba58f7166d978355dffd54ac2bdea6058f63c4cbfe1c"
+    },
+    {
+      "slug": "barbell-pin-press-overhead",
+      "videoSha256": "80f2c4e59e3050a682084617656056b2c2034e24b3e3f9e17863a1c1f17b3530",
+      "posterSha256": "9fc16e3847dc141c057e997eff0a20a6fe5c0d169d5d8316f782c326c3312933"
+    },
+    {
+      "slug": "barbell-pin-squat",
+      "videoSha256": "3a72c6273a1660c9e4611140531e5c12df77ce6572f9ddb15d1a704a05302889",
+      "posterSha256": "9af1570161a3b8dc3bc544626e5c8282ecf382571e1cdcf41d8cdb326fd0d4ad"
+    },
+    {
+      "slug": "barbell-preacher-curl",
+      "videoSha256": "67862cd693c916033ef57d69da4c3e8cb731e7eee49fb1809e602d08c2a62169",
+      "posterSha256": "f4b220b7455e243787b0098551e32640ff83da357e5e6f9054152ec83b27bc8c"
+    },
+    {
+      "slug": "barbell-push-press",
+      "videoSha256": "a09e3c361e103971748acc4a1342c1108015102dd36528816e8647090b84a611",
+      "posterSha256": "8752b2201623b8dc8f2cf76bb9262ff86ee54ab274ecb0cde4f7eb70983b7cd3"
+    },
+    {
+      "slug": "barbell-rack-pull",
+      "videoSha256": "9940b59a5dd1bfa1a2f0544a07d02754878c6c376641b69921b38371ee9447ed",
+      "posterSha256": "3185ef311a0af74b21745a4c038ae9c99897bc9c333f3b0442097e786794e04e"
+    },
+    {
+      "slug": "barbell-rdl",
+      "videoSha256": "66a096673f345d155c7a0488d0f4c5333c0a8cf97cbd36788af3051d9de18589",
+      "posterSha256": "4fe5c899ab094c9d9d2b22cda935c5e69b7b5374cc0bab9f03027296b0d3e50d"
+    },
+    {
+      "slug": "barbell-reverse-curl",
+      "videoSha256": "0f8c0e10e16d56eec278d5219a49a270a6d7713685c8c6b9eb73a4a5ec657444",
+      "posterSha256": "088ccdccf256a06cf2e8a4f894c6528fba023ce98d5a863e9531f81f6693215a"
+    },
+    {
+      "slug": "barbell-reverse-lunge",
+      "videoSha256": "4d3680e3150d94c19ee407ec24e521c746c76b8efc45cf22dd02c4f036430c42",
+      "posterSha256": "45e2eeb58c957c1e79172a879673cee79766c58313a4b84729a24aa399b91d75"
+    },
+    {
+      "slug": "barbell-reverse-wrist-curl",
+      "videoSha256": "7fca504e52a41f3c829ef4518c184d0681a3cbd3ee8d69f9e4f8e6cf54ff3458",
+      "posterSha256": "f4af577ba4e1ba3a363e3e48857fe156f2581096fdd44b82d330f0e340544109"
+    },
+    {
+      "slug": "barbell-rolling-triceps-extension",
+      "videoSha256": "689d834583dc25e4b062514943cc22747c910a912f9169844e1f748b8a92491c",
+      "posterSha256": "ec3b623d3da4811759013e27c0c192fc3df090a3690c444c4a1e7b6b268efda4"
+    },
+    {
+      "slug": "barbell-single-leg-hip-thrust",
+      "videoSha256": "ef301035a9ba3dbbb9074076e484405e0f2d93b1dd4b027279248cf9fb7a7c1f",
+      "posterSha256": "8eccfa28f03b61dad6abc961ebf9f25b834eb32fc7e49264e2100a637dd9ca5c"
+    },
+    {
+      "slug": "barbell-spider-curl",
+      "videoSha256": "26cd73d8ac762366599f5578b4626fd5fe4c035c031731048cd8a86c9e8c99ab",
+      "posterSha256": "2474085f99103652bf6665c4bbab39d8668a27b556437ab8f70f38a9235bf21c"
+    },
+    {
+      "slug": "barbell-step-up",
+      "videoSha256": "a9c9617ab87384317e6ba83732827a6fb42c82c4fcc7c29c9fe5da4532599fb8",
+      "posterSha256": "f3690accded5e3f45614ad82bf29f95af15e23d4c66c4c83362ca0dba9fdb5fb"
+    },
+    {
+      "slug": "barbell-wrist-curl",
+      "videoSha256": "dbae457cf5df7ce072b20e1e264ee5d527a2abb291efc9b07d2fcaacacd1169c",
+      "posterSha256": "fe7fbcfda3e8a78b3cf7007b104ddd9f5106243f7f36cdd63253db407b5ab0ea"
+    },
+    {
+      "slug": "barbell-z-press",
+      "videoSha256": "54f51f1ea324d9ed0fb6ac78f18ee345f6ac4b2a60b34ee8f4e025299f4ed911",
+      "posterSha256": "9d94fbf7f8f9b55914d2e368a1e66a45bbe11d68bc16fdb418b44d5496248fec"
+    },
+    {
+      "slug": "bayesian-cable-curl",
+      "videoSha256": "f26aa96b3e7e4846b48c67890427deed65b05ba88c483384f7e0f94b06d3fb12",
+      "posterSha256": "371274b89232ee8dd14f5cdef3e5839d12c5e2f533779ff682a06bdf1456ac57"
+    },
+    {
+      "slug": "bear-crawl",
+      "videoSha256": "f3ebfe0ccfe3848d8da414a6f79f767a3c50856cf29491a903bf083f094d4f39",
+      "posterSha256": "4efdd3b177c99f9750c3c96f87728ddf03fbe691d1fdf4b525c8ce95d41bffed"
+    },
+    {
+      "slug": "bear-hug-dumbbell-carry",
+      "videoSha256": "cf27af94d1b4a0418ba7430232fd9937515e2a2b2362a8162164856f00887368",
+      "posterSha256": "fab3c301dd31f89646d36ed09df208d252b7a4fa7eb17775503915a039c6ade5"
+    },
+    {
+      "slug": "belt-squat",
+      "videoSha256": "1e578c027f460b90617afbe8e80b68a1588f2e9c69e6e80d8c5a8d962ed7377f",
+      "posterSha256": "42c8f8cc5baa5a13ec2593f081d642970d38b884ffcd14189a5107a257761b05"
+    },
+    {
+      "slug": "bench-triceps-dip-feet-assisted",
+      "videoSha256": "438cf4811958cd605dbe2f2142af5e97ea5d22577fd250f6b57680149a2dc414",
+      "posterSha256": "8a6f62f008c38f2b1e390617c57e806a1320204c4e7935782e1a25089c8cb7ba"
+    },
+    {
+      "slug": "bent-over-dumbbell-reverse-fly",
+      "videoSha256": "a1eca0814c590f203d6ff6b7764d88b151697563eee335fc0f26666359b8a736",
+      "posterSha256": "240c83ad47f216561443e0c1277c1ec555e7efc6277dfb22d2dca4e578750b26"
+    },
+    {
+      "slug": "bird-dog",
+      "videoSha256": "400c0391194ab9a7b95bcee624c0f541b865eb6cd33228305cfa7bd7e53cec82",
+      "posterSha256": "850eca6dfca1d4b57625384f02dac0e45b66d43381a8149961250e01428ddc06"
+    },
+    {
+      "slug": "bodyweight-bicycle-crunch-controlled",
+      "videoSha256": "c429e14467034a00facfe696829006a46f8364b53694a0be1f57f2bcc2039805",
+      "posterSha256": "ec1e4dfdb5cd6e8b4ac001169be66733d1453f90f536f40cc030f7eb03691c37"
+    },
+    {
+      "slug": "bodyweight-box-squat",
+      "videoSha256": "772c245dfc9a5b071ac51104f53b1bbd586dcf8eb38390d1707d3bf00053c9b8",
+      "posterSha256": "0817233252616243eaf683ec622bb15516af6b11ad22db7e3247a0dcf59081ba"
+    },
+    {
+      "slug": "bodyweight-calf-raise",
+      "videoSha256": "c7ac7c69c936f8baa1bf1f9056cb65fa40495b887ecc5ae49902bbdc2d2cab68",
+      "posterSha256": "2c3f4614590b267e56445ebd3fb06e40d4d9064ef61528085e7be1e7f5aee06f"
+    },
+    {
+      "slug": "bodyweight-hip-hinge",
+      "videoSha256": "4c11d7a6e1acc2db9de2a3e364924161a3b1707f1f02b4e644aec8d9da297e17",
+      "posterSha256": "b79992f5b38322f6aef940ba5d9429e648a336827978defecc0cc34758fa9051"
+    },
+    {
+      "slug": "bodyweight-lateral-lunge",
+      "videoSha256": "9907c9f7bdc6c9bd071aa44ad963c7809368744baec7423f1821f68177e23d40",
+      "posterSha256": "f4dc93ecede56708af587a09095e1aa936ef8079cbabff90ac33668d41070737"
+    },
+    {
+      "slug": "bodyweight-mountain-climber-slow",
+      "videoSha256": "80aa06a8a2ab661a61cc9da9cd436aabae62143f0b16235ca4f109c525144dd0",
+      "posterSha256": "edf7775ec683efd95d644d077d5b7d28acfa6fc9cf6c143eaa986cf949945628"
+    },
+    {
+      "slug": "bodyweight-pause-squat",
+      "videoSha256": "4e98e97164156775ed3161be05c6ccc262d43a4ed703b019a5a1facf9f0cc5f4",
+      "posterSha256": "4cfbd62ebd6e157b7baff412ee861609ddab7cad5d99cc77eb045070cf4790cb"
+    },
+    {
+      "slug": "bodyweight-reverse-lunge",
+      "videoSha256": "9dd715a40b7718ad9c82f5fb9caced04abeb79fab7c8eb39035ce5ad02e219a9",
+      "posterSha256": "0fb64968cfc2d3d59a5b64c56274cd68badf1010bbae64d338b273bc4aeb11cd"
+    },
+    {
+      "slug": "bodyweight-single-leg-box-squat",
+      "videoSha256": "57668f120f8ddd3206b0f2ab641ecc4186464d707e3f64e2da7d27a3ba59c846",
+      "posterSha256": "e64b0947d5dc9e9d0a1909b86cd18e2cb80a7897eaa3381a72dc4e9d22c0c4ba"
+    },
+    {
+      "slug": "bodyweight-split-squat",
+      "videoSha256": "e335bfba23a9384eb5852425bd264fcafacca1dd186998f5a1b491e33a2b51ff",
+      "posterSha256": "88f4d74baf89747b9899ed955e3b2980e9e6d27dce463c5b54f3f2913b6bfd0d"
+    },
+    {
+      "slug": "bodyweight-step-up",
+      "videoSha256": "8aeec8fbede7ee65ed3569ad8a675d7d3048e1e876a5eeba8beea4169ed12510",
+      "posterSha256": "b698eef4a7258117af0d50de56f7c4320a65cfdafc6134c9da4a435397dd359c"
+    },
+    {
+      "slug": "bodyweight-superman-pull",
+      "videoSha256": "d6cb4da98312be44a2e173748ed2254c74baa47ebb4fd762506d90fd3c04cd12",
+      "posterSha256": "57af028e692f1109e561cf658025a4b56b5c7c20c3aa591d52933939719614d8"
+    },
+    {
+      "slug": "bodyweight-tempo-squat",
+      "videoSha256": "42bcf7af1d2a4dd517b20d658e140a7323bd016324955b0f14a0d74696ca9702",
+      "posterSha256": "ee18b0687a39f5647d66bf74ebc50cdfa60849674adb573fb4e1c374a3c842b1"
+    },
+    {
+      "slug": "cable-behind-body-lateral-raise",
+      "videoSha256": "bfa23c57d82ef58a0cc6280bf1fae795e07985457ae85cab4fe22f68b8fcc42e",
+      "posterSha256": "fefc345f9626d81799eb3e99c60ba9fba6adde51c40465c57f9358b21732ae97"
+    },
+    {
+      "slug": "cable-biceps-curl",
+      "videoSha256": "d3ad14b1bb1361545fcd271d8233459c44b20bb287c75baec532d76ffe13582c",
+      "posterSha256": "9f4a9f3376ecfa48e26169c0f67c9ee70dcaf60399fcb9d9b41e7bbc48101804"
+    },
+    {
+      "slug": "cable-chest-press",
+      "videoSha256": "c8fe1a5b77997f3d93bf149e66b8db1f823bc284cb279fb488ab1313254db55a",
+      "posterSha256": "abdc7ffe073ee7ac09c6536a48f5e845dae15b41e36293907991baa13bbc595a"
+    },
+    {
+      "slug": "cable-cross-body-lateral-raise",
+      "videoSha256": "67334714245d815dad15d8fd66ba6abe3c278923621545d955b0d0362ebe157e",
+      "posterSha256": "911f6e94b13793f830115b6254e744913c5646f71a72c71833a4380da4e7a60b"
+    },
+    {
+      "slug": "cable-cross-body-rear-delt-fly",
+      "videoSha256": "e11daba08afa2acab89bda054cc2ad8fc5b5fc7b2ee0a919aa695e9fea3fa7b4",
+      "posterSha256": "4953197862e822d0b5bd2e80be5d70b26822a28abfdd97a673f377ba09a8ea12"
+    },
+    {
+      "slug": "cable-cross-body-triceps-extension",
+      "videoSha256": "10b1ccb5f071812f8fa1fa154de5fa228a00f8ebe88f212284e02d795208dcfa",
+      "posterSha256": "a0250c612e704b974284b0010a83619a43bc14fa542e4b99c5c7b0ba4992061c"
+    },
+    {
+      "slug": "cable-crunch",
+      "videoSha256": "b855c1a5b9ce8e3311fe6dc598b34d2c2274ea56f04b68c130910544f2f704f7",
+      "posterSha256": "b31a188a92be941da6ec49a7740e461f65009bab1f5f5ce472f1bd26beb1fb6e"
+    },
+    {
+      "slug": "cable-cuffed-hip-flexion",
+      "videoSha256": "e71c0ff01442a9d476273c615ee64e072030465547a57c39c7a65eaa76f49b15",
+      "posterSha256": "3c053aee31fd2fe74d08464b32ed3d8695718fb4deb8c396d1b421db6066882f"
+    },
+    {
+      "slug": "cable-fly-high-to-low",
+      "videoSha256": "3b2790c94663e77b87094fc43d05d559bafcb4a655e7e0e6517098343bebe5ac",
+      "posterSha256": "4ff70d45313d02e6a7b4aa3a392787cb162f0ed2ae4425e03ac1859b926d4141"
+    },
+    {
+      "slug": "cable-fly-low-to-high",
+      "videoSha256": "7b433245449b9dfb7d75b83a1981db2080d9eeae784944ad04821d2b4e4a7e51",
+      "posterSha256": "b35e5c7dc5eca717fc330e3d3bb493913e0f77e32647228d2d29e57d44ba7953"
+    },
+    {
+      "slug": "cable-fly-mid",
+      "videoSha256": "a2cc48714a9a95aedf9d610aaecbee11d2ad4b99a45a1c9bebef4c190668ab4d",
+      "posterSha256": "f996cbed12dce56d51436b9cc08d052c92ed9fb67c201f41ff93dac874b8e3ca"
+    },
+    {
+      "slug": "cable-front-raise",
+      "videoSha256": "6383342e642c7f622d472387850f7afdcb097f273981dd28457afeef583888d7",
+      "posterSha256": "042633700aad12a06e9b016143f4c867968b545a998467c8b285beeae8660265"
+    },
+    {
+      "slug": "cable-glute-kickback",
+      "videoSha256": "840aeac3fa5e5c3f1c6636b9676c85d8b5fd6e74d8d4efa9e52d4da93140156c",
+      "posterSha256": "901e5ca4a3ffa31296967499b69fc5dbb35af514ab36c6dea84b2c543fb26a29"
+    },
+    {
+      "slug": "cable-high-pulley-biceps-curl",
+      "videoSha256": "a353685dc331b9052f42dca77c65974f32999b5e535672d4445d5d13831cfd24",
+      "posterSha256": "70bd916b5b7d3e241f7fa4767257c06bbd08807a50bbec003d5931ee7639dcae"
+    },
+    {
+      "slug": "cable-high-row",
+      "videoSha256": "92f45046c0e710d233711409634942305fdcf44cb9dad47573aa64cc7cf8c031",
+      "posterSha256": "47f48b1a2691e53c3878cb9554d16e4ec2bbea18112f033097736a9862f2ab6d"
+    },
+    {
+      "slug": "cable-hip-flexion",
+      "videoSha256": "46c77368b5d793936a6a4cea490fcf6521162419a2c556e5c9eafc63707ecfe2",
+      "posterSha256": "6f03934448eca613e8642f668bffcab07d18373da15f9e07973b27742db2a302"
+    },
+    {
+      "slug": "cable-incline-rear-delt-fly",
+      "videoSha256": "8238739169abb48aef41fcad8ca97c2c1a0aeb66761e90b44b382b4c8839d756",
+      "posterSha256": "1f8789095eeafaa05796af8e240257fe5e8af763639bc5457d266a679ba96300"
+    },
+    {
+      "slug": "cable-knee-extension-standing",
+      "videoSha256": "aee348991f26915ba5fcfd35f6baaa9a18f5d1020da802c3a9246d6fc8d94d5f",
+      "posterSha256": "c8b6237ee15a192adfad3cc96a35cc89ae25e75dea8d2d933f9ea0d656a76d60"
+    },
+    {
+      "slug": "cable-lateral-raise",
+      "videoSha256": "91339d4a5b958cecd3a82d82fd2b5db0068174be4a8e1e7f144ba94152bcd37c",
+      "posterSha256": "1a45be12c77c77a451a05219be6eefacff0d3b85308a86182181259f59586f53"
+    },
+    {
+      "slug": "cable-lean-away-lateral-raise",
+      "videoSha256": "a89743f04550023f6b1ba29743b6a666690b192748299eff9bdfb12e8fea1ca1",
+      "posterSha256": "63e3be518a1714e19becc071cb88f9799870ab3b178bc0fcaefa7659c050af41"
+    },
+    {
+      "slug": "cable-lying-biceps-curl",
+      "videoSha256": "e719b66cb68e5fbd4757e7648f56dff42754e031acac044a973949ac14401c7d",
+      "posterSha256": "d84e280ddb939bee054288c82316420ab388eebd244e6da990f92eeb44765523"
+    },
+    {
+      "slug": "cable-lying-triceps-extension",
+      "videoSha256": "ce101df49423ab62db2d6257b98408ea41badf0a711dd7681680951961492984",
+      "posterSha256": "82b4cb188094775d01353463a7cb8c8a8c4671e363ba1f12e4a0acb39e1ceaaf"
+    },
+    {
+      "slug": "cable-pull-through",
+      "videoSha256": "52abcc8de4377b75fb369a082c0c0561a84ae47019a168dae0a010c114a70a46",
+      "posterSha256": "9cd65a641882e9abf9187c20d45bb802fae5fe87ffdbd167e3d86512f5d15223"
+    },
+    {
+      "slug": "cable-rear-delt-row",
+      "videoSha256": "b48223e4f01e86fb2718e47e575b02b9a6b3f29303bdbc70c0d06d790f086b91",
+      "posterSha256": "5685948035c47b921745316442c53ef93633bef3d2202b9d497a9a15c3a81ed4"
+    },
+    {
+      "slug": "cable-reverse-fly",
+      "videoSha256": "e39d2ea0716c8b4d05ae75b1539a0b319e50dfeee2291973980b71f90402b0b5",
+      "posterSha256": "0d6ffab3932d9f3b5c9d84762b2f6baa1a24be7da2d44549464ccfb078b87949"
+    },
+    {
+      "slug": "cable-reverse-lunge",
+      "videoSha256": "f730feaf6dd611f59a4925a56bc3888a79109a0a2b97d64c6145a99e659beb0a",
+      "posterSha256": "6a41b6f4aeae1a5a14aeb1db81b51634426148418ffe834b3548cceb9d2f69ce"
+    },
+    {
+      "slug": "cable-row",
+      "videoSha256": "48423d4d31a4bac82e67f1e83a87596901ef6d2586ea944c2053309f2e669759",
+      "posterSha256": "1c2da5316934e08d34c9138f43b280b7fda4ba4521424b998e7d6bbc4df08197"
+    },
+    {
+      "slug": "cable-shrug",
+      "videoSha256": "2ba6afe249a83bbddb993534dc4f97deee9a4d2a8ceeac3915fc2c87f92d81ec",
+      "posterSha256": "6af7a4b7a3bb33b7da953d67dfad66a6299ab0949a1cd72cf3a3fcdb20d33098"
+    },
+    {
+      "slug": "cable-split-squat",
+      "videoSha256": "40319110be2eb4e60b5d7c76bef829ce637b0771e705e73986d7f90d7846eaf8",
+      "posterSha256": "ab6ae64c5bf8689567ace770a39ca55450aae77b1b8906287a17f828826a2591"
+    },
+    {
+      "slug": "cable-step-up",
+      "videoSha256": "14296fef14857f646084632f40275edbffdb650c5ec1cbe4c6caa2b88fc93a9c",
+      "posterSha256": "19d7121bc7b6f220fd60834e97d42f6487e4c4ac06b58a6b970671d1a3bcaea4"
+    },
+    {
+      "slug": "cable-triceps-kickback",
+      "videoSha256": "7341ee1a562012b7b0d4cf268c326419bac95a3b6958867a450dc5a2813bf759",
+      "posterSha256": "25faabc7c9200421684d6a427838969b699750bbc3e63a78d1d539b7c956006c"
+    },
+    {
+      "slug": "cable-triceps-pressdown",
+      "videoSha256": "3a659a3617d3dbac6fddda007b889c41ecf8a9f897107b9824699f663bef1523",
+      "posterSha256": "e5ea6dd042bb0c9096ed5ff4b4e6e01d17a85141aa28607ec9a57caafa1b13bc"
+    },
+    {
+      "slug": "cable-upright-row",
+      "videoSha256": "ea86e71e9b3aff55d975797c172b8673b2fff01f779b9d73ccac443d6ab3c257",
+      "posterSha256": "dee76316afbf218eba1638cda276a2f1e7a8df8d9d5281810d4f50dee67185de"
+    },
+    {
+      "slug": "cable-y-raise",
+      "videoSha256": "9f359cb486d731f1d6b0b000530b16c8be9d580d74d52811a537c2870aa05377",
+      "posterSha256": "b8551b29b122a590133d5271a71e462a8b3a137fa1a98f79525b1dfd3a6c0bb1"
+    },
+    {
+      "slug": "chest-supported-dumbbell-row",
+      "videoSha256": "fc07381c659786f1178f889d35836bc15394c58e9384c9bf731492f02aab968c",
+      "posterSha256": "aa7e7ce4c1a5dae4d6dc0892e91a028f805b9c64631e3f4bf11f2aeaefe1496e"
+    },
+    {
+      "slug": "chest-supported-machine-row",
+      "videoSha256": "2e2f22888c1f3b3055fbbad11e59b00b257e80898a35a6f8edaed5dfe2813384",
+      "posterSha256": "cb4186498d27700a6093b7bbe2021965fd99b1e1af355980a591fc2497d1ebfe"
+    },
+    {
+      "slug": "close-grip-barbell-bench-press",
+      "videoSha256": "71f6d6df3c22dd0c8f13189c9f63f849ff7a2c099bfd0a2bb5ed47d9fe1a7b14",
+      "posterSha256": "bb2ca5cf07f6e199b27a785319c0544c28116ca949053ddccdcffb8884de4c94"
+    },
+    {
+      "slug": "close-grip-lat-pulldown",
+      "videoSha256": "a0a200954a3af78ff00ace0b42e124554ffc4412c241f0df8075f2d723c6c7cc",
+      "posterSha256": "197c91d43758851056523c83214f999eaa6cd3786acd856150b7766923f4d0fd"
+    },
+    {
+      "slug": "close-grip-push-up",
+      "videoSha256": "2067915a4792fa0174b001605d6eba188a3e717642f49e459ffc88cb2cc56dbf",
+      "posterSha256": "7dbb23f736896863ae292863e527c9013b1c5e95b472496388f25588de030633"
+    },
+    {
+      "slug": "conventional-deadlift",
+      "videoSha256": "52152b4a6742b785ec5d1820be8ece408810974d6a36283576e6ce4ea20feb63",
+      "posterSha256": "d1e5d90c7596f43a6ae5ccd660c8c0f6829529e4e13927ab0345794b6ef9117b"
+    },
+    {
+      "slug": "converging-chest-press-machine",
+      "videoSha256": "3eb374d84f51fb24e17626718864e013f338a2cf0e6672616b6816fcc62fde3c",
+      "posterSha256": "c95bdb2d5d03d478eab8c38f0d29aa51239616ec9a0451c2ccf5df6bd2b8239e"
+    },
+    {
+      "slug": "cyclist-smith-squat",
+      "videoSha256": "d7a3813ba0ee188613b566f83359d819f7687603ac85cfc372f82a0404ab6fd6",
+      "posterSha256": "e7b7304cd6d27ef91c7d39d3ab7b5cc14675650f4d15102d9a34824a12562f08"
+    },
+    {
+      "slug": "dead-bug",
+      "videoSha256": "664b853f490c6007a1125b286f26ebe69dd8122449a10ecd7776bd236cc9f748",
+      "posterSha256": "3b9bddc345de1a457e6f9dcceba8d6bec06137e85bfcbf68e16b2c4f8ee17191"
+    },
+    {
+      "slug": "decline-chest-press-machine",
+      "videoSha256": "4bd6964d1ac1fec80636c9a75a70aebd09cc3cc21a30ee3f07f1e72afa09f790",
+      "posterSha256": "d1101bd7d94caf4df42c2206aa692cb84160d0cd3e33fff7d0054f2e491acef3"
+    },
+    {
+      "slug": "decline-dumbbell-bench-press",
+      "videoSha256": "079bf80d3e156d4a6d7ed4e0cf1a9e27bea6bc1ee2034c715ff3b140684074fd",
+      "posterSha256": "84c3fbc8894bbdaf3b1137a5d93a96a14577cfbee11aa31b4ffcff97c7dd5baf"
+    },
+    {
+      "slug": "decline-push-up",
+      "videoSha256": "7b426865d141f133699a7bb53286cee135ab5a0dfe1e8139782632f6e24893e2",
+      "posterSha256": "7f2d036f269a7d422e53f2ef273c0c805b92ac8cecf8448a6255a06baed302b0"
+    },
+    {
+      "slug": "deficit-barbell-deadlift",
+      "videoSha256": "0c2efaadfc6ec3bcf64a1c1accd8a27f15c5f971df6a11ac9701f24ca2d8e05b",
+      "posterSha256": "c3b10ab22908c946be8cf036017c893d23c92ce88d340d7ccbbfc3626c98e69b"
+    },
+    {
+      "slug": "donkey-calf-raise-machine",
+      "videoSha256": "c36b17cc2b22a5c61bca310626e6c572b42ea87c197ced1d069753d1f067351b",
+      "posterSha256": "45f948c450db15f3fc246907954e66f3ee6f0299f9f8c73d169acdf53b9b2a82"
+    },
+    {
+      "slug": "double-dumbbell-suitcase-carry",
+      "videoSha256": "a787ac943c1685f26bf6e01252752d8d34409dfebc49d8c538f43a1796246cd3",
+      "posterSha256": "9b911fbe1ba7fcca5861e9a45d63dd1fbe0013652390d4e117b57314f3cc8424"
+    },
+    {
+      "slug": "dumbbell-arnold-press",
+      "videoSha256": "f271f7bb65d9c8213cc6883e416c6b6ec210d455f644c98067cfc3669e58b5c8",
+      "posterSha256": "b7c21051f8d8898250c0632cd59d7565c032b02ee1f3ee2e2eb46bef99326da7"
+    },
+    {
+      "slug": "dumbbell-b-stance-rdl",
+      "videoSha256": "9854c8e4843c1d143d4db47fb3345952eab3f18b2e413c07a09c5eb2f6055e03",
+      "posterSha256": "b6cd9d8f8bd45e4f569a25e0fcd9c31885623c273ec508603f0246844351a456"
+    },
+    {
+      "slug": "dumbbell-bench-press",
+      "videoSha256": "a38c45dc3b3e210b622bc988560c9011b661fcc184ed52a9335cf243ec7a8bfe",
+      "posterSha256": "da0cc5a7fd26b96f302f8577c04d0b97aeb94422a5fe39353ce328b83654b915"
+    },
+    {
+      "slug": "dumbbell-bent-over-row",
+      "videoSha256": "4a4e885bd2322453ac9f3bc3a3d11643d0559e9a9cbb9a32b205fbe6359142d6",
+      "posterSha256": "8d9e83d7f00bbc476b8641a6089756871eae86202a292133b345f6e3716efa2a"
+    },
+    {
+      "slug": "dumbbell-box-squat",
+      "videoSha256": "d97d0adc66a88b246a09d4279b78c3b991f10861c05a3efc8c7b6dd74a4500ad",
+      "posterSha256": "deb719606de1d72995cf88a4a5d98029a46d2bd8b49ad1f2ebf3d5a7feaa3d43"
+    },
+    {
+      "slug": "dumbbell-bulgarian-split-squat",
+      "videoSha256": "dbd89f2cb156601cfac8e560057c657a1ef32a461c443eb7840e92677ec2ee48",
+      "posterSha256": "379d2417c09b547786ed1ada0e0a01d430f647f672a1f067ff9c0e8f55ee9693"
+    },
+    {
+      "slug": "dumbbell-concentration-curl",
+      "videoSha256": "ef77f7e8c9c677cec9bb3b6a0530a6946dfe62c58d2caa969afdeb7d78008692",
+      "posterSha256": "f4732f23daa5fb6415625ea3b7b56717d033c75eada931c76ffd3dd0d54d1648"
+    },
+    {
+      "slug": "dumbbell-contralateral-walking-lunge",
+      "videoSha256": "c65755cbcb9fc42f4f467c7e2a3768ef1d7d387dcbdaea561b847f588c9e0a95",
+      "posterSha256": "cb50e27f136883db9acf3f554994ebf80477a32cf7402d18809a823eb3b61690"
+    },
+    {
+      "slug": "dumbbell-cross-body-curl",
+      "videoSha256": "27213d466f1f0e0ef02680bd2fca7b1967b801a90a3e6b1483eff3b54f010c1a",
+      "posterSha256": "7fe244ee568581db58fdd9ab4ef193ddb9e9f42ec2a15384afb446cbb5ba4f2f"
+    },
+    {
+      "slug": "dumbbell-curl",
+      "videoSha256": "790145b82599c8395cf810755520ccaae95993c97e3c3e2ce210f04ef2833337",
+      "posterSha256": "e69c5741b96fb587a20b9ee46c262c974ad6293b57dafc671679c3e34fd5a1d6"
+    },
+    {
+      "slug": "dumbbell-cyclist-squat",
+      "videoSha256": "faa100f3452ed746a47ac9948274d3f746a76a032d06a2623af0504e43769df5",
+      "posterSha256": "bb20b0055a9e200b9d619d1bcc0c752e4095746948227f29e94dbc255402779e"
+    },
+    {
+      "slug": "dumbbell-dead-bug",
+      "videoSha256": "d467df225d13847a4387832709846ff2c26fbd365054d19932264b6d57a9262e",
+      "posterSha256": "006f0c69bb7694c50a190f1c72063cd78518a49bbf8c305d9adc9952c67a036a"
+    },
+    {
+      "slug": "dumbbell-deadlift",
+      "videoSha256": "ab6ca7e87fefa171298306e99a073abf34d91d3af0d0380bc50438895eff92fd",
+      "posterSha256": "42136b55a91c43d1e51ebf1a6f8a03c9e48595345c93cb396413513d475577a2"
+    },
+    {
+      "slug": "dumbbell-farmers-carry",
+      "videoSha256": "de3cc8b9489d510222f80d5b2e1de2736e4b053f52d6e2f51a268015a6c608a5",
+      "posterSha256": "da9da6067b137f78488872fd4fd13b885a119daf9d568f762030edea3b35fab9"
+    },
+    {
+      "slug": "dumbbell-floor-press",
+      "videoSha256": "8d5e9c0e429545480119da9f255ac706f250a182e1aa4c671030727a0e619ad8",
+      "posterSha256": "744d19609ca7d8bcd06bdcca7ab667f6c214d43abf097c436cb611a51897e38f"
+    },
+    {
+      "slug": "dumbbell-forward-lunge",
+      "videoSha256": "17f0412439a9bbb839498c72bf099c5931694b7dae6dbee19dcb1bb3a8212555",
+      "posterSha256": "831e37274d4c6e5dd3e69826b33011384441035def54ac71c2a080050a080425"
+    },
+    {
+      "slug": "dumbbell-frog-pump",
+      "videoSha256": "9f644d8b6314c6e9f3bcdf0b607f0d669a1c6795fba99003b3cf549745c4a87b",
+      "posterSha256": "759a611c13912e172d90c47443c4f422fe4f790cb15f51d2e9de2a961cf646a6"
+    },
+    {
+      "slug": "dumbbell-front-rack-carry",
+      "videoSha256": "5fe4bf5a87be03539eabf7cd47d9cdf2be1078d269ae2dd9e00264aaa6df414d",
+      "posterSha256": "182b9b1a077dc7f7281c099aa9a73382af08e02ed0d8bc0978adc5f9e2994424"
+    },
+    {
+      "slug": "dumbbell-front-rack-reverse-lunge",
+      "videoSha256": "924f6160f13bff91f090c1bfa2286fa48135cbbd20d1087ef901328728d125d2",
+      "posterSha256": "5c89fc68d9df88cfc48001100515de424d4607dca6ad1cf37c8f76f611c24020"
+    },
+    {
+      "slug": "dumbbell-front-raise",
+      "videoSha256": "b5b2a4fa159fb4bed5037d38f9878136a8b90fc3d6b6e3163c5395795a627619",
+      "posterSha256": "8316da62c7f0fad95ef99ab2c2c57d58ee5f13174af12704f02f73128e3e691c"
+    },
+    {
+      "slug": "dumbbell-front-squat",
+      "videoSha256": "64365a75b5d51fee6be43850ec7e300af0f053dc49c88127062ecd7119534ff5",
+      "posterSha256": "884f05861312a4168fbfb1f99cdfe5945cb8dffd587ae5bb784ff8f936e89c5c"
+    },
+    {
+      "slug": "dumbbell-glute-bridge",
+      "videoSha256": "c2a1f04d8bb785359e537928666ac3ab5f32961140c44406bed14513b215cbaa",
+      "posterSha256": "293a17ce9607762535d5758f69919fc4794c3c22edbe68e958ce4b7819ce6321"
+    },
+    {
+      "slug": "dumbbell-gorilla-row",
+      "videoSha256": "fed27f4b0b5086d17700f60a09c5e53ec71f24d7e221bc4c683666691532f874",
+      "posterSha256": "fedf273efc3d801549ed53be5bdeab3d427579b437fe176d9d70a8deeafe1537"
+    },
+    {
+      "slug": "dumbbell-heel-elevated-goblet-squat",
+      "videoSha256": "8498216cbed931c135dd79952dc1eab724284a222d5aa5f80db42132623ae7d0",
+      "posterSha256": "502e82ac81a52ec2a59702bde45b067ecb448d7910e8976735ad2cdb72cd6ebe"
+    },
+    {
+      "slug": "dumbbell-hip-thrust",
+      "videoSha256": "09d3ef7229fb96d60e8ce7b0525d27bde802cdf72972eab8c76cc9f1aeed46d4",
+      "posterSha256": "0764e7b2229df0406190ab8107a7dd2ea7f4551a02e58a745256befcd4c1c059"
+    },
+    {
+      "slug": "dumbbell-lateral-lunge",
+      "videoSha256": "3e5fb491db0d63989976c398e083ee2c5245ad4a879c99f2e2be36c80bdfa20a",
+      "posterSha256": "7586ce06ab138d0f434d11024fa83181c0416fb833fcd4205addf915635d3b42"
+    },
+    {
+      "slug": "dumbbell-lateral-step-up",
+      "videoSha256": "c54ebd80f5707d297b9909e0e42869bbbce3474deb2c2af12f478957f6f9e2b7",
+      "posterSha256": "424ec5d2cf2e52e68fe39e7066a844c233b195f1aee113ced24a7d100b74ed66"
+    },
+    {
+      "slug": "dumbbell-march-carry",
+      "videoSha256": "b4bb324ce519db5b317177181711a42738ea8918c3271203db688b6d4aac3001",
+      "posterSha256": "611fbfdfd8793282d994552c4d5aee5806483e8b07377fe85ccf43c7c8555125"
+    },
+    {
+      "slug": "dumbbell-overhead-press",
+      "videoSha256": "023872d03205b432dd523ee30c97890f95f0e4c183d52e72b142040a36ec3c69",
+      "posterSha256": "2d227c8c1be1b89c410b7db005c8102a0ca3bc9650caa064ae060871eab17150"
+    },
+    {
+      "slug": "dumbbell-pullover",
+      "videoSha256": "22725daa1517876a780918fb390e9739eb402fd2b17e2e62499060f5e0b0ecec",
+      "posterSha256": "6022cc13b94ea13f9eb4b4e760a3436e2c22583227db1c4258fcd0e8ad34a03c"
+    },
+    {
+      "slug": "dumbbell-push-press",
+      "videoSha256": "f89ad9efaf8d9ffb5520c94662c73e535cd7704a21faed1e61061d5a101985cf",
+      "posterSha256": "062f74d00f2c65be35f09442c344b9c41a46271ee210f1fa4e3788105b35ebb7"
+    },
+    {
+      "slug": "dumbbell-rdl",
+      "videoSha256": "a79ffdc11ddf287c299be07ef0093057c15df9a08e59cc9cce7f057ea17f5984",
+      "posterSha256": "5bcf569faed92775e9cb2e1e8cca6b0bc1d79e89321f372b52f959dc6e3a0074"
+    },
+    {
+      "slug": "dumbbell-rear-delt-row",
+      "videoSha256": "ff2d6894d9b963135b9113589a0113a849c1aab83f2638f2cd812d8a8f24540d",
+      "posterSha256": "45e6ba154574cfcf8b38c292fcbdbae15ed5d0d69fd9a248939b5a7ab24c04dd"
+    },
+    {
+      "slug": "dumbbell-renegade-row",
+      "videoSha256": "69c7c26ee8cf4dd2728953b3c48433ba2a6fbc6ccc3d01aa5b4a23d87b6180bb",
+      "posterSha256": "1995b53d705ad175e3889e02b9e68835f12e13b816fc17fa092368ccd51d804f"
+    },
+    {
+      "slug": "dumbbell-russian-twist",
+      "videoSha256": "90f9e3a366e88b069b5bc00d10a8dedb90134ed8d0c2e3866f52de0f02841544",
+      "posterSha256": "130fc08d958863e1499338d599fe07ec34bd225a247640586d29d2c0b0a55989"
+    },
+    {
+      "slug": "dumbbell-shrug",
+      "videoSha256": "71536a45e743bacd306a1fdd7080e102a8e58ec3f87e034c3f5880c447de367b",
+      "posterSha256": "955c84fcd46f5c3256d8f96e6f45fb20d30930c87451df8cfb4af7534f535f0f"
+    },
+    {
+      "slug": "dumbbell-single-leg-rdl",
+      "videoSha256": "d8d35198cb8acc7ee211c1495e193fdd9368d78fc5d0800da7568c04b588082f",
+      "posterSha256": "9f2df869efde9471a2f72bef6cf13727b42f354c80252286a9f08af9037afa2e"
+    },
+    {
+      "slug": "dumbbell-skull-crusher",
+      "videoSha256": "61a516e03ae67f2430087d87a3eb970e5b306345c92e3ff2b561eb2f052d3ba7",
+      "posterSha256": "64f1419f4f99ed694efc41d7146b76e95d8ac211491e7b633b6bb364ae43aaaa"
+    },
+    {
+      "slug": "dumbbell-spider-curl",
+      "videoSha256": "e723198d66f73494071b4385d092dd38f0e5d0f35bf47e17445aa3aef376c1b4",
+      "posterSha256": "9c70afe3626d46f7758009ae0b93a744d1a2e7f172dbdcb08212bdd715ea46a8"
+    },
+    {
+      "slug": "dumbbell-squeeze-press",
+      "videoSha256": "b008adb0ee7881579976c19b23d73ef8c014a9069672c6a17b6d278be3824a07",
+      "posterSha256": "0c318408e4f268b82dba3459326a76d3680bcbc53e4d774252e828bb8166957c"
+    },
+    {
+      "slug": "dumbbell-stiff-leg-deadlift",
+      "videoSha256": "35836576470756030f65cb1f003b8b601af77a55725d2d5c74ccf5b82428867c",
+      "posterSha256": "3e31beb23943df9c94c5f4c4ab9dc5e91b12776bb2c28fe8a85c11e619ddf4bf"
+    },
+    {
+      "slug": "dumbbell-sumo-rdl",
+      "videoSha256": "17ae559e3442a701d77cc5501f990ee16266a0a5116c30631157b51eccb136ee",
+      "posterSha256": "e5e52bbcfd6d84ee3b1ed814cbe85910612a1f7a03f83f28514cfc8dcd9ea295"
+    },
+    {
+      "slug": "dumbbell-sumo-squat",
+      "videoSha256": "f421978958583feda6d255ae9053aa24c6f16f926be6b8cd1a3c17f5c15d2096",
+      "posterSha256": "8418878b8888375783ccf9e076bf391a69b2eb2c0386d8228407f331e68aa490"
+    },
+    {
+      "slug": "dumbbell-thruster",
+      "videoSha256": "791cdb56269b41e694232696f6571159ef1a853713b1c0401262950aaad413b7",
+      "posterSha256": "65ec5c9f7425017890579945266d8dcc57d1dc26deca31f813ebbe9349714b1d"
+    },
+    {
+      "slug": "dumbbell-triceps-kickback",
+      "videoSha256": "986cb5cc598da0575fda279528209b6e2fd1665ab6475c32ea452ad78fdc3948",
+      "posterSha256": "ecd757bb18189629904304cec6227741477383588e88d1bb5d53256e52b8f1a4"
+    },
+    {
+      "slug": "dumbbell-zottman-curl",
+      "videoSha256": "3b2379f20eda104ae16d529204e6c974b4b74543d1792166a89a10f0688cdb55",
+      "posterSha256": "dc8435217ceb401352c05b19a7dbe69e0a99fecffa76b0165d4c5f8cfdbb170a"
+    },
+    {
+      "slug": "eccentric-chin-up",
+      "videoSha256": "cb6dc999e76aa410376705fdac53c0d7045a5f4942f884a94b02cd5f3d6806ee",
+      "posterSha256": "69ce7def6b35ea3d693238caaa777d351f647b627f0c3765ec4d5f0f0b74b689"
+    },
+    {
+      "slug": "face-pull",
+      "videoSha256": "6d797a2fc22125c6863bf3be58b0bab6e135a8d3ba52cf9c5ff102190b4b351f",
+      "posterSha256": "7888ef63ab1941de7a1e87bacc65680fdebff38b674a6a5ce5a495d7744060e5"
+    },
+    {
+      "slug": "farmers-carry-dumbbell",
+      "videoSha256": "59a0d11aa246e33ccabcc06102b85466a6d4f8aebd4887ca6b12d0cca460bae4",
+      "posterSha256": "42fb7e99f7c5c4f0a8aa46269b84fdd95f3975169e0ad62a1b1fb7848bd1cd65"
+    },
+    {
+      "slug": "feet-elevated-glute-bridge",
+      "videoSha256": "fbfe4e61533b3feec224f68b955b7159d298ccb612d6bcefb4d9eb6eebcd304c",
+      "posterSha256": "7ffa4ed9549039a33d9ed2561b90396422222f2360f8cd6e2f76495ddfb35b5c"
+    },
+    {
+      "slug": "forearm-plank",
+      "videoSha256": "1ecce5bcd6680127a3520d44b302ae648193173f8a2ba45d33cb53cce9ccb690",
+      "posterSha256": "0c67d72b5cf19b26be509f44856fb556ea7c8c2514fad17fde0a326c9e284be4"
+    },
+    {
+      "slug": "front-foot-elevated-barbell-split-squat",
+      "videoSha256": "eee5d144d0ff44b0ed8454cc39b59fd8594b6cad6994c761eb9dece4ef8e90b7",
+      "posterSha256": "139c3aabe6f9d13b8dead82f832a474b5d99beecde3dbb9898b0bc271f23bd16"
+    },
+    {
+      "slug": "front-rack-dumbbell-march",
+      "videoSha256": "da7fa714cbb944217660c8b09fe83a8f77a78431e33cd434663601e2235607a9",
+      "posterSha256": "793733811491098733a01830283ebc3a9a74513fb4b50bfc419398595a96231a"
+    },
+    {
+      "slug": "glute-drive-machine",
+      "videoSha256": "f05c006075702cb9922c7578967bfbbf2b38590dc2355a27cabdc2bd143d37c8",
+      "posterSha256": "3747df4d6408af88e5ab017912f21649d1deea20fc8ffba24ed02e1e4b7972f5"
+    },
+    {
+      "slug": "goblet-squat",
+      "videoSha256": "10d47a9824a4042914f60df7e0171e2e5d7b2aa9c36c6b921723e06ad1fb7807",
+      "posterSha256": "ee392f7029d9268ed89761825f9ba0739a22db9e74c90473d916a899ec1bb7f2"
+    },
+    {
+      "slug": "hack-squat-machine",
+      "videoSha256": "ebefe6bae7b2a28ca6f54db9a8c194d904002ee53d8691b908bd4b4e76eb789d",
+      "posterSha256": "00f904c11b347c363c7ede81ec8f20a9045c73e2e002985012cb699b8be89667"
+    },
+    {
+      "slug": "half-kneeling-single-arm-band-press",
+      "videoSha256": "f4b1c66de0d8928cdb46e9d3558da3ce63f36e45f37097c641d9eec36d83d4ea",
+      "posterSha256": "506bcb8b7cba8a0f0bd1caf3e94862b52b7bf3df9a85a4ca6790fd6849ce3860"
+    },
+    {
+      "slug": "half-kneeling-single-arm-band-pulldown",
+      "videoSha256": "b4aa3afdec56f585912c00ddae68747005ebf8c23a98e7d0adc92f1375bcaf56",
+      "posterSha256": "884b212079d4d049a1f801169cd853d288de268e6c90795af518716afed39488"
+    },
+    {
+      "slug": "hammer-curl",
+      "videoSha256": "5be5a91312d850bc510f950f85be106d3708e6f7597bc25c31f6aadf0ee6b584",
+      "posterSha256": "dc9df648d67d2d87efd10299676da472cabbda688399bbb3be0c2923399ee0ec"
+    },
+    {
+      "slug": "heel-tap-crunch",
+      "videoSha256": "1783928313133f07fa112289b35385da60bc6a72053b6263888894f3373fc372",
+      "posterSha256": "7251ab259e117bf7c1746a68f7a9f678b804f4c85dc5fff9d400298ce3b552cc"
+    },
+    {
+      "slug": "high-plank-shoulder-tap",
+      "videoSha256": "9770a76a0e7e573a45befae91d569ad6b0ff514fb4747abb2ba25622e8184548",
+      "posterSha256": "6cea5a3f57e2ca602f3a25e0b8dbdea28f7384da9dfb67d0a509808707433c3e"
+    },
+    {
+      "slug": "hip-thrust",
+      "videoSha256": "e69645a5493ca5198fb10e63464f317f49ef937523174751d10dce9c333c6710",
+      "posterSha256": "57165db962ec376f97367f35e22fbb40d4218a1a014efeb00af8644e44d726bf"
+    },
+    {
+      "slug": "hollow-body-tuck-hold",
+      "videoSha256": "c69da82f9ee75591b6e97d99ea757635e9c2754cbbf1a3fb1f9088fe98265132",
+      "posterSha256": "3cc313ef9b5b2bfa65066f507a16e96df586b3e601acb4913cc6c30e18406865"
+    },
+    {
+      "slug": "incline-barbell-bench-press",
+      "videoSha256": "69883680c255afe54279d1a39fbde32bff971e9234e0df84c21a823cbdc4e124",
+      "posterSha256": "6245dc59c4f2d70095c854c50a2c6f2f99f16f610d3ebbeb0a12b10536a3a5d0"
+    },
+    {
+      "slug": "incline-cable-chest-press",
+      "videoSha256": "f2f0e79109f6ab288deb3ae0110b01c922f5289a95bda3332b3b481bb509db56",
+      "posterSha256": "a57aff006e330278a59d8e55b7c53efa60dc4e86f813c300596bbd42ceb914df"
+    },
+    {
+      "slug": "incline-chest-press-machine",
+      "videoSha256": "e3fd9716e9fcd11a3634a2f11e87c022c8013915986ff11aa412a113464f0cc2",
+      "posterSha256": "38f92ffe8d6c38c4a46ebaf17889b34e2dfb5d31d0b5c71fe6a4fca21458d6b8"
+    },
+    {
+      "slug": "incline-close-grip-barbell-bench-press",
+      "videoSha256": "6e6d269e528ab48499d9aa011369756f11feeb10aeb34f1823a0e2a5bba25557",
+      "posterSha256": "bcaa78d46085bbd4f7e37a1a0792144c6493cf1ba0f9eeec7f3a60da67a6e129"
+    },
+    {
+      "slug": "incline-dumbbell-bench-press",
+      "videoSha256": "efe5578caeb0c1a62a0ceae7725ffc3be0d55df867d2d11266fe589c8f7f55ae",
+      "posterSha256": "0df3e29b9015b958ace51f16e9f4652cdb148090baa45799bd1f73e4be46e690"
+    },
+    {
+      "slug": "incline-dumbbell-curl",
+      "videoSha256": "165069758b3d550e137105d245d3a4c3fedaf72e2af4e575ed9880e0259a07bb",
+      "posterSha256": "3f43633b29788e69c23469204e16419f1910309d9247a4a90b24d289e974251d"
+    },
+    {
+      "slug": "incline-dumbbell-press",
+      "videoSha256": "602cc003567427359c512e00e3dd1b38cc1b71043b513d83075b9c5ce6f183dd",
+      "posterSha256": "fadcf1b2d598b42a1d9f76f511bc6cc78415bb3fb9246badb54f324f8bd82135"
+    },
+    {
+      "slug": "incline-dumbbell-reverse-fly",
+      "videoSha256": "414ce8d012b7da9c80b615f85ba993185db2761157f3c056b36db880f0177a70",
+      "posterSha256": "02cce4525dbf3aa423b75e6c0ce2a701bc550a3166f5da802fd2236f3dd1b01e"
+    },
+    {
+      "slug": "incline-dumbbell-row",
+      "videoSha256": "cba3695cb5d2bc0ecdee25722d8308afeac38a1ce0330dd64695c109f227fcfb",
+      "posterSha256": "54e55aac9761d910bd4008ab3fe71d49e6ea32b57d0f80a1b7ec64c4538cafca"
+    },
+    {
+      "slug": "incline-push-up",
+      "videoSha256": "12b3a34394089974f4a30ec665527eda4c8b03929e18ca0d768003ff9c0e94f5",
+      "posterSha256": "f3caac5e32791d5fc38216a866f7af1496e4a50cb1b941f47f55ec306817d79c"
+    },
+    {
+      "slug": "iso-lateral-machine-row",
+      "videoSha256": "3827c4ded054fa4b75dd51d743a7fe618fac38d1df90a0d261f1d5ad0c6af85e",
+      "posterSha256": "c7b4f29e9f7efaded9d305f3ee8c682ff622c4e1bcf6d08e5625fa625a2d7618"
+    },
+    {
+      "slug": "kneeling-leg-curl-machine",
+      "videoSha256": "0a29721572a7afcd0ddaf273f3a7bb84a03621ffbf9cc9db1d8d39b3f2e5737d",
+      "posterSha256": "f0e01aab700014b4e6370b14703af72861ce9cd451952810df1d3bb1fb024dc7"
+    },
+    {
+      "slug": "kneeling-push-up",
+      "videoSha256": "bf78c3ac7a3c411545aa1cccf2882c42453b2119f0eb113f196c2267665c3dfc",
+      "posterSha256": "43a5d948114da7d739f51457a5cd0652cf52b00e62f9eacc61cd507450371561"
+    },
+    {
+      "slug": "landmine-meadows-row",
+      "videoSha256": "3c4745f2f0d85bbf8e82d69c2deb7575bd5209acb2f29993e73fc8ec59faba7b",
+      "posterSha256": "e417b77253d8f2f887395447c5ccd4cba0f9331fff21d8e17be823588605ef39"
+    },
+    {
+      "slug": "landmine-press",
+      "videoSha256": "7e7ecd4a5ec47ab25e00ce112a77c326e74d5b90f008a999c23ce9fa03e58219",
+      "posterSha256": "298acdceb28712a1f831f2f199b173de856a191511dfff82fd3367cad6c0c8d2"
+    },
+    {
+      "slug": "landmine-t-bar-row",
+      "videoSha256": "90e9f43b94492c5c483aa252dd012615b27157051c6e0b8f792b515a0c94686a",
+      "posterSha256": "e02e58c2b75992da862fe0b64c2935f2549dcb24f1dc06b183ba25b742a93da6"
+    },
+    {
+      "slug": "lat-pulldown",
+      "videoSha256": "2174998614ce1c04f0ba863453ff90f77f29ddaa514a90eb28a6b8e1b8df731a",
+      "posterSha256": "004a895897929a910e043478f1d5cd2f2bf32002e766b2336bac65d7f4f3f33f"
+    },
+    {
+      "slug": "lateral-raise",
+      "videoSha256": "03aef26a7bfb79c967ad7ccb02e42b1173ba91283d949f58f5f7584f2b37571e",
+      "posterSha256": "38ca926fbf83190d4b1eb08473d1b96e6e3e669a96609332bf89700507eddddb"
+    },
+    {
+      "slug": "lean-away-dumbbell-lateral-raise",
+      "videoSha256": "47a8ad087e95f020d0448158928833d7cd3c33a3553a09de74aa40c37be7af87",
+      "posterSha256": "f09e681c6a07982ce2f4d3d8166e67b8ed2d63156d6027844bab7eff72461f9a"
+    },
+    {
+      "slug": "leg-curl",
+      "videoSha256": "dcd17a0a126f2fbcaa963865f9f6ba8c0393294abd99d74d15c745abc3e17e2d",
+      "posterSha256": "8b2af9099fbb55de06ef47e273a108570931c67150e14d33bb290a6659ff6fd5"
+    },
+    {
+      "slug": "leg-extension",
+      "videoSha256": "97eb1bcdbe6b2df66c24edc2dbb70d791fa39666395536de22647d2fb775449d",
+      "posterSha256": "77839d51041edfc0cea2deae6867e7328f018dbf6f5d2a79982a846f0d60fdf4"
+    },
+    {
+      "slug": "leg-press",
+      "videoSha256": "14015b2a94e19ef0db0feffdeffabef9f6ec5ef2709d1d621773bfb0ba0a89f3",
+      "posterSha256": "e6cdb433fbda9dce1b782c0556c869d96c68045102a9c1b620dc4fb3265b2dad"
+    },
+    {
+      "slug": "lever-squat-machine",
+      "videoSha256": "1ea8dd10169fea4ea4b1ecd5d6680afe072572f68743d66a8a4e56beee4f3ef9",
+      "posterSha256": "eb0f8da4a40eeb6a01ee92187b55abde004898fbf94fe29799cdc3eaadf7cb49"
+    },
+    {
+      "slug": "lying-knee-raise",
+      "videoSha256": "7b5976f9d8a9d0e966018faacbc5b280334b406fffb3c9114c035cf74e181d3d",
+      "posterSha256": "a0712b7ff6b98bfd1b12b36f4f35506990e3cf27e71efec90954af09c0fd837a"
+    },
+    {
+      "slug": "lying-leg-curl",
+      "videoSha256": "028d2d2979b85e8a6b10a19f9bab7135ab5ed0d9218a8797800794eb8ac2f078",
+      "posterSha256": "7c954655d788088f907ed4205149c39e621e593957f5722bbf5d2ad8aa876254"
+    },
+    {
+      "slug": "lying-triceps-extension",
+      "videoSha256": "b15be8e039dc9b3442aca403c2c8eef83332d43f7bb966eec827ad3ee935d502",
+      "posterSha256": "959f50599dad1c450f38510f843b4ab285cb48800c2a0e3ba83d5cb8a4b395f1"
+    },
+    {
+      "slug": "machine-abdominal-crunch",
+      "videoSha256": "48301e4096f6ce9e178187ab40d77bdcc4e7a487cef12bb8313bc5f23fdea363",
+      "posterSha256": "5443f262c630aab41f03a6b86ab8c6cbc4674cdd9006c03da3b4a3f24ed972a3"
+    },
+    {
+      "slug": "machine-back-extension-seated",
+      "videoSha256": "4d8619bbf1b934bbcf3575997746bc69204f72101a4bb5a9905f91d6f9571263",
+      "posterSha256": "611add9d3dfb83abdc88c5e02a912547e9f560923964f1c790e785d1d5c346c4"
+    },
+    {
+      "slug": "machine-biceps-curl",
+      "videoSha256": "564d378ee4c5949539230843ba861822b170889ccb29ba9394fab3f131cb8fea",
+      "posterSha256": "93307a8184a32af9a2912ab4ebeb89dcb3700afef18bfe070537c2e267c07081"
+    },
+    {
+      "slug": "machine-chest-press",
+      "videoSha256": "5f0418c163a5c88d9c8d01b419f8ff1d13553aae965bd2323bb3f54e64aa37a8",
+      "posterSha256": "bafc9bf6e4e6bb41ff5676243aa649ef7efe58bc1448f4311555e68f124c31f1"
+    },
+    {
+      "slug": "machine-front-raise",
+      "videoSha256": "fa77cc9e23e1f4765da0290cfd8917d02b21e5230c46ffe394b970a3c1b59556",
+      "posterSha256": "5fc1f8527fd36c6d218dd3a80dcd89936ef99c957ae1c3abe6db19ca7f085afe"
+    },
+    {
+      "slug": "machine-hip-abduction",
+      "videoSha256": "c346e94055b6e70ae5d520df7d06df0109dd7f5a49f562362f7bc07c66b9aa47",
+      "posterSha256": "0fa7b64f942f7505c7ce4b36aae2b5b1fd891606633ef258918e783fe636dc41"
+    },
+    {
+      "slug": "machine-hip-adduction",
+      "videoSha256": "71ab6ccf0a1f8e47dec5676f41ab6461d3515207ef6a5f86b13fec33d8670a81",
+      "posterSha256": "19e9e80426a2a2c12735b31d28a50250d640aceb9302bc88fa8f35fa5c07d7c3"
+    },
+    {
+      "slug": "machine-lat-pulldown",
+      "videoSha256": "0133e166031053498419463ecfd6a8764d5790134360ba3a8f0087e3adf21284",
+      "posterSha256": "4fa1c211f84dbd576c87a51bba1976d40115cfe53428d6b886e47f1b6af81f72"
+    },
+    {
+      "slug": "machine-lateral-raise",
+      "videoSha256": "aa107ccb28c85c839c38aec150dab9a3c5c8e08d6035b5771253b4649c4e5a2d",
+      "posterSha256": "b3dec41c2626a2259b5aa80c1d4894f460529e4730d5f75501f40ac3f8c57e7c"
+    },
+    {
+      "slug": "machine-leg-press-calf-raise",
+      "videoSha256": "badf2289a51d6170844a11211c6b335bc79c8f5005eac8314efbbc3030ec1373",
+      "posterSha256": "f5195c419c24db53f6f3fb24c96fd9730f5f97435bbe935875ace26b0b373f90"
+    },
+    {
+      "slug": "machine-low-row",
+      "videoSha256": "7203a8669b16203ec96c1f4adcfbb9bfec8a18df6c3d5ec7c9312cf5f10a110d",
+      "posterSha256": "2e82ccf94abf4f19d78e6a899c08b1ef2bb2bbca5af4d073d9bd94d69e34acf2"
+    },
+    {
+      "slug": "machine-pullover",
+      "videoSha256": "18ec4b807a82f46ec664945f228b0a72a3f7b0fe16a154d8144591fee2e1123f",
+      "posterSha256": "4564538b32e04602bb4762db63dbea39da52d560b5fcdcc0ddb9f45ba4079f2f"
+    },
+    {
+      "slug": "machine-reverse-lunge",
+      "videoSha256": "12c2e77391319c03a878731e1f892d78e95f7c32e1a96ce79ca5c7394ef359bc",
+      "posterSha256": "0382e67dba78db68cc07602f7f59197e616e6f1fe8ec76271a21c0aa11a277fd"
+    },
+    {
+      "slug": "machine-romanian-deadlift",
+      "videoSha256": "9c6d314cebaa1b6b81765ef3a0e3415159c2e8c8350eec5c52de40bdeac646d5",
+      "posterSha256": "1e223ee5092e23a101ff970479afe89fac263c5b0d432880ca9703dc00ad4eeb"
+    },
+    {
+      "slug": "machine-rotary-torso",
+      "videoSha256": "71a51db0a373b012d3f50f6398f61a674899a36e10d87de5a326a63ed66cc536",
+      "posterSha256": "7d83360f981e3be34a3da4d3727167a72aa9d5311afa911781b1656cbf69a00f"
+    },
+    {
+      "slug": "machine-seated-row",
+      "videoSha256": "b590b849a731e7770ad87da8fdbbfbc4023b8fbbaf7e65a9acaef51863b88b87",
+      "posterSha256": "ae5015a336c9f3a4ebbdc26cb7b99296d1500ca05fa2625381c806d5f75c42e0"
+    },
+    {
+      "slug": "machine-shoulder-press",
+      "videoSha256": "ecefa6c45effd4622d0156abd72454948df65af4dfaf396dc51065ed83842a82",
+      "posterSha256": "cd5e5f411327bda3801fdb2023ec75b1a78cfe2498b3b0c57147a6dd728ee60a"
+    },
+    {
+      "slug": "machine-shrug",
+      "videoSha256": "b558cf16dcf57ef92ed98a7e533e2a56371713285bc3b5ae17f539ac7b709cbb",
+      "posterSha256": "f9c89bccb2c853d27c4fbf577f658e37cb2c436b6d278ab238ec8fe5ccf46346"
+    },
+    {
+      "slug": "machine-sissy-squat",
+      "videoSha256": "3d82db768fca904afa716d9b3c2b314ef67f8ef4c69e934237849ef31fb2d931",
+      "posterSha256": "f1c6138780803cfbae2634846bc63e7533e763967cd9e2a5438dc3f73a15fc39"
+    },
+    {
+      "slug": "machine-triceps-extension",
+      "videoSha256": "819dfae7b192e9eaecf5b49046181100e4df6e5b6f9a61e07dd527a6516bc31a",
+      "posterSha256": "3b2234b8d38cd4c3796cfa7478be6af9369630fc221463228322bd0059e32713"
+    },
+    {
+      "slug": "neutral-grip-dumbbell-bench-press",
+      "videoSha256": "46109f7ff3d55451a7239030b716c75b613ba5765148bc7b0f1efed0ff631726",
+      "posterSha256": "b8e8eaa6d6f3848f9c47f4033e549584036e6fcc5afb869e015d25e156e8d571"
+    },
+    {
+      "slug": "neutral-grip-lat-pulldown",
+      "videoSha256": "315c8ff0ca21bb340f7203cc2ff77db9f0c460a9d170b26a6fd17648986add6f",
+      "posterSha256": "ab16246609a927c7360effebf2e0125363c7864916cdcb57b1c9ca27beefa649"
+    },
+    {
+      "slug": "neutral-grip-shoulder-press-machine",
+      "videoSha256": "f0428a4b1a3c4f03417746ae7dc9600e558f1bc36d716f51537a614365776864",
+      "posterSha256": "5ff946559d2a875d0485c97921a6753be20bc4a527174febcf5d438330bee86f"
+    },
+    {
+      "slug": "one-arm-cable-row",
+      "videoSha256": "954dd418412b4e12eca3f0b19b55cc09c469d3af5b92d9724dd2150a066bd405",
+      "posterSha256": "19aec2e5896f903cbdc13b6527675d651ffa2deb7f0ee4c5c873b3a57033a6fe"
+    },
+    {
+      "slug": "one-arm-dumbbell-row",
+      "videoSha256": "988305e3b70b4153b362be5d50983963fb6ab856f08373ab54fa91ae01a0de24",
+      "posterSha256": "6d3e198284e5a514a26646a59fd5bfb2a372a68d8b18ff0e719a504b12e27165"
+    },
+    {
+      "slug": "overhead-cable-triceps-extension",
+      "videoSha256": "1bd1589c7d8aae61643b5c8bfdde6b8d7444e3ca23299b29de441d44868da5d6",
+      "posterSha256": "361de391649bee61b63abe2cbc7bf1b005e063d473c509886e23323ffa444390"
+    },
+    {
+      "slug": "pallof-press",
+      "videoSha256": "e490309f6164895890f534441afd09f5b4f0a352b6d3624d1382f5916747f669",
+      "posterSha256": "b27be6b50973556c88f7b3f1ddcf311c244d6fc69133e26bbc0864f224e6dd75"
+    },
+    {
+      "slug": "pause-barbell-back-squat",
+      "videoSha256": "7f5e363d6c690a9c4554f408c70c19625b8749ae115e9bd0d523b1ad76d96ef4",
+      "posterSha256": "8cc2a0652688e53b0ac2b10e3e7bc44d843eadce2f57f1dd9b5c1a4ce9c22cd7"
+    },
+    {
+      "slug": "pause-barbell-bench-press",
+      "videoSha256": "5d114093069a63d21337a34ff0df788a15e7c41e7e39f2f1a3317a604c15fe62",
+      "posterSha256": "bbaa0afb39a981b836ed7b14a5cf0c400b132eaf9f283e53919baea5dddd5509"
+    },
+    {
+      "slug": "pause-barbell-rdl",
+      "videoSha256": "68831e58b38e19bf1d9697c096b672b403c30b5b27af07910cc40c6119cfcaef",
+      "posterSha256": "dc262ae2ba7812395d3fe088f84bf5f64c19bf212939eb32da1591963a46c42a"
+    },
+    {
+      "slug": "paused-barbell-deadlift",
+      "videoSha256": "1a0df909df52833c30b373d0ffe94822ff3f8b0d34f67c3bd4f81d79bfc441e8",
+      "posterSha256": "ec8e5e95e29f3f7522907ec644f3b322519b4e9563c56c87f2764cd47b44cc05"
+    },
+    {
+      "slug": "pec-deck-fly",
+      "videoSha256": "bb955d082e9c4846d126718fbec8e0fac56ca757c2eed62968405a36bff14a39",
+      "posterSha256": "4454f697b7970e2cce843efcd5cab2f7cc0dd914e70d313f83c37270ed4c3bc0"
+    },
+    {
+      "slug": "pendlay-row",
+      "videoSha256": "8b02ea6a539a2bbda5c01d2564493c01776c5a8ced57178eb40a8ceff13da3fa",
+      "posterSha256": "046e39191fdb3eeb7609e1212d79e246400d950a181c04e597cf555c80b0e4ac"
+    },
+    {
+      "slug": "pendulum-squat",
+      "videoSha256": "486ef2f8f747c7414aa91376b35b227b5668b5328345ae90287222da4fae12e3",
+      "posterSha256": "1e0df05180e1c145d14b4d3d8af63498a4ffea93ddb2d09cc7d988643610469c"
+    },
+    {
+      "slug": "pike-push-up",
+      "videoSha256": "74af2630d48fd37cc1aebe201f6c5c835bbe19cc038689d8d31f13afcd7bab86",
+      "posterSha256": "8245c2c7432221201df22aed382b4e9c962009da27127092548cafffabf38811"
+    },
+    {
+      "slug": "plate-loaded-chest-press",
+      "videoSha256": "b3b96d43091a71374045f8abbf39f897268f7539e55b3674456fc5a8377edeea",
+      "posterSha256": "19b4deda2107f4b3ec340a6d8c17b41a3d47a3133ccecd8a456933d9e5e2fb65"
+    },
+    {
+      "slug": "plate-loaded-high-row",
+      "videoSha256": "f4e657652eb89b1c8289afe64aa36e4d250fdafde6675072209677457467e29f",
+      "posterSha256": "839c3b2fe302efad139e68c196e505193d32a84a57ea8169120f641639615658"
+    },
+    {
+      "slug": "plate-loaded-lat-pulldown",
+      "videoSha256": "c828448d51d03572b7c5806d9c19fea90e2fb91865748d1d85f6f5419fd785be",
+      "posterSha256": "df77efddf33e0cf96bc5f6e61c514bc2cd0c7a2ffd6443280e6dfa4d3c7d0ed7"
+    },
+    {
+      "slug": "plate-loaded-shoulder-press",
+      "videoSha256": "7b27803d986d76bcc30b4fed5e4d2031745ca5d6712744cd046861b1945723d4",
+      "posterSha256": "26024619f3eb829156812c2891e7286e28e4268751bc8e3cda761a4016fb77a7"
+    },
+    {
+      "slug": "preacher-curl-machine",
+      "videoSha256": "f89162b96e2d6f78e8a540ec773d114f89c850b6b58be2776378e2aa959037e5",
+      "posterSha256": "836ff11787b522b0054aece09be719edebd1dfc7aaa9d77842f4062dc11b7762"
+    },
+    {
+      "slug": "prone-w-raise",
+      "videoSha256": "8889ef1646a6d3e4ac5da520835e213b54c66899e5144e0236cce67c2345efd9",
+      "posterSha256": "a7178e17a69ea31e64ab80baec00bb65c584dc9d8965f367b10cd38e2a7b129c"
+    },
+    {
+      "slug": "prone-y-raise-bodyweight",
+      "videoSha256": "a7dfd63384d75c371024802eb4a5e48eea16a4e607f7fad81111ec8e176151f4",
+      "posterSha256": "03b65f10814e287656d5239663c17002db4e9126fe2438a180c93aab02b88fb2"
+    },
+    {
+      "slug": "pull-up",
+      "videoSha256": "5c74f5b29516c8bbf0e6f9edabc3e722bd394a226ebf463f16486b8f2b6ff60b",
+      "posterSha256": "2ee1f27f3c7c15a0a7e13f3f63ea28ce7e2cad66a5d634cac9bfb8ee20b09264"
+    },
+    {
+      "slug": "push-up",
+      "videoSha256": "0e648755b091def5ed542579f5c7e345bcd2a73e786cd39741106d922b6f5a04",
+      "posterSha256": "efc2b9086295517b0eadce1a21df4fd6dedd236e3f3a90bf8243b86092c9df14"
+    },
+    {
+      "slug": "reverse-grip-barbell-bench-press",
+      "videoSha256": "dba48e484fe1d23e88d193314f709676c0180299b2d69c2e64646f90a382ac67",
+      "posterSha256": "0b224fa2530029c3c5c51922fa8b2adf4781ceb1bcf69c9c701bbf9d0a96c42d"
+    },
+    {
+      "slug": "reverse-grip-cable-curl",
+      "videoSha256": "49ca10547b2d1e8b86c5b97c185fd24b25cb314cd48ecd5188e18ac4a657f3c9",
+      "posterSha256": "fc5b8129c4aad52520bf9d8d26c973d6de32cc2f0da7eb616d1bf97a63ae4a75"
+    },
+    {
+      "slug": "reverse-hyperextension-machine",
+      "videoSha256": "7aa34b98b3fe47fccfbfbf2c8c47035b5e26d01d99f93b0e0fe6c79a49f278ac",
+      "posterSha256": "9cdd4bcf1929b11e64869d5a35dab42668379864b8dc59ec4efee08e8993db1f"
+    },
+    {
+      "slug": "reverse-lunge-dumbbell",
+      "videoSha256": "21f4493a0625c363f0010bbc9471577be5e17e0d88d660e2ec9ba0395c0abfd8",
+      "posterSha256": "ddd96f06c189761c78b0d843e41bd800b9fbacf4c88991527c8131d1a54adf94"
+    },
+    {
+      "slug": "reverse-pec-deck",
+      "videoSha256": "197651a7f464e90002d1d0da300d9fa74a54a20aa5c77f57f81221664e2cdab6",
+      "posterSha256": "87811631dd9ff0a88db00e9ecdb8ed49d175a9e5547ae4adc8b4013eb938eadb"
+    },
+    {
+      "slug": "reverse-snow-angel",
+      "videoSha256": "f609524044cf7fc75b9e51e5f76b555eb1d37b15b435b33dacb3885074a3242d",
+      "posterSha256": "4fa96ddc8093dfc5f908f1c73e0374db7fbedc8d203df3c7c668a13fc163405d"
+    },
+    {
+      "slug": "rope-hammer-curl",
+      "videoSha256": "9aeb4526c31415fa888109fd8fa97a5275d6378a576c077cd275d5b0f9761c81",
+      "posterSha256": "d5f32b3bdc6be8c28033da31e83f0bfa9536bf0498af3fc2d8127dcbc67b9148"
+    },
+    {
+      "slug": "safety-bar-squat",
+      "videoSha256": "1caec4f91ee20fe3d492c4f73106c20c8aedfd260f657469d590d0d2be5aa6b6",
+      "posterSha256": "e398ddd1a68f1f72a02246604157f15980cece88ab12a77ef640e6a5ac783fb3"
+    },
+    {
+      "slug": "scapular-pull-up",
+      "videoSha256": "f91700d493f9e49d0e849021069c97f5f2213e96bed80ccdeb0595a33c69459f",
+      "posterSha256": "08779f3ef7be1f8ca6c4b822f5cc6e8438e039dcf662452767ba89d004ecae0e"
+    },
+    {
+      "slug": "seal-row-barbell",
+      "videoSha256": "42a50dc02ec8b76ced6650f6b8e444f697b813776c7dfe12fcf941279b1225b8",
+      "posterSha256": "6e19508a3964d19f327bac098b585538981b9f6e92ae9b9dd7de22a66fc233d5"
+    },
+    {
+      "slug": "seated-band-lat-pulldown",
+      "videoSha256": "9c28a21ea13a27d8785c0733f192b81e8f17301e34626d4289e30eb9d3f86f6b",
+      "posterSha256": "c0fc6714979c3163865333d6c0fee1c254d076defdddfaec5513fda489df3d6b"
+    },
+    {
+      "slug": "seated-barbell-overhead-press",
+      "videoSha256": "6c1a8c3640ae64ac9fa0f018ce13761c80b725376bfc1a05ddceca0c0063b93e",
+      "posterSha256": "6f703e7adf94f034d9242d08811a5d7c6bb18390791e14b311c7060150b4ad87"
+    },
+    {
+      "slug": "seated-calf-raise-machine",
+      "videoSha256": "835932f4f474f717c6313b53d1e52054cead128e13b011a631c9a86695db6f83",
+      "posterSha256": "20d7a3943616caf4d318cc6063acdcc7cf6341d82a0a1a3ce715b34559f9ea78"
+    },
+    {
+      "slug": "seated-dumbbell-calf-raise",
+      "videoSha256": "1cba08600b3c16c84988c5175cf78145b570d2aab0543cfb4b8e8be2a760c14a",
+      "posterSha256": "e8557f68e970ee1ef610cace1061f09256bf18bf95719838ef657b39677a9ebc"
+    },
+    {
+      "slug": "seated-dumbbell-overhead-press",
+      "videoSha256": "e74dfb7f42a82a5bde2cb20b849909206c31e74b7208efe7a2a5a69b9aee7d9f",
+      "posterSha256": "8cc19bdbaa043480bdd5f24044ac869a8754dfcf573d4613a6655f70ecdd871b"
+    },
+    {
+      "slug": "seated-leg-curl",
+      "videoSha256": "13fb7d327bd58646e88584ef3733e369721af8cbaccbd153dc610f648737300b",
+      "posterSha256": "b9e0056350b53be6182d6a421a3bc23dd3a132fbf7c30fece57f43d472a21bad"
+    },
+    {
+      "slug": "side-plank-knees",
+      "videoSha256": "30e4633e09ba96df78a0404c04b15926d8caf5d399c2667be8fe8144f6fca370",
+      "posterSha256": "f44cbfe6867da5e154fcd22e221ae5a49ebd8d2b733fd5306065a329583c75c6"
+    },
+    {
+      "slug": "side-plank-straight-leg",
+      "videoSha256": "8a045133ddfc7d91d39f6c2d41c2bec332632120322f032e87697329633b5125",
+      "posterSha256": "fbfae9e06cb93b9e6327e4611e86505313de8b74fe694203180c414238597ea6"
+    },
+    {
+      "slug": "single-arm-cable-chest-press",
+      "videoSha256": "e99ed4fee97d06dc216ccf8be686cfb2fb068bbe902a6053ef145ca89f87e7e4",
+      "posterSha256": "dd8c9299a5c926c067ebab085856e2d3e0855784700ac0665250ea4bfff86b97"
+    },
+    {
+      "slug": "single-arm-cable-overhead-press",
+      "videoSha256": "a56f9ea4e75ae7b0566d7f0ae9e5d1de03a00639833ab8036fc0656128d1b5a1",
+      "posterSha256": "b11c13c57ff7ebd564e025a387d8a51a1b6e8b099403857b933787e8f78c688c"
+    },
+    {
+      "slug": "single-arm-cable-triceps-extension",
+      "videoSha256": "c0f46c49065f1ff864749f6a8277d0f8275666a9e77c3ed8315d61163fdca532",
+      "posterSha256": "f7fffe6b15b7685710d605166301ffac537ff9aad490371e86defa84100d4592"
+    },
+    {
+      "slug": "single-arm-chest-press-machine",
+      "videoSha256": "81344011e45c07c9826bbf2673587075c50e1fb92717f21bdfcdea9db7a6cbab",
+      "posterSha256": "f5536418832fd159dad8b59c18b933700c44d0444bbc2556b274ff063c12f7d7"
+    },
+    {
+      "slug": "single-arm-dumbbell-floor-press",
+      "videoSha256": "190943042f662c0ee9fe2008175600cb761e7a3aff4d1337d802b97c1d0dd869",
+      "posterSha256": "fd9f351da9a29d0235ab1b67cef31db288942d5a53cf4686e09d9f488beebed0"
+    },
+    {
+      "slug": "single-arm-dumbbell-overhead-carry",
+      "videoSha256": "ddc11e06f3cb36b66e177be60e7940cb00d98be5b78aa38595e988a9591d5625",
+      "posterSha256": "992419dc1eeb0e600f7c38c882fb14dc2c0a6cd736be3cc968ec7bb5a328fa84"
+    },
+    {
+      "slug": "single-arm-dumbbell-overhead-press",
+      "videoSha256": "e79c0dee03ea93aa70d743f66f2bd0b4e4d04b7bac207c3ee3feedfcf3870abf",
+      "posterSha256": "df04e5cfcd8bfa7648c9c73bcb991a1b72b301b76195029a88db7d1c0a45331c"
+    },
+    {
+      "slug": "single-arm-dumbbell-z-press",
+      "videoSha256": "b5de639f6e5d7aee54779d9928f67b662bb4b09d007e2d66748fd2a9c00cbac1",
+      "posterSha256": "cea0ac053188375b244e06f4a97f985d9a27f15e74f8f8716229667726cf2711"
+    },
+    {
+      "slug": "single-arm-front-rack-carry",
+      "videoSha256": "953b0bd880366a1136bd5f0b01219fd941bbbdd0e8411f1bfcfe397e6c1b32bb",
+      "posterSha256": "bb32530dba1dee1e59829d104d7a95dfba22afd3d01d89a1fae3c583df058289"
+    },
+    {
+      "slug": "single-arm-lat-pulldown",
+      "videoSha256": "b9e4458d12a3a3f3eb51aa1db64f46f8dde0f2af263bd8923bbefe66f52ad720",
+      "posterSha256": "497cf255e65be10ac23d15c446e4e943ef45cf5f21a89c202e2191ace5039a73"
+    },
+    {
+      "slug": "single-dumbbell-overhead-triceps-extension",
+      "videoSha256": "dd2a70810d864af4e030cbc326eee9346828f35b7fb4f4a1dbc335ba1bae9817",
+      "posterSha256": "6a20c980ef1bfb71f8556eb05e08313e7dec46810ee7cbad308dbaea5266d335"
+    },
+    {
+      "slug": "single-leg-calf-raise-bodyweight",
+      "videoSha256": "56f52035f933c01ada24d051fd456ecc3ad4467b7137bafaf614820cce50b914",
+      "posterSha256": "d6b1c38ff00d5910d31979d5caae0d06779df48ee0606905caa6694bf6a21029"
+    },
+    {
+      "slug": "single-leg-dumbbell-calf-raise",
+      "videoSha256": "f07edf0d4557d31143f39e381f2621835ccfab363d1344df4b7cbca06bdd50f8",
+      "posterSha256": "8d80803291d3fc643654b6f65e4b1f9aad62ccce7b21f6d7194b34e554e9a112"
+    },
+    {
+      "slug": "single-leg-extension-machine",
+      "videoSha256": "c72adff2a1e9711ddb1eb0595b590a69e0fea1922e0542e50da511d69caac1f4",
+      "posterSha256": "22b101470af66d6b9e8b15bcbdfee3717f19d4b035393a29adb225ab3b3bbb39"
+    },
+    {
+      "slug": "single-leg-glute-bridge",
+      "videoSha256": "7eec4393ae0c356c1b109fa13b93f528afdf7cc352a6ddc49977bc2abd0db460",
+      "posterSha256": "b4b54a7cdf5a1c9345ceaf8421906b0267ce9217c792c462697fe17819e7a6ae"
+    },
+    {
+      "slug": "single-leg-press-machine",
+      "videoSha256": "4377eb8d8c33316d91dad95ad4eafe22aff24d255aa763aff785eb7a5498a44d",
+      "posterSha256": "e64671262fe409dfb160be98699cfcb9bc108409e6aa1a64ca7f3615fccb725d"
+    },
+    {
+      "slug": "single-leg-seated-curl-machine",
+      "videoSha256": "ca91daf4616d9a271e0471f07a12996b53ab8baeb090256fc5506af65a5d40ec",
+      "posterSha256": "1419917fc1b99428e3f56530c542fa0dec93bd789d29884d176f8dcf60c3afd9"
+    },
+    {
+      "slug": "smith-machine-bench-press",
+      "videoSha256": "1ec171d809ce6b3a8840664b76829114a1c8d0227bcc627816d277011432f439",
+      "posterSha256": "490ab3d91bee8f3ae188cd5aab5919b25d339510c716ce4bbfdf430d2cdbcd99"
+    },
+    {
+      "slug": "smith-machine-split-squat",
+      "videoSha256": "3e12a925c05794014aaca0ddcf914043d644b2c247c94f181c30a4362dc5caf2",
+      "posterSha256": "84139eb257da3ffe1bef33429e72e22c603b5cae622ce93651ca7a190caa75ae"
+    },
+    {
+      "slug": "smith-machine-squat",
+      "videoSha256": "55f0065fdf1588cd6933bcc1fbd7bdc3984506d695e127a3288121b0f56576fd",
+      "posterSha256": "f0feef18db1b411718f3f9768cb1553548276f5b9d8cc28cec7f0cdb53752e06"
+    },
+    {
+      "slug": "snatch-grip-barbell-rdl",
+      "videoSha256": "5bdf18ccf4dc611eb49b252d864d00f24af9b269a928dc0d4b579e2357a5ceaf",
+      "posterSha256": "bb1719e634f7e26cca2a1e58e43f6ae10f0468fb2a8973ecad0340e0766c4d1c"
+    },
+    {
+      "slug": "split-squat",
+      "videoSha256": "c58ef2213c82d1d53307b9f67a48f0401824100ef5a78d2cb4653f6004fec488",
+      "posterSha256": "e680c264d5f84957b451fee8c6df257c81f73f594aee9582309ebf110b66d166"
+    },
+    {
+      "slug": "spoto-press",
+      "videoSha256": "67b5d742e535a7de484c849f01ac9b1020c043b40f76dcfaccb04fa1e0a83f22",
+      "posterSha256": "8c671f9fe90dbf79d1f6fc4a9d628c034ef86ec91069f1fc19bfc2196d17c6fb"
+    },
+    {
+      "slug": "standing-cable-hip-abduction",
+      "videoSha256": "bba638db881926fcbe45f3265005692ea6d67484308a893dbb8fbdc09f4fb362",
+      "posterSha256": "e32ceb2f3e7a91eea76bd14a24c0b0e047a60f541143130f45c04c14eba68b89"
+    },
+    {
+      "slug": "standing-cable-hip-adduction",
+      "videoSha256": "72e226973e9c119163c453d9ded9cae93438871b6ac004c44a8b5ca056b2cf27",
+      "posterSha256": "1a1216f629f7670d7f1f7d6bdf8ed3f97f26433e5eb1c424aa2bcc7e366e7fc1"
+    },
+    {
+      "slug": "standing-calf-raise",
+      "videoSha256": "df001cd148baa7fb2cc7240ea5c9bb8dada3edc13b2a94ad28949c297472d0e1",
+      "posterSha256": "b2d3dac02a1f46d19ae70334f4b87c2bf115d63e2258162f769e450d2819aa72"
+    },
+    {
+      "slug": "standing-calf-raise-machine",
+      "videoSha256": "849e92681d107a547e328d15a0a6dfbd32cd45bb493f62d405146779e0924892",
+      "posterSha256": "73e6f312f38bd31ed32f697da9059cf5b784c14b2ee1173fbe89c69e62b4725d"
+    },
+    {
+      "slug": "step-up-dumbbell",
+      "videoSha256": "ee43511316759cb726b16bf0a59976982a9ad1168ce427556c391e81fdb2636e",
+      "posterSha256": "14c85cff59a1ffde810de525ce1ba42ec52964887d36f7ee0dfecc618227944c"
+    },
+    {
+      "slug": "straight-arm-pulldown",
+      "videoSha256": "ae334f2b2cbff0122c9b7a307ce45072d89180b44bdf8f038c6e597b0ddf6ff6",
+      "posterSha256": "37ab32341f003af3d286f51d172aab7c45d5453e4ed07f5b34df1a3f13c88186"
+    },
+    {
+      "slug": "suitcase-carry-dumbbell",
+      "videoSha256": "4723439df298dad54a383fa3e1aa3ee0c1fafb59e974fd34cf118e455e0ecdaa",
+      "posterSha256": "d3c21f3dd08d558d285e9b7fd0a0e61b4c17f29d9491d9e9a2c622f63f55b5cc"
+    },
+    {
+      "slug": "sumo-barbell-deadlift",
+      "videoSha256": "fa353ce9d96a50d6c7b38ccb53c038d318f64e6d8ccd3ff4f7b1ef49d3858484",
+      "posterSha256": "7a0e7ac0c8a62dd0baa743cd2a90b1193566695204ec2b103ee00c310c5c4aa2"
+    },
+    {
+      "slug": "t-bar-row",
+      "videoSha256": "29e3cd2a4b3879cdcb1ae7e8a6985e663c3cb21f4daefa39f6255ebdab20ed60",
+      "posterSha256": "554ff2c1969f341109745a23830a70a6e1f4279ccbe3a2f4062097c52dec1aac"
+    },
+    {
+      "slug": "tall-kneeling-band-overhead-press",
+      "videoSha256": "4d1f351cbd9dbc60e7c882413d30a345f0fc5bbbc442511ef3923c785b08323a",
+      "posterSha256": "7382a2814548ab81346e390b6d02a8088b68634bc226a45922bf4a4ded019a79"
+    },
+    {
+      "slug": "tempo-barbell-back-squat",
+      "videoSha256": "af19a6cf151da23a65737d6974a62d617d4fa37e822a768553cb7ec1239e4d9c",
+      "posterSha256": "d9ee9e3aa381a6068b240dc3dd81aedef92758548ab379cd5905250f3bd1f4c8"
+    },
+    {
+      "slug": "towel-grip-dumbbell-carry",
+      "videoSha256": "4b124005fafa4004e73ec6eb9264067cf82d3df3ebe32916541ac8fb0fc76da7",
+      "posterSha256": "8f1438228ddc79b7308dd579c5296133b1ff7595a5b7e424d1e575d29c83b47d"
+    },
+    {
+      "slug": "trap-bar-deadlift",
+      "videoSha256": "51e44008afa0f57defff84a90eb2b6a7f9cf34dd1e4b26768a9e2ed209bfeb93",
+      "posterSha256": "d0036fdae16f202dba7e951015d7b433513e1b498ea05840590f6ab1668f6978"
+    },
+    {
+      "slug": "underhand-barbell-row",
+      "videoSha256": "633daa897857bf22136d3d6265302ee4fe1112c3a42431bb6b459473a865ed71",
+      "posterSha256": "860f2f667aaa6694481e771dfb742eb566d1054c32a55a1094815327818fdbf3"
+    },
+    {
+      "slug": "underhand-lat-pulldown",
+      "videoSha256": "155718910b01f97f830c73e94d3402b650bb34b03774cd674458b523667570b7",
+      "posterSha256": "8bb11c4eb19ceb1e5a13d10fd593d3c230bb5cd20b8e70552b6e4401b3392850"
+    },
+    {
+      "slug": "v-squat-machine",
+      "videoSha256": "047ce0df6bab0648839c5fd07c68b8cdaa942f5f14f12e613137c75818bab1ec",
+      "posterSha256": "290afdc2d14d542e04931288f8454c1f3c2d09b9ab1cd7f2c6d5bdbf502f8005"
+    },
+    {
+      "slug": "walking-lunge-dumbbell",
+      "videoSha256": "7d1d0b277eb4560a43807b946cc1f4ff5fdada7e988f0ec35412631556a56e3d",
+      "posterSha256": "ed75d2307a16f080560d455d9b8199dbe308a0143aad74d3daa97cc142c9f5b8"
+    },
+    {
+      "slug": "wall-sit",
+      "videoSha256": "0f363bfdbef85b1ad5097f280df9267c1de0157ebbb014d12970fa5b96df9d63",
+      "posterSha256": "45ad269e7c494e0982637094dd2981ee9719b41d06def34454be0a1b5aa4f0d6"
+    },
+    {
+      "slug": "wall-slide-bodyweight",
+      "videoSha256": "24a42f0f9a42d22fdf53d715c36e797eb3b6d65fa2f02f5b2ddefc46b7fc5375",
+      "posterSha256": "bc8d3c1023bf90c50df24047998333922cd03a1c958e5d8eea71ceb1f45258e1"
+    },
+    {
+      "slug": "wide-grip-cable-row",
+      "videoSha256": "2b12b5f1008f62ba970f7cf81a4d4e60f8fe2d6cbb84f4d74582ac58973f3f0b",
+      "posterSha256": "367c28c5908e1a65302eb57e6bd6480d34a150b29dcf0a6c0f977b0f96adde9d"
+    },
+    {
+      "slug": "wide-grip-lat-pulldown",
+      "videoSha256": "0f7f7c019e68eeb83ca90ad2e1ac53781d37adce0bbe1889745e151657cac3d2",
+      "posterSha256": "29296c6b1129e55236d2a1ea471b9bc34dbd88146ffd674d73c266d68259e211"
+    },
+    {
+      "slug": "wide-push-up",
+      "videoSha256": "7f3d172d072a32253aa5dea11c24b21b8e14532e0188dccf448fe39ccd77b9eb",
+      "posterSha256": "2d7f93df8866084751cdab6f9e60f241e0209d81a427fe1c11114db33f1441e9"
+    },
+    {
+      "slug": "zercher-squat",
+      "videoSha256": "00b37b12c06521218d1ffc318149e915f206455999fe56e722ce5255361d455f",
+      "posterSha256": "dcab7b65b3eda3f69903d80a8697068d0c18a5985879743464109e3f071b39b9"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "product": "STHENO Product 17 v2",
+  "validatedAt": "2026-08-20T13:35:24.664Z",
+  "exercises": 330,
+  "videos": 330,
+  "posters": 330,
+  "mapped": 330,
+  "automatedValidation": 330,
+  "rendererVersion": "stheno-3d-2.0.0",
+  "codec": "H.264",
+  "dimensions": "360x480",
+  "failures": []
+}

@@ -1,15 +1,19 @@
 {
-  "product": "STHENO Product 16",
-  "generatedAt": "2026-08-19T00:00:00Z",
+  "product": "STHENO Product 17 v2",
+  "generatedAt": "2026-08-20T13:35:00.007Z",
   "total": 330,
   "productionReady": 330,
-  "withDetailedInstructions": 330,
-  "withAnatomy": 330,
-  "withThreeOrMoreAlternatives": 330,
-  "withMotionSpecs": 330,
-  "withMp4": 330,
+  "withExerciseSpecific3dMp4": 330,
   "withPosters": 330,
-  "reviewedApproved": 330,
+  "mapped": 330,
+  "automatedValidation": 330,
+  "instructionsPreserved": 330,
+  "anatomyPreserved": 330,
+  "alternativesPreserved": 330,
+  "workoutIntegrationPreserved": true,
   "zeroPaidRuntimeDependencies": true,
-  "renderer": "STHENO deterministic 2D renderer + imageio-ffmpeg"
+  "externalMediaApis": [],
+  "renderer": "STHENO offline procedural 3D rasterizer + FFmpeg",
+  "renderVersion": "stheno-3d-2.0.0",
+  "rollback": "content/exercises/rollback/product16-2d"
 }

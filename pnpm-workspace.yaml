@@ -1,5 +1,6 @@
 allowBuilds:
   '@sentry/cli': true
   core-js: true
+  ffmpeg-static: true
   sharp: false
   unrs-resolver: false

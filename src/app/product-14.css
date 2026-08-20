@@ -1351,3 +1351,21 @@ body:not(:has(.app-shell)) .related-section .insight-grid h3 {
     transition: none;
   }
 }
+
+/* Product 17: adaptation is the conversion wedge; product behavior is the proof. */
+.p17-handled-line{margin:22px 0 0;color:#242824;font-weight:750;letter-spacing:.01em}
+.p17-proof{padding:clamp(72px,9vw,128px) 0;background:#17211d;color:#f8f4eb}
+.p17-proof header{max-width:780px;margin-bottom:44px}
+.p17-proof header h2{font:500 clamp(2.8rem,6vw,5.8rem)/.95 Georgia,serif;letter-spacing:-.055em;margin:12px 0 22px}
+.p17-proof header>p:last-child{max-width:650px;color:#bec7c0;font-size:1.12rem;line-height:1.65}
+.p17-proof-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:36px}
+.p17-proof-grid article{grid-column:span 2;display:flex;flex-direction:column;min-height:340px;padding:26px;background:#f7f2e8;color:#18201d;border-top:4px solid #e17b32}
+.p17-proof-grid article:nth-child(4){grid-column:2/span 2}.p17-proof-grid article:nth-child(5){grid-column:4/span 2}
+.p17-proof-number{color:#a75424;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.p17-proof-grid blockquote{font:500 1.55rem/1.25 Georgia,serif;margin:28px 0;max-width:20ch}
+.p17-proof-change{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;border-top:1px solid #17211d24;border-bottom:1px solid #17211d24;padding:18px 0}
+.p17-proof-change span{font-size:.8rem;font-weight:750;line-height:1.35}.p17-proof-change small{display:block;color:#747c76;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.p17-proof-change b{color:#e17b32}.p17-proof-grid article>p{margin-top:auto;color:#555d57;line-height:1.55}
+.p17-proof .p14-button{width:max-content}
+@media(max-width:900px){.p17-proof-grid{grid-template-columns:1fr 1fr}.p17-proof-grid article,.p17-proof-grid article:nth-child(4),.p17-proof-grid article:nth-child(5){grid-column:auto}}
+@media(max-width:620px){.p17-proof-grid{grid-template-columns:1fr}.p17-proof-grid article{min-height:0}.p17-proof-change{grid-template-columns:1fr}.p17-proof-change b{transform:rotate(90deg);width:max-content}.p17-proof .p14-button{width:100%}}
