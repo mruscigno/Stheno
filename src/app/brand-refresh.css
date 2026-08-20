@@ -66,7 +66,12 @@ body {
 .global-header nav a:hover, .header-auth-link:hover { color: var(--brand-white); }
 
 .brand { min-width: 178px; }
-.brand picture { display: block; line-height: 0; }
+.stheno-logo, .brand > .stheno-logo { display: inline-flex!important; align-items: center; gap: 10px; height:58px; color: #ff5a1f; line-height: 1; }
+.stheno-logo-mark { width: 52px; height: 52px; flex: 0 0 auto; fill: #ff5a1f; }
+.stheno-logo-type { display: grid; gap: 5px; color: #ff5a1f; }
+.stheno-logo-type b { font-size: 1.18rem; letter-spacing: .22em; }
+.stheno-logo-type small, .brand .stheno-logo-type small { margin:0; color:#ff5a1f; font-size: .56rem; font-weight: 850; letter-spacing: .5em; }
+.stheno-logo-compact { gap: 0; }
 .brand-logo {
   display: block;
   width: 178px;
@@ -120,7 +125,7 @@ body {
 .field input:focus, .auth-wrap input:focus { border-color: var(--brand-orange); outline-color: rgb(255 120 73 / 55%); }
 
 .assessment-v2 { background: var(--brand-black); color: var(--brand-white); }
-.assessment-logo { grid-row: 1 / 3; width: 56px; height: 56px; object-fit: contain; }
+.assessment-logo { grid-row: 1 / 3; width: 56px; height: 56px; }
 .assessment-v2 progress { accent-color: var(--brand-orange); }
 .assessment-v2 progress::-webkit-progress-value { background: var(--brand-orange); }
 .answer-grid button { background: var(--brand-surface-raised); border-color: #3b3b40; color: var(--brand-white); }
@@ -146,7 +151,7 @@ body {
   min-height: 118px;
   padding: 18px 20px;
 }
-.app-nav > a.member-brand:first-child img { width: 176px; height: auto; object-fit: contain; }
+.app-nav > a.member-brand:first-child .stheno-logo { transform: scale(.92); transform-origin: center; }
 .app-nav nav strong, .app-content .eyebrow, .app-content .kicker { color: var(--brand-orange-on-light); }
 .app-nav nav a { color: #35353a; }
 .app-nav nav a:hover { background: var(--brand-paper-raised); color: var(--brand-black); }
@@ -210,10 +215,11 @@ body {
 @media (max-width: 640px) {
   .global-header .chrome-shell { min-height: 72px; }
   .brand { min-width: 48px; }
-  .brand-logo { width: 46px; height: 46px; object-position: center; }
+  .global-header .stheno-logo-type { display: none; }
+  .global-header .stheno-logo-mark { width: 46px; height: 46px; }
   .footer-logo { width: 180px; height: 68px; }
   .app-nav > a.member-brand:first-child { justify-content: flex-start; min-height: 92px; padding-bottom: 14px; }
-  .app-nav > a.member-brand:first-child img { width: 164px; height: auto; }
+  .app-nav > a.member-brand:first-child .stheno-logo { transform: scale(.86); transform-origin: left center; }
 }
 
 /* Shared long-form article mobile standard. Product 14's desktop selector is

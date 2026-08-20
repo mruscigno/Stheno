@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { SthenoLogo } from "@/components/brand/stheno-logo";
 import type { Blueprint } from "@/modules/acquisition/blueprint";
 import {
   ASSESSMENT_VERSION,
@@ -153,7 +153,7 @@ export function FreeAssessment() {
     return (
       <main className="assessment-v2 assessment-review">
         <header>
-          <Image className="assessment-logo" src="/stheno-mark.png" alt="STHENO Fitness" width={56} height={56} priority />
+          <SthenoLogo compact className="assessment-logo" />
           <div>
             <p>Review</p>
             <strong>Here’s what I’m building around.</strong>
@@ -216,7 +216,7 @@ export function FreeAssessment() {
   return (
     <main className="assessment-v2">
       <header>
-        <Image className="assessment-logo" src="/stheno-mark.png" alt="STHENO Fitness" width={56} height={56} priority />
+        <SthenoLogo compact className="assessment-logo" />
         <div>
           <p>{step.section}</p>
           <strong>

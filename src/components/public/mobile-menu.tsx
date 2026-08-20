@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { PublicAuthState } from "@/components/public/use-auth-state";
 const links = [
   ["/how-it-works", "How it works"],
+  ["/exercises", "Exercises"],
   ["/methodology", "Methodology"],
   ["/insights", "Learn"],
   ["/faq", "FAQ"],

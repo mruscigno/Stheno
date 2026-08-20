@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 72" role="img" aria-labelledby="title">
+  <title id="title">STHENO Fitness</title>
+  <g fill="#ff5a1f">
+    <path d="M12 8h43L43 20H24l-5 6h25l8 9-12 21H9l11-12h14l5-8H16L8 27z"/>
+    <text x="76" y="38" font-family="Arial,sans-serif" font-size="31" font-weight="800" letter-spacing="5">STHENO</text>
+    <text x="79" y="57" font-family="Arial,sans-serif" font-size="10" font-weight="800" letter-spacing="8">FITNESS</text>
+  </g>
+</svg>

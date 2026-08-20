@@ -1,25 +1,14 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
-
-export function AccountActions() {
-  const [confirmation, setConfirmation] = useState("");
-  const [message, setMessage] = useState("");
-  const [exporting, setExporting] = useState(false);
-  async function exportData() {
-    setExporting(true); setMessage("Preparing your private export…");
-    (window as Window & { posthog?: { capture: (name: string) => void } }).posthog?.capture("data_export_requested");
-    try {
-      const response = await fetch("/api/account/export", { cache: "no-store" });
-      if (!response.ok) throw new Error();
-      const blob = await response.blob(), url = URL.createObjectURL(blob), anchor = document.createElement("a");
-      anchor.href = url; anchor.download = `stheno-data-${new Date().toISOString().slice(0, 10)}.zip`; anchor.click(); URL.revokeObjectURL(url);
-      setMessage("Your export is ready and the download has started.");
-      (window as Window & { posthog?: { capture: (name: string) => void } }).posthog?.capture("data_export_completed");
-    } catch {
-      setMessage("Your export could not be completed. Please try again.");
-      (window as Window & { posthog?: { capture: (name: string) => void } }).posthog?.capture("data_export_failed");
-    } finally { setExporting(false); }
-  }
-  async function remove() { const response = await fetch("/api/account/delete", { method: "DELETE", headers: { "content-type": "application/json" }, body: JSON.stringify({ confirmation }) }); const result = await response.json(); setMessage(response.ok ? result.status === "deleted" ? "Your account and associated data were deleted." : "Your deletion request is queued." : result.error); }
-  return <section className="card-wide"><h2>Data &amp; privacy</h2><p>Your data is yours. Export the fitness and progress information stored with STHENO as a ZIP containing JSON and readable CSV files.</p><button className="button secondary" type="button" disabled={exporting} onClick={exportData}>{exporting ? "Preparing export…" : "Export my data"}</button><p aria-live="polite">{message}</p><h2>Delete account</h2><p>This permanently removes your account and associated application data. Billing should be cancelled first.</p><label className="field">Type DELETE MY ACCOUNT<input value={confirmation} onChange={(event)=>setConfirmation(event.target.value)}/></label><button className="button secondary" type="button" disabled={confirmation!=="DELETE MY ACCOUNT"} onClick={remove}>Delete my account</button></section>;
+export function AccountActions(){
+  const[confirmation,setConfirmation]=useState(""),[message,setMessage]=useState(""),[exporting,setExporting]=useState(false),[deleteOpen,setDeleteOpen]=useState(false);
+  async function exportData(){setExporting(true);setMessage("Preparing your private export…");try{const response=await fetch("/api/account/export",{cache:"no-store"});if(!response.ok)throw new Error();const blob=await response.blob(),url=URL.createObjectURL(blob),anchor=document.createElement("a");anchor.href=url;anchor.download=`stheno-data-${new Date().toISOString().slice(0,10)}.zip`;anchor.click();URL.revokeObjectURL(url);setMessage("Your export is ready and the download has started.")}catch{setMessage("Your export could not be completed. Please try again.")}finally{setExporting(false)}}
+  async function remove(){const response=await fetch("/api/account/delete",{method:"DELETE",headers:{"content-type":"application/json"},body:JSON.stringify({confirmation})});const result=await response.json();setMessage(response.ok?result.status==="deleted"?"Your account and associated data were deleted.":"Your deletion request is queued.":result.error);if(response.ok)setDeleteOpen(false)}
+  return <>
+    <section className="account-card"><p className="kicker">Data &amp; Privacy</p><h2>Your information belongs to you.</h2><p>Download the fitness, program, and progress information stored with STHENO.</p><button className="button secondary" type="button" disabled={exporting} onClick={exportData}>{exporting?"Preparing export…":"Export my data"}</button><nav className="account-policy-links" aria-label="Policies"><Link href="/privacy">Privacy Policy</Link><Link href="/terms">Terms</Link><Link href="/medical-disclaimer">Fitness &amp; Medical Disclaimer</Link></nav></section>
+    <section className="account-card danger-zone"><p className="kicker">Danger Zone</p><h2>Delete account</h2><p>Permanently removes your account and associated application data. Cancel an active subscription first.</p><button className="button danger-button" type="button" onClick={()=>setDeleteOpen(true)}>Delete account</button></section>
+    <p className="account-message" aria-live="polite">{message}</p>
+    {deleteOpen?<div className="account-modal-backdrop" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setDeleteOpen(false)}}><section className="account-delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-account-title"><p className="kicker">Permanent action</p><h2 id="delete-account-title">Delete your STHENO account?</h2><p>This removes your profile and associated application data. This cannot be undone.</p><label className="field">Type DELETE MY ACCOUNT<input autoFocus value={confirmation} onChange={e=>setConfirmation(e.target.value)}/></label><div className="account-modal-actions"><button className="button secondary" type="button" onClick={()=>{setDeleteOpen(false);setConfirmation("")}}>Keep my account</button><button className="button danger-button" type="button" disabled={confirmation!=="DELETE MY ACCOUNT"} onClick={remove}>Permanently delete</button></div></section></div>:null}
+  </>;
 }

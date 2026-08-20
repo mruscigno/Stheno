@@ -1,7 +1,7 @@
 import "@/components/brand/member-brand.css";
 import "./member-shell.css";
 import Link from "next/link";
-import Image from "next/image";
+import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { signOut } from "@/app/auth/actions";
 import { ClaimPublicAssessment } from "@/components/assessment/claim-public-assessment";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -15,6 +15,7 @@ const memberLinks = [
   ["/app/nutrition", "Nutrition"],
   ["/app/progress", "Progress"],
   ["/app/checkin", "Check-in"],
+  ["/exercises", "Exercise Library"],
   ["/app/account", "Account"],
 ] as const;
 
@@ -50,7 +51,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <ClaimPublicAssessment />
       <aside className="app-nav">
         <Link className="member-brand" href="/app" aria-label="STHENO member home">
-          <Image src="/stheno-logo-horizontal.png" alt="" width={320} height={120} priority />
+          <SthenoLogo />
         </Link>
         <nav aria-label="Member navigation">
           <strong>Your STHENO</strong>
