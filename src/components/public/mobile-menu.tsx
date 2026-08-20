@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { PublicAuthState } from "@/components/public/use-auth-state";
+import { SocialLinks } from "@/components/public/social-links";
 const links = [
   ["/how-it-works", "How it works"],
   ["/exercises", "Exercises"],
@@ -53,6 +54,7 @@ export function MobileMenu({ authState }: { authState: PublicAuthState }) {
           ) : (
             <span className="session-placeholder" aria-label="Checking account status" />
           )}
+          <SocialLinks compact />
         </nav>
       ) : null}
     </div>

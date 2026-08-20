@@ -5,6 +5,7 @@ import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { MobileMenu } from "@/components/public/mobile-menu";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
 import { TrackedLink } from "@/components/analytics/tracked-link";
+import { SocialLinks } from "@/components/public/social-links";
 export function SiteHeader() {
   const authState = usePublicAuthState();
   return (
@@ -53,6 +54,7 @@ export function SiteFooter() {
             <SthenoLogo className="footer-logo" />
           </Link>
           <p>Your fitness. Handled.</p>
+          <SocialLinks />
         </div>
         <nav aria-label="Explore">
           <strong>Explore</strong>
