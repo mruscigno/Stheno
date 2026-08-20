@@ -77,6 +77,16 @@ export default async function ArticlePage({
           <a href="#evidence">Evidence notes</a>
         </aside>
         <article>
+          <details className="article-mobile-toc">
+            <summary>In this guide</summary>
+            <nav>
+              <a href="#start">Start here</a><a href="#why">Why it works</a>
+              <a href="#decide">Make the decision</a><a href="#example">Practical example</a>
+              <a href="#apply">Apply it</a><a href="#measure">What to measure</a>
+              <a href="#special">Special cases</a><a href="#adjust">How to adjust</a>
+              <a href="#workbook">Four-week protocol</a><a href="#evidence">Evidence notes</a>
+            </nav>
+          </details>
           <p className="article-lead">
             {a.thesis} The useful question is not what looks most impressive on
             paper. It is what decision you can make today, observe honestly, and
@@ -124,7 +134,7 @@ export default async function ArticlePage({
           </p>
           <h2 id="apply">Apply it in the real week</h2>
           <p>{x.application}</p>
-          <table className="article-decision-table">
+          <div className="article-table-scroll" role="region" aria-label="Decision examples" tabIndex={0}><table className="article-decision-table">
             <thead>
               <tr>
                 <th>What you observe</th>
@@ -139,7 +149,7 @@ export default async function ArticlePage({
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
           <h2 id="measure">What to measure—and what to ignore</h2>
           <p>{d.measure}</p>
           <p>

@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="global-header">
       <div className="chrome-shell">
         <Link className="brand" href="/" aria-label="STHENO Fitness home">
-          <Image className="brand-logo" src="/stheno-logo.png" alt="" width={96} height={96} priority />
+          <picture><source media="(max-width: 640px)" srcSet="/stheno-mark.png"/><Image className="brand-logo" src="/stheno-logo-horizontal.png" alt="" width={320} height={120} priority /></picture>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="/how-it-works">How it works</Link>
@@ -49,7 +49,7 @@ export function SiteFooter() {
       <div className="chrome-shell footer-grid">
         <div>
           <Link className="brand" href="/">
-            <Image className="brand-logo footer-logo" src="/stheno-logo.png" alt="STHENO Fitness" width={144} height={144} />
+            <Image className="brand-logo footer-logo" src="/stheno-logo-horizontal.png" alt="STHENO Fitness" width={320} height={120} />
           </Link>
           <p>Your fitness. Handled.</p>
         </div>

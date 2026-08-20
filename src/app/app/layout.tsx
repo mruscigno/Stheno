@@ -50,7 +50,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <ClaimPublicAssessment />
       <aside className="app-nav">
         <Link className="member-brand" href="/app" aria-label="STHENO member home">
-          <Image src="/stheno-logo.png" alt="" width={128} height={128} priority />
+          <Image src="/stheno-logo-horizontal.png" alt="" width={320} height={120} priority />
         </Link>
         <nav aria-label="Member navigation">
           <strong>Your STHENO</strong>

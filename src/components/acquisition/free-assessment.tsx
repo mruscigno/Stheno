@@ -153,7 +153,7 @@ export function FreeAssessment() {
     return (
       <main className="assessment-v2 assessment-review">
         <header>
-          <Image className="assessment-logo" src="/stheno-logo.png" alt="STHENO Fitness" width={56} height={56} priority />
+          <Image className="assessment-logo" src="/stheno-mark.png" alt="STHENO Fitness" width={56} height={56} priority />
           <div>
             <p>Review</p>
             <strong>Here’s what I’m building around.</strong>
@@ -216,7 +216,7 @@ export function FreeAssessment() {
   return (
     <main className="assessment-v2">
       <header>
-        <Image className="assessment-logo" src="/stheno-logo.png" alt="STHENO Fitness" width={56} height={56} priority />
+        <Image className="assessment-logo" src="/stheno-mark.png" alt="STHENO Fitness" width={56} height={56} priority />
         <div>
           <p>{step.section}</p>
           <strong>
