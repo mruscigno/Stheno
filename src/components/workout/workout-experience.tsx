@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/set-state-in-effect -- effects hydrate remote workout state and subscribe to a timer */
 import { useCallback, useEffect, useState } from "react";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
-import { MovementDemo } from "@/components/exercises/movement-demo";
+import { ExerciseVideo } from "@/components/exercises/exercise-video";
 type Exercise = {
   exerciseSlug: string;
   exerciseName: string;
@@ -101,12 +101,7 @@ function ExerciseGuide({
             ×
           </button>
         </header>
-        <MovementDemo
-          name={exercise.name}
-          pattern={exercise.movement_pattern}
-          equipment={exercise.required_equipment}
-          version="current"
-        />
+        <ExerciseVideo slug={exercise.slug} name={exercise.name} compact />
         <div className="muscle-summary">
           <span>
             <b>Primary</b>

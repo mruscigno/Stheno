@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MovementDemo } from "@/components/exercises/movement-demo";
+import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
 import { completeExerciseGuide } from "@/modules/training/guide-content";
 import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
@@ -61,7 +61,7 @@ export default async function Exercise({
         </div>
         <AnatomyMap primary={primary} secondary={secondary} />
       </header>
-      <MovementDemo name={e.name} pattern={String(e.movement_pattern)} equipment={e.required_equipment??[]} />
+      <ExerciseVideo slug={e.slug} name={e.name} />
       <dl className="exercise-facts">
         <div>
           <dt>Equipment</dt>
