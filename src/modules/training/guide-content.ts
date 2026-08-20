@@ -17,6 +17,12 @@ type GuideInput = {
 
 const label = (value: string) => value.replaceAll("_", " ");
 
+/** Convert stable snake_case taxonomy tokens embedded in copy into human prose. */
+export const humanizeExerciseText = (value: string) =>
+  value.replace(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g, label);
+
+const humanizeList = (values: string[]) => values.map(humanizeExerciseText);
+
 const patternCopy: Record<string, { setup: string[]; execution: string[]; cues: string[]; mistakes: string[] }> = {
   squat: {
     setup: ["Set your feet about shoulder-width apart and turn the toes slightly out.", "Brace as if preparing for a firm push to the stomach, while keeping your ribs stacked over your pelvis."],
@@ -90,12 +96,12 @@ export function completeExerciseGuide(input: GuideInput): Required<ExerciseEduca
     "After the final repetition, stabilize the load first and return it to the rack, stack, or floor without twisting or dropping it.",
   ];
   return {
-    setup,
-    execution,
-    feel: existing.feel ?? `You should feel the ${primary} doing most of the work, with effort building in the muscle rather than sharp pressure in a joint.`,
-    cues: existing.cues && existing.cues.length >= 3 ? existing.cues : base.cues,
-    mistakes: existing.mistakes && existing.mistakes.length >= 3 ? existing.mistakes : base.mistakes,
-    stopModify: existing.stopModify ?? "Stop or shorten the range if you feel sharp, sudden, worsening, or joint-focused pain. Choose a reviewed alternative if a comfortable setup is not available.",
+    setup: humanizeList(setup),
+    execution: humanizeList(execution),
+    feel: humanizeExerciseText(existing.feel ?? `You should feel the ${primary} doing most of the work, with effort building in the muscle rather than sharp pressure in a joint.`),
+    cues: humanizeList(existing.cues && existing.cues.length >= 3 ? existing.cues : base.cues),
+    mistakes: humanizeList(existing.mistakes && existing.mistakes.length >= 3 ? existing.mistakes : base.mistakes),
+    stopModify: humanizeExerciseText(existing.stopModify ?? "Stop or shorten the range if you feel sharp, sudden, worsening, or joint-focused pain. Choose a reviewed alternative if a comfortable setup is not available."),
   };
 }
 

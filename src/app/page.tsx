@@ -9,6 +9,7 @@ import { membership, annualSavings } from "@/modules/commerce/product";
 import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
 import { homepageFaqItems } from "@/modules/content/faq";
+import { humanizeExerciseText } from "@/modules/training/guide-content";
 
 export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | A Fitness Plan That Changes When Life Does", description: "Training and nutrition for busy adults, continuously adjusted when schedules, equipment, travel, progress, or life changes.", path: "/" });
 
@@ -329,7 +330,7 @@ export default async function Home() {
         <div className="exercise-proof-grid">{preview.exercises.map((exercise) => {
           const education = exercise.education as { setup?: string[]; execution?: string[]; cues?: string[]; mistakes?: string[] } | null;
           return <TrackedLink event="exercise_preview_open" eventProperties={{ exercise: exercise.slug }} href={`/exercises/${exercise.slug}`} key={exercise.slug}>
-            <span>{(exercise.primary_muscles as string[]).join(" · ")}</span><h3>{exercise.name}</h3><p><b>Equipment</b> {(exercise.required_equipment as string[]).join(", ")}</p><p><b>Set up</b> {education?.setup?.[0] ?? education?.cues?.[0] ?? "Use a stable, repeatable position."}</p><p><b>Do</b> {education?.execution?.[0] ?? education?.cues?.[1] ?? "Move with a controlled range you can repeat."}</p><p><b>Avoid</b> {education?.mistakes?.[0] ?? "Using load that changes the intended movement."}</p><strong>Open exercise guide →</strong>
+            <span>{(exercise.primary_muscles as string[]).map(humanizeExerciseText).join(" · ")}</span><h3>{exercise.name}</h3><p><b>Equipment</b> {(exercise.required_equipment as string[]).map(humanizeExerciseText).join(", ")}</p><p><b>Set up</b> {humanizeExerciseText(education?.setup?.[0] ?? education?.cues?.[0] ?? "Use a stable, repeatable position.")}</p><p><b>Do</b> {humanizeExerciseText(education?.execution?.[0] ?? education?.cues?.[1] ?? "Move with a controlled range you can repeat.")}</p><p><b>Avoid</b> {humanizeExerciseText(education?.mistakes?.[0] ?? "Using load that changes the intended movement.")}</p><strong>Open exercise guide →</strong>
           </TrackedLink>;
         })}</div><Link className="p14-outline-button" href="/exercises">Browse all {preview.count} movements</Link>
       </section> : null}
