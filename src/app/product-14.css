@@ -81,23 +81,25 @@ body:not(:has(.app-shell)) {
   margin: 0 auto 48px;
 }
 .p14-hero {
-  min-height: 720px;
+  min-height: 660px;
   display: grid;
-  grid-template-columns: 44% 56%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   background: var(--p14-ivory);
 }
 .p14-hero-copy {
   padding: clamp(70px, 9vw, 130px) max(28px, calc((100vw - 1180px) / 2))
     clamp(70px, 8vw, 110px);
-  padding-right: clamp(35px, 5vw, 80px);
+  padding-right: clamp(30px, 4vw, 64px);
   align-self: center;
 }
 .p14-hero h1 {
   font:
-    780 clamp(3.8rem, 7.5vw, 7.2rem)/0.83 var(--font-geist-sans),
+    780 clamp(3.45rem, 5.2vw, 5.8rem)/0.92 var(--font-geist-sans),
     sans-serif;
-  letter-spacing: -0.075em;
+  max-width: 10.5ch;
+  letter-spacing: -0.065em;
   margin: 24px 0 30px;
+  text-wrap: balance;
 }
 .p14-hero h1 span {
   color: var(--p14-gold-dark);
@@ -119,7 +121,7 @@ body:not(:has(.app-shell)) {
 }
 .p14-hero-media {
   position: relative;
-  min-height: 720px;
+  min-height: 660px;
 }
 .p14-hero-media > img {
   object-fit: cover;
@@ -1244,7 +1246,9 @@ body:not(:has(.app-shell)) .related-section .insight-grid h3 {
     padding: 66px 18px 52px;
   }
   .p14-hero h1 {
-    font-size: 3.8rem;
+    max-width: 11ch;
+    font-size: clamp(3rem, 14vw, 3.5rem);
+    line-height: 0.94;
   }
   .p14-actions {
     align-items: flex-start;
