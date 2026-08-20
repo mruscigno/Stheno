@@ -1,0 +1,429 @@
+{
+  "assisted-pull-up-machine": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/assisted-pull-up-machine.mp4",
+    "posterPath": "/exercise-media/vital/posters/assisted-pull-up-machine.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0102"
+  },
+  "banded-biceps-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/banded-biceps-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/banded-biceps-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0161"
+  },
+  "banded-good-morning": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/banded-good-morning.mp4",
+    "posterPath": "/exercise-media/vital/posters/banded-good-morning.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0274"
+  },
+  "banded-lateral-raise": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/banded-lateral-raise.mp4",
+    "posterPath": "/exercise-media/vital/posters/banded-lateral-raise.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0285"
+  },
+  "banded-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/banded-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/banded-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0277"
+  },
+  "barbell-back-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-back-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-back-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0054"
+  },
+  "barbell-bent-over-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-bent-over-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-bent-over-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0028"
+  },
+  "barbell-bulgarian-split-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-bulgarian-split-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-bulgarian-split-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0055"
+  },
+  "barbell-front-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-front-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-front-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0056"
+  },
+  "barbell-good-morning": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-good-morning.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-good-morning.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0035"
+  },
+  "barbell-overhead-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-overhead-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-overhead-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0088"
+  },
+  "barbell-rdl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/barbell-rdl.mp4",
+    "posterPath": "/exercise-media/vital/posters/barbell-rdl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0060"
+  },
+  "bear-crawl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/bear-crawl.mp4",
+    "posterPath": "/exercise-media/vital/posters/bear-crawl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0209"
+  },
+  "bird-dog": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/bird-dog.mp4",
+    "posterPath": "/exercise-media/vital/posters/bird-dog.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-workouts:1111"
+  },
+  "bodyweight-lateral-lunge": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/bodyweight-lateral-lunge.mp4",
+    "posterPath": "/exercise-media/vital/posters/bodyweight-lateral-lunge.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0216"
+  },
+  "cable-cross-body-lateral-raise": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/cable-cross-body-lateral-raise.mp4",
+    "posterPath": "/exercise-media/vital/posters/cable-cross-body-lateral-raise.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0095"
+  },
+  "cable-crunch": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/cable-crunch.mp4",
+    "posterPath": "/exercise-media/vital/posters/cable-crunch.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0002"
+  },
+  "cable-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/cable-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/cable-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0163"
+  },
+  "cable-upright-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/cable-upright-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/cable-upright-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0287"
+  },
+  "close-grip-barbell-bench-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/close-grip-barbell-bench-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/close-grip-barbell-bench-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0013"
+  },
+  "dead-bug": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dead-bug.mp4",
+    "posterPath": "/exercise-media/vital/posters/dead-bug.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0105"
+  },
+  "decline-dumbbell-bench-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/decline-dumbbell-bench-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/decline-dumbbell-bench-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0047"
+  },
+  "decline-push-up": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/decline-push-up.mp4",
+    "posterPath": "/exercise-media/vital/posters/decline-push-up.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0224"
+  },
+  "dumbbell-arnold-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-arnold-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-arnold-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0087"
+  },
+  "dumbbell-bench-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-bench-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-bench-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0046"
+  },
+  "dumbbell-bent-over-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-bent-over-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-bent-over-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0189"
+  },
+  "dumbbell-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0015"
+  },
+  "dumbbell-front-raise": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-front-raise.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-front-raise.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0092"
+  },
+  "dumbbell-rdl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-rdl.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-rdl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0256"
+  },
+  "dumbbell-russian-twist": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-russian-twist.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-russian-twist.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0121"
+  },
+  "dumbbell-shrug": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-shrug.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-shrug.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0034"
+  },
+  "dumbbell-spider-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-spider-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-spider-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0018"
+  },
+  "dumbbell-thruster": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-thruster.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-thruster.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0259"
+  },
+  "dumbbell-triceps-kickback": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/dumbbell-triceps-kickback.mp4",
+    "posterPath": "/exercise-media/vital/posters/dumbbell-triceps-kickback.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0146"
+  },
+  "face-pull": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/face-pull.mp4",
+    "posterPath": "/exercise-media/vital/posters/face-pull.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0030"
+  },
+  "goblet-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/goblet-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/goblet-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0261"
+  },
+  "hack-squat-machine": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/hack-squat-machine.mp4",
+    "posterPath": "/exercise-media/vital/posters/hack-squat-machine.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0068"
+  },
+  "hammer-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/hammer-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/hammer-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0016"
+  },
+  "incline-barbell-bench-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/incline-barbell-bench-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/incline-barbell-bench-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0043"
+  },
+  "incline-dumbbell-bench-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/incline-dumbbell-bench-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/incline-dumbbell-bench-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0048"
+  },
+  "incline-dumbbell-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/incline-dumbbell-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/incline-dumbbell-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0019"
+  },
+  "incline-push-up": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/incline-push-up.mp4",
+    "posterPath": "/exercise-media/vital/posters/incline-push-up.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0231"
+  },
+  "landmine-meadows-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/landmine-meadows-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/landmine-meadows-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0158"
+  },
+  "leg-extension": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/leg-extension.mp4",
+    "posterPath": "/exercise-media/vital/posters/leg-extension.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0073"
+  },
+  "leg-press": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/leg-press.mp4",
+    "posterPath": "/exercise-media/vital/posters/leg-press.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0074"
+  },
+  "lying-leg-curl": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/lying-leg-curl.mp4",
+    "posterPath": "/exercise-media/vital/posters/lying-leg-curl.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0271"
+  },
+  "machine-hip-abduction": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/machine-hip-abduction.mp4",
+    "posterPath": "/exercise-media/vital/posters/machine-hip-abduction.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0069"
+  },
+  "machine-lateral-raise": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/machine-lateral-raise.mp4",
+    "posterPath": "/exercise-media/vital/posters/machine-lateral-raise.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0097"
+  },
+  "machine-seated-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/machine-seated-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/machine-seated-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0157"
+  },
+  "one-arm-dumbbell-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/one-arm-dumbbell-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/one-arm-dumbbell-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0203"
+  },
+  "overhead-cable-triceps-extension": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/overhead-cable-triceps-extension.mp4",
+    "posterPath": "/exercise-media/vital/posters/overhead-cable-triceps-extension.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0140"
+  },
+  "pec-deck-fly": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/pec-deck-fly.mp4",
+    "posterPath": "/exercise-media/vital/posters/pec-deck-fly.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0051"
+  },
+  "pendlay-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/pendlay-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/pendlay-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0195"
+  },
+  "preacher-curl-machine": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/preacher-curl-machine.mp4",
+    "posterPath": "/exercise-media/vital/posters/preacher-curl-machine.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0159"
+  },
+  "pull-up": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/pull-up.mp4",
+    "posterPath": "/exercise-media/vital/posters/pull-up.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0038"
+  },
+  "single-leg-glute-bridge": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/single-leg-glute-bridge.mp4",
+    "posterPath": "/exercise-media/vital/posters/single-leg-glute-bridge.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0124"
+  },
+  "smith-machine-squat": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/smith-machine-squat.mp4",
+    "posterPath": "/exercise-media/vital/posters/smith-machine-squat.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0279"
+  },
+  "standing-calf-raise": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/standing-calf-raise.mp4",
+    "posterPath": "/exercise-media/vital/posters/standing-calf-raise.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0281"
+  },
+  "sumo-barbell-deadlift": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/sumo-barbell-deadlift.mp4",
+    "posterPath": "/exercise-media/vital/posters/sumo-barbell-deadlift.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0033"
+  },
+  "wide-grip-cable-row": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/wide-grip-cable-row.mp4",
+    "posterPath": "/exercise-media/vital/posters/wide-grip-cable-row.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "200-workouts:0181"
+  },
+  "wide-grip-lat-pulldown": {
+    "kind": "provider_animation",
+    "videoPath": "/exercise-media/vital/videos/wide-grip-lat-pulldown.mp4",
+    "posterPath": "/exercise-media/vital/posters/wide-grip-lat-pulldown.webp",
+    "provider": "Vital Animations",
+    "providerExerciseId": "100-gym-workouts:0037"
+  }
+}
