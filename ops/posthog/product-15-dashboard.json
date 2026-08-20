@@ -1,0 +1,13 @@
+{
+  "name": "Product 15 — Acquisition and paid conversion",
+  "description": "Create after NEXT_PUBLIC_POSTHOG_KEY is configured. Stripe webhook events are authoritative for paid states.",
+  "funnels": [
+    { "name": "Primary acquisition", "steps": ["landing_viewed", "assessment_started", "assessment_completed", "blueprint_viewed", "signup_completed", "trial_started", "trial_converted_to_paid"], "breakdowns": ["$device_type", "$referrer", "utm_source"] },
+    { "name": "Assessment step drop-off", "steps": ["assessment_started", "assessment_step_viewed", "assessment_step_completed", "assessment_completed"], "breakdown": "step_key" },
+    { "name": "Blueprint to signup", "steps": ["blueprint_viewed", "signup_completed"] },
+    { "name": "Signup to trial", "steps": ["signup_completed", "trial_started"] },
+    { "name": "Trial to paid", "steps": ["trial_started", "trial_converted_to_paid"] }
+  ],
+  "trends": ["subscription_cancelled", "trial_cancelled", "trial_expired", "payment_failed", "subscription_past_due"]
+}
+

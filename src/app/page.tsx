@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { organizationId, publicMetadata, safeJsonLd, serviceJsonLd, siteUrl, websiteId } from "@/lib/seo";
 import { membership, annualSavings } from "@/modules/commerce/product";
-import { TrackedLink } from "@/components/analytics/tracked-link";
+import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
 import { homepageFaqItems } from "@/modules/content/faq";
 
@@ -22,7 +22,7 @@ const Check = () => (
 async function exercisePreview() {
   const db = await createSupabaseServerClient();
   if (!db) return { count: 0, exercises: [] };
-  const { data, count } = await db.from("exercises").select("slug,name,primary_muscles,required_equipment,education", { count: "exact" }).eq("status", "production").eq("review_status", "reviewed").order("name").limit(6);
+  const { data, count } = await db.from("exercises").select("slug,name,primary_muscles,required_equipment,education", { count: "exact" }).eq("status", "production").eq("review_status", "reviewed").eq("prescribable",true).eq("public_indexable",true).eq("technical_review_status","reviewed").eq("editorial_review_status","reviewed").eq("visual_review_status","reviewed").order("name").limit(6);
   return { count: count ?? data?.length ?? 0, exercises: data ?? [] };
 }
 
@@ -30,6 +30,7 @@ export default async function Home() {
   const preview = await exercisePreview();
   return (
     <main className="p14-home">
+      <TrackView event="landing_viewed" />
       <section className="p14-hero">
         <div className="p14-hero-copy">
           <p className="p14-kicker">Personalized fitness coaching</p>
@@ -42,7 +43,7 @@ export default async function Home() {
             Personalized workouts, nutrition, and coaching built around your goals, schedule, experience, equipment, and real life—adapting as you progress.
           </p>
           <div className="p14-actions">
-            <TrackedLink event="hero_primary_cta_click" className="p14-button" href="/assessment">Get my free fitness plan <span>→</span></TrackedLink>
+            <TrackedLink event="primary_cta_clicked" eventProperties={{location:"homepage_hero"}} className="p14-button" href="/assessment">Get my free fitness plan <span>→</span></TrackedLink>
             <TrackedLink event="hero_secondary_cta_click" className="p14-text-link" href="/how-it-works">See how STHENO works</TrackedLink>
           </div>
           <p className="p14-no-card">

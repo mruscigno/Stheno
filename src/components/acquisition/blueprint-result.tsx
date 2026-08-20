@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   normalizeStoredBlueprint,
   type StoredBlueprint,
 } from "@/modules/acquisition/blueprint-storage";
+import { capture } from "@/lib/analytics/client";
 
 function readBlueprint(): StoredBlueprint | null {
   if (typeof window === "undefined") return null;
@@ -20,6 +21,7 @@ function readBlueprint(): StoredBlueprint | null {
 
 export function BlueprintResult() {
   const [blueprint] = useState<StoredBlueprint | null>(readBlueprint);
+  useEffect(() => { if (blueprint) capture("blueprint_viewed", { blueprint_version: blueprint.version }); }, [blueprint]);
   if (!blueprint)
     return (
       <section className="blueprint-empty">

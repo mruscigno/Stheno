@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import type { Blueprint } from "@/modules/acquisition/blueprint";
@@ -11,6 +11,7 @@ import {
   type Intake,
 } from "@/modules/acquisition/assessment-model";
 import { ftInToCm, lbToKg } from "@/modules/units/conversions";
+import { capture } from "@/lib/analytics/client";
 const STORAGE = `stheno_assessment_${ASSESSMENT_VERSION}`;
 const initial: Intake = { diet: "flexible", heightFeet: 5, heightInches: 9 };
 function restore() {
@@ -29,6 +30,7 @@ function shown(value: unknown) {
   return String(value ?? "").replaceAll("_", " ");
 }
 export function FreeAssessment() {
+  const completed = useRef(false);
   const router = useRouter(),
     [answers, setAnswers] = useState<Intake>(restore),
     [index, setIndex] = useState(0),
@@ -48,6 +50,9 @@ export function FreeAssessment() {
       }),
     );
   }, [answers]);
+  useEffect(() => { capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); }, []);
+  useEffect(() => { if (step) capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); }, [index, step, steps.length]);
+  useEffect(() => { const abandon = () => { if (!completed.current) capture("assessment_abandoned", { assessment_version: ASSESSMENT_VERSION, step_key: step?.key ?? "unknown", step_number: index + 1 }); }; window.addEventListener("pagehide", abandon); return () => window.removeEventListener("pagehide", abandon); }, [index, step?.key]);
   function set(v: string | number | string[]) {
     setAnswers((a) => ({ ...a, [step.key]: v }));
   }
@@ -79,6 +84,7 @@ export function FreeAssessment() {
   }
   function advance() {
     if (!valid()) return;
+    capture("assessment_step_completed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length });
     if (index < steps.length - 1) setIndex((x) => x + 1);
     else setReview(true);
   }
@@ -107,6 +113,8 @@ export function FreeAssessment() {
       diet: answers.diet,
     };
     try {
+      capture("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_steps: steps.length });
+      capture("blueprint_generation_started", { assessment_version: ASSESSMENT_VERSION });
       const response = await fetch("/api/blueprint", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -129,6 +137,8 @@ export function FreeAssessment() {
           createdAt: new Date().toISOString(),
         }),
       );
+      completed.current = true;
+      capture("blueprint_generation_completed", { assessment_version: ASSESSMENT_VERSION, blueprint_version: data.blueprint.version });
       router.push("/blueprint");
     } catch (cause) {
       setError(
@@ -302,7 +312,7 @@ export function FreeAssessment() {
           {index === steps.length - 1 ? "Review my answers →" : "Continue →"}
         </button>
         {step.optional && value === undefined ? (
-          <button type="button" className="skip" onClick={advance}>
+          <button type="button" className="skip" onClick={() => { capture("assessment_step_skipped", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1 }); advance(); }}>
             Skip for now
           </button>
         ) : null}

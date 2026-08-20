@@ -80,6 +80,9 @@ export function SiteFooter() {
             </>
           ) : null}
           <Link href="/contact">Contact</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/medical-disclaimer">Medical disclaimer</Link>
         </nav>
         <div>
           <strong>STHENO standard</strong>
@@ -91,7 +94,7 @@ export function SiteFooter() {
       </div>
       <div className="chrome-shell footer-bottom">
         <span>© 2026 STHENO Fitness</span>
-        <span>Educational guidance—not medical care.</span>
+        <span><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · <Link href="/medical-disclaimer">Fitness &amp; Medical Disclaimer</Link></span>
       </div>
     </footer>
   );

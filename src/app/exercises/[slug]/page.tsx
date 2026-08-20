@@ -1,23 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { MovementDemo } from "@/components/exercises/movement-demo";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
 import { completeExerciseGuide } from "@/modules/training/guide-content";
+import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
 async function getExercise(slug: string) {
-  const db = await createSupabaseServerClient();
-  if (!db) return null;
-  const { data } = await db
-    .from("exercises")
-    .select(
-      "slug,name,movement_pattern,exercise_role,primary_muscles,secondary_muscles,required_equipment,skill_level,rep_min,rep_max,education,caution_tags",
-    )
-    .eq("slug", slug)
-    .eq("status", "production")
-    .eq("review_status", "reviewed")
-    .maybeSingle();
-  return data;
+  return getPublicExercise(slug);
 }
 export async function generateMetadata({
   params,
@@ -50,7 +39,9 @@ export default async function Exercise({
     },
     primary = e.primary_muscles as string[],
     secondary = e.secondary_muscles as string[],
-    education = completeExerciseGuide({name:e.name,movementPattern:String(e.movement_pattern),primaryMuscles:primary,equipment:e.required_equipment as string[],education:storedEducation});
+    education = completeExerciseGuide({name:e.name,movementPattern:String(e.movement_pattern),primaryMuscles:primary,equipment:e.required_equipment as string[],education:storedEducation}),
+    alternativeRows = await getPublicExerciseAlternatives(e.slug, primary),
+    alternatives = (alternativeRows??[]).filter(candidate => (candidate.primary_muscles as string[]).some(muscle=>primary.includes(muscle)) && candidate.exercise_role===e.exercise_role).slice(0,6);
   return (
     <main className="exercise-profile shell">
       <nav className="breadcrumbs">
@@ -61,11 +52,7 @@ export default async function Exercise({
         <div>
           <p className="eyebrow">Exercise guide · {String(e.skill_level)}</p>
           <h1>{e.name}</h1>
-          <p className="lede">
-            A {String(e.exercise_role)}{" "}
-            {String(e.movement_pattern).replaceAll("_", " ")} movement with a
-            clear setup, coaching intent, and practical training range.
-          </p>
+          <p className="lede">{e.purpose}</p>
           <div className="exercise-tags">
             {primary.map((item) => (
               <span key={item}>{item.replaceAll("_", " ")}</span>
@@ -135,6 +122,7 @@ export default async function Exercise({
         <h3>Stop or modify when</h3>
         <p>{education.stopModify}</p>
       </section>
+      {alternatives.length ? <section className="exercise-alternatives"><p className="kicker">Reviewed alternatives</p><h2>Other ways to train the same primary muscles</h2><div>{alternatives.map(alternative=><Link href={`/exercises/${alternative.slug}`} key={alternative.slug}>{alternative.name}</Link>)}</div></section>:null}
       {(e.caution_tags as string[]).length ? (
         <aside className="exercise-caution">
           <strong>Train within a comfortable range</strong>
