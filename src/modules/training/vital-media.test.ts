@@ -7,6 +7,7 @@ import { ExerciseVideo } from "../../components/exercises/exercise-video";
 import catalog from "../../../content/exercises/canonical-exercises.json";
 import report from "../../../content/exercise-media/vital-animations/exercise-video-match-report.json";
 import manifest from "../exercise-media/vital-manifest.json";
+import expansion from "../../../content/exercises/vital-provider-expansion.json";
 
 describe("Vital Animations media ingestion", () => {
   it("preserves the complete canonical STHENO library", () => {
@@ -18,7 +19,7 @@ describe("Vital Animations media ingestion", () => {
   it("publishes only accepted, self-hosted mappings", () => {
     const accepted = report.matches.filter((row) => row.status === "AUTO_MATCH");
     expect(accepted).toHaveLength(report.summary.providerAnimationMapped);
-    expect(Object.keys(manifest)).toHaveLength(accepted.length);
+    expect(Object.keys(manifest)).toHaveLength(accepted.length + expansion.length);
     for (const row of accepted) {
       const media = manifest[row.sthenoId as keyof typeof manifest];
       expect(row.hostedStatus).toBe("ready");
@@ -27,6 +28,22 @@ describe("Vital Animations media ingestion", () => {
       expect(existsSync(path.join(process.cwd(), "public", media.videoPath))).toBe(true);
       expect(existsSync(path.join(process.cwd(), "public", media.posterPath))).toBe(true);
       expect(readFileSync(path.join(process.cwd(), "public", media.videoPath)).subarray(4, 8).toString()).toBe("ftyp");
+    }
+  });
+
+  it("adds distinct provider exercises with complete guides and self-hosted media", () => {
+    expect(expansion).toHaveLength(237);
+    const baseSlugs = new Set(catalog.map((exercise) => exercise.slug));
+    const addedSlugs = new Set(expansion.map((exercise) => exercise.slug));
+    expect(addedSlugs.size).toBe(expansion.length);
+    for (const exercise of expansion) {
+      expect(baseSlugs.has(exercise.slug)).toBe(false);
+      expect(exercise.education.setup.length).toBeGreaterThanOrEqual(1);
+      expect(exercise.education.execution.length).toBeGreaterThanOrEqual(1);
+      expect(exercise.education.cues.length).toBeGreaterThanOrEqual(3);
+      expect(exercise.education.mistakes.length).toBeGreaterThanOrEqual(3);
+      expect(existsSync(path.join(process.cwd(), "public", exercise.media.videoPath))).toBe(true);
+      expect(existsSync(path.join(process.cwd(), "public", exercise.media.posterPath))).toBe(true);
     }
   });
 

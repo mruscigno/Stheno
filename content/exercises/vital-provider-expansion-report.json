@@ -1,0 +1,848 @@
+{
+  "generatedAt": "2026-08-20T16:11:25.655Z",
+  "baseExercises": 330,
+  "providerRecords": 402,
+  "providerUniqueNames": 377,
+  "added": 237,
+  "totalLibrary": 567,
+  "excluded": [
+    {
+      "providerKey": "100-gym-workouts:0002",
+      "name": "cable crunch (kneeling)",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0009",
+      "name": "barbell curl standard",
+      "reason": "probable_alias:Barbell Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0013",
+      "name": "close-grip bench press barbell",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0015",
+      "name": "dumbbell curl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0149",
+      "name": "dumbbell hammer curl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0017",
+      "name": "dumbbell overhead press version 1",
+      "reason": "probable_alias:Dumbbell Overhead Press",
+      "score": 0.6
+    },
+    {
+      "providerKey": "100-gym-workouts:0018",
+      "name": "dumbbell spider curl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0019",
+      "name": "incline dumbbell curl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0021",
+      "name": "overhead triceps extension (dumbbell)",
+      "reason": "probable_alias:Single-Dumbbell Overhead Triceps Extension",
+      "score": 0.8
+    },
+    {
+      "providerKey": "100-gym-workouts:0023",
+      "name": "single arm straight arm cable pulldown",
+      "reason": "probable_alias:Straight-Arm Cable Pulldown",
+      "score": 0.8
+    },
+    {
+      "providerKey": "100-gym-workouts:0027",
+      "name": "wide dumbbell push up",
+      "reason": "probable_alias:Wide Push-Up",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0028",
+      "name": "barbell bent over row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0029",
+      "name": "barbell shrug",
+      "reason": "probable_alias:Barbell Overhead Shrug",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0136",
+      "name": "cable face pull",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0032",
+      "name": "deadlift barbell",
+      "reason": "probable_alias:Barbell Romanian Deadlift",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0033",
+      "name": "deadlift sumo barbell",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0289",
+      "name": "dumbbell shrug",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0035",
+      "name": "good morning barbell",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0037",
+      "name": "lat pull down wide grip",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-workouts:1179",
+      "name": "pull up",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0040",
+      "name": "seated chest supported machine",
+      "reason": "probable_alias:Chest-Supported Machine Row",
+      "score": 0.6
+    },
+    {
+      "providerKey": "100-gym-workouts:0041",
+      "name": "t-bar row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0042",
+      "name": "barbell bench press flat",
+      "reason": "probable_alias:Barbell Bench Press",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-gym-workouts:0043",
+      "name": "barbell incline bench press",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0044",
+      "name": "high to low cable crossover",
+      "reason": "probable_alias:High-to-Low Cable Fly",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0046",
+      "name": "dumbbell bench press (bench)",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0047",
+      "name": "dumbbell bench press (decline)",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0048",
+      "name": "dumbbell bench press incline",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0051",
+      "name": "pec deck machine fly",
+      "reason": "known_alias",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0243",
+      "name": "barbell back squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0055",
+      "name": "barbell bulgarian split squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0244",
+      "name": "barbell front squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0057",
+      "name": "barbell hip thrust",
+      "reason": "probable_alias:Paused Barbell Hip Thrust",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0247",
+      "name": "barbell romanian deadlift",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0061",
+      "name": "cable leg kickback",
+      "reason": "known_alias",
+      "score": 0.5
+    },
+    {
+      "providerKey": "100-gym-workouts:0063",
+      "name": "dumbbell bulgarian split squat",
+      "reason": "probable_alias:Dumbbell Split Squat",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-gym-workouts:0064",
+      "name": "dumbbell goblet squat",
+      "reason": "probable_alias:Goblet Squat",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0068",
+      "name": "hack squat machine",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0069",
+      "name": "hip abduction machine",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0269",
+      "name": "leg extension machine",
+      "reason": "known_alias",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0270",
+      "name": "leg press machine",
+      "reason": "probable_alias:Leg Press",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-gym-workouts:0075",
+      "name": "lying leg curl machine",
+      "reason": "known_alias",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-gym-workouts:0079",
+      "name": "seated leg curl machine",
+      "reason": "known_alias",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-gym-workouts:0080",
+      "name": "seated overhead press",
+      "reason": "probable_alias:Seated Barbell Overhead Press",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-gym-workouts:0087",
+      "name": "arnold press dumbbell",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0088",
+      "name": "barbell overhead press standing",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0092",
+      "name": "front raise (dumbbell)",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0095",
+      "name": "cable cross lateral raise",
+      "reason": "probable_alias:Cross-Body Cable Lateral Raise",
+      "score": 0.8
+    },
+    {
+      "providerKey": "100-gym-workouts:0097",
+      "name": "lateral raise machine",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-gym-workouts:0099",
+      "name": "rear delt fly (reverse pec deck)",
+      "reason": "known_alias",
+      "score": 0.5
+    },
+    {
+      "providerKey": "100-gym-workouts:0100",
+      "name": "rear delt cable fly",
+      "reason": "probable_alias:Cross-Body Cable Rear-Delt Fly",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1111",
+      "name": "bird dog",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "100-workouts:1113",
+      "name": "bulgarian split squat",
+      "reason": "probable_alias:Barbell Bulgarian Split Squat",
+      "score": 0.75
+    },
+    {
+      "providerKey": "100-workouts:1126",
+      "name": "decline push ups",
+      "reason": "known_alias",
+      "score": 0.333
+    },
+    {
+      "providerKey": "100-workouts:1139",
+      "name": "glute bridge",
+      "reason": "probable_alias:Banded Glute Bridge",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1140",
+      "name": "goblet squat entry",
+      "reason": "probable_alias:Goblet Squat",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1149",
+      "name": "hollow hold",
+      "reason": "probable_alias:Tuck Hollow Hold",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1151",
+      "name": "incline push ups",
+      "reason": "known_alias",
+      "score": 0.333
+    },
+    {
+      "providerKey": "100-workouts:1166",
+      "name": "mountain climber",
+      "reason": "probable_alias:Slow Mountain Climber",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1197",
+      "name": "sumo squat",
+      "reason": "probable_alias:Dumbbell Sumo Squat",
+      "score": 0.667
+    },
+    {
+      "providerKey": "100-workouts:1208",
+      "name": "wide grip push up",
+      "reason": "probable_alias:Wide Push-Up",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0102",
+      "name": "assisted pull up",
+      "reason": "known_alias",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0103",
+      "name": "cable crunch",
+      "reason": "probable_alias:Kneeling Cable Crunch",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0105",
+      "name": "dead bug",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0118",
+      "name": "kneeling cable crunch",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0121",
+      "name": "russian twist dumbbell",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0122",
+      "name": "russian twist",
+      "reason": "probable_alias:Dumbbell Russian Twist",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0124",
+      "name": "single leg glute bridge",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0129",
+      "name": "alternating dumbbell curl",
+      "reason": "probable_alias:Alternating Dumbbell Hammer Curl",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0134",
+      "name": "biceps curl",
+      "reason": "probable_alias:Cable Biceps Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0137",
+      "name": "cable lateral raise",
+      "reason": "probable_alias:Behind-Body Cable Lateral Raise",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0138",
+      "name": "cable pull",
+      "reason": "probable_alias:Cable Pull-Through",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0140",
+      "name": "cable overhead triceps extension",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0141",
+      "name": "close grip barbell bench press",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0142",
+      "name": "concentration curl",
+      "reason": "probable_alias:Dumbbell Concentration Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0143",
+      "name": "cross-body hammer curl",
+      "reason": "probable_alias:Dumbbell Cross-Body Curl",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0146",
+      "name": "dumbbell triceps kickback",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0148",
+      "name": "dumbbell forearms curl",
+      "reason": "probable_alias:Dumbbell Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0150",
+      "name": "dumbbell skull crusher",
+      "reason": "slug_collision"
+    },
+    {
+      "providerKey": "200-workouts:0151",
+      "name": "dumbbell waiter curl",
+      "reason": "probable_alias:Dumbbell Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0157",
+      "name": "machine seated row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0158",
+      "name": "meadows row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0159",
+      "name": "preacher curl machine",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0161",
+      "name": "resistance band biceps curl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0163",
+      "name": "seated cable row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0165",
+      "name": "seated overhead dumbbell extension",
+      "reason": "probable_alias:Seated Dumbbell Overhead Press",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0166",
+      "name": "seated shoulder press machine",
+      "reason": "probable_alias:Machine Shoulder Press",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0171",
+      "name": "standing barbell overhead extension",
+      "reason": "probable_alias:Standing Barbell Overhead Press",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0175",
+      "name": "straight barbell curl",
+      "reason": "probable_alias:Barbell Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0181",
+      "name": "wide grip seated cable row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0183",
+      "name": "zottman curl",
+      "reason": "probable_alias:Dumbbell Zottman Curl",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0184",
+      "name": "45-degree hyperextension machine",
+      "reason": "probable_alias:45-Degree Back Extension",
+      "score": 0.8
+    },
+    {
+      "providerKey": "200-workouts:0185",
+      "name": "banded overhead press",
+      "reason": "slug_collision"
+    },
+    {
+      "providerKey": "200-workouts:0186",
+      "name": "banded pull-apart",
+      "reason": "slug_collision"
+    },
+    {
+      "providerKey": "200-workouts:0188",
+      "name": "bent over barbell row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0189",
+      "name": "bent over dumbbell row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0191",
+      "name": "conventional deadlift",
+      "reason": "probable_alias:Conventional Barbell Deadlift",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0192",
+      "name": "good morning",
+      "reason": "probable_alias:Barbell Good Morning",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0193",
+      "name": "gorilla row",
+      "reason": "probable_alias:Dumbbell Gorilla Row",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0195",
+      "name": "pendlay row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0198",
+      "name": "rear delt dumbbell fly",
+      "reason": "probable_alias:Dumbbell Rear-Delt Row",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0199",
+      "name": "renegade row",
+      "reason": "probable_alias:Dumbbell Renegade Row",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0201",
+      "name": "resistance band lat pulldown",
+      "reason": "probable_alias:Seated Band Lat Pulldown",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0203",
+      "name": "single arm dumbbell row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0204",
+      "name": "dumbbell single leg deadlift",
+      "reason": "probable_alias:Dumbbell Single-Leg Romanian Deadlift",
+      "score": 0.8
+    },
+    {
+      "providerKey": "200-workouts:0207",
+      "name": "dumbbell bent-over row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0209",
+      "name": "bear crawl",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0216",
+      "name": "lateral lunge",
+      "reason": "probable_alias:Barbell Lateral Lunge",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0223",
+      "name": "close grip (diamond) push-up",
+      "reason": "probable_alias:Close-Grip Push-Up",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0224",
+      "name": "decline push-up",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0225",
+      "name": "dumbbell glute bridge chest press",
+      "reason": "probable_alias:Dumbbell Glute Bridge",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0227",
+      "name": "flat dumbbell bench press",
+      "reason": "probable_alias:Dumbbell Bench Press",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0229",
+      "name": "incline barbell bench press",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0230",
+      "name": "incline dumbbell bench press",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0231",
+      "name": "incline push-up",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0232",
+      "name": "machine pec deck fly",
+      "reason": "known_alias",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0235",
+      "name": "resistance band chest press",
+      "reason": "probable_alias:Resistance-Band Floor Press",
+      "score": 0.6
+    },
+    {
+      "providerKey": "200-workouts:0237",
+      "name": "seated machine chest press",
+      "reason": "probable_alias:Machine Chest Press",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0241",
+      "name": "band squat",
+      "reason": "probable_alias:Resistance-Band Squat",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0248",
+      "name": "barbell standing calf raise",
+      "reason": "probable_alias:Standing Calf Raise",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0249",
+      "name": "barbell sumo deadlift",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0251",
+      "name": "cable hip abduction",
+      "reason": "probable_alias:Standing Cable Hip Abduction",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0254",
+      "name": "dumbbell calf raise",
+      "reason": "probable_alias:Seated Dumbbell Calf Raise",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0255",
+      "name": "dumbbell march",
+      "reason": "probable_alias:Dumbbell March Carry",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0256",
+      "name": "dumbbell romanian deadlift",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0258",
+      "name": "dumbbell sumo deadlift",
+      "reason": "probable_alias:Dumbbell Sumo Romanian Deadlift",
+      "score": 0.75
+    },
+    {
+      "providerKey": "200-workouts:0259",
+      "name": "dumbbell thruster",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0261",
+      "name": "goblet squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0274",
+      "name": "resistance band good morning",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0277",
+      "name": "resistance band squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0279",
+      "name": "smith machine squat",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0280",
+      "name": "squat machine",
+      "reason": "probable_alias:Hack Squat Machine",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0281",
+      "name": "standing calf raise",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0283",
+      "name": "walking lunge",
+      "reason": "probable_alias:Dumbbell Walking Lunge",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0285",
+      "name": "banded lateral raise",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0287",
+      "name": "cable upright row",
+      "reason": "existing_normalized_identity",
+      "score": 1
+    },
+    {
+      "providerKey": "200-workouts:0291",
+      "name": "elevated pike push-up",
+      "reason": "probable_alias:Pike Push-Up",
+      "score": 0.667
+    },
+    {
+      "providerKey": "200-workouts:0292",
+      "name": "incline bench rear delt fly",
+      "reason": "probable_alias:Incline-Bench Cable Rear-Delt Fly",
+      "score": 0.833
+    },
+    {
+      "providerKey": "200-workouts:0299",
+      "name": "standing arnold press",
+      "reason": "known_alias",
+      "score": 0.5
+    },
+    {
+      "providerKey": "200-workouts:0300",
+      "name": "standing overhead military press",
+      "reason": "probable_alias:Standing Barbell Overhead Press",
+      "score": 0.6
+    }
+  ],
+  "method": "Conservative semantic deduplication; exact, known-alias, and token-overlap candidates remain excluded."
+}
