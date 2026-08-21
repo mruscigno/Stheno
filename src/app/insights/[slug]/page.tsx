@@ -7,6 +7,9 @@ import { guidance } from "@/modules/library/article-content";
 import { depth } from "@/modules/library/article-depth";
 import { extended } from "@/modules/library/article-extended";
 import { findTool } from "@/modules/library/tools";
+import { ArticleShare } from "@/components/library/article-share";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { hasEditorialAccess } from "@/lib/editorial/access";
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
 }
@@ -46,6 +49,7 @@ export default async function ArticlePage({
     related = articles
       .filter((item) => item.pillar === a.pillar && item.slug !== a.slug)
       .slice(0, 3);
+  const db=await createSupabaseServerClient(),{data:{user}}=db?await db.auth.getUser():{data:{user:null}},canEdit=await hasEditorialAccess(user);
   return (
     <main className="article-new">
       <header className="article-hero chrome-shell">
@@ -61,6 +65,7 @@ export default async function ArticlePage({
           <span>{a.readMinutes} min read</span>
           <span>Updated Aug 18, 2026</span>
         </div>
+        {canEdit?<Link className="button secondary" href={`/app/social-studio/${a.slug}`}>Open Social Studio</Link>:null}
       </header>
       <div className="article-layout chrome-shell">
         <aside>
@@ -77,6 +82,7 @@ export default async function ArticlePage({
           <a href="#evidence">Evidence notes</a>
         </aside>
         <article>
+          <ArticleShare articleId={a.slug} title={a.title} url={`https://www.sthenofitness.com/insights/${a.slug}`}/>
           <details className="article-mobile-toc">
             <summary>In this guide</summary>
             <nav>
