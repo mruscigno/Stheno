@@ -10,6 +10,7 @@ import { findTool } from "@/modules/library/tools";
 import { ArticleShare } from "@/components/library/article-share";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasEditorialAccess } from "@/lib/editorial/access";
+import { articleCaption } from "@/modules/social-studio/captions";
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
 }
@@ -82,7 +83,7 @@ export default async function ArticlePage({
           <a href="#evidence">Evidence notes</a>
         </aside>
         <article>
-          <ArticleShare articleId={a.slug} title={a.title} url={`https://www.sthenofitness.com/insights/${a.slug}`}/>
+          <ArticleShare articleId={a.slug} title={a.title} url={`https://www.sthenofitness.com/insights/${a.slug}`} instagramCaption={articleCaption(a,"instagram_post")}/>
           <details className="article-mobile-toc">
             <summary>In this guide</summary>
             <nav>
