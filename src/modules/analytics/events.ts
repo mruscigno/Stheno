@@ -3,6 +3,7 @@ export const eventNames = [
   "coach_question_sent", "coach_domain_classified", "coach_answer_returned", "coach_false_refusal_feedback", "coach_error",
   "nav_methodology_click", "nav_about_click", "hero_primary_cta_click", "hero_secondary_cta_click", "consistency_callout_click", "methodology_view", "about_view", "about_assessment_click", "pricing_checkout_click", "compare_click", "comparison_view", "comparison_assessment_click", "vs_assessment_click", "faq_opened", "exercise_preview_open", "data_export_requested", "data_export_completed", "data_export_failed",
   "social_studio_opened", "social_platform_selected", "social_asset_generated", "social_asset_downloaded", "social_caption_copied", "social_link_copied", "social_native_share_started", "social_native_share_completed", "article_reader_share_clicked",
+  "progress_photo_consent_viewed", "progress_photo_consent_accepted", "progress_photo_set_started", "progress_photo_set_completed", "progress_photo_set_deleted", "monthly_review_due", "monthly_review_started", "monthly_review_completed", "monthly_review_recommendations_viewed", "monthly_review_accept_all", "monthly_review_apply_selected", "monthly_review_keep_current", "monthly_review_recommendation_declined",
 ] as const;
 export type EventName = typeof eventNames[number];
 export interface AnalyticsEvent { name: EventName; properties: Record<string, string | number | boolean | null> }

@@ -146,6 +146,16 @@ export async function POST() {
           engine_version: generated.engineVersion,
           ruleset_version: generated.rulesetVersion,
         }),
+      ctx.supabase.from("member_review_state").upsert({
+        user_id:ctx.user.id,
+        program_started_at:prescription.prescribed_at,
+        next_monthly_review_at:new Date(new Date(prescription.prescribed_at).getTime()+28*86400000).toISOString(),
+        monthly_review_due:false,
+        monthly_review_status:"scheduled",
+        reminder_sent_at:null,
+        follow_up_sent_at:null,
+        updated_at:new Date().toISOString(),
+      },{onConflict:"user_id"}),
     ]);
     return NextResponse.json(
       {

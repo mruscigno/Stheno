@@ -1,1 +1,1 @@
-import{ProgressExperience}from"@/components/coaching/progress-experience";export default function ProgressPage(){return <ProgressExperience/>}
+import{ProgressExperience}from"@/components/coaching/progress-experience";import{MonthlyReviewExperience}from"@/components/progress/monthly-review";export default function ProgressPage(){return <><MonthlyReviewExperience/><ProgressExperience/></>}

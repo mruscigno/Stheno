@@ -15,6 +15,7 @@ import "./guide-quality.css";
 import "./trial-access.css";
 import "./mobile-navigation.css";
 import "./social-studio.css";
+import "@/components/progress/monthly-review.css";
 import "./article-share.css";
 import "./product-14.css";
 import "./heycatch.css";
