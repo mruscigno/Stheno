@@ -1,0 +1,5 @@
+create index if not exists personal_records_source_set_idx on public.personal_records(source_set_id);
+create index if not exists personal_records_superseded_by_idx on public.personal_records(superseded_by);
+create index if not exists training_achievements_source_session_idx on public.training_achievements(source_session_id);
+create index if not exists training_load_recommendations_performed_set_idx on public.training_load_recommendations(performed_set_id);
+create index if not exists training_load_recommendations_prescription_idx on public.training_load_recommendations(program_prescription_id);

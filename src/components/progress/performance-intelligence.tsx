@@ -1,0 +1,37 @@
+"use client";
+import { useEffect, useMemo, useState } from "react";
+import { capture } from "@/lib/analytics/client";
+import "./performance-intelligence.css";
+
+type TimelinePoint = { date: string; e1rm: number | null; volume: number | null };
+type Exercise = { slug: string; name: string; sessions: number; bestLoad: number; bestReps: number; currentE1rm: number | null; bestE1rm: number | null; totalVolume: number; timeline: TimelinePoint[] };
+type Payload = { range: string; status: string; metrics: { workoutsCompleted: number; workoutAdherence: number | null; setAdherence: number | null; prCount: number; totalVolume: number; strengthChangePercent?: number | null }; frequency: { date: string; count: number }[]; exercises: Exercise[]; prs: { id: string; exercise_slug: string; record_type: string; value: number; secondary_value: number | null; unit: string | null; achieved_at: string }[]; workload: { muscle: string; planned: number; completed: number }[]; achievements: { id: string; achievement_type: string; achieved_at: string }[] };
+const ranges = [["4w", "4 weeks"], ["8w", "8 weeks"], ["3m", "3 months"], ["6m", "6 months"], ["1y", "1 year"], ["all", "All time"]] as const;
+function formatNumber(value: number) { return Intl.NumberFormat("en-US", { maximumFractionDigits: 1 }).format(value); }
+
+export function PerformanceIntelligenceExperience() {
+  const [range, setRange] = useState("8w"), [data, setData] = useState<Payload | null>(null), [selected, setSelected] = useState("");
+  useEffect(() => { let active = true; void fetch(`/api/progress/performance?range=${range}`).then(response => response.ok ? response.json() as Promise<Payload> : null).then(payload => { if (active && payload) setData(payload); }); capture("progress_viewed", { range }); return () => { active = false; }; }, [range]);
+  const activeSelection = data?.exercises.some(exercise => exercise.slug === selected) ? selected : (data?.exercises[0]?.slug ?? "");
+  const exercise = useMemo(() => data?.exercises.find(item => item.slug === activeSelection) ?? null, [activeSelection, data]);
+  if (!data) return <section className="performance-progress" aria-busy="true"><p className="muted">Loading your recorded training…</p></section>;
+  const maxE1rm = Math.max(1, ...(exercise?.timeline.map(point => point.e1rm ?? 0) ?? [])), maxWorkload = Math.max(1, ...data.workload.map(item => Math.max(item.planned, item.completed)));
+  return <section className="performance-progress">
+    <header className="performance-hero"><div><p className="eyebrow">Performance intelligence</p><h1>{data.status}</h1><p>Every number below comes from workouts you recorded. Estimates and limits are labeled.</p></div><div className="range-picker" aria-label="Progress date range">{ranges.map(([value, label]) => <button type="button" aria-pressed={range === value} key={value} onClick={() => { setRange(value); capture("progress_range_changed", { range: value }); }}>{label}</button>)}</div></header>
+    <div className="performance-metrics">
+      <article><span>Workouts completed</span><strong>{data.metrics.workoutsCompleted}</strong></article>
+      <article><span>Workout completion</span><strong>{data.metrics.workoutAdherence == null ? "—" : `${data.metrics.workoutAdherence}%`}</strong><small>Completed / started</small></article>
+      <article><span>Prescribed sets completed</span><strong>{data.metrics.setAdherence == null ? "—" : `${data.metrics.setAdherence}%`}</strong></article>
+      <article><span>Personal bests</span><strong>{data.metrics.prCount}</strong></article>
+      <article><span>Recorded volume</span><strong>{formatNumber(data.metrics.totalVolume)}</strong><small>Within comparable loaded exercises</small></article>
+    </div>
+    {!data.exercises.length ? <div className="performance-empty"><h2>Your first trend starts with a logged workout.</h2><p>STHENO will never invent progress or an exact starting load without usable history.</p><a className="button" href="/app/workout">Open today&apos;s workout</a></div> : <>
+      <div className="performance-grid"><article className="progress-panel exercise-trend"><div className="panel-head"><div><p className="eyebrow">Strength progression</p><h2>{exercise?.name}</h2></div><label>Exercise<select value={activeSelection} onChange={event => { setSelected(event.target.value); capture("exercise_progress_viewed", { exercise_id: event.target.value }); }}>{data.exercises.map(item => <option value={item.slug} key={item.slug}>{item.name}</option>)}</select></label></div>
+        <div className="exercise-bests"><span>Current estimated 1RM<strong>{exercise?.currentE1rm == null ? "—" : `${formatNumber(exercise.currentE1rm)} lb`}</strong></span><span>Best estimated 1RM<strong>{exercise?.bestE1rm == null ? "—" : `${formatNumber(exercise.bestE1rm)} lb`}</strong></span><span>Heaviest set<strong>{formatNumber(exercise?.bestLoad ?? 0)} lb</strong></span><span>Best reps<strong>{exercise?.bestReps ?? 0}</strong></span></div>
+        <div className="trend-bars" role="img" aria-label={`${exercise?.name} estimated one-rep-max history. ${exercise?.timeline.length ?? 0} observations.`}>{exercise?.timeline.map((point, index) => <i key={`${point.date}-${index}`} style={{ height: `${Math.max(5, (point.e1rm ?? 0) / maxE1rm * 100)}%` }} title={`${new Date(point.date).toLocaleDateString()}: ${point.e1rm ? `${formatNumber(point.e1rm)} lb` : "not eligible"}`} />)}</div><p className="metric-limit">Estimated 1RM uses Epley for eligible loaded sets of 12 reps or fewer. It is a training estimate, not a test.</p>
+      </article>
+      <article className="progress-panel"><p className="eyebrow">Recent personal bests</p><h2>Proof from recorded sets</h2>{data.prs.length ? <ol className="pr-list">{data.prs.slice(0, 8).map(pr => <li key={pr.id}><span>{data.exercises.find(item => item.slug === pr.exercise_slug)?.name ?? pr.exercise_slug.replaceAll("-", " ")}<small>{pr.record_type.replaceAll("_", " ")} · {new Date(pr.achieved_at).toLocaleDateString()}</small></span><strong>{formatNumber(Number(pr.value))}{pr.unit ? ` ${pr.unit}` : ""}</strong></li>)}</ol> : <p className="muted">No confirmed personal bests in this range yet.</p>}</article></div>
+      <article className="progress-panel workload-panel"><div className="panel-head"><div><p className="eyebrow">Weekly training distribution</p><h2>Planned compared with completed</h2></div><p>Set-equivalents, not exact fatigue or recovery.</p></div>{data.workload.length ? <div className="workload-list">{data.workload.map(item => <div className="workload-row" key={item.muscle}><strong>{item.muscle}</strong><div><span className="planned" style={{ width: `${item.planned / maxWorkload * 100}%` }} /><span className="completed" style={{ width: `${item.completed / maxWorkload * 100}%` }} /></div><span>{formatNumber(item.completed)} / {formatNumber(item.planned)}</span></div>)}</div> : <p className="muted">Complete a workout to compare planned and completed muscle work.</p>}<div className="workload-legend"><span><i className="completed" />Completed</span><span><i className="planned" />Planned</span></div><table className="sr-only"><caption>Muscle workload text equivalent</caption><thead><tr><th>Muscle</th><th>Completed</th><th>Planned</th></tr></thead><tbody>{data.workload.map(item => <tr key={item.muscle}><td>{item.muscle}</td><td>{item.completed}</td><td>{item.planned}</td></tr>)}</tbody></table></article>
+    </>}
+  </section>;
+}

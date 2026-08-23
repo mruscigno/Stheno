@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
 import { ExerciseVideo } from "@/components/exercises/exercise-video";
+import { EnhancedSetLogger } from "@/components/workout/enhanced-set-logger";
 type Exercise = {
   exerciseSlug: string;
   exerciseName: string;
@@ -20,11 +21,17 @@ type Workout = {
   exercises: Exercise[];
 };
 type SetLog = {
+  id: string;
   exercise_slug: string;
   set_ordinal: number;
+  set_type: string;
   load_value: number | null;
+  load_unit: "lb" | "kg";
   repetitions: number;
-  rir: number;
+  rir: number | null;
+  rpe: number | null;
+  is_user_added?: boolean;
+  recommendation_id?: string | null;
 };
 type Performance = { load: number; reps: number } | null;
 type Data = {
@@ -33,6 +40,8 @@ type Data = {
   workout?: Workout;
   sets?: SetLog[];
   lastPerformance?: Performance;
+  previousPerformance?: Record<string, { load: number; unit: "lb" | "kg"; reps: number; rir?: number | null }[]>;
+  recommendations?: { id: string; exercise_slug: string; set_ordinal: number; recommended_load: number | null; load_unit: "lb" | "kg"; recommended_reps_min: number; recommended_reps_max: number; confidence: string; reason_code: string; explanation: string }[];
   next?: {
     exerciseIndex: number;
     setOrdinal: number;
@@ -428,7 +437,7 @@ function SetLogger({
     </section>
   );
 }
-export function WorkoutExperience() {
+export function WorkoutExperience({ enhanced = true }: { enhanced?: boolean }) {
   const [data, setData] = useState<Data | null>(null),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
@@ -437,7 +446,7 @@ export function WorkoutExperience() {
       exercise: ExerciseInfo;
       alternatives: string[];
     } | null>(null),
-    [summary, setSummary] = useState<Record<string, number> | null>(null);
+    [summary, setSummary] = useState<{ durationSeconds: number; completedSets: number; prescribedSets: number; adherencePercent: number; totalVolume: number; prCount: number; personalRecords?: { id: string; exercise_slug: string; record_type: string; value: number; unit: string | null }[]; achievements?: string[] } | null>(null);
   const load = useCallback(async () => {
     const response = await fetch("/api/workouts/today", { cache: "no-store" });
     setData(await response.json());
@@ -468,7 +477,7 @@ export function WorkoutExperience() {
       return body;
     }
     if (body.safety) setMessage(body.safety.message);
-    if (body.summary) setSummary(body.summary);
+    if (body.summary) setSummary({ ...body.summary, personalRecords: body.personalRecords, achievements: body.achievements });
     else await load();
     return body;
     }catch{setBusy(false);setMessage("You appear to be offline. Reconnect and tap the set again to sync.");return{saved:false}}
@@ -497,7 +506,7 @@ export function WorkoutExperience() {
         <div className="summary-grid">
           <article>
             <span>Time</span>
-            <strong>{summary.durationMinutes} min</strong>
+            <strong>{Math.max(1, Math.round(summary.durationSeconds / 60))} min</strong>
           </article>
           <article>
             <span>Sets</span>
@@ -509,7 +518,10 @@ export function WorkoutExperience() {
             <span>Adherence</span>
             <strong>{summary.adherencePercent}%</strong>
           </article>
+          <article><span>Personal bests</span><strong>{summary.prCount}</strong></article>
+          <article><span>Recorded volume</span><strong>{Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(summary.totalVolume)}</strong></article>
         </div>
+        {summary.personalRecords?.length ? <div className="completion-prs"><p className="eyebrow">New personal best</p>{summary.personalRecords.map(record=><p key={record.id}><strong>{record.exercise_slug.replaceAll("-"," ")}</strong> · {record.record_type.replaceAll("_"," ")} · {Number(record.value).toFixed(record.record_type==="estimated_1rm"?1:0)} {record.unit??""}</p>)}</div> : <p className="muted">Your workout is saved. Keep logging comparable sets to build stronger recommendations.</p>}
         <button
           className="button"
           onClick={() => {
@@ -569,29 +581,23 @@ export function WorkoutExperience() {
       <section className="workout-screen">
         <p className="eyebrow">Session complete</p>
         <h1>All sets logged.</h1>
-        <button
-          className="button"
-          disabled={busy}
-          onClick={() =>
-            void act({ action: "complete", sessionId: data.session!.id })
-          }
-        >
-          Finish workout
-        </button>
+        <h2>How did that workout feel?</h2>
+        <div className="effort-options">{[["too_easy","Too easy"],["about_right","About right"],["very_hard","Very hard"],["couldnt_finish","Couldn’t finish"]].map(([effort,copy])=><button className="button secondary" key={effort} disabled={busy} onClick={()=>void act({action:"complete",sessionId:data.session!.id,effort})}>{copy}</button>)}</div>
       </section>
     );
   return (
     <>
-      <SetLogger
+      {enhanced ? <EnhancedSetLogger
         key={`${data.next.exercise.exerciseSlug}-${data.next.setOrdinal}`}
-        data={data}
+        data={{...data,session:data.session!,workout:data.workout!}}
         busy={busy}
         message={message}
         rest={rest}
         setRest={setRest}
         onAct={act}
         onInfo={showInfo}
-      />
+        onReplace={(exercise)=><AdjustmentMenu exercise={exercise} onReplace={(reason,scope,replacement)=>act({action:"replace",sessionId:data.session!.id,exerciseSlug:exercise.exerciseSlug,replacementSlug:replacement,reason,scope,confirmedSafety:reason==="discomfort"})}/>}
+      /> : <SetLogger data={data} busy={busy} message={message} rest={rest} setRest={setRest} onAct={act} onInfo={showInfo} />}
       {info ? (
         <ExerciseGuide
           exercise={info.exercise}

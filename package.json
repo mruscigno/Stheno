@@ -12,6 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "verify:exercise-media": "node scripts/product17/validate_3d_factory.mjs",
+    "backfill:training:dry-run": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --dry-run",
+    "backfill:training:apply": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --apply",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
   },
   "dependencies": {
