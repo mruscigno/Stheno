@@ -8,7 +8,6 @@ import {
 } from "@/modules/workout/logic";
 import { summarizeWorkoutDeterministically, type SessionEffort } from "@/modules/training-intelligence";
 import { buildWorkoutIntelligence, earnWorkoutAchievements, persistWeeklyWorkload, processSetIntelligence } from "@/modules/training-intelligence/server";
-import { trainingIntelligenceFlags } from "@/modules/training-intelligence/flags";
 import {
   TRAINING_ENGINE_VERSION,
   TRAINING_RULESET_VERSION,
@@ -80,7 +79,7 @@ export async function GET() {
   const ctx = await auth();
   if (!ctx)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { data: active } = await ctx.supabase
+  const { data: activeResult } = await ctx.supabase
     .from("workout_execution_sessions")
     .select("*")
     .eq("user_id", ctx.user.id)
@@ -88,6 +87,11 @@ export async function GET() {
     .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+  let active = activeResult;
+  if (active && Date.now() - new Date(active.updated_at ?? active.started_at).getTime() > 18 * 60 * 60 * 1000) {
+    await ctx.supabase.from("workout_execution_sessions").update({ status: "stale", updated_at: new Date().toISOString() }).eq("id", active.id).eq("user_id", ctx.user.id);
+    active = null;
+  }
   if (active) {
     const { data: sets } = await ctx.supabase
       .from("workout_set_logs")
@@ -130,7 +134,7 @@ export async function GET() {
           reps: Number(last.repetitions),
         };
     }
-    const intelligence = trainingIntelligenceFlags.calculations && trainingIntelligenceFlags.adaptiveLoads ? await buildWorkoutIntelligence(ctx.supabase, ctx.user.id, active.id, workout, active.program_prescription_id) : { previous: {}, recommendations: [] };
+    const intelligence = await buildWorkoutIntelligence(ctx.supabase, ctx.user.id, active.id, workout, active.program_prescription_id);
     return NextResponse.json({
       state: "active",
       session: active,
@@ -256,7 +260,7 @@ export async function POST(request: Request) {
         { error: "That set didn’t save. Check your connection and try again." },
         { status: 500 },
       );
-    const derived = trainingIntelligenceFlags.calculations ? await processSetIntelligence(ctx.supabase, ctx.user.id, session.id, savedSet, prescription, body.recommendationId) : { personalRecords: [], e1rm: null, setVolume: null };
+    const derived = await processSetIntelligence(ctx.supabase, ctx.user.id, session.id, savedSet, prescription, body.recommendationId);
     const { data: sessionSets } = await ctx.supabase
       .from("workout_set_logs")
       .select("exercise_slug,set_ordinal,load_value,repetitions,rir,state")
@@ -479,6 +483,6 @@ export async function POST(request: Request) {
     })
     .eq("id", session.id)
     .eq("user_id", ctx.user.id);
-  const [workload, achievements] = await Promise.all([trainingIntelligenceFlags.muscleWorkload ? persistWeeklyWorkload(ctx.supabase, ctx.user.id, workout, sets ?? [], completedAt) : {}, trainingIntelligenceFlags.achievements ? earnWorkoutAchievements(ctx.supabase, ctx.user.id, session.id, completedAt, prs?.length ?? 0) : []]);
+  const [workload, achievements] = await Promise.all([persistWeeklyWorkload(ctx.supabase, ctx.user.id, workout, sets ?? [], completedAt), earnWorkoutAchievements(ctx.supabase, ctx.user.id, session.id, completedAt, prs?.length ?? 0)]);
   return NextResponse.json({ completed: true, summary, personalRecords: prs ?? [], achievements, workload, nextWorkout: "Your next planned workout is available on your program calendar." });
 }
