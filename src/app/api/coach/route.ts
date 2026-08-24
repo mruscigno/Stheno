@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     answer = proposal.blocked ? safetyResponse(parsed.data.message).copy : "I prepared the minimum necessary change for review. Nothing changes until you confirm it.";
   } else {
     const topics = domain === "technique" ? ["training"] : [domain];
-    const [evidence, profile, nutrition, history, trainingSessions, recentPrs, workload, loadRecommendations] = await Promise.all([
+    const [evidence, profile, nutrition, history, trainingSessions, recentPrs, workload, loadRecommendations, nutritionHistory] = await Promise.all([
       c.supabase.from("evidence_records").select("id,title,organization,claim_summary,evidence_tier,applicable_context,limitations,source_locator").eq("review_status", "reviewed").overlaps("topic_tags", topics).limit(5),
       c.supabase.from("personalization_profile_snapshots").select("profile,safety_classification").eq("user_id", c.user.id).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       domain === "nutrition" || domain === "supplements" ? c.supabase.from("nutrition_targets").select("calories_kcal,protein_g,carbohydrate_g,fat_g,fiber_g,target_range").eq("user_id", c.user.id).order("effective_from", { ascending: false }).limit(1).maybeSingle() : Promise.resolve({ data: null }),
@@ -69,6 +69,7 @@ export async function POST(request: Request) {
       c.supabase.from("personal_records").select("id,exercise_slug,record_type,value,secondary_value,unit,achieved_at").eq("user_id", c.user.id).eq("status", "active").order("achieved_at", { ascending: false }).limit(8),
       c.supabase.from("muscle_workload_weekly").select("period_start,muscle_group,planned_set_equivalents,completed_set_equivalents,algorithm_version").eq("user_id", c.user.id).order("period_start", { ascending: false }).limit(30),
       c.supabase.from("training_load_recommendations").select("exercise_slug,recommended_load,load_unit,confidence,reason_code,algorithm_version,evidence_snapshot,created_at").eq("user_id", c.user.id).order("created_at", { ascending: false }).limit(8),
+      domain === "nutrition" ? c.supabase.from("nutrition_daily_summaries").select("local_date,calories,protein_g,carbs_g,fat_g,logging_status").eq("user_id", c.user.id).order("local_date", { ascending: false }).limit(14) : Promise.resolve({ data: null }),
     ]);
     evidenceIds = (evidence.data ?? []).map((item) => item.id);
     if (!process.env.OPENAI_API_KEY) {
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
         reasoning: { effort: "low" },
         max_output_tokens: 700,
         instructions: "You are STHENO Coach, an evidence-led fitness coach. Answer immediately, directly, calmly, and concisely. No praise, filler, canned headings, fake certainty, diagnosis, or invented citations. Use supplied member context when it changes the practical recommendation, including goal, current frequency, experience, schedule, equipment, recovery, adherence, and current program. Use only supplied reviewed evidence for scientific claims. Mention uncertainty and a practical next action when useful. Never claim to change a plan. If the user asks for a change, say it must go through STHENO's deterministic engine.",
-        input: JSON.stringify({ question: parsed.data.message, domain, verifiedMemberContext: profile.data?.profile ?? null, currentNutritionTargets: nutrition.data, reviewedEvidence: evidence.data ?? [], recentConversation: (history.data ?? []).reverse(), authoritativeTrainingSnapshot: { last3Workouts: trainingSessions.data ?? [], recentPersonalRecords: recentPrs.data ?? [], currentMuscleWorkload: workload.data ?? [], loadRecommendations: loadRecommendations.data ?? [], instruction: "These persisted deterministic facts are authoritative. Never invent or alter a load, PR, adherence value, or workout result. When history is sparse, say so." } }),
+        input: JSON.stringify({ question: parsed.data.message, domain, verifiedMemberContext: profile.data?.profile ?? null, currentNutritionTargets: nutrition.data, nutritionLoggingSnapshot: nutritionHistory.data ?? [], nutritionContextInstruction: "Only logging_status=complete may support adherence conclusions. Partial days are not evidence of under-eating. Never change a target or recommend a calorie cut when adherence evidence is poor; route changes through the deterministic review flow.", reviewedEvidence: evidence.data ?? [], recentConversation: (history.data ?? []).reverse(), authoritativeTrainingSnapshot: { last3Workouts: trainingSessions.data ?? [], recentPersonalRecords: recentPrs.data ?? [], currentMuscleWorkload: workload.data ?? [], loadRecommendations: loadRecommendations.data ?? [], instruction: "These persisted deterministic facts are authoritative. Never invent or alter a load, PR, adherence value, or workout result. When history is sparse, say so." } }),
       });
       answer = response.output_text.trim();
       if (!answerQuality(answer).passes) answer = "I don’t have a concise, evidence-aligned answer I can stand behind yet. Rephrase the fitness question with the specific goal or constraint that matters.";

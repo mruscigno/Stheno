@@ -5,6 +5,7 @@ export const eventNames = [
   "social_studio_opened", "social_platform_selected", "social_asset_generated", "social_asset_downloaded", "social_caption_copied", "social_link_copied", "social_native_share_started", "social_native_share_completed", "article_reader_share_clicked",
   "progress_photo_consent_viewed", "progress_photo_consent_accepted", "progress_photo_set_started", "progress_photo_set_completed", "progress_photo_set_deleted", "monthly_review_due", "monthly_review_started", "monthly_review_completed", "monthly_review_recommendations_viewed", "monthly_review_accept_all", "monthly_review_apply_selected", "monthly_review_keep_current", "monthly_review_recommendation_declined",
   "set_logged", "set_edited", "rest_timer_started", "rest_timer_completed", "rest_timer_dismissed", "exercise_swapped", "load_recommendation_shown", "load_recommendation_accepted", "load_recommendation_overridden", "load_recommendation_unavailable", "progress_range_changed", "exercise_progress_viewed", "muscle_workload_viewed", "pr_detail_viewed", "pr_earned", "achievement_earned",
+  "nutrition_day_viewed", "nutrition_entry_added", "nutrition_entry_deleted", "nutrition_day_completed", "food_search_used", "nutrition_adherence_viewed", "goal_projection_viewed",
 ] as const;
 export type EventName = typeof eventNames[number];
 export interface AnalyticsEvent { name: EventName; properties: Record<string, string | number | boolean | null> }
