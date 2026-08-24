@@ -156,6 +156,19 @@ export async function POST() {
         follow_up_sent_at:null,
         updated_at:new Date().toISOString(),
       },{onConflict:"user_id"}),
+      ctx.supabase.from("training_blocks").insert({
+        user_id: ctx.user.id,
+        program_prescription_id: prescription.id,
+        block_index: generated.block?.blockIndex ?? 1,
+        name: generated.block?.name ?? "Foundation",
+        focus: generated.block?.focus ?? generated.name,
+        duration_weeks: generated.block?.durationWeeks ?? generated.weeks,
+        current_week: generated.block?.currentWeek ?? 1,
+        phase: generated.block?.phase ?? "foundation",
+        status: "active",
+        algorithm_version: generated.rulesetVersion,
+        reason_codes: generated.block?.reasonCodes ?? ["INITIAL_BLOCK_FROM_ASSESSMENT"],
+      }),
     ]);
     return NextResponse.json(
       {

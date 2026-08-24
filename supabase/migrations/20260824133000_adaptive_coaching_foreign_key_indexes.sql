@@ -1,0 +1,10 @@
+create index if not exists training_blocks_previous_block_idx on public.training_blocks(previous_block_id);
+create index if not exists training_block_priorities_user_idx on public.training_block_priorities(user_id);
+create index if not exists training_block_summaries_user_idx on public.training_block_summaries(user_id);
+create index if not exists recovery_observations_session_idx on public.recovery_observations(workout_execution_session_id);
+create index if not exists adaptive_coaching_decisions_session_idx on public.adaptive_coaching_decisions(source_session_id);
+create index if not exists adaptive_coaching_decisions_block_idx on public.adaptive_coaching_decisions(source_block_id);
+create index if not exists schedule_repair_decisions_user_idx on public.schedule_repair_decisions(user_id);
+create index if not exists workout_coach_events_user_idx on public.workout_coach_events(user_id);
+create index if not exists workout_coach_events_session_idx on public.workout_coach_events(workout_execution_session_id);
+create index if not exists workout_coach_events_set_idx on public.workout_coach_events(source_set_id);

@@ -1,18 +1,178 @@
-export type Goal="build_strength"|"build_muscle"|"lose_fat"|"general_fitness"|"endurance";
-export type Experience="new"|"beginner"|"intermediate"|"advanced";
-export type Equipment="barbell"|"dumbbells"|"machines"|"cables"|"bench"|"bands"|"bodyweight";
-export type MovementPattern="squat"|"hinge"|"horizontal_push"|"vertical_push"|"horizontal_pull"|"vertical_pull"|"lunge"|"isolation"|"carry";
-export type Muscle="quadriceps"|"hamstrings"|"glutes"|"chest"|"back"|"shoulders"|"biceps"|"triceps"|"calves"|"core";
-export type ExerciseRole="primary"|"secondary"|"accessory";
-export type SubstitutionScope="session_only"|"program"|"persistent";
-export type ReplacementReason="equipment_unavailable"|"equipment_occupied"|"discomfort"|"dislike"|"temporary_limitation"|"travel"|"other";
-export interface TrainingProfile{profileId:string;assessmentId:string;goal:Goal;experience:Experience;daysPerWeek:number;sessionMinutes:number;equipment:Equipment[];avoidances:string[];preferences:string[];cardioDays?:number;safetyClassification:"normal"|"caution"|"modify"|"stop"|"refer"}
-export interface Exercise{slug:string;name:string;family:string;pattern:MovementPattern;role:ExerciseRole;primaryMuscles:Muscle[];secondaryMuscles:Muscle[];requiredEquipment:Equipment[];skill:Experience;fatigueCost:1|2|3|4|5;setupMinutes:number;repRange:[number,number];progressionSuitability:1|2|3|4|5;unilateral:boolean;instructions:string[];cues:string[];mistakes:string[];cautionTags:string[];reviewStatus:"reviewed"|"draft";contentVersion:string;license:"STHENO_ORIGINAL"}
-export interface Prescription{exerciseSlug:string;exerciseName:string;role:ExerciseRole;sets:number;repMin:number;repMax:number;rir:number;restSeconds:number;estimatedMinutes:number;reasonCodes:string[];alternatives:string[]}
-export interface Workout{key:string;name:string;dayOrdinal:number;focus:string;estimatedMinutes:number;exercises:Prescription[];reasonCodes:string[]}
-export interface TrainingProgram{id:string;profileId:string;assessmentId:string;name:string;weeks:number;workouts:Workout[];progressionPolicy:"double_progression";engineVersion:string;rulesetVersion:string;generatedAt:string;reasonCodes:string[]}
-export interface ValidationResult{valid:boolean;errors:string[];warnings:string[]}
-export interface WorkoutConstraints{availableMinutes?:number;availableEquipment?:Equipment[];unavailableExercises?:string[]}
-export interface StructuredDiff{removed:string[];added:string[];preserved:string[];reasonCodes:string[];confirmationRequired:boolean}
-export interface ProgressionContext{load:number;repMin:number;repMax:number;completedReps:number[];targetRir:number;actualRir:number[];consecutiveStalls:number;fatigueFlag:boolean}
-export interface ProgressionDecision{action:"increase_load"|"increase_reps"|"hold"|"reduce_load"|"deload";loadMultiplier:number;reasonCodes:string[]}
+export type Goal =
+  | "build_strength"
+  | "build_muscle"
+  | "lose_fat"
+  | "general_fitness"
+  | "endurance";
+export type Experience = "new" | "beginner" | "intermediate" | "advanced";
+export type Equipment =
+  | "barbell"
+  | "dumbbells"
+  | "machines"
+  | "cables"
+  | "bench"
+  | "bands"
+  | "bodyweight";
+export type MovementPattern =
+  | "squat"
+  | "hinge"
+  | "horizontal_push"
+  | "vertical_push"
+  | "horizontal_pull"
+  | "vertical_pull"
+  | "lunge"
+  | "isolation"
+  | "carry";
+export type Muscle =
+  | "quadriceps"
+  | "hamstrings"
+  | "glutes"
+  | "chest"
+  | "back"
+  | "shoulders"
+  | "biceps"
+  | "triceps"
+  | "calves"
+  | "core";
+export type ExerciseRole = "primary" | "secondary" | "accessory";
+export type SubstitutionScope = "session_only" | "program" | "persistent";
+export type ReplacementReason =
+  | "equipment_unavailable"
+  | "equipment_occupied"
+  | "discomfort"
+  | "dislike"
+  | "temporary_limitation"
+  | "travel"
+  | "other";
+export interface TrainingProfile {
+  profileId: string;
+  assessmentId: string;
+  goal: Goal;
+  experience: Experience;
+  daysPerWeek: number;
+  sessionMinutes: number;
+  equipment: Equipment[];
+  avoidances: string[];
+  preferences: string[];
+  cardioDays?: number;
+  safetyClassification: "normal" | "caution" | "modify" | "stop" | "refer";
+}
+export interface Exercise {
+  slug: string;
+  name: string;
+  family: string;
+  pattern: MovementPattern;
+  role: ExerciseRole;
+  primaryMuscles: Muscle[];
+  secondaryMuscles: Muscle[];
+  requiredEquipment: Equipment[];
+  skill: Experience;
+  fatigueCost: 1 | 2 | 3 | 4 | 5;
+  setupMinutes: number;
+  repRange: [number, number];
+  progressionSuitability: 1 | 2 | 3 | 4 | 5;
+  unilateral: boolean;
+  instructions: string[];
+  cues: string[];
+  mistakes: string[];
+  cautionTags: string[];
+  reviewStatus: "reviewed" | "draft";
+  contentVersion: string;
+  license: "STHENO_ORIGINAL";
+}
+export interface Prescription {
+  exerciseSlug: string;
+  exerciseName: string;
+  role: ExerciseRole;
+  sets: number;
+  repMin: number;
+  repMax: number;
+  rir: number;
+  restSeconds: number;
+  estimatedMinutes: number;
+  reasonCodes: string[];
+  alternatives: string[];
+}
+export interface Workout {
+  key: string;
+  name: string;
+  dayOrdinal: number;
+  focus: string;
+  estimatedMinutes: number;
+  exercises: Prescription[];
+  reasonCodes: string[];
+}
+export type TrainingPhase =
+  | "foundation"
+  | "build"
+  | "progress"
+  | "intensify"
+  | "recovery"
+  | "consolidate";
+export interface TrainingBlock {
+  blockIndex: number;
+  name: string;
+  focus: string;
+  durationWeeks: number;
+  currentWeek: number;
+  phase: TrainingPhase;
+  status: "active" | "completed";
+  reasonCodes: string[];
+}
+export interface TrainingProgram {
+  id: string;
+  profileId: string;
+  assessmentId: string;
+  name: string;
+  weeks: number;
+  workouts: Workout[];
+  progressionPolicy: "double_progression";
+  engineVersion: string;
+  rulesetVersion: string;
+  generatedAt: string;
+  reasonCodes: string[];
+  block?: TrainingBlock;
+}
+export interface ValidationResult {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+export interface WorkoutConstraints {
+  availableMinutes?: number;
+  availableEquipment?: Equipment[];
+  unavailableExercises?: string[];
+}
+export interface StructuredDiff {
+  removed: string[];
+  added: string[];
+  preserved: string[];
+  reasonCodes: string[];
+  confirmationRequired: boolean;
+}
+export interface ProgressionContext {
+  load: number;
+  repMin: number;
+  repMax: number;
+  completedReps: number[];
+  targetRir: number;
+  actualRir: number[];
+  consecutiveStalls: number;
+  fatigueFlag: boolean;
+}
+export type ProgressionStrategy =
+  | "load"
+  | "reps"
+  | "sets"
+  | "range_of_motion"
+  | "tempo"
+  | "variation"
+  | "density"
+  | "technique"
+  | "hold";
+export interface ProgressionDecision {
+  action: "increase_load" | "increase_reps" | "hold" | "reduce_load" | "deload";
+  loadMultiplier: number;
+  strategy: ProgressionStrategy;
+  reasonCodes: string[];
+}
