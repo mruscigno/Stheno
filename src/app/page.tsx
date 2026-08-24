@@ -1,575 +1,561 @@
-import Image from "next/image";
-import Link from "next/link";
-import { tools } from "@/modules/library/tools";
-import { articles } from "@/modules/library/articles";
 import type { Metadata } from "next";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { organizationId, publicMetadata, safeJsonLd, serviceJsonLd, siteUrl, websiteId } from "@/lib/seo";
-import { membership, annualSavings } from "@/modules/commerce/product";
+import Link from "next/link";
 import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
 import { homepageFaqItems } from "@/modules/content/faq";
-import { humanizeExerciseText } from "@/modules/training/guide-content";
-
-export const metadata: Metadata = publicMetadata({ title: "STHENO Fitness | A Fitness Plan That Changes When Life Does", description: "Training and nutrition for busy adults, continuously adjusted when schedules, equipment, travel, progress, or life changes.", path: "/" });
-
-const media = "/media/product-14";
-const Check = () => (
-  <span className="p14-check" aria-hidden="true">
-    ✓
-  </span>
+import { tools } from "@/modules/library/tools";
+import { articles } from "@/modules/library/articles";
+import { annualSavings, membership } from "@/modules/commerce/product";
+import { isLive } from "@/modules/marketing/capabilities";
+import {
+  organizationId,
+  publicMetadata,
+  safeJsonLd,
+  serviceJsonLd,
+  siteUrl,
+  websiteId,
+} from "@/lib/seo";
+export const metadata: Metadata = publicMetadata({
+  title: "STHENO Fitness | Personalized Training, Nutrition & Progress",
+  description:
+    "Personalized workouts, practical nutrition guidance, progress tracking and fitness coaching that adapts as you improve and life changes.",
+  path: "/",
+});
+const Cta = ({
+  location,
+  className = "mr-button",
+}: {
+  location: string;
+  className?: string;
+}) => (
+  <TrackedLink
+    event="primary_cta_clicked"
+    eventProperties={{ location }}
+    className={className}
+    href="/assessment"
+  >
+    Get Your Free Plan <span aria-hidden="true">→</span>
+  </TrackedLink>
 );
-
-async function exercisePreview() {
-  const db = await createSupabaseServerClient();
-  if (!db) return { count: 0, exercises: [] };
-  const { data, count } = await db.from("exercises").select("slug,name,primary_muscles,required_equipment,education", { count: "exact" }).eq("status", "production").eq("review_status", "reviewed").eq("prescribable",true).eq("public_indexable",true).eq("technical_review_status","reviewed").eq("editorial_review_status","reviewed").eq("visual_review_status","reviewed").order("name").limit(6);
-  return { count: count ?? data?.length ?? 0, exercises: data ?? [] };
-}
-
-export default async function Home() {
-  const preview = await exercisePreview();
+export default function Home() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${siteUrl}/#faq`,
+    mainEntity: homepageFaqItems.map((x) => ({
+      "@type": "Question",
+      name: x.question,
+      acceptedAnswer: { "@type": "Answer", text: x.answer },
+    })),
+  };
   return (
-    <main className="p14-home">
+    <main className="mr-home">
       <TrackView event="landing_viewed" />
-      <section className="p14-hero">
-        <div className="p14-hero-copy">
-          <p className="p14-kicker">Your fitness. Handled.</p>
-          <h1>A fitness plan that changes when your life does.</h1>
-          <p className="p14-lede">
-            STHENO builds your training and nutrition around your goals—and keeps adjusting when your schedule, equipment, progress, or life changes.
-          </p>
-          <div className="p14-actions">
-            <TrackedLink event="primary_cta_clicked" eventProperties={{location:"homepage_hero"}} className="p14-button" href="/assessment">Build my free plan <span>→</span></TrackedLink>
-            <TrackedLink event="hero_secondary_cta_click" className="p14-text-link" href="/how-it-works">See how STHENO works</TrackedLink>
+      <section className="mr-hero">
+        <div className="mr-shell mr-hero-grid">
+          <div className="mr-hero-copy">
+            <p className="mr-kicker">Your fitness. Handled.</p>
+            <h1>Personalized fitness coaching that keeps up with you.</h1>
+            <p className="mr-lede">
+              Your workouts, nutrition and progress in one place—with a plan
+              that adapts as you improve and life changes.
+            </p>
+            <div className="mr-actions">
+              <Cta location="homepage_hero" />
+              <TrackedLink
+                event="hero_secondary_cta_click"
+                href="#how-it-works"
+                className="mr-link"
+              >
+                See How It Works
+              </TrackedLink>
+            </div>
+            <small>
+              Starts with a personalized assessment. No guesswork required.
+            </small>
           </div>
-          <p className="p14-no-card">
-            No credit card required.
-          </p>
-          <p className="p17-handled-line">You do the work. STHENO handles the plan.</p>
-        </div>
-        <div className="p14-hero-media">
-          <Image
-            src={`${media}/hero-strength.jpg`}
-            alt="Adult strength training with dumbbells in a gym"
-            fill
-            priority
-            sizes="(max-width: 800px) 100vw, 58vw"
-          />
-          <div className="p14-live-card">
-            <span>MONDAY · FULL BODY</span>
-            <strong>Next: Dumbbell row</strong>
-            <small>3 sets · 8–10 reps · 90 sec rest</small>
-          </div>
-          <div className="p14-hero-badge">
-            <strong>3</strong>
-            <span>
-              workouts
-              <br />
-              this week
-            </span>
-          </div>
+          <ConnectedProductDemo />
         </div>
       </section>
-      <ProductProof />
-      <section className="p14-blueprint p14-shell">
-        <div className="p14-section-copy">
-          <p className="p14-kicker">Your personalized Blueprint</p>
-          <h2>A plan that starts with you.</h2>
+      <section className="mr-problem">
+        <div className="mr-shell">
+          <p className="mr-kicker">The static-plan problem</p>
+          <h2>
+            A fitness plan shouldn’t stop being useful the moment real life
+            happens.
+          </h2>
           <p>
-            Answer a focused assessment and see exactly how your training,
-            nutrition, activity, and progress strategy fit together.
+            Most plans know what you were supposed to do. They do not know what
+            you completed, what changed, or whether you are progressing. STHENO
+            connects those pieces so you can keep moving without starting over.
           </p>
-          <Link className="p14-text-link" href="/assessment">
-            Build your Blueprint →
-          </Link>
-        </div>
-        <BlueprintPreview />
-      </section>
-      <section className="p14-simplicity">
-        <div className="p14-shell">
-          <p className="p14-kicker">Fitness made clear</p>
-          <h2>You don’t need to become a fitness expert.</h2>
-          <div className="p14-three">
-            <article>
-              <b>01</b>
-              <h3>Know exactly what to do.</h3>
-              <p>
-                Your session, sets, reps, cues, and rest—ready when you are.
-              </p>
-            </article>
-            <article>
-              <b>02</b>
-              <h3>Know what to eat.</h3>
-              <p>
-                Useful targets and meal structure without a rigid meal plan.
-              </p>
-            </article>
-            <article>
-              <b>03</b>
-              <h3>Know when to change things.</h3>
-              <p>Your real progress tells STHENO what should happen next.</p>
-            </article>
-          </div>
         </div>
       </section>
-      <section className="p14-training p14-shell">
-        <div className="p14-photo-stack">
-          <Image
-            src={`${media}/gym-training.jpg`}
-          alt="Woman strength training in a commercial gym"
-          fill
-            sizes="(max-width: 800px) 100vw, 46vw"
-          />
-          <span>{preview.count ? `${preview.count} reviewed exercises` : "Reviewed exercise library"}</span>
-        </div>
-        <div className="p14-section-copy">
-          <p className="p14-kicker">Training</p>
-          <h2>Walk into the gym knowing exactly what to do.</h2>
-          <p>
-            Every workout includes targets, previous performance,
-            beginner-friendly exercise guidance, substitutions, and a rest
-            timer.
-          </p>
-          <WorkoutMini />
-          <Link className="p14-text-link" href="/how-it-works">
-            Explore the training experience →
-          </Link>
-        </div>
-      </section>
-      <section className="p14-nutrition">
-        <div className="p14-shell">
-          <div className="p14-section-copy">
-            <p className="p14-kicker">Nutrition</p>
-            <h2>Know what to eat without living on a meal plan.</h2>
-            <p>
-              Calories, protein, macros, meal timing, and supplements—explained
-              in the context of your goal and normal food.
-            </p>
-            <div className="p14-macros">
-              <span>
-                <b>2,180</b>calories
-              </span>
-              <span>
-                <b>145g</b>protein
-              </span>
-              <span>
-                <b>245g</b>carbs
-              </span>
-              <span>
-                <b>68g</b>fat
-              </span>
-            </div>
-            <Link className="p14-text-link" href="/tools/protein">
-              Estimate your protein range →
-            </Link>
-          </div>
-          <div className="p14-food">
-            <Image
-              src={`${media}/meal-prep.jpg`}
-            alt="A balanced meal with vegetables, eggs, and avocado"
-            fill
-              sizes="(max-width: 800px) 100vw, 48vw"
-            />
-            <div>
-              <strong>Today’s direction</strong>
-              <span>Protein at 3–4 meals</span>
-              <span>Carbs around training</span>
-              <span>Produce twice before dinner</span>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="p14-adapt" id="adaptation">
-        <div className="p14-shell">
-          <div className="p14-adapt-copy">
-            <p className="p14-kicker">Real-life adaptation</p>
-            <h2>Your plan should fit the week you actually have.</h2>
-            <blockquote>
-              “I’m traveling Wednesday through Friday and only have a hotel
-              gym.”
-            </blockquote>
-            <div className="p14-adapt-result">
-              <span>Plan updated</span>
-              <strong>Friday full body · 30 minutes</strong>
-              <small>
-                3 hotel-friendly swaps · same movement patterns · no lost week
-              </small>
-            </div>
-          </div>
-          <div className="p14-adapt-photo">
-            <Image
-              src={`${media}/home-training.jpg`}
-            alt="Woman completing a limited-equipment workout"
-            fill
-              sizes="(max-width: 800px) 100vw, 44vw"
-            />
-          </div>
-        </div>
-      </section>
-      <section className="p14-coach p14-shell">
-        <div className="p14-coach-photo">
-          <Image
-            src={`${media}/phone-training.jpg`}
-          alt="Active adults training together"
-          fill
-            sizes="(max-width: 800px) 100vw, 42vw"
-          />
-        </div>
-        <div className="p14-section-copy">
-          <p className="p14-kicker">STHENO Coach</p>
-          <h2>Ask a question. Leave with a decision.</h2>
-          <div className="p14-chat">
-            <p className="user">
-              I only have 30 minutes today. What should I do?
-            </p>
-            <p className="stheno">
-              <b>STHENO</b>Keep the first four exercises. I shortened rest on
-              the accessories and removed one optional finisher. You’ll preserve
-              the main work and finish in about 28 minutes.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="p14-progress">
-        <div className="p14-shell">
-          <div className="p14-section-copy">
-            <p className="p14-kicker">Progress</p>
-            <h2>See the trend. Understand the next move.</h2>
-            <p>
-              Strength, consistency, body trend, recovery, and weekly check-ins
-              come together in one clear view.
-            </p>
-          </div>
-          <ProgressPanel />
-        </div>
-      </section>
-      <section className="p14-how p14-shell">
-        <div className="p14-section-heading">
-          <p className="p14-kicker">How STHENO works</p>
-          <h2>One connected coaching loop.</h2>
-        </div>
-        <ol>
+      <section
+        className="mr-promises mr-shell"
+        aria-labelledby="promises-title"
+      >
+        <header>
+          <p className="mr-kicker">One connected membership</p>
+          <h2 id="promises-title">Know what to do next.</h2>
+        </header>
+        <div>
           {[
             [
               "01",
-              "Assess",
-              "Tell us your goals, experience, schedule, equipment, and constraints.",
+              "Training built for you",
+              "Your goals, experience, schedule, equipment and preferences shape every starting point.",
             ],
             [
               "02",
-              "Plan",
-              "Get a training and nutrition strategy built around your starting point.",
+              "Nutrition made manageable",
+              "Personalized calorie and macro targets, daily logging and food search—without turning meals into a second job.",
             ],
             [
               "03",
-              "Train",
-              "Open today’s workout and log the whole session in one focused flow.",
+              "See what’s working",
+              "Follow strength, personal records, consistency, body trends and your goal outlook in one place.",
             ],
             [
               "04",
-              "Check in",
-              "Share progress, recovery, adherence, and what real life changed.",
-            ],
-            [
-              "05",
-              "Adapt",
-              "STHENO explains and applies the next useful adjustment.",
+              "Your plan changes when life does",
+              "Use swaps, check-ins and Coach when time, equipment, travel or recovery change.",
             ],
           ].map(([n, h, p]) => (
-            <li key={n}>
-              <b>{n}</b>
+            <article key={n}>
+              <span>{n}</span>
               <h3>{h}</h3>
               <p>{p}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-      <section className="p14-evidence">
-        <div className="p14-shell">
-          <p className="p14-kicker">Built with visible standards</p>
-          <h2>Proven principles. Clear reasons. No invented certainty.</h2>
-          <div>
-            <p>
-              <Check /> Built on established training and nutrition principles
-            </p>
-            <p>
-              <Check /> Every plan change comes with a plain-language reason
-            </p>
-            <p>
-              <Check /> Estimates show their limits instead of pretending to be
-              promises
-            </p>
-          </div>
-          <Link className="p14-text-link" href="/methodology">
-            Read our methodology →
-          </Link>
-        </div>
-      </section>
-      <section className="p14-tools p14-shell">
-        <div className="p14-section-heading">
-          <p className="p14-kicker">Free fitness tools</p>
-          <h2>Useful answers. No account required.</h2>
-        </div>
-        <div className="p14-tool-grid">
-          {tools.slice(0, 6).map((tool, index) => (
-            <Link href={`/tools/${tool.slug}`} key={tool.slug}>
-              <span>0{index + 1}</span>
-              <h3>{tool.title}</h3>
-              <p>{tool.summary}</p>
-              <b>Use tool →</b>
-            </Link>
+            </article>
           ))}
         </div>
-        <Link className="p14-outline-button" href="/tools">
-          Explore all free tools
-        </Link>
       </section>
-      {preview.exercises.length ? <section className="exercise-proof p14-shell">
-        <div className="p14-section-heading"><p className="p14-kicker">Inside the exercise library</p><h2>Real guidance, before you ever start a set.</h2><p>Every public entry below comes directly from the production exercise library.</p></div>
-        <div className="exercise-proof-grid">{preview.exercises.map((exercise) => {
-          const education = exercise.education as { setup?: string[]; execution?: string[]; cues?: string[]; mistakes?: string[] } | null;
-          return <TrackedLink event="exercise_preview_open" eventProperties={{ exercise: exercise.slug }} href={`/exercises/${exercise.slug}`} key={exercise.slug}>
-            <span>{(exercise.primary_muscles as string[]).map(humanizeExerciseText).join(" · ")}</span><h3>{exercise.name}</h3><p><b>Equipment</b> {(exercise.required_equipment as string[]).map(humanizeExerciseText).join(", ")}</p><p><b>Set up</b> {humanizeExerciseText(education?.setup?.[0] ?? education?.cues?.[0] ?? "Use a stable, repeatable position.")}</p><p><b>Do</b> {humanizeExerciseText(education?.execution?.[0] ?? education?.cues?.[1] ?? "Move with a controlled range you can repeat.")}</p><p><b>Avoid</b> {humanizeExerciseText(education?.mistakes?.[0] ?? "Using load that changes the intended movement.")}</p><strong>Open exercise guide →</strong>
-          </TrackedLink>;
-        })}</div><Link className="p14-outline-button" href="/exercises">Browse all {preview.count} movements</Link>
-      </section> : null}
-      <section className="p14-learn">
-        <div className="p14-shell">
-          <div className="p14-section-heading">
-            <p className="p14-kicker">Learn</p>
-            <h2>Fitness guidance worth reading.</h2>
-          </div>
-          <div className="p14-editorial">
-            {articles.slice(0, 3).map((article, index) => (
-              <Link href={`/insights/${article.slug}`} key={article.slug}>
-                <div className="p14-article-image">
-                  <Image
-                    src={`${media}/${["recovery.jpg", "food-composition.jpg", "woman-strength.jpg"][index]}`}
-                    alt={["Person recovering after a training session", "Balanced foods supporting practical nutrition", "Woman performing a strength-training exercise"][index]}
-                    fill
-                    sizes="(max-width: 800px) 100vw, 33vw"
-                  />
+      <section className="mr-how" id="how-it-works">
+        <div className="mr-shell">
+          <header>
+            <p className="mr-kicker">How it works</p>
+            <h2>One plan. Four useful steps.</h2>
+          </header>
+          <ol>
+            {[
+              [
+                "Tell us about you",
+                "A focused assessment covers your goals, experience, schedule, equipment, preferences and constraints.",
+              ],
+              [
+                "Get your plan",
+                "See personalized training and nutrition built around the life you actually have.",
+              ],
+              [
+                "Train, eat and track",
+                "Log workouts and meals, check in, and build a record that means something.",
+              ],
+              [
+                "Keep adapting",
+                "Progress and changing circumstances inform the next useful decision—never a silent change.",
+              ],
+            ].map(([h, p], i) => (
+              <li key={h}>
+                <b>0{i + 1}</b>
+                <div>
+                  <h3>{h}</h3>
+                  <p>{p}</p>
                 </div>
-                <span>
-                  {article.pillar.replaceAll("-", " ")} · {6 + index * 2} min
-                  read
-                </span>
-                <h3>{article.title}</h3>
-                <b>Read article →</b>
-              </Link>
+              </li>
+            ))}
+          </ol>
+          <Cta location="homepage_how_it_works" />
+        </div>
+      </section>
+      <ProductSection type="training" />
+      <ProductSection type="nutrition" />
+      <ProductSection type="progress" />
+      <section className="mr-adapt">
+        <div className="mr-shell mr-split">
+          <div>
+            <p className="mr-kicker">Adaptation</p>
+            <h2>Your life changes. Your plan should too.</h2>
+            <p>
+              Tell STHENO what changed and review the smallest useful
+              adjustment. Nothing important changes silently.
+            </p>
+            <ul>
+              <li>Short on time today</li>
+              <li>Training in a hotel gym</li>
+              <li>Need a reviewed exercise swap</li>
+              <li>Getting stronger than the current target</li>
+              <li>Nutrition trend needs a closer look</li>
+            </ul>
+          </div>
+          <div className="mr-change-card">
+            <span>YOU SAID</span>
+            <blockquote>“I only have 25 minutes today.”</blockquote>
+            <div>
+              <small>FULL BODY A · 52 MIN</small>
+              <b aria-hidden="true">↓</b>
+              <strong>Priority session · 24 min</strong>
+              <p>Squat, press and row stay. Optional volume moves out.</p>
+            </div>
+            <em>Review before applying</em>
+          </div>
+        </div>
+      </section>
+      <section className="mr-coach mr-shell">
+        <div>
+          <p className="mr-kicker">STHENO Coach</p>
+          <h2>Questions come up. Ask your coach.</h2>
+          <p>
+            Get direct help with training, exercise substitutions, nutrition
+            guidance, progress and supported plan changes.
+          </p>
+          <div className="mr-question-list">
+            <span>What weight should I use next?</span>
+            <span>What can I substitute?</span>
+            <span>How am I progressing?</span>
+            <span>How can I hit my protein target?</span>
+          </div>
+        </div>
+        <div className="mr-coach-ui">
+          <header>
+            <span className="mr-s">S</span>
+            <div>
+              <b>STHENO Coach</b>
+              <small>Uses your current plan and logged history</small>
+            </div>
+          </header>
+          <p className="user">What weight should I use next?</p>
+          <p className="coach">
+            Your last three completed sets were 185 lb for 8 reps with two reps
+            left. The current load guidance is 190 lb. Keep the same rep target
+            and record how it feels.
+          </p>
+          <small>Fitness guidance—not diagnosis or medical care.</small>
+        </div>
+      </section>
+      <section className="mr-assessment">
+        <div className="mr-shell mr-split">
+          <div>
+            <p className="mr-kicker">A better starting point</p>
+            <h2>A plan should know more than your age and goal.</h2>
+          </div>
+          <div className="mr-assessment-list">
+            {[
+              "Goals and training experience",
+              "Weekly schedule and session length",
+              "Available equipment and environment",
+              "Exercise preferences and constraints",
+              "Nutrition context and normal routines",
+              "Real-life considerations that affect consistency",
+            ].map((x) => (
+              <span key={x}>✓ {x}</span>
             ))}
           </div>
         </div>
       </section>
-      <section className="p14-pricing p14-shell">
+      <section className="mr-pricing mr-shell">
         <div>
-          <p className="p14-kicker">One membership</p>
-          <h2>Everything connected for less than one training session.</h2>
+          <p className="mr-kicker">One membership</p>
+          <h2>Training, nutrition, progress, adaptation and Coach.</h2>
           <p>
-            Begin with the complete 14-day trial. No payment method is required
-            to start.
+            Start with the complete {membership.trialDays}-day trial. No payment
+            method is required.
           </p>
+          <Link href="/pricing" className="mr-link">
+            See full pricing details
+          </Link>
         </div>
-        <div className="p14-price-card">
+        <article>
           <span>STHENO membership</span>
           <strong>
-            {membership.monthly.label}<small>/{membership.monthly.interval}</small>
+            {membership.monthly.label}
+            <small> / {membership.monthly.interval}</small>
           </strong>
-          <p>or {membership.annual.label} annually · save ${annualSavings}</p>
+          <p>
+            or {membership.annual.label} annually · save ${annualSavings}
+          </p>
           <ul>
             <li>Personalized training</li>
-            <li>Nutrition guidance</li>
-            <li>Adaptive coaching</li>
-            <li>Progress intelligence</li>
+            <li>Daily nutrition tools</li>
+            <li>Progress and goal outlook</li>
+            <li>Coach and plan adjustments</li>
           </ul>
-          <Link className="p14-button" href="/assessment">
-            Start my free plan
+          <Cta location="homepage_pricing" />
+        </article>
+      </section>
+      <section className="mr-resources">
+        <div className="mr-shell">
+          <header>
+            <p className="mr-kicker">Useful before you join</p>
+            <h2>Clear answers, free.</h2>
+          </header>
+          <div className="mr-resource-grid">
+            {tools.slice(0, 3).map((t) => (
+              <Link href={`/tools/${t.slug}`} key={t.slug}>
+                <span>FREE TOOL</span>
+                <h3>{t.title}</h3>
+                <p>{t.summary}</p>
+                <b>Use tool →</b>
+              </Link>
+            ))}
+            {articles.slice(0, 3).map((a) => (
+              <Link href={`/insights/${a.slug}`} key={a.slug}>
+                <span>{a.pillar.replaceAll("-", " ")}</span>
+                <h3>{a.title}</h3>
+                <p>{a.thesis}</p>
+                <b>Read guide →</b>
+              </Link>
+            ))}
+          </div>
+          <div className="mr-resource-links">
+            <Link href="/exercises">Browse exercises</Link>
+            <Link href="/methodology">Read our methodology</Link>
+            <Link href="/about">Meet STHENO</Link>
+          </div>
+        </div>
+      </section>
+      <section className="mr-faq mr-shell" id="faq">
+        <header>
+          <p className="mr-kicker">Common questions</p>
+          <h2>Start with clarity.</h2>
+        </header>
+        <div>
+          <FaqList items={homepageFaqItems} />
+          <Link href="/faq" className="mr-link">
+            View all questions
           </Link>
-          <TrackedLink event="compare_click" eventProperties={{ location: "home_pricing" }} className="p14-compare-link" href="/compare">Compare STHENO with other options →</TrackedLink>
         </div>
       </section>
-      <section className="p14-faq p14-shell">
-        <div>
-          <p className="p14-kicker">Common questions</p>
-          <h2>Start with confidence.</h2>
-        </div>
-        <div><FaqList items={homepageFaqItems}/><Link className="p14-text-link faq-view-all" href="/faq">View all FAQs →</Link></div>
-      </section>
-      <section className="p14-final">
-        <Image
-          src={`${media}/walking.jpg`}
-        alt="Adults moving outdoors"
-        fill
-          sizes="100vw"
-        />
-        <div>
-          <p className="p14-kicker">Start where you are</p>
-          <h2>Your next plan should fit your life.</h2>
+      <section className="mr-final">
+        <div className="mr-shell">
+          <p className="mr-kicker">Start where you are</p>
+          <h2>Your fitness plan should fit your life.</h2>
           <p>
-            Four focused minutes. A complete starting Blueprint. No credit card.
+            Complete the assessment and see what STHENO would build around you.
           </p>
-          <Link className="p14-button" href="/assessment">
-            Build my free plan →
-          </Link>
+          <Cta location="homepage_final" />
         </div>
       </section>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:safeJsonLd([
-        {"@context":"https://schema.org","@type":"Organization","@id":organizationId,name:"STHENO Fitness",url:siteUrl},
-        {"@context":"https://schema.org","@type":"WebSite","@id":websiteId,name:"STHENO Fitness",url:siteUrl,publisher:{"@id":organizationId}},
-        serviceJsonLd(),
-      ])}} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd([
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "@id": organizationId,
+              name: "STHENO Fitness",
+              url: siteUrl,
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": websiteId,
+              name: "STHENO Fitness",
+              url: siteUrl,
+              publisher: { "@id": organizationId },
+            },
+            serviceJsonLd(),
+            faqSchema,
+          ]),
+        }}
+      />
     </main>
   );
 }
-
-const proofScenarios = [
-  { label: "Short on time", prompt: "I only have 25 minutes today.", before: "Full Body A · 52 min", after: "Priority session · 24 min", detail: "Squat, press, and row preserved; optional volume removed." },
-  { label: "Travel", prompt: "I’m away Wednesday through Friday with a hotel gym.", before: "Wed · Lower / Fri · Upper", after: "Wed + Thu · Hotel / Sat · Full gym", detail: "Friday becomes recovery; the full-gym session moves to Saturday." },
-  { label: "Equipment", prompt: "The cable station is busy.", before: "Cable row · 3 × 10", after: "Chest-supported dumbbell row · 3 × 10", detail: "Same primary muscles and horizontal-pull purpose." },
-  { label: "Missed workout", prompt: "I missed Tuesday’s session.", before: "Tue / Thu / Sat", after: "Thu / Sat · week reorganized", detail: "The week is rebalanced without stacking two demanding days." },
-  { label: "Progress", prompt: "My weight trend is flat, but training is improving.", before: "One noisy weigh-in", after: "No change needed", detail: "STHENO protects a working plan until the trend supports a change." },
-];
-
-function ProductProof() {
-  return <section className="p17-proof" aria-labelledby="product-proof-title">
-    <div className="p14-shell">
-      <header><p className="p14-kicker">Product proof</p><h2 id="product-proof-title">See what happens when life changes.</h2><p>Your week changed. Your plan can too—without making fitness another job.</p></header>
-      <div className="p17-proof-grid">{proofScenarios.map((scenario, index) => <article key={scenario.label}>
-        <div className="p17-proof-number">0{index + 1} · {scenario.label}</div>
-        <blockquote>“{scenario.prompt}”</blockquote>
-        <div className="p17-proof-change"><span><small>Before</small>{scenario.before}</span><b aria-hidden="true">→</b><span><small>STHENO adjusted</small>{scenario.after}</span></div>
-        <p>{scenario.detail}</p>
-      </article>)}</div>
-      <Link className="p14-button" href="/assessment">Build my free plan <span>→</span></Link>
-    </div>
-  </section>;
-}
-
-function BlueprintPreview() {
+function ConnectedProductDemo() {
   return (
-    <div className="p14-blueprint-card">
-      <header>
-        <span>STHENO BLUEPRINT</span>
-        <b>Ready to begin</b>
-      </header>
-      <div className="p14-bp-goal">
-        <small>PRIMARY GOAL</small>
-        <strong>Build strength</strong>
-        <span>Realistic pace · 12-week first phase</span>
-      </div>
-      <div className="p14-bp-grid">
-        <span>
-          <small>TRAINING</small>
-          <b>3 days</b>
-          <em>Full body</em>
-        </span>
-        <span>
-          <small>NUTRITION</small>
-          <b>2,180 kcal</b>
-          <em>145g protein</em>
-        </span>
-        <span>
-          <small>ACTIVITY</small>
-          <b>8,000</b>
-          <em>steps / day</em>
-        </span>
-        <span>
-          <small>CARDIO</small>
-          <b>2 × 20</b>
-          <em>minutes</em>
-        </span>
-      </div>
-      <footer>
-        <span>
-          <i />
-          Built around a 45-minute session
-        </span>
-        <span>
-          <i />
-          Gym + home backup
-        </span>
-      </footer>
-    </div>
-  );
-}
-function WorkoutMini() {
-  return (
-    <div className="p14-workout-mini">
-      <header>
-        <span>TODAY · FULL BODY A</span>
-        <b>42 min</b>
-      </header>
-      {[
-        ["Goblet squat", "3 × 8–10", "Last: 40 lb"],
-        ["Dumbbell bench press", "3 × 8–12", "Last: 30 lb"],
-        ["One-arm row", "3 × 10", "Last: 35 lb"],
-      ].map(([name, target, last], i) => (
-        <div key={name}>
-          <b>0{i + 1}</b>
-          <span>
-            <strong>{name}</strong>
-            <small>
-              {target} · {last}
-            </small>
-          </span>
-          <button aria-label={`Exercise info for ${name}`}>Info</button>
-        </div>
-      ))}
-      <footer>
-        <span>Rest timer</span>
-        <strong>01:24</strong>
-      </footer>
-    </div>
-  );
-}
-function ProgressPanel() {
-  return (
-    <div className="p14-progress-panel">
-      <div className="p14-trend">
+    <div
+      className="mr-connected-demo"
+      role="img"
+      aria-label="Illustrative STHENO product interface"
+    >
+      <div className="mr-demo-workout">
         <header>
-          <span>STRENGTH TREND</span>
-          <b>+12.4%</b>
+          <span>TODAY · UPPER A</span>
+          <b>42 min</b>
         </header>
-        <svg
-          viewBox="0 0 600 170"
-          role="img"
-          aria-label="Strength trend rising over eight weeks"
-        >
-          <path
-            d="M10 145 C90 138 115 112 170 120 S255 82 310 90 S400 46 455 56 S535 24 590 18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="6"
-          />
-          <path
-            d="M10 145 C90 138 115 112 170 120 S255 82 310 90 S400 46 455 56 S535 24 590 18 L590 170 L10 170Z"
-            fill="url(#fade)"
-          />
-          <defs>
-            <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-              <stop stopColor="currentColor" stopOpacity=".22" />
-              <stop offset="1" stopColor="currentColor" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-        </svg>
+        <h2>Know what to do now.</h2>
+        {[
+          ["Dumbbell bench press", "190 lb · 3 × 8", "Previous 185 × 8"],
+          ["Seated cable row", "3 × 8–12", "2 sets left"],
+        ].map(([h, t, s], i) => (
+          <div key={h}>
+            <b>0{i + 1}</b>
+            <span>
+              <strong>{h}</strong>
+              <small>{t}</small>
+            </span>
+            <em>{s}</em>
+          </div>
+        ))}
         <footer>
-          <span>WEEK 1</span>
-          <span>WEEK 8</span>
+          <span>Rest timer</span>
+          <strong>01:24</strong>
         </footer>
       </div>
-      <div className="p14-week-status">
-        <span>THIS WEEK</span>
-        <strong>On track</strong>
-        <p>
-          3 of 3 workouts complete. Recovery is stable. Two exercises progress
-          next week.
-        </p>
+      <div className="mr-demo-nutrition">
+        <span>NUTRITION</span>
+        <strong>
+          1,730 <small>/ 2,400 kcal</small>
+        </strong>
         <div>
-          <b>87%</b>
-          <small>consistency</small>
+          <i style={{ width: "72%" }} />
         </div>
+        <p>
+          <b>142g</b> / 180g protein
+        </p>
+      </div>
+      <div className="mr-demo-progress">
+        <span>PROGRESS</span>
+        <b>New personal record</b>
+        <p>Bench press · 190 × 8</p>
       </div>
     </div>
+  );
+}
+function ProductSection({
+  type,
+}: {
+  type: "training" | "nutrition" | "progress";
+}) {
+  if (type === "training")
+    return (
+      <section className="mr-product mr-shell" id="training">
+        <div>
+          <p className="mr-kicker">Training</p>
+          <h2>Know what to do—and what to do next.</h2>
+          <p>
+            Open a complete workout with previous performance, load guidance,
+            instructions, swaps, logging, a rest timer and personal-record
+            feedback.
+          </p>
+          <Link className="mr-link" href="/how-it-works">
+            Explore the training experience
+          </Link>
+        </div>
+        <div className="mr-screen training">
+          <header>
+            <span>UPPER A</span>
+            <b>7 / 13 sets</b>
+          </header>
+          <div className="exercise">
+            <b>Dumbbell Bench Press</b>
+            <small>3 sets · 6–10 reps</small>
+            <div>
+              <span>185 lb</span>
+              <span>8 reps</span>
+              <span>2 left</span>
+              <strong>✓</strong>
+            </div>
+            <p>Previous: 180 × 8 · Next guidance: 190 lb</p>
+          </div>
+          <footer>
+            <span>Timer 01:24</span>
+            <span>Swap exercise</span>
+            <span>View instructions</span>
+          </footer>
+        </div>
+      </section>
+    );
+  if (type === "nutrition") {
+    if (!isLive("nutritionTracking")) return null;
+    return (
+      <section className="mr-product reverse mr-shell" id="nutrition">
+        <div>
+          <p className="mr-kicker">Nutrition</p>
+          <h2>Nutrition you can actually use every day.</h2>
+          <p>
+            Get personalized calorie and macro targets, then see how your day is
+            tracking without turning nutrition into a second job.
+          </p>
+          <Link className="mr-link" href="/tools">
+            Explore free nutrition tools
+          </Link>
+        </div>
+        <div className="mr-screen nutrition">
+          <header>
+            <span>TODAY</span>
+            <b>Partial log</b>
+          </header>
+          <strong>
+            1,730 <small>/ 2,400 calories</small>
+          </strong>
+          <div className="meter">
+            <i />
+          </div>
+          <div className="macros">
+            <span>
+              <b>142g</b>protein
+            </span>
+            <span>
+              <b>168g</b>carbs
+            </span>
+            <span>
+              <b>54g</b>fat
+            </span>
+          </div>
+          <ul>
+            <li>
+              <span>Breakfast · Greek yogurt bowl</span>
+              <b>420</b>
+            </li>
+            <li>
+              <span>Lunch · Chicken rice bowl</span>
+              <b>680</b>
+            </li>
+            <li>
+              <span>Snack · Protein shake</span>
+              <b>220</b>
+            </li>
+          </ul>
+          <span className="demo-action">Add food</span>
+        </div>
+      </section>
+    );
+  }
+  return (
+    <section className="mr-product mr-shell" id="progress">
+      <div>
+        <p className="mr-kicker">Progress</p>
+        <h2>See whether the plan is working.</h2>
+        <p>
+          STHENO connects what you are doing with how you are progressing, then
+          turns the numbers into guidance you can understand.
+        </p>
+        <small className="mr-illustrative">
+          Illustrative product data—not a customer result.
+        </small>
+      </div>
+      <div className="mr-screen progress">
+        <header>
+          <span>8-WEEK VIEW</span>
+          <b>Building evidence</b>
+        </header>
+        <div className="chart">
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </div>
+        <div className="progress-stats">
+          <span>
+            <small>WORKOUTS</small>
+            <b>21 / 24</b>
+          </span>
+          <span>
+            <small>PERSONAL RECORDS</small>
+            <b>4</b>
+          </span>
+          <span>
+            <small>GOAL OUTLOOK</small>
+            <b>On track</b>
+          </span>
+        </div>
+      </div>
+    </section>
   );
 }

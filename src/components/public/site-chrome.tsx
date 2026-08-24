@@ -4,7 +4,6 @@ import Link from "next/link";
 import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { MobileMenu } from "@/components/public/mobile-menu";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
-import { TrackedLink } from "@/components/analytics/tracked-link";
 import { SocialLinks } from "@/components/public/social-links";
 export function SiteHeader() {
   const authState = usePublicAuthState();
@@ -16,27 +15,36 @@ export function SiteHeader() {
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="/how-it-works">How it works</Link>
-          <Link href="/exercises">Exercises</Link>
-          <TrackedLink event="nav_methodology_click" href="/methodology">Methodology</TrackedLink>
-          <Link href="/insights">Learn</Link>
-          <Link href="/faq">FAQ</Link>
-          <Link href="/tools">Free tools</Link>
+          <Link href="/#training">Training</Link>
+          <Link href="/#nutrition">Nutrition</Link>
+          <Link href="/#progress">Progress</Link>
           <Link href="/pricing">Pricing</Link>
-          <TrackedLink event="nav_about_click" href="/about">About</TrackedLink>
+          <Link href="/insights">Resources</Link>
         </nav>
         <div className="header-actions">
           {authState === "signed-in" ? (
             <>
-              <Link className="header-auth-link" href="/app">My STHENO</Link>
-              <Link className="button button-compact" href="/app/account">Account</Link>
+              <Link className="header-auth-link" href="/app">
+                My STHENO
+              </Link>
+              <Link className="button button-compact" href="/app/account">
+                Account
+              </Link>
             </>
           ) : authState === "signed-out" ? (
             <>
-              <Link className="header-auth-link" href="/login">Sign in</Link>
-              <Link className="button button-compact" href="/assessment">Build my free plan</Link>
+              <Link className="header-auth-link" href="/login">
+                Sign In
+              </Link>
+              <Link className="button button-compact" href="/assessment">
+                Get Your Free Plan
+              </Link>
             </>
           ) : (
-            <span className="session-placeholder" aria-label="Checking account status" />
+            <span
+              className="session-placeholder"
+              aria-label="Checking account status"
+            />
           )}
         </div>
         <MobileMenu authState={authState} />
@@ -79,7 +87,7 @@ export function SiteFooter() {
           ) : authState === "signed-out" ? (
             <>
               <Link href="/signup">Create account</Link>
-              <Link href="/login">Sign in</Link>
+              <Link href="/login">Sign In</Link>
             </>
           ) : null}
           <Link href="/contact">Contact</Link>
@@ -97,7 +105,13 @@ export function SiteFooter() {
       </div>
       <div className="chrome-shell footer-bottom">
         <span>© 2026 STHENO Fitness</span>
-        <span><Link href="/terms">Terms</Link> · <Link href="/privacy">Privacy</Link> · <Link href="/medical-disclaimer">Fitness &amp; Medical Disclaimer</Link></span>
+        <span>
+          <Link href="/terms">Terms</Link> ·{" "}
+          <Link href="/privacy">Privacy</Link> ·{" "}
+          <Link href="/medical-disclaimer">
+            Fitness &amp; Medical Disclaimer
+          </Link>
+        </span>
       </div>
     </footer>
   );

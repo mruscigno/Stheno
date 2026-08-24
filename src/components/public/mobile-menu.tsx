@@ -5,14 +5,11 @@ import type { PublicAuthState } from "@/components/public/use-auth-state";
 import { SocialLinks } from "@/components/public/social-links";
 const links = [
   ["/how-it-works", "How it works"],
-  ["/exercises", "Exercises"],
-  ["/methodology", "Methodology"],
-  ["/insights", "Learn"],
-  ["/faq", "FAQ"],
-  ["/tools", "Free tools"],
+  ["/#training", "Training"],
+  ["/#nutrition", "Nutrition"],
+  ["/#progress", "Progress"],
   ["/pricing", "Pricing"],
-  ["/compare", "Compare"],
-  ["/about", "About"],
+  ["/insights", "Resources"],
 ] as const;
 export function MobileMenu({ authState }: { authState: PublicAuthState }) {
   const [open, setOpen] = useState(false);
@@ -43,16 +40,35 @@ export function MobileMenu({ authState }: { authState: PublicAuthState }) {
           ))}
           {authState === "signed-in" ? (
             <>
-              <Link href="/app" onClick={() => setOpen(false)}>My STHENO</Link>
-              <Link className="button" href="/app/account" onClick={() => setOpen(false)}>Account</Link>
+              <Link href="/app" onClick={() => setOpen(false)}>
+                My STHENO
+              </Link>
+              <Link
+                className="button"
+                href="/app/account"
+                onClick={() => setOpen(false)}
+              >
+                Account
+              </Link>
             </>
           ) : authState === "signed-out" ? (
             <>
-              <Link href="/login" onClick={() => setOpen(false)}>Log in</Link>
-              <Link className="button" href="/assessment" onClick={() => setOpen(false)}>Build my free plan</Link>
+              <Link href="/login" onClick={() => setOpen(false)}>
+                Sign In
+              </Link>
+              <Link
+                className="button"
+                href="/assessment"
+                onClick={() => setOpen(false)}
+              >
+                Get Your Free Plan
+              </Link>
             </>
           ) : (
-            <span className="session-placeholder" aria-label="Checking account status" />
+            <span
+              className="session-placeholder"
+              aria-label="Checking account status"
+            />
           )}
           <SocialLinks compact />
         </nav>
