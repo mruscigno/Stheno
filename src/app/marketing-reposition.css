@@ -76,8 +76,8 @@
 }
 .mr-hero-grid {
   display: grid;
-  grid-template-columns: 0.92fr 1.08fr;
-  gap: 75px;
+  grid-template-columns: 0.86fr 1.14fr;
+  gap: 56px;
   align-items: center;
 }
 .mr-hero-grid > *,
@@ -107,108 +107,98 @@
 .mr-hero-copy > small {
   color: #77716a;
 }
-.mr-connected-demo {
+.mr-hero-visual {
   position: relative;
-  min-height: 520px;
+  min-height: 585px;
 }
-.mr-demo-workout {
+.mr-hero-photo {
   position: absolute;
-  inset: 25px 70px 55px 0;
+  inset: 0 18px 48px 0;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #d8d0c3;
+  box-shadow: 0 35px 90px #34220d2e;
+}
+.mr-hero-photo img {
+  object-fit: cover;
+  object-position: 56% center;
+}
+.mr-hero-workout {
+  position: absolute;
+  z-index: 2;
+  left: -28px;
+  bottom: 0;
+  width: min(365px, 63%);
+  padding: 20px 22px;
+  border-radius: 14px;
   background: #191a17;
   color: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 35px 90px #34220d38;
+  box-shadow: 0 20px 54px #21180f55;
 }
-.mr-demo-workout header,
+.mr-hero-workout header,
 .mr-screen header {
   display: flex;
   justify-content: space-between;
   font-size: 0.72rem;
   letter-spacing: 0.1em;
 }
-.mr-demo-workout h2 {
-  font-size: 2.5rem;
-  margin: 30px 0;
+.mr-hero-workout > strong {
+  display: block;
+  margin: 18px 0 12px;
+  font-size: 1.05rem;
 }
-.mr-demo-workout > div {
-  display: grid;
-  grid-template-columns: 30px 1fr auto;
-  gap: 14px;
+.mr-hero-workout > div {
+  display: flex;
+  gap: 15px;
   align-items: center;
-  padding: 20px 0;
+  padding-top: 12px;
   border-top: 1px solid #ffffff1f;
 }
-.mr-demo-workout > div > b {
-  color: var(--mr-orange);
-}
-.mr-demo-workout > div span {
-  display: grid;
-}
-.mr-demo-workout small,
-.mr-demo-workout em {
+.mr-hero-workout em {
+  margin-left: auto;
   color: #aaa;
   font-size: 0.74rem;
   font-style: normal;
 }
-.mr-demo-workout footer {
-  display: flex;
-  justify-content: space-between;
-  background: #ffffff0c;
-  padding: 15px;
-  margin-top: 12px;
-}
-.mr-demo-nutrition,
-.mr-demo-progress {
+.mr-hero-nutrition {
   position: absolute;
-  background: #fff;
-  border: 1px solid var(--mr-line);
-  box-shadow: 0 20px 60px #33220f28;
-  border-radius: 14px;
-  padding: 20px;
-}
-.mr-demo-nutrition {
+  z-index: 3;
   right: 0;
-  bottom: 0;
-  width: 260px;
+  bottom: 24px;
+  width: 235px;
+  padding: 18px;
+  border: 1px solid var(--mr-line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 60px #33220f28;
 }
-.mr-demo-progress {
-  right: 5px;
-  top: 0;
-  width: 220px;
-}
-.mr-demo-nutrition > span,
-.mr-demo-progress > span {
+.mr-hero-nutrition > span {
   color: var(--mr-orange-dark);
   font-size: 0.63rem;
   font-weight: 800;
   letter-spacing: 0.14em;
 }
-.mr-demo-nutrition > strong {
+.mr-hero-nutrition > strong {
   display: block;
-  font-size: 1.65rem;
   margin: 12px 0;
+  font-size: 1.65rem;
 }
-.mr-demo-nutrition strong small {
-  font-size: 0.7rem;
+.mr-hero-nutrition strong small {
   color: #777;
+  font-size: 0.7rem;
 }
-.mr-demo-nutrition > div {
+.mr-hero-nutrition > div {
   height: 8px;
   background: #e5ded2;
 }
-.mr-demo-nutrition i {
+.mr-hero-nutrition i {
   display: block;
   height: 100%;
   background: var(--mr-orange);
 }
-.mr-demo-progress b {
-  display: block;
-  margin: 13px 0 0;
-}
-.mr-demo-progress p {
-  font-size: 0.76rem;
+.mr-hero-nutrition p {
   margin: 5px 0;
+  font-size: 0.76rem;
 }
 .mr-problem {
   background: var(--mr-orange);
@@ -705,8 +695,8 @@
   .mr-faq {
     grid-template-columns: 1fr;
   }
-  .mr-connected-demo {
-    min-height: 500px;
+  .mr-hero-visual {
+    min-height: 640px;
   }
   .mr-promises > div {
     grid-template-columns: 1fr 1fr;
@@ -758,33 +748,30 @@
     align-items: flex-start;
     flex-direction: column;
   }
-  .mr-connected-demo {
-    min-height: 430px;
+  .mr-hero-visual {
+    min-height: 510px;
     width: 100%;
     max-width: 100%;
   }
-  .mr-demo-workout {
-    inset: 0 20px 70px 0;
-    padding: 20px;
+  .mr-hero-photo {
+    inset: 0 0 72px;
+    border-radius: 14px;
   }
-  .mr-demo-workout h2 {
-    font-size: 1.8rem;
+  .mr-hero-photo img {
+    object-position: 56% center;
   }
-  .mr-demo-workout > div {
-    grid-template-columns: 25px 1fr;
+  .mr-hero-workout {
+    right: 14px;
+    bottom: 0;
+    left: 14px;
+    width: auto;
+    padding: 17px 18px;
   }
-  .mr-demo-workout > div em {
+  .mr-hero-workout em {
     display: none;
   }
-  .mr-demo-nutrition {
-    width: 220px;
-    padding: 15px;
-  }
-  .mr-demo-progress {
-    top: auto;
-    bottom: 4px;
-    right: 0;
-    width: 165px;
+  .mr-hero-nutrition {
+    display: none;
   }
   .mr-problem,
   .mr-promises,

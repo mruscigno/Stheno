@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
@@ -74,7 +75,7 @@ export default function Home() {
               Starts with a personalized assessment. No guesswork required.
             </small>
           </div>
-          <ConnectedProductDemo />
+          <HeroVisual />
         </div>
       </section>
       <section className="mr-problem">
@@ -362,38 +363,43 @@ export default function Home() {
     </main>
   );
 }
-function ConnectedProductDemo() {
+function HeroVisual() {
   return (
     <div
-      className="mr-connected-demo"
-      role="img"
-      aria-label="Illustrative STHENO product interface"
+      className="mr-hero-visual"
+      role="group"
+      aria-label="STHENO training experience"
     >
-      <div className="mr-demo-workout">
+      <div className="mr-hero-photo">
+        <Image
+          src="/media/product-14/hero-strength.jpg"
+          alt="Adult strength training with dumbbells in a gym"
+          fill
+          priority
+          sizes="(max-width: 600px) calc(100vw - 28px), (max-width: 900px) calc(100vw - 40px), 54vw"
+        />
+      </div>
+      <div
+        className="mr-hero-workout"
+        role="group"
+        aria-label="Illustrative workout preview"
+      >
         <header>
           <span>TODAY · UPPER A</span>
           <b>42 min</b>
         </header>
-        <h2>Know what to do now.</h2>
-        {[
-          ["Dumbbell bench press", "190 lb · 3 × 8", "Previous 185 × 8"],
-          ["Seated cable row", "3 × 8–12", "2 sets left"],
-        ].map(([h, t, s], i) => (
-          <div key={h}>
-            <b>0{i + 1}</b>
-            <span>
-              <strong>{h}</strong>
-              <small>{t}</small>
-            </span>
-            <em>{s}</em>
-          </div>
-        ))}
-        <footer>
-          <span>Rest timer</span>
-          <strong>01:24</strong>
-        </footer>
+        <strong>Dumbbell bench press</strong>
+        <div>
+          <span>190 lb</span>
+          <span>3 × 8</span>
+          <em>Previous 185 × 8</em>
+        </div>
       </div>
-      <div className="mr-demo-nutrition">
+      <div
+        className="mr-hero-nutrition"
+        role="group"
+        aria-label="Illustrative nutrition preview"
+      >
         <span>NUTRITION</span>
         <strong>
           1,730 <small>/ 2,400 kcal</small>
@@ -404,11 +410,6 @@ function ConnectedProductDemo() {
         <p>
           <b>142g</b> / 180g protein
         </p>
-      </div>
-      <div className="mr-demo-progress">
-        <span>PROGRESS</span>
-        <b>New personal record</b>
-        <p>Bench press · 190 × 8</p>
       </div>
     </div>
   );
