@@ -1,0 +1,220 @@
+/* Final public-system layer. It intentionally comes after legacy sprint CSS. */
+:root {
+  --human-paper: #fbf8f1;
+  --human-card: #f1ece3;
+  --human-ink: #171815;
+  --human-muted: #625f58;
+  --human-line: #d8d0c3;
+  --human-orange: #ff582b;
+  --human-orange-dark: #b93412;
+  --human-radius: 14px;
+}
+
+body:not(:has(.app-shell)) {
+  background: var(--human-paper);
+  color: var(--human-ink);
+}
+
+body:not(:has(.app-shell)) :where(.public-page, .pricing-page, .methodology-page) {
+  color: var(--human-ink);
+}
+
+body:not(:has(.app-shell)) :where(.public-page, .pricing-page, .methodology-page) :where(.lede, p) {
+  color: var(--human-muted);
+}
+
+body:not(:has(.app-shell)) :where(.kicker, .eyebrow) {
+  color: var(--human-orange-dark);
+}
+
+/* Reserve display scale for brand and campaign pages. Reference and utility
+   pages use a quieter hierarchy so the task, not the headline, leads. */
+body:not(:has(.app-shell)) :where(.insights-page, .tools-page) > h1,
+body:not(:has(.app-shell)) .pricing-hero h1,
+body:not(:has(.app-shell)) .methodology-hero h1 {
+  max-width: 860px;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(3rem, 5.4vw, 5.25rem);
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+
+body:not(:has(.app-shell)) .pricing-hero h1 { margin-inline: auto; }
+body:not(:has(.app-shell)) .pricing-hero { padding-top: 18px; }
+body:not(:has(.app-shell)) .pricing-hero > p:last-child { color: #5e5b55; }
+body:not(:has(.app-shell)) .pricing-value-anchor {
+  max-width: 760px;
+  margin-top: 24px;
+  color: var(--human-ink);
+  font: 700 1.02rem/1.5 var(--font-geist-sans), Arial, sans-serif;
+  text-align: center;
+}
+
+body:not(:has(.app-shell)) .pricing-options { max-width: 1050px; margin-top: 46px; }
+body:not(:has(.app-shell)) .pricing-options article {
+  background: #1b1c19;
+  border: 1px solid #33342f;
+  border-radius: var(--human-radius);
+  box-shadow: 0 18px 50px rgb(43 31 20 / 10%);
+}
+body:not(:has(.app-shell)) .pricing-options .recommended { border-color: var(--human-orange); }
+body:not(:has(.app-shell)) .pricing-options .recommended > b { background: var(--human-orange); }
+body:not(:has(.app-shell)) .price strong {
+  color: #fff;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: -.05em;
+}
+body:not(:has(.app-shell)) .pricing-benefits h2,
+body:not(:has(.app-shell)) .pricing-note h2,
+body:not(:has(.app-shell)) .section-title h2 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: -.045em;
+}
+body:not(:has(.app-shell)) .pricing-benefits li { color: var(--human-muted); border-color: var(--human-line); }
+body:not(:has(.app-shell)) .pricing-note {
+  background: var(--human-card);
+  border-color: var(--human-line);
+  border-radius: var(--human-radius);
+}
+
+body:not(:has(.app-shell)) .category-pills a {
+  border-color: var(--human-line);
+  color: #4d4b46;
+  background: #fff;
+}
+body:not(:has(.app-shell)) .category-pills a:hover {
+  border-color: var(--human-orange);
+  color: var(--human-orange-dark);
+}
+body:not(:has(.app-shell)) .featured-article {
+  border: 1px solid var(--human-line);
+  border-radius: var(--human-radius);
+  overflow: hidden;
+  background: var(--human-card);
+}
+body:not(:has(.app-shell)) .featured-article h2,
+body:not(:has(.app-shell)) .insight-grid h3,
+body:not(:has(.app-shell)) .tool-category h2,
+body:not(:has(.app-shell)) .curated-tools h3 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: -.035em;
+}
+body:not(:has(.app-shell)) .insight-grid > a,
+body:not(:has(.app-shell)) .curated-tools > a {
+  background: #fff;
+  border-color: var(--human-line);
+  border-radius: 10px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+body:not(:has(.app-shell)) .insight-grid > a:hover,
+body:not(:has(.app-shell)) .curated-tools > a:hover {
+  transform: translateY(-3px);
+  border-color: #bdb3a5;
+  box-shadow: 0 14px 32px rgb(43 31 20 / 9%);
+}
+body:not(:has(.app-shell)) .insight-grid p,
+body:not(:has(.app-shell)) .curated-tools p { color: var(--human-muted); }
+
+body:not(:has(.app-shell)) .methodology-page { padding-top: clamp(3rem, 7vw, 6rem); }
+body:not(:has(.app-shell)) .methodology-hero { max-width: 930px; }
+body:not(:has(.app-shell)) .methodology-grid { border-color: var(--human-line); }
+body:not(:has(.app-shell)) .methodology-grid section { border-color: var(--human-line); }
+body:not(:has(.app-shell)) .methodology-grid h2 {
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  letter-spacing: -.035em;
+}
+body:not(:has(.app-shell)) .methodology-grid p { max-width: 760px; color: var(--human-muted); }
+
+/* Calculators are work surfaces, not campaign pages. */
+body:not(:has(.app-shell)) .tool-detail-page { padding-top: clamp(3rem, 7vw, 6rem); }
+body:not(:has(.app-shell)) .tool-detail-page > h1 {
+  max-width: 850px;
+  margin-bottom: 18px;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(3rem, 5.4vw, 5.25rem);
+  line-height: .98;
+  letter-spacing: -.055em;
+}
+body:not(:has(.app-shell)) .calculator-shell { gap: 28px; }
+body:not(:has(.app-shell)) :where(.calculator-form, .calculator-result, .calculator-shell > aside) {
+  background: var(--human-card);
+  border-color: var(--human-line);
+  border-radius: var(--human-radius);
+  box-shadow: none;
+}
+body:not(:has(.app-shell)) .calculator-shell label { color: var(--human-ink); }
+body:not(:has(.app-shell)) .calculator-shell :where(input, select) {
+  background: #fff;
+  border-color: #aaa196;
+  color: var(--human-ink);
+}
+body:not(:has(.app-shell)) .calculator-shell :where(input, select):focus {
+  border-color: var(--human-orange-dark);
+  outline: 3px solid rgb(255 88 43 / 20%);
+}
+
+/* Authentication should feel calm and obviously interactive. */
+body:not(:has(.app-shell)) .auth-wrap {
+  min-height: calc(100vh - 88px);
+  background: linear-gradient(145deg, #f3eee5, #fffdf8 60%);
+}
+body:not(:has(.app-shell)) .auth-wrap .card {
+  background: #fff;
+  border-color: var(--human-line);
+  color: var(--human-ink);
+  box-shadow: 0 24px 70px rgb(43 31 20 / 12%);
+}
+body:not(:has(.app-shell)) .auth-wrap :where(h1, .field label) { color: var(--human-ink); }
+body:not(:has(.app-shell)) .auth-wrap .muted { color: var(--human-muted); }
+body:not(:has(.app-shell)) .auth-wrap :where(.field input, input) {
+  background: #fff;
+  border: 1px solid #938b80;
+  color: var(--human-ink);
+}
+body:not(:has(.app-shell)) .auth-wrap :where(.field input, input):focus {
+  border-color: var(--human-orange-dark);
+  outline: 3px solid rgb(255 88 43 / 20%);
+}
+
+/* Long-form reading: restrained title, comfortable measure, visible hierarchy. */
+body:not(:has(.app-shell)) .article-hero { max-width: 860px; text-align: left; }
+body:not(:has(.app-shell)) .article-hero h1 {
+  max-width: 820px;
+  margin-inline: 0;
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  font-size: clamp(3rem, 5.2vw, 5rem);
+  line-height: .98;
+}
+body:not(:has(.app-shell)) .article-hero > p:not(.kicker) { margin-inline: 0; color: var(--human-muted); }
+body:not(:has(.app-shell)) .article-meta { justify-content: flex-start; color: #6d6962; }
+body:not(:has(.app-shell)) .article-layout { border-color: var(--human-line); }
+body:not(:has(.app-shell)) .article-new .article-layout article,
+body:not(:has(.app-shell)) .article-new .article-layout article p,
+body:not(:has(.app-shell)) .article-new .article-layout article li {
+  color: #34332f;
+}
+body:not(:has(.app-shell)) .article-new .article-lead { color: var(--human-ink); }
+body:not(:has(.app-shell)) .article-callout { background: var(--human-card); }
+body:not(:has(.app-shell)) .related-rail > a { background: #fff; border-color: var(--human-line); }
+
+@media (max-width: 640px) {
+  body:not(:has(.app-shell)) :where(.insights-page, .tools-page) > h1,
+  body:not(:has(.app-shell)) .pricing-hero h1,
+  body:not(:has(.app-shell)) .methodology-hero h1,
+  body:not(:has(.app-shell)) .tool-detail-page > h1,
+  body:not(:has(.app-shell)) .article-hero h1 {
+    font-size: clamp(2.65rem, 12vw, 3.45rem);
+    line-height: 1;
+  }
+  body:not(:has(.app-shell)) .pricing-page { padding-top: 38px; }
+  body:not(:has(.app-shell)) .pricing-options article { padding: 30px 24px; }
+  body:not(:has(.app-shell)) .featured-article { min-height: 0; }
+  body:not(:has(.app-shell)) .featured-article h2 { font-size: 2.35rem; }
+  body:not(:has(.app-shell)) .section-title { align-items: flex-start; gap: 18px; flex-direction: column; }
+  body:not(:has(.app-shell)) .article-hero { width: calc(100% - 32px); }
+  body:not(:has(.app-shell)) .article-new .article-layout { width: calc(100% - 32px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(:has(.app-shell)) :where(.insight-grid > a, .curated-tools > a) { transition: none; }
+}

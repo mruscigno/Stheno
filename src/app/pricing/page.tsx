@@ -36,16 +36,15 @@ export default function Pricing() {
       />
       <header className="pricing-hero chrome-shell">
         <p className="kicker">Your fitness. Handled.</p>
-        <h1>A fitness plan that changes when your life does.</h1>
+        <h1>One membership. Your whole plan.</h1>
         <p>
-          Your complete {membership.trialDays}-day trial starts when you create
-          your account. STHENO keeps training and nutrition aligned as
-          schedules, equipment, travel, and progress change.
+          Try every feature for {membership.trialDays} days. No credit card is
+          required to start, and you choose a plan only if STHENO earns a place
+          in your routine. It is one fitness plan that changes when your life does.
         </p>
       </header>
       <p className="pricing-value-anchor chrome-shell">
-        You do the work. STHENO handles the plan—for less than the cost of a
-        typical personal training session.
+        Training, nutrition, progress reviews, and coaching are included.
       </p>
       <section className="pricing-options chrome-shell">
         <article>

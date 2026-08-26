@@ -1,1 +1,60 @@
-import type{Metadata}from"next";import Link from"next/link";import{articles,pillars}from"@/modules/library/articles";export const metadata:Metadata={title:"Fitness Insights",description:"Direct, practical fitness guides without hype or shame.",alternates:{canonical:"/insights"}};export default function Insights(){const featured=articles[0];return <main className="public-page chrome-shell insights-page"><p className="kicker">STHENO Insights</p><h1>Make fitness easier to understand.</h1><p className="lede">Practical answers for training, nutrition, fat loss, recovery, and the weeks when life refuses to cooperate.</p><nav className="category-pills" aria-label="Insight categories">{pillars.filter(p=>!["tools","exercises"].includes(p.slug)).map(p=><Link href={`/library/${p.slug}`} key={p.slug}>{p.title}</Link>)}</nav><Link className="featured-article" href={`/insights/${featured.slug}`}><div><span>Start here · 6 min read</span><h2>{featured.title}</h2><p>{featured.thesis}</p><b>Read the guide →</b></div><div className="editorial-art"><i/><i/><i/></div></Link><section><div className="section-title"><div><p className="kicker">Latest guides</p><h2>Useful this week</h2></div><Link href="/tools">Explore free tools →</Link></div><div className="insight-grid">{articles.slice(1).map(a=><Link href={`/insights/${a.slug}`} key={a.slug}><span>{a.pillar.replaceAll("-"," ")} · {a.readMinutes} min</span><h3>{a.title}</h3><p>{a.thesis}</p><b>Read →</b></Link>)}</div></section></main>}
+import type { Metadata } from "next";
+import Link from "next/link";
+import { articles, pillars } from "@/modules/library/articles";
+
+export const metadata: Metadata = {
+  title: "Fitness Insights",
+  description: "Straightforward fitness guides for decisions you can make today.",
+  alternates: { canonical: "/insights" },
+};
+
+export default function Insights() {
+  const featured = articles[0];
+  return (
+    <main className="public-page chrome-shell insights-page">
+      <p className="kicker">STHENO Insights</p>
+      <h1>Fitness advice you can actually use.</h1>
+      <p className="lede">
+        Training, nutrition, and recovery explained for ordinary weeks—not
+        perfect ones.
+      </p>
+      <nav className="category-pills" aria-label="Insight categories">
+        {pillars
+          .filter((pillar) => !["tools", "exercises"].includes(pillar.slug))
+          .map((pillar) => (
+            <Link href={`/library/${pillar.slug}`} key={pillar.slug}>
+              {pillar.title}
+            </Link>
+          ))}
+      </nav>
+      <Link className="featured-article" href={`/insights/${featured.slug}`}>
+        <div>
+          <span>Start here · 6 min read</span>
+          <h2>{featured.title}</h2>
+          <p>{featured.thesis}</p>
+          <b>Read the guide →</b>
+        </div>
+        <div className="editorial-art" aria-hidden="true"><i /><i /><i /></div>
+      </Link>
+      <section>
+        <div className="section-title">
+          <div>
+            <p className="kicker">Latest guides</p>
+            <h2>Pick a question. Get a straight answer.</h2>
+          </div>
+          <Link href="/tools">Explore free tools →</Link>
+        </div>
+        <div className="insight-grid">
+          {articles.slice(1).map((article) => (
+            <Link href={`/insights/${article.slug}`} key={article.slug}>
+              <span>{article.pillar.replaceAll("-", " ")} · {article.readMinutes} min</span>
+              <h3>{article.title}</h3>
+              <p>{article.thesis}</p>
+              <b>Read →</b>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}

@@ -40,11 +40,12 @@ export default function Methodology() {
       </nav>
       <header className="methodology-hero">
         <p className="eyebrow">The STHENO standard</p>
-        <h1>Useful guidance with visible limits.</h1>
+        <h1>How STHENO makes a recommendation.</h1>
         <p className="lede">
-          STHENO turns established fitness principles into practical starting
-          decisions. We show where an answer is an estimate, preserve the
-          context behind changes, and do not present education as diagnosis.
+          Your plan starts with established training and nutrition principles,
+          then changes in response to what you complete and report. Here is
+          what the system uses, what it does not know, and when human medical
+          care belongs in the conversation.
         </p>
       </header>
       <div className="methodology-grid">
