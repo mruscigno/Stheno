@@ -89,8 +89,8 @@
   min-width: 0;
 }
 .mr-hero h1 {
-  font-size: clamp(4rem, 7vw, 7rem);
-  line-height: 0.86;
+  font-size: clamp(3.5rem, 4.5vw, 4.6rem);
+  line-height: 0.92;
   margin: 18px 0 30px;
 }
 .mr-lede {
