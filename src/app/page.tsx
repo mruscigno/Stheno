@@ -11,11 +11,6 @@ import { annualSavings, membership } from "@/modules/commerce/product";
 import { isLive } from "@/modules/marketing/capabilities";
 import { TractionCounter } from "@/components/marketing/traction-counter";
 import {
-  activeHomepageHeroVariant,
-  homepageHeroVariants,
-  HOMEPAGE_HERO_EXPERIMENT_ID,
-} from "@/modules/marketing/hero-experiment";
-import {
   organizationId,
   publicMetadata,
   safeJsonLd,
@@ -48,7 +43,6 @@ const Cta = ({
   </TrackedLink>
 );
 export default function Home() {
-  const heroVariant = activeHomepageHeroVariant();
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -62,24 +56,15 @@ export default function Home() {
   return (
     <main className="mr-home">
       <TrackView event="landing_viewed" />
-      <TrackView
-        event="homepage_hero_variant_viewed"
-        eventProperties={{
-          experiment_id: HOMEPAGE_HERO_EXPERIMENT_ID,
-          variant_id: heroVariant,
-        }}
-      />
       <section className="mr-hero">
         <div className="mr-shell mr-hero-grid">
           <div className="mr-hero-copy">
             <p className="mr-kicker">Your fitness. Handled.</p>
-            <h1>{homepageHeroVariants[heroVariant]}</h1>
-            <p className="mr-hero-wedge">
-              A fitness plan that changes when your life does.
-            </p>
+            <h1>A fitness plan that changes when your life does.</h1>
             <p className="mr-lede">
-              Get personalized workouts, practical nutrition guidance, progress
-              tracking, and coaching adjustments in one connected membership.
+              STHENO builds your training and nutrition around your goals,
+              schedule, equipment, and progress—then keeps adjusting when life
+              changes.
             </p>
             <div className="mr-actions">
               <Cta
@@ -285,7 +270,8 @@ export default function Home() {
           <h2>Training, nutrition, progress, adaptation and Coach.</h2>
           <p>
             Start with the complete {membership.trialDays}-day trial. No payment
-            method is required.
+            method is required. Get the structure of an adaptive fitness plan
+            without the cost or scheduling of a personal trainer.
           </p>
           <Link href="/pricing" className="mr-link">
             See full pricing details
