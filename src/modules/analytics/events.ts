@@ -7,6 +7,7 @@ export const eventNames = [
   "set_logged", "set_edited", "rest_timer_started", "rest_timer_completed", "rest_timer_dismissed", "exercise_swapped", "load_recommendation_shown", "load_recommendation_accepted", "load_recommendation_overridden", "load_recommendation_unavailable", "progress_range_changed", "exercise_progress_viewed", "muscle_workload_viewed", "pr_detail_viewed", "pr_earned", "achievement_earned",
   "nutrition_day_viewed", "nutrition_entry_added", "nutrition_entry_deleted", "nutrition_day_completed", "food_search_used", "nutrition_adherence_viewed", "goal_projection_viewed",
   "block_viewed", "phase_started", "phase_explanation_viewed", "block_completed", "next_block_priority_selected", "recovery_feedback_submitted", "recovery_status_viewed", "training_balance_explanation_viewed", "workout_adjustment_started", "workout_adjusted", "workout_shortened", "schedule_repair_shown", "schedule_repair_accepted", "guided_mode_started", "coach_event_shown", "recommendation_why_viewed", "deload_recommended",
+  "homepage_hero_variant_viewed", "homepage_primary_cta_clicked", "free_apps_faq_opened", "money_back_guarantee_viewed", "money_back_refund_completed", "compare_nav_clicked", "compare_page_viewed", "vs_page_viewed", "traction_counter_viewed", "review_prompt_viewed", "review_prompt_clicked", "third_party_review_link_clicked",
 ] as const;
 export type EventName = typeof eventNames[number];
 export interface AnalyticsEvent { name: EventName; properties: Record<string, string | number | boolean | null> }

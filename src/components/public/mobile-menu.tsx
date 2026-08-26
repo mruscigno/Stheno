@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useState } from "react";
 import type { PublicAuthState } from "@/components/public/use-auth-state";
 import { SocialLinks } from "@/components/public/social-links";
+import { capture } from "@/lib/analytics/client";
 const links = [
   ["/how-it-works", "How it works"],
   ["/#training", "Training"],
   ["/#nutrition", "Nutrition"],
   ["/#progress", "Progress"],
   ["/pricing", "Pricing"],
+  ["/compare", "Compare"],
   ["/insights", "Resources"],
 ] as const;
 export function MobileMenu({ authState }: { authState: PublicAuthState }) {
@@ -34,7 +36,15 @@ export function MobileMenu({ authState }: { authState: PublicAuthState }) {
           aria-label="Mobile navigation"
         >
           {links.map(([href, label]) => (
-            <Link href={href} key={href} onClick={() => setOpen(false)}>
+            <Link
+              href={href}
+              key={href}
+              onClick={() => {
+                if (href === "/compare")
+                  capture("compare_nav_clicked", { location: "mobile_menu" });
+                setOpen(false);
+              }}
+            >
               {label}
             </Link>
           ))}

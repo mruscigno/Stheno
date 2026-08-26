@@ -98,6 +98,9 @@
   max-width: 620px;
   color: var(--mr-muted);
 }
+.mr-hero-wedge { margin: -10px 0 18px; max-width: 600px; color: var(--mr-orange); font-size: 1.05rem; font-weight: 850; }
+.mr-traction { display: flex; align-items: baseline; gap: 7px; margin: 18px 0 0; color: var(--mr-muted); font-size: .86rem; }
+.mr-traction strong { color: var(--mr-ink); font-size: 1.1rem; }
 .mr-actions {
   display: flex;
   align-items: center;

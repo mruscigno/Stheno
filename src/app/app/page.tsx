@@ -1,1 +1,45 @@
-import Link from"next/link";import{ProgramCalendar}from"@/components/calendar/program-calendar";import{NutritionSummary}from"@/components/plan/nutrition-summary";import{MonthlyReviewDueCard}from"@/components/progress/monthly-review";export default function AppHome(){return <><section className="status"><p className="eyebrow">Ask STHENO Coach</p><h1>Anything you want to ask your coach today?</h1><p className="lede">Training, technique, nutrition, recovery, supplements, progress, or a change to your plan.</p><Link className="button" href="/app/coach">Ask STHENO</Link></section><div className="status-grid"><article className="status">Next action<strong>Today&apos;s workout</strong></article><MonthlyReviewDueCard/><NutritionSummary/></div><div className="actions"><Link className="button secondary" href="/app/workout">Open workout</Link><Link className="button secondary" href="/app/nutrition">Nutrition</Link><Link className="button secondary" href="/app/checkin">Weekly check-in</Link><Link className="button secondary" href="/app/progress">Progress</Link></div><ProgramCalendar/></>}
+import Link from "next/link";
+import { ProgramCalendar } from "@/components/calendar/program-calendar";
+import { NutritionSummary } from "@/components/plan/nutrition-summary";
+import { MonthlyReviewDueCard } from "@/components/progress/monthly-review";
+import { ReviewPrompt } from "@/components/reviews/review-prompt";
+export default function AppHome() {
+  return (
+    <>
+      <section className="status">
+        <p className="eyebrow">Ask STHENO Coach</p>
+        <h1>Anything you want to ask your coach today?</h1>
+        <p className="lede">
+          Training, technique, nutrition, recovery, supplements, progress, or a
+          change to your plan.
+        </p>
+        <Link className="button" href="/app/coach">
+          Ask STHENO
+        </Link>
+      </section>
+      <div className="status-grid">
+        <article className="status">
+          Next action<strong>Today&apos;s workout</strong>
+        </article>
+        <MonthlyReviewDueCard />
+        <NutritionSummary />
+      </div>
+      <div className="actions">
+        <Link className="button secondary" href="/app/workout">
+          Open workout
+        </Link>
+        <Link className="button secondary" href="/app/nutrition">
+          Nutrition
+        </Link>
+        <Link className="button secondary" href="/app/checkin">
+          Weekly check-in
+        </Link>
+        <Link className="button secondary" href="/app/progress">
+          Progress
+        </Link>
+      </div>
+      <ProgramCalendar />
+      <ReviewPrompt />
+    </>
+  );
+}

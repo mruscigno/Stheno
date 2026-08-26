@@ -5,6 +5,7 @@ import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { MobileMenu } from "@/components/public/mobile-menu";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
 import { SocialLinks } from "@/components/public/social-links";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 export function SiteHeader() {
   const authState = usePublicAuthState();
   return (
@@ -19,6 +20,13 @@ export function SiteHeader() {
           <Link href="/#nutrition">Nutrition</Link>
           <Link href="/#progress">Progress</Link>
           <Link href="/pricing">Pricing</Link>
+          <TrackedLink
+            event="compare_nav_clicked"
+            eventProperties={{ location: "desktop_header" }}
+            href="/compare"
+          >
+            Compare
+          </TrackedLink>
           <Link href="/insights">Resources</Link>
         </nav>
         <div className="header-actions">

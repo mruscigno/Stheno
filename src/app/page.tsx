@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { TrackedLink, TrackView } from "@/components/analytics/tracked-link";
 import { FaqList } from "@/components/public/faq-list";
 import { homepageFaqItems } from "@/modules/content/faq";
@@ -8,6 +9,12 @@ import { tools } from "@/modules/library/tools";
 import { articles } from "@/modules/library/articles";
 import { annualSavings, membership } from "@/modules/commerce/product";
 import { isLive } from "@/modules/marketing/capabilities";
+import { TractionCounter } from "@/components/marketing/traction-counter";
+import {
+  activeHomepageHeroVariant,
+  homepageHeroVariants,
+  HOMEPAGE_HERO_EXPERIMENT_ID,
+} from "@/modules/marketing/hero-experiment";
 import {
   organizationId,
   publicMetadata,
@@ -25,12 +32,14 @@ export const metadata: Metadata = publicMetadata({
 const Cta = ({
   location,
   className = "mr-button",
+  event = "primary_cta_clicked",
 }: {
   location: string;
   className?: string;
+  event?: "primary_cta_clicked" | "homepage_primary_cta_clicked";
 }) => (
   <TrackedLink
-    event="primary_cta_clicked"
+    event={event}
     eventProperties={{ location }}
     className={className}
     href="/assessment"
@@ -39,6 +48,7 @@ const Cta = ({
   </TrackedLink>
 );
 export default function Home() {
+  const heroVariant = activeHomepageHeroVariant();
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -52,17 +62,30 @@ export default function Home() {
   return (
     <main className="mr-home">
       <TrackView event="landing_viewed" />
+      <TrackView
+        event="homepage_hero_variant_viewed"
+        eventProperties={{
+          experiment_id: HOMEPAGE_HERO_EXPERIMENT_ID,
+          variant_id: heroVariant,
+        }}
+      />
       <section className="mr-hero">
         <div className="mr-shell mr-hero-grid">
           <div className="mr-hero-copy">
             <p className="mr-kicker">Your fitness. Handled.</p>
-            <h1>Personalized fitness coaching that keeps up with you.</h1>
+            <h1>{homepageHeroVariants[heroVariant]}</h1>
+            <p className="mr-hero-wedge">
+              A fitness plan that changes when your life does.
+            </p>
             <p className="mr-lede">
-              Your workouts, nutrition and progress in one place—with a plan
-              that adapts as you improve and life changes.
+              Get personalized workouts, practical nutrition guidance, progress
+              tracking, and coaching adjustments in one connected membership.
             </p>
             <div className="mr-actions">
-              <Cta location="homepage_hero" />
+              <Cta
+                location="homepage_hero"
+                event="homepage_primary_cta_clicked"
+              />
               <TrackedLink
                 event="hero_secondary_cta_click"
                 href="#how-it-works"
@@ -72,8 +95,11 @@ export default function Home() {
               </TrackedLink>
             </div>
             <small>
-              Starts with a personalized assessment. No guesswork required.
+              Starts with a personalized assessment. No credit card required.
             </small>
+            <Suspense fallback={null}>
+              <TractionCounter />
+            </Suspense>
           </div>
           <HeroVisual />
         </div>
