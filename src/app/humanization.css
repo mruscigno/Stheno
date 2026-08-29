@@ -197,6 +197,40 @@ body:not(:has(.app-shell)) .article-new .article-lead { color: var(--human-ink);
 body:not(:has(.app-shell)) .article-callout { background: var(--human-card); }
 body:not(:has(.app-shell)) .related-rail > a { background: #fff; border-color: var(--human-line); }
 
+/* Give content-first exercise visitors a product path before the long guide. */
+.exercise-plan-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 28px;
+  padding: 18px 20px;
+  border: 1px solid var(--human-line);
+  border-left: 4px solid var(--human-orange);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--human-ink);
+}
+.exercise-plan-prompt > div { display: grid; gap: 5px; }
+.exercise-plan-prompt strong { font-size: .96rem; }
+.exercise-plan-prompt span { color: var(--human-muted); font-size: .86rem; line-height: 1.45; }
+.exercise-plan-prompt > a {
+  flex: 0 0 auto;
+  color: var(--human-orange-dark);
+  font-size: .86rem;
+  font-weight: 800;
+}
+.exercise-plan-prompt > a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* The expanded desktop navigation needs more room than the old seven-link
+   version. Switch to the existing accessible menu before labels wrap. */
+@media (max-width: 1180px) {
+  .global-header .desktop-nav,
+  .global-header .header-actions { display: none; }
+  .mobile-menu { display: block; }
+  .global-header .mobile-menu-panel { display: grid; }
+}
+
 @media (max-width: 640px) {
   body:not(:has(.app-shell)) :where(.insights-page, .tools-page) > h1,
   body:not(:has(.app-shell)) .pricing-hero h1,
@@ -213,6 +247,7 @@ body:not(:has(.app-shell)) .related-rail > a { background: #fff; border-color: v
   body:not(:has(.app-shell)) .section-title { align-items: flex-start; gap: 18px; flex-direction: column; }
   body:not(:has(.app-shell)) .article-hero { width: calc(100% - 32px); }
   body:not(:has(.app-shell)) .article-new .article-layout { width: calc(100% - 32px); }
+  .exercise-plan-prompt { align-items: flex-start; flex-direction: column; gap: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

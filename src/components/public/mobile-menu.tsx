@@ -9,6 +9,7 @@ const links = [
   ["/#training", "Training"],
   ["/#nutrition", "Nutrition"],
   ["/#progress", "Progress"],
+  ["/exercises", "Exercises"],
   ["/pricing", "Pricing"],
   ["/compare", "Compare"],
   ["/insights", "Resources"],

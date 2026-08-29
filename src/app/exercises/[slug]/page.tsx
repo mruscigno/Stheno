@@ -58,6 +58,15 @@ export default async function Exercise({
               <span key={item}>{item.replaceAll("_", " ")}</span>
             ))}
           </div>
+          <aside className="exercise-plan-prompt">
+            <div>
+              <strong>Want this exercise inside a complete program?</strong>
+              <span>
+                Tell STHENO about your goals, schedule, and equipment first.
+              </span>
+            </div>
+            <Link href="/assessment">Build my free plan →</Link>
+          </aside>
         </div>
         <AnatomyMap primary={primary} secondary={secondary} />
       </header>
