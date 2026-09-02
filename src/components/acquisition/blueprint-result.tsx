@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   normalizeStoredBlueprint,
   type StoredBlueprint,
 } from "@/modules/acquisition/blueprint-storage";
 import { capture } from "@/lib/analytics/client";
+import { captureFunnel } from "@/lib/analytics/funnel-client";
 
 function readBlueprint(): StoredBlueprint | null {
   if (typeof window === "undefined") return null;
@@ -21,7 +22,9 @@ function readBlueprint(): StoredBlueprint | null {
 
 export function BlueprintResult() {
   const [blueprint] = useState<StoredBlueprint | null>(readBlueprint);
-  useEffect(() => { if (blueprint) capture("blueprint_viewed", { blueprint_version: blueprint.version }); }, [blueprint]);
+  const reasoningRef = useRef<HTMLElement>(null);
+  useEffect(() => { if (blueprint) { capture("blueprint_viewed", { blueprint_version: blueprint.version }); void captureFunnel("assessment_preview_view", { blueprint_version: blueprint.version }); } }, [blueprint]);
+  useEffect(()=>{const element=reasoningRef.current;if(!element||!blueprint)return;let sent=false;const observer=new IntersectionObserver(entries=>{if(!sent&&entries.some(entry=>entry.isIntersecting)){sent=true;void captureFunnel("assessment_preview_reasoning_view",{blueprint_version:blueprint.version});observer.disconnect()}},{threshold:.35});observer.observe(element);return()=>observer.disconnect()},[blueprint]);
   if (!blueprint)
     return (
       <section className="blueprint-empty">
@@ -107,6 +110,16 @@ export function BlueprintResult() {
           ))}
         </ol>
       </section>
+      <section className="blueprint-reasoning" ref={reasoningRef}>
+        <p className="kicker">Why this starting point makes sense</p>
+        <h2>These answers changed the recommendation.</h2>
+        <div>
+          <p>You told us <strong>{blueprint.training.days} training days</strong> are realistic, so the opening structure prioritizes {blueprint.training.days} complete sessions instead of forcing a higher-frequency split.</p>
+          <p>Your <strong>{blueprint.training.duration}-minute window</strong> sets the amount of work each session can hold without assuming a perfect schedule.</p>
+          <p>Your goal changes the starting emphasis: <strong>{blueprint.training.focus}</strong>.</p>
+        </div>
+      </section>
+      <aside className="blueprint-uncertainty"><p className="kicker">This is a starting point—not a prediction</p><p>Your assessment gives us enough information to build an informed starting plan. Your actual workouts, progress, recovery, and check-ins give us better information over time.</p></aside>
       <section className="blueprint-trajectory">
         <p className="kicker">How the plan should evolve</p>
         {blueprint.trajectory.map((item) => (
@@ -116,19 +129,19 @@ export function BlueprintResult() {
       <aside className="blueprint-cta">
         <div>
           <p className="kicker">A fitness plan that changes when your life does</p>
-          <h2>You do the work. STHENO handles the plan.</h2>
+          <h2>Your complete plan is ready.</h2>
           <p>
             Turn this starting point into a program that keeps training,
             nutrition, and weekly decisions aligned when real life changes.
           </p>
         </div>
-        <Link className="button button-large" href="/signup?next=/pricing">
-          Start with STHENO →
+        <Link className="button button-large" href="/signup?next=/app">
+          Create My Account →
         </Link>
       </aside>
       <footer>
         <p>{blueprint.disclaimer}</p>
-        <Link href="/assessment">Retake assessment</Link>
+        <Link href="/assessment">Review my recommendations</Link>
       </footer>
     </article>
   );

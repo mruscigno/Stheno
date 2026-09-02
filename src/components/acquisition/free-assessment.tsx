@@ -12,45 +12,46 @@ import {
 } from "@/modules/acquisition/assessment-model";
 import { ftInToCm, lbToKg } from "@/modules/units/conversions";
 import { capture } from "@/lib/analytics/client";
+import { captureFunnel } from "@/lib/analytics/funnel-client";
 const STORAGE = `stheno_assessment_${ASSESSMENT_VERSION}`;
 const initial: Intake = { diet: "flexible", heightFeet: 5, heightInches: 9 };
-function restore() {
-  if (typeof window === "undefined") return initial;
-  try {
-    const x = JSON.parse(localStorage.getItem(STORAGE) || "null");
-    return x?.version === ASSESSMENT_VERSION
-      ? { ...initial, ...x.answers }
-      : initial;
-  } catch {
-    return initial;
-  }
-}
 function shown(value: unknown) {
   if (Array.isArray(value)) return value.join(", ").replaceAll("_", " ");
   return String(value ?? "").replaceAll("_", " ");
 }
 export function FreeAssessment() {
   const completed = useRef(false);
+  const milestones = useRef(new Set<number>());
+  const resumed = useRef(false);
   const router = useRouter(),
-    [answers, setAnswers] = useState<Intake>(restore),
+    [answers, setAnswers] = useState<Intake>(initial),
     [index, setIndex] = useState(0),
     [review, setReview] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [hydrated, setHydrated] = useState(false);
   const steps = visibleSteps(answers),
     step = steps[Math.min(index, steps.length - 1)],
     value = step?.key ? answers[step.key] : undefined;
   useEffect(() => {
+    try { const saved=JSON.parse(localStorage.getItem(STORAGE)||"null");if(saved?.version===ASSESSMENT_VERSION){resumed.current=Boolean(saved.startedAt);setAnswers({...initial,...saved.answers});setIndex(Math.max(0,Number(saved.index??0)));setReview(Boolean(saved.review));} } catch { /* Start clean if storage is unavailable or invalid. */ }
+    setHydrated(true);
+  }, []);
+  useEffect(() => {
+    if(!hydrated)return;
     localStorage.setItem(
       STORAGE,
       JSON.stringify({
         version: ASSESSMENT_VERSION,
         answers,
+        index,
+        review,
+        startedAt:new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }),
     );
-  }, [answers]);
-  useEffect(() => { capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); }, []);
+  }, [answers, hydrated, index, review]);
+  useEffect(() => { if(!hydrated)return;if(resumed.current)capture("assessment_resumed",{assessment_version:ASSESSMENT_VERSION});else{capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); void captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION });} }, [hydrated]);
   useEffect(() => { if (step) capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); }, [index, step, steps.length]);
   useEffect(() => { const abandon = () => { if (!completed.current) capture("assessment_abandoned", { assessment_version: ASSESSMENT_VERSION, step_key: step?.key ?? "unknown", step_number: index + 1 }); }; window.addEventListener("pagehide", abandon); return () => window.removeEventListener("pagehide", abandon); }, [index, step?.key]);
   function set(v: string | number | string[]) {
@@ -85,6 +86,14 @@ export function FreeAssessment() {
   function advance() {
     if (!valid()) return;
     capture("assessment_step_completed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length });
+    void captureFunnel("assessment_question_answered", { assessment_version: ASSESSMENT_VERSION, question_number: index + 1, total_questions: steps.length });
+    const percent = Math.round(((index + 1) / steps.length) * 100);
+    ([25, 50, 75] as const).forEach((threshold) => {
+      if (percent >= threshold && !milestones.current.has(threshold)) {
+        milestones.current.add(threshold);
+        void captureFunnel(`assessment_${threshold}_percent`, { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
+      }
+    });
     if (index < steps.length - 1) setIndex((x) => x + 1);
     else setReview(true);
   }
@@ -114,6 +123,7 @@ export function FreeAssessment() {
     };
     try {
       capture("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_steps: steps.length });
+      void captureFunnel("assessment_complete", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
       capture("blueprint_generation_started", { assessment_version: ASSESSMENT_VERSION });
       const response = await fetch("/api/blueprint", {
         method: "POST",
@@ -149,6 +159,7 @@ export function FreeAssessment() {
       setBusy(false);
     }
   }
+  if(!hydrated)return <main className="assessment-v2"><section className="assessment-stage"><p role="status">Restoring your assessment…</p></section></main>;
   if (review)
     return (
       <main className="assessment-v2 assessment-review">
@@ -219,9 +230,7 @@ export function FreeAssessment() {
         <SthenoLogo compact className="assessment-logo" />
         <div>
           <p>{step.section}</p>
-          <strong>
-            {index + 1} of {steps.length}
-          </strong>
+          <strong>Question {index + 1}</strong>
         </div>
         <progress value={index + 1} max={steps.length} />
       </header>

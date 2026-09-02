@@ -56,7 +56,8 @@ export function NutritionTracker() {
     [results, setResults] = useState<Food[]>([]),
     [showGuidance, setShowGuidance] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [searched, setSearched] = useState(false);
   const load = useCallback(async () => {
     const r = await fetch(`/api/nutrition/day?date=${date}`, {
       cache: "no-store",
@@ -100,11 +101,10 @@ export function NutritionTracker() {
   async function find(e: FormEvent) {
     e.preventDefault();
     if (search.trim().length < 2) return;
-    setBusy(true);
-    const r = await fetch(`/api/food/search?q=${encodeURIComponent(search)}`),
-      b = await r.json();
-    setResults(b.results ?? []);
-    setBusy(false);
+    setBusy(true); setError(""); setSearched(false);
+    try { const r = await fetch(`/api/food/search?q=${encodeURIComponent(search)}`), b = await r.json(); if(!r.ok)throw new Error(b.error??"Food search is unavailable."); setResults(b.results ?? []); setSearched(true); }
+    catch(cause){setResults([]);setError(cause instanceof Error?cause.message:"Food search is unavailable.");}
+    finally{setBusy(false)}
   }
   async function remove(id: string) {
     await fetch("/api/nutrition/day", {
@@ -237,7 +237,7 @@ export function NutritionTracker() {
                 <option value="snack">Snack</option>
               </select>
             </div>
-            <form className="food-search" onSubmit={find}>
+            <form className="food-search" onSubmit={find} aria-busy={busy}>
               <input
                 aria-label="Search food"
                 value={search}
@@ -249,6 +249,7 @@ export function NutritionTracker() {
               </button>
             </form>
             {error && <p role="alert">{error}</p>}
+            {searched && results.length === 0 && !error ? <p className="search-empty" role="status">No matches found. Try a simpler food name or use quick add below.</p> : null}
             {results.length > 0 && (
               <div className="search-results">
                 {results.map((f) => (

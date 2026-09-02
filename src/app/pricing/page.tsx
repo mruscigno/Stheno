@@ -12,6 +12,7 @@ import {
   serviceJsonLd,
 } from "@/lib/seo";
 import { annualSavings, membership } from "@/modules/commerce/product";
+import { AttributionFields } from "@/components/auth/attribution-fields";
 
 export const metadata: Metadata = publicMetadata({
   title: `Pricing | Adaptive Fitness from ${membership.monthly.label}/mo`,
@@ -34,6 +35,7 @@ export default function Pricing() {
         event="money_back_guarantee_viewed"
         eventProperties={{ location: "pricing" }}
       />
+      <AttributionFields event="checkout_view" />
       <header className="pricing-hero chrome-shell">
         <p className="kicker">Your fitness. Handled.</p>
         <h1>One membership. Your whole plan.</h1>
@@ -55,6 +57,7 @@ export default function Pricing() {
           </div>
           <p>Flexible month-to-month access after your free trial.</p>
           <form action="/api/billing/checkout" method="post">
+            <AttributionFields />
             <input type="hidden" name="plan" value="monthly" />
             <TrackedButton
               event="pricing_checkout_click"
@@ -87,6 +90,7 @@ export default function Pricing() {
             after your free trial.
           </p>
           <form action="/api/billing/checkout" method="post">
+            <AttributionFields />
             <input type="hidden" name="plan" value="annual" />
             <TrackedButton
               event="pricing_checkout_click"

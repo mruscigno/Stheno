@@ -24,6 +24,8 @@ import "./product-16.css";
 import "./logo-account-library.css";
 import "./marketing-reposition.css";
 import "./humanization.css";
+import "./social-start.css";
+import "./social-funnel-admin.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 import { defaultSocialImage } from "@/lib/seo";
 import { HeyCatchIdentity } from "@/components/analytics/heycatch-identity";
