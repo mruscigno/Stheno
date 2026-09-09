@@ -23,7 +23,7 @@ function readBlueprint(): StoredBlueprint | null {
 export function BlueprintResult() {
   const [blueprint] = useState<StoredBlueprint | null>(readBlueprint);
   const reasoningRef = useRef<HTMLElement>(null);
-  useEffect(() => { if (blueprint) { capture("blueprint_viewed", { blueprint_version: blueprint.version }); void captureFunnel("assessment_preview_view", { blueprint_version: blueprint.version }); } }, [blueprint]);
+  useEffect(() => { if (blueprint) { capture("blueprint_viewed", { blueprint_version: blueprint.version }); void captureFunnel("assessment_preview_view", { blueprint_version: blueprint.version }); void captureFunnel("blueprint_viewed", { blueprint_version: blueprint.version }); } }, [blueprint]);
   useEffect(()=>{const element=reasoningRef.current;if(!element||!blueprint)return;let sent=false;const observer=new IntersectionObserver(entries=>{if(!sent&&entries.some(entry=>entry.isIntersecting)){sent=true;void captureFunnel("assessment_preview_reasoning_view",{blueprint_version:blueprint.version});observer.disconnect()}},{threshold:.35});observer.observe(element);return()=>observer.disconnect()},[blueprint]);
   if (!blueprint)
     return (

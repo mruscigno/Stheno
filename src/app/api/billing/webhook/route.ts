@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         await analytics.setIdentity(userId, { plan });
         if (becameActive) await Promise.all([analytics.trackEvent("subscription_started", { plan, status: sub.status }, { userId }), captureServerEvent("subscription_started", userId, { plan, status: sub.status }), captureFunnelServer("subscription_complete", userId, { plan, status: sub.status })]);
         if (reactivated) await captureServerEvent("subscription_reactivated", userId, { plan, status: sub.status });
-        if (converted) await captureServerEvent("trial_converted_to_paid", userId, { plan });
+        if (converted) await Promise.all([captureServerEvent("trial_converted_to_paid", userId, { plan }), captureFunnelServer("paid_conversion", userId, { plan })]);
         if (cancelled) await Promise.all([analytics.trackEvent("subscription_cancelled", { plan, status: sub.status }, { userId }), captureServerEvent("subscription_cancelled", userId, { plan, status: sub.status })]);
         if (pastDue) await captureServerEvent("subscription_past_due", userId, { plan });
       }

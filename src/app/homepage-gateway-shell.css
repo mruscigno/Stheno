@@ -1,0 +1,57 @@
+body:has(.homepage-gateway) .global-header,
+body:has(.homepage-gateway) .global-footer {
+  display: none;
+}
+
+.homepage-gateway {
+  min-height: 100svh;
+}
+
+@media (max-width: 780px) {
+  .homepage-gateway {
+    min-height: 100svh;
+  }
+
+  .gateway-brand {
+    padding: 18px 20px 14px;
+  }
+
+  .gateway-brand .stheno-logo {
+    margin-bottom: 18px;
+  }
+
+  .gateway-brand h1 {
+    font-size: clamp(2.45rem, 11vw, 3.25rem);
+    margin: 12px 0;
+  }
+
+  .gateway-brand > p:last-child {
+    font-size: .92rem;
+    line-height: 1.4;
+  }
+
+  .gateway-question {
+    padding: 18px 20px 22px;
+  }
+
+  .gateway-question h2 {
+    font-size: clamp(1.65rem, 7vw, 2.25rem);
+    margin: 5px 0 14px;
+  }
+
+  .gateway-options {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .gateway-options button {
+    min-height: 66px;
+    padding: 10px 12px;
+    font-size: .91rem;
+    line-height: 1.15;
+  }
+
+  .gateway-explore {
+    padding-top: 16px;
+  }
+}

@@ -1,6 +1,7 @@
 import { ReviewPromptClient } from "@/components/reviews/review-prompt-client";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getActiveReviewProvider } from "@/modules/reviews/provider";
+function reviewWindowStart(){return new Date(Date.now()-30*86400000).toISOString()}
 export async function ReviewPrompt() {
   const [db, provider] = await Promise.all([
     createSupabaseServerClient(),
@@ -11,7 +12,7 @@ export async function ReviewPrompt() {
     data: { user },
   } = await db.auth.getUser();
   if (!user) return null;
-  const since = new Date(Date.now() - 30 * 86400000).toISOString();
+  const since = reviewWindowStart();
   const [workouts, reviews, priorPrompt] = await Promise.all([
     db
       .from("workout_execution_sessions")

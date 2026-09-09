@@ -13,7 +13,7 @@ import {
 import { ftInToCm, lbToKg } from "@/modules/units/conversions";
 import { capture } from "@/lib/analytics/client";
 import { captureFunnel } from "@/lib/analytics/funnel-client";
-const STORAGE = `stheno_assessment_${ASSESSMENT_VERSION}`;
+import { ASSESSMENT_STORAGE as STORAGE } from "@/modules/acquisition/homepage-gateway";
 const initial: Intake = { diet: "flexible", heightFeet: 5, heightInches: 9 };
 function shown(value: unknown) {
   if (Array.isArray(value)) return value.join(", ").replaceAll("_", " ");
@@ -34,8 +34,10 @@ export function FreeAssessment() {
     step = steps[Math.min(index, steps.length - 1)],
     value = step?.key ? answers[step.key] : undefined;
   useEffect(() => {
-    try { const saved=JSON.parse(localStorage.getItem(STORAGE)||"null");if(saved?.version===ASSESSMENT_VERSION){resumed.current=Boolean(saved.startedAt);setAnswers({...initial,...saved.answers});setIndex(Math.max(0,Number(saved.index??0)));setReview(Boolean(saved.review));} } catch { /* Start clean if storage is unavailable or invalid. */ }
-    setHydrated(true);
+    queueMicrotask(() => {
+      try { const saved=JSON.parse(localStorage.getItem(STORAGE)||"null");if(saved?.version===ASSESSMENT_VERSION){resumed.current=Boolean(saved.startedAt);setAnswers({...initial,...saved.answers});setIndex(Math.max(0,Number(saved.index??0)));setReview(Boolean(saved.review));} } catch { /* Start clean if storage is unavailable or invalid. */ }
+      setHydrated(true);
+    });
   }, []);
   useEffect(() => {
     if(!hydrated)return;
@@ -124,6 +126,7 @@ export function FreeAssessment() {
     try {
       capture("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_steps: steps.length });
       void captureFunnel("assessment_complete", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
+      void captureFunnel("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
       capture("blueprint_generation_started", { assessment_version: ASSESSMENT_VERSION });
       const response = await fetch("/api/blueprint", {
         method: "POST",

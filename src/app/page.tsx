@@ -10,6 +10,7 @@ import { articles } from "@/modules/library/articles";
 import { annualSavings, membership } from "@/modules/commerce/product";
 import { isLive } from "@/modules/marketing/capabilities";
 import { TractionCounter } from "@/components/marketing/traction-counter";
+import { HomepageEntryGate } from "@/components/acquisition/homepage-gateway";
 import {
   organizationId,
   publicMetadata,
@@ -42,7 +43,7 @@ const Cta = ({
     Get Your Free Plan <span aria-hidden="true">→</span>
   </TrackedLink>
 );
-export default function Home() {
+function MarketingHomepage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -374,6 +375,9 @@ export default function Home() {
       />
     </main>
   );
+}
+export default function Home() {
+  return <HomepageEntryGate><MarketingHomepage /></HomepageEntryGate>;
 }
 function HeroVisual() {
   return (
