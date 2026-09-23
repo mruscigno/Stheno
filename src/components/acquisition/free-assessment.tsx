@@ -23,12 +23,17 @@ export function FreeAssessment() {
   const completed = useRef(false);
   const milestones = useRef(new Set<number>());
   const resumed = useRef(false);
+  const advancing = useRef(false);
+  const viewedAt = useRef(Date.now());
+  const stageRef = useRef<HTMLElement>(null);
   const router = useRouter(),
     [answers, setAnswers] = useState<Intake>(initial),
     [index, setIndex] = useState(0),
     [review, setReview] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
+    [validation, setValidation] = useState(""),
+    [savingFailed, setSavingFailed] = useState(false),
     [hydrated, setHydrated] = useState(false);
   const steps = visibleSteps(answers),
     step = steps[Math.min(index, steps.length - 1)],
@@ -41,20 +46,24 @@ export function FreeAssessment() {
   }, []);
   useEffect(() => {
     if(!hydrated)return;
-    localStorage.setItem(
-      STORAGE,
-      JSON.stringify({
+    try {
+      localStorage.setItem(STORAGE, JSON.stringify({
         version: ASSESSMENT_VERSION,
         answers,
         index,
         review,
         startedAt:new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      }),
-    );
+      }));
+      setSavingFailed(false);
+    } catch {
+      setSavingFailed(true);
+      void captureFunnel("assessment_save_failed", { assessment_version: ASSESSMENT_VERSION, question_number: index + 1 });
+      void captureFunnel("funnel_error", { assessment_version: ASSESSMENT_VERSION, error_type: "assessment_local_save_failed", question_number: index + 1 });
+    }
   }, [answers, hydrated, index, review]);
-  useEffect(() => { if(!hydrated)return;if(resumed.current)capture("assessment_resumed",{assessment_version:ASSESSMENT_VERSION});else{capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); void captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION });} }, [hydrated]);
-  useEffect(() => { if (step) capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); }, [index, step, steps.length]);
+  useEffect(() => { if(!hydrated)return;void captureFunnel("assessment_loaded", { assessment_version: ASSESSMENT_VERSION, resumed: resumed.current }, { dedupeKey: ASSESSMENT_VERSION });if(resumed.current)capture("assessment_resumed",{assessment_version:ASSESSMENT_VERSION});else{capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); void captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION }, { dedupeKey: ASSESSMENT_VERSION });} }, [hydrated]);
+  useEffect(() => { if (step && hydrated) { viewedAt.current=Date.now(); setValidation(""); capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); void captureFunnel("assessment_question_viewed", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length }); } }, [hydrated, index, step, steps.length]);
   useEffect(() => { const abandon = () => { if (!completed.current) capture("assessment_abandoned", { assessment_version: ASSESSMENT_VERSION, step_key: step?.key ?? "unknown", step_number: index + 1 }); }; window.addEventListener("pagehide", abandon); return () => window.removeEventListener("pagehide", abandon); }, [index, step?.key]);
   function set(v: string | number | string[]) {
     setAnswers((a) => ({ ...a, [step.key]: v }));
@@ -86,9 +95,20 @@ export function FreeAssessment() {
     );
   }
   function advance() {
-    if (!valid()) return;
+    if (advancing.current) return;
+    void captureFunnel("assessment_continue_click", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, valid: valid() });
+    if (!valid()) {
+      const message = "Choose an answer before continuing.";
+      setValidation(message);
+      void captureFunnel("assessment_validation_error", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, error_type: "required_answer_missing" });
+      stageRef.current?.focus({ preventScroll: true });
+      stageRef.current?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+      return;
+    }
+    advancing.current = true;
+    setValidation("");
     capture("assessment_step_completed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length });
-    void captureFunnel("assessment_question_answered", { assessment_version: ASSESSMENT_VERSION, question_number: index + 1, total_questions: steps.length });
+    void captureFunnel("assessment_question_answered", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length, dwell_ms: Date.now()-viewedAt.current });
     const percent = Math.round(((index + 1) / steps.length) * 100);
     ([25, 50, 75] as const).forEach((threshold) => {
       if (percent >= threshold && !milestones.current.has(threshold)) {
@@ -98,6 +118,7 @@ export function FreeAssessment() {
     });
     if (index < steps.length - 1) setIndex((x) => x + 1);
     else setReview(true);
+    queueMicrotask(() => { advancing.current = false; });
   }
   function edit(key: string) {
     const target = steps.findIndex((x) => x.key === key);
@@ -160,6 +181,7 @@ export function FreeAssessment() {
           : "We could not build your Blueprint. Please try again.",
       );
       setBusy(false);
+      void captureFunnel("funnel_error", { assessment_version: ASSESSMENT_VERSION, error_type: "blueprint_generation_failed" });
     }
   }
   if(!hydrated)return <main className="assessment-v2"><section className="assessment-stage"><p role="status">Restoring your assessment…</p></section></main>;
@@ -237,7 +259,7 @@ export function FreeAssessment() {
         </div>
         <progress value={index + 1} max={steps.length} />
       </header>
-      <section key={step.key} className="assessment-stage">
+      <section key={step.key} className="assessment-stage" ref={stageRef} tabIndex={-1} aria-describedby={validation ? "assessment-validation" : undefined}>
         <p className="kicker">{index === 0 ? "A fitness plan that changes when your life does" : "STHENO coaching intake"}</p>
         <h1>{step.question}</h1>
         <p className="assessment-microcopy">{index === 0 ? "Tell us about your goals and the real-life constraints your plan needs to handle. You do the work. STHENO handles the plan." : step.help}</p>
@@ -305,6 +327,8 @@ export function FreeAssessment() {
             }
           />
         )}
+        {validation ? <p id="assessment-validation" role="alert" className="assessment-validation">{validation}</p> : null}
+        {savingFailed ? <p role="status" className="assessment-save-warning">Your answer is still here, but this browser blocked saving it for later. Keep this tab open and try continuing.</p> : null}
       </section>
       <footer>
         <button
@@ -318,7 +342,7 @@ export function FreeAssessment() {
         <button
           type="button"
           className="button button-large"
-          disabled={!valid()}
+          data-valid={valid()}
           onClick={advance}
         >
           {index === steps.length - 1 ? "Review my answers →" : "Continue →"}
