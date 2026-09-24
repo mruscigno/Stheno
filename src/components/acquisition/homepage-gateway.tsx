@@ -107,7 +107,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
 
   if (entry === "homepage") return <>{children}</>;
   if (entry === "loading" || entry === "member" || entry === "blueprint") {
-    return <main className="homepage-gateway gateway-loading" aria-busy="true"><SthenoLogo /><p>Loading your STHENO experience…</p></main>;
+    return <main className="homepage-gateway gateway-loading" aria-busy="true"><SthenoLogo /><h1>A fitness plan that changes when your life does.</h1><p>Loading your STHENO experience…</p></main>;
   }
   if (entry === "continue") {
     return <main className="homepage-gateway"><div className="gateway-brand"><SthenoLogo /><p>YOUR FITNESS. HANDLED.</p><h1>A fitness plan that changes when your life does.</h1></div><section className="gateway-question"><p className="kicker">Your plan is waiting</p><h2>You’ve already started your Assessment.</h2><button className="gateway-primary" type="button" onClick={continueAssessment}>Continue my Assessment <span>→</span></button><button className="gateway-explore" type="button" onClick={explore}>Explore STHENO first <span>→</span></button></section></main>;

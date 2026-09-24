@@ -184,7 +184,7 @@ export function FreeAssessment() {
       void captureFunnel("funnel_error", { assessment_version: ASSESSMENT_VERSION, error_type: "blueprint_generation_failed" });
     }
   }
-  if(!hydrated)return <main className="assessment-v2"><section className="assessment-stage"><p role="status">Restoring your assessment…</p></section></main>;
+  if(!hydrated)return <main className="assessment-v2"><section className="assessment-stage"><p className="kicker">Your fitness. Handled.</p><h1>Build your personalized fitness plan.</h1><p role="status">Restoring your assessment…</p></section></main>;
   if (review)
     return (
       <main className="assessment-v2 assessment-review">
