@@ -1,16 +1,16 @@
 # Production SEO audit
 
-Generated 2026-09-24T15:42:28.555Z against https://www.sthenofitness.com. The CSV inventory is the source of truth for per-URL fields.
+Generated 2026-09-24T16:19:28.312Z against https://www.sthenofitness.com. The CSV inventory is the source of truth for per-URL fields.
 
 ## Coverage
 
-- Sitemap URLs audited: 66
+- Sitemap URLs audited: 635
 - Non-200 responses: 0
 - Missing canonical: 0
 - Missing description: 0
-- Missing H1: 2
-- Canonical conflicts: 2
-- Pages with structured data: 50
+- Missing H1: 0
+- Canonical conflicts: 0
+- Pages with structured data: 635
 
 ## Duplicate titles
 
