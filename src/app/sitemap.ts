@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { data } = db
     ? await db
         .from("exercises")
-        .select("slug,updated_at")
+        .select("slug")
         .eq("status", "production")
         .eq("review_status", "reviewed")
         .eq("public_indexable", true)
@@ -54,9 +54,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...articles.map((article) => ({ url: `${base}/insights/${article.slug}`, lastModified: new Date(article.updatedAt), changeFrequency: "monthly" as const, priority: 0.75 })),
     ...(data ?? []).map((exercise) => ({
       url: `${base}/exercises/${exercise.slug}`,
-      lastModified: exercise.updated_at
-        ? new Date(exercise.updated_at)
-        : undefined,
       changeFrequency: "yearly" as const,
       priority: 0.6,
     })),
