@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const select = vi.fn();
-vi.mock("@/lib/supabase/admin",()=>({createSupabaseAdminClient:vi.fn(()=>({from:()=>({select})}))}));
+vi.mock("@/lib/config/env",()=>({publicEnv:{NEXT_PUBLIC_SUPABASE_URL:"https://example.supabase.co",NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:"test"}}));
+vi.mock("@supabase/supabase-js",()=>({createClient:vi.fn(()=>({from:()=>({select})}))}));
 import sitemap from "./sitemap";
 
 describe("sitemap",()=>{

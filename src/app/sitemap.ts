@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@supabase/supabase-js";
+import { publicEnv } from "@/lib/config/env";
 import { articles, pillars } from "@/modules/library/articles";
 import { tools } from "@/modules/library/tools";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -27,7 +28,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .map((pillar) => `/library/${pillar.slug}`),
     ...tools.map((tool) => `/tools/${tool.slug}`),
   ];
-  const db = createSupabaseAdminClient();
+  const db = publicEnv.NEXT_PUBLIC_SUPABASE_URL && publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    ? createClient(publicEnv.NEXT_PUBLIC_SUPABASE_URL, publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } })
+    : null;
   const { data } = db
     ? await db
         .from("exercises")
