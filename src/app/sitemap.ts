@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { publicEnv } from "@/lib/config/env";
 import { articles, pillars } from "@/modules/library/articles";
 import { tools } from "@/modules/library/tools";
+export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://www.sthenofitness.com";
   const staticPaths = [
