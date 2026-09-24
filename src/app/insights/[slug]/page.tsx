@@ -11,6 +11,8 @@ import { ArticleShare } from "@/components/library/article-share";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasEditorialAccess } from "@/lib/editorial/access";
 import { articleCaption } from "@/modules/social-studio/captions";
+import { sourcesByPillar } from "@/modules/library/sources";
+import { authorUrl, defaultSocialImage, organizationId, safeJsonLd, siteUrl } from "@/lib/seo";
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
 }
@@ -31,7 +33,12 @@ export async function generateMetadata({
           description: a.description,
           url: `/insights/${slug}`,
           type: "article",
+          publishedTime: a.publishedAt,
+          modifiedTime: a.updatedAt,
+          authors: [authorUrl],
+          images: [defaultSocialImage],
         },
+        twitter: { card: "summary_large_image", title: a.title, description: a.description, images: [defaultSocialImage.url] },
       }
     : {};
 }
@@ -62,9 +69,10 @@ export default async function ArticlePage({
         <h1>{a.title}</h1>
         <p>{a.thesis}</p>
         <div className="article-meta">
-          <span>By {a.author}</span>
+          <span>By <Link href="/author/matthew-david">{a.author}</Link></span>
           <span>{a.readMinutes} min read</span>
-          <span>Updated Aug 18, 2026</span>
+          <span>Published <time dateTime={a.publishedAt}>Aug 18, 2026</time></span>
+          {a.updatedAt !== a.publishedAt ? <span>Updated <time dateTime={a.updatedAt}>{a.updatedAt}</time></span> : null}
         </div>
         {canEdit?<Link className="button secondary" href={`/app/social-studio/${a.slug}`}>Open Social Studio</Link>:null}
       </header>
@@ -195,16 +203,16 @@ export default async function ArticlePage({
             without abandoning the underlying goal.
           </p>
           <section className="evidence-notes" id="evidence">
-            <h2>Evidence and editorial notes</h2>
+            <h2>Sources &amp; further reading</h2>
             <p>
-              This guide is educational content written by STHENO Editorial. It
+              This guide is educational content written by Matthew David. It
               has not been represented as independent medical review. The
               sources below inform the general principles; they do not validate
               a personalized prescription for every reader.
             </p>
             <ul>
-              {d.evidence.map((source) => (
-                <li key={source}>{source}</li>
+              {sourcesByPillar[a.pillar].map((source) => (
+                <li key={source.url}><a href={source.url} rel="noreferrer">{source.title}</a> — {source.authors}. <i>{source.publication}</i> ({source.year}). <span>{source.supports}</span></li>
               ))}
             </ul>
             <p>
@@ -252,15 +260,19 @@ export default async function ArticlePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "BlogPosting",
+            "@id": `${siteUrl}/insights/${a.slug}#article`,
             headline: a.title,
             description: a.description,
-            author: { "@type": "Organization", name: a.author },
+            image: [`${siteUrl}${defaultSocialImage.url}`],
+            datePublished: a.publishedAt,
             dateModified: a.updatedAt,
-            mainEntityOfPage: `https://www.sthenofitness.com/insights/${a.slug}`,
-          }).replaceAll("<", "\\u003c"),
+            mainEntityOfPage: `${siteUrl}/insights/${a.slug}`,
+            author: { "@type": "Person", "@id": `${authorUrl}#person`, name: a.author, url: authorUrl },
+            publisher: { "@id": organizationId },
+          }),
         }}
       />
     </main>

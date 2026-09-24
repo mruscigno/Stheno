@@ -84,6 +84,7 @@ export function SiteFooter() {
           <Link href="/faq">FAQ</Link>
           <Link href="/compare">Compare</Link>
           <Link href="/about">About</Link>
+          <Link href="/editorial-standards">Editorial standards</Link>
         </nav>
         <nav aria-label="Account">
           <strong>Account</strong>

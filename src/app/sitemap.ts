@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { articles, pillars } from "@/modules/library/articles";
 import { tools } from "@/modules/library/tools";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -11,6 +11,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contact",
     "/methodology",
     "/about",
+    "/author/matthew-david",
+    "/editorial-standards",
     "/faq",
     "/compare",
     "/vs/fitbod",
@@ -24,16 +26,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .filter((pillar) => !["tools", "exercises"].includes(pillar.slug))
       .map((pillar) => `/library/${pillar.slug}`),
     ...tools.map((tool) => `/tools/${tool.slug}`),
-    ...articles.map((article) => `/insights/${article.slug}`),
   ];
-  const db = await createSupabaseServerClient();
+  const db = createSupabaseAdminClient();
   const { data } = db
     ? await db
         .from("exercises")
         .select("slug,updated_at")
         .eq("status", "production")
         .eq("review_status", "reviewed")
-        .limit(500)
+        .eq("public_indexable", true)
+        .eq("technical_review_status", "reviewed")
+        .eq("editorial_review_status", "reviewed")
+        .eq("visual_review_status", "reviewed")
+        .eq("production_ready", true)
+        .limit(1000)
     : { data: [] };
   return [
     ...staticPaths.map((path, index) => ({
@@ -41,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: (index ? "monthly" : "weekly") as "monthly" | "weekly",
       priority: index ? 0.7 : 1,
     })),
+    ...articles.map((article) => ({ url: `${base}/insights/${article.slug}`, lastModified: new Date(article.updatedAt), changeFrequency: "monthly" as const, priority: 0.75 })),
     ...(data ?? []).map((exercise) => ({
       url: `${base}/exercises/${exercise.slug}`,
       lastModified: exercise.updated_at

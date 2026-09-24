@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Methodology & Editorial Standard",
   description:
     "How STHENO handles estimates, evidence, review status, safety boundaries, and updates.",
+  alternates: { canonical: "/methodology" },
 };
 
 const standards = [

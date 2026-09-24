@@ -29,7 +29,7 @@ import "./social-funnel-admin.css";
 import "./homepage-gateway.css";
 import "./homepage-gateway-shell.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
-import { defaultSocialImage } from "@/lib/seo";
+import { defaultSocialImage, organizationJsonLd, safeJsonLd } from "@/lib/seo";
 import { HeyCatchIdentity } from "@/components/analytics/heycatch-identity";
 
 const geistSans = Geist({
@@ -57,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body><HeyCatchIdentity/><a className="skip-link" href="#main-content">Skip to content</a><SiteHeader/><div id="main-content">{children}</div><SiteFooter/></body>
+      <body><HeyCatchIdentity/><a className="skip-link" href="#main-content">Skip to content</a><SiteHeader/><div id="main-content">{children}</div><SiteFooter/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:safeJsonLd(organizationJsonLd())}} /></body>
     </html>
   );
 }

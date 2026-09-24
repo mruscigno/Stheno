@@ -6,6 +6,9 @@ import { signOut } from "@/app/auth/actions";
 import { ClaimPublicAssessment } from "@/components/assessment/claim-public-assessment";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { evaluateMemberAccess } from "@/modules/access/trial";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const memberLinks = [
   ["/app", "Today"],
