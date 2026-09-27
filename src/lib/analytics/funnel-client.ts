@@ -1,5 +1,6 @@
 "use client";
 
+import { analytics } from "@heycatch/sdk";
 import { capture } from "@/lib/analytics/client";
 import type { EventName } from "@/modules/analytics/events";
 
@@ -58,6 +59,7 @@ export async function captureFunnel(event: EventName, properties: Record<string,
     ...properties,
   };
   capture(event, merged);
+  analytics.trackEvent(event, merged);
   try {
     const response = await fetch("/api/funnel/event", {
       method: "POST",

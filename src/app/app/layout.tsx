@@ -58,7 +58,11 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         </Link>
         <nav aria-label="Member navigation">
           <strong>Your STHENO</strong>
-          {memberLinks.map(([href, label]) => <Link href={href} key={href}>{label}</Link>)}
+          {memberLinks.map(([href, label]) => {
+            const locked = access?.state === "expired" && !["/app/account", "/app/assessment", "/app/trial-ended", "/exercises"].includes(href);
+            const destination = locked ? `/pricing?feature=${encodeURIComponent(label.toLowerCase())}` : href;
+            return <Link href={destination} key={href}>{label}{locked && label === "Coach" ? " · Unlock" : ""}</Link>;
+          })}
         </nav>
         <nav className="member-explore" aria-label="Explore STHENO">
           <strong>Explore</strong>

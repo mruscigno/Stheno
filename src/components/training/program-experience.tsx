@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { TrainingProgram } from "@/modules/training/types";
+import { captureFunnel } from "@/lib/analytics/funnel-client";
 type State = { state: "ready"; program: TrainingProgram } | { state: "empty" };
 export function ProgramExperience() {
   const [data, setData] = useState<State | null>(null),
@@ -18,6 +19,7 @@ export function ProgramExperience() {
     );
   }, []);
   useEffect(() => {
+    void captureFunnel("program_viewed", {}, { dedupeKey: "member-program" });
     void load();
     const refresh = () => void load();
     window.addEventListener("stheno:assessment-claimed", refresh);

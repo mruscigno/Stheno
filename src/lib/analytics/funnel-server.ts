@@ -1,8 +1,11 @@
+import { analytics } from "@heycatch/sdk";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { EventName } from "@/modules/analytics/events";
 import { safeAnalyticsProperties, type AnalyticsProperties } from "@/modules/analytics/privacy";
 
 type Attribution = { sessionId?: string; first?: Record<string, string>; last?: Record<string, string> };
+
+analytics.init({ projectKey: "hck_pk_dHLKWbUi7UUrnBvLWuJJn60N1J7eHAiq" });
 
 export function parseAttribution(value: FormDataEntryValue | null): Attribution | null {
   if (typeof value !== "string" || value.length > 3000) return null;
@@ -11,9 +14,10 @@ export function parseAttribution(value: FormDataEntryValue | null): Attribution 
 }
 
 export async function captureFunnelServer(event: EventName, userId: string | null, properties: AnalyticsProperties = {}, attribution: Attribution | null = null) {
+  const safe = safeAnalyticsProperties(properties);
+  await analytics.trackEvent(event, safe, userId ? { userId } : undefined);
   const admin = createSupabaseAdminClient();
   if (!admin) return;
-  const safe = safeAnalyticsProperties(properties);
   const touch = attribution?.last ?? attribution?.first ?? {};
   await admin.from("social_funnel_events").insert({
     event_name: event,
