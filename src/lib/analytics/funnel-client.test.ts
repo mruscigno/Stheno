@@ -33,4 +33,13 @@ describe("acquisition attribution and delivery",()=>{
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(duplicate.status).toBe(208);
   });
+
+  it("routes canonical funnel milestones through the identity-linked endpoint only",async()=>{
+    await captureFunnel("assessment_complete",{assessment_version:"3.0.0"});
+    expect(trackEvent).not.toHaveBeenCalled();
+    expect(fetch).toHaveBeenCalledWith("/api/funnel/event",expect.objectContaining({
+      method:"POST",
+      body:expect.stringContaining('"event":"assessment_complete"'),
+    }));
+  });
 });

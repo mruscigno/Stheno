@@ -4,6 +4,8 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { eventNames } from "@/modules/analytics/events";
 import { safeAnalyticsProperties } from "@/modules/analytics/privacy";
+import { isCanonicalHeyCatchFunnelEvent } from "@/modules/analytics/events";
+import { forwardFunnelToHeyCatch } from "@/lib/analytics/funnel-server";
 
 const EventSchema = z.object({
   event: z.enum(eventNames),
@@ -23,6 +25,14 @@ export async function POST(request: Request) {
   const inferredDevice = /Mobile|Android|iPhone|iPad/i.test(userAgent) ? "mobile" : "desktop";
   const botSignal = /bot|crawler|spider|headless|preview|facebookexternalhit|Slackbot/i.test(userAgent);
   const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.npm_package_version ?? "local";
+  if (isCanonicalHeyCatchFunnelEvent(parsed.data.event)) {
+    await forwardFunnelToHeyCatch(
+      parsed.data.event,
+      user?.id ?? parsed.data.sessionId ?? null,
+      properties,
+      request,
+    );
+  }
   const admin = createSupabaseAdminClient();
   if (!admin) return NextResponse.json({ accepted: true }, { status: 202 });
   const { error } = await admin.from("social_funnel_events").insert({

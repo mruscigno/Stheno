@@ -13,3 +13,16 @@ export const eventNames = [
 ] as const;
 export type EventName = typeof eventNames[number];
 export interface AnalyticsEvent { name: EventName; properties: Record<string, string | number | boolean | null> }
+
+export const canonicalHeyCatchFunnelEvents = [
+  "social_primary_cta_click",
+  "assessment_start",
+  "assessment_complete",
+  "assessment_preview_view",
+  "signup_complete",
+  "program_viewed",
+] as const satisfies readonly EventName[];
+
+export function isCanonicalHeyCatchFunnelEvent(event: EventName) {
+  return (canonicalHeyCatchFunnelEvents as readonly EventName[]).includes(event);
+}

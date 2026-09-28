@@ -94,6 +94,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     capture("homepage_gateway_goal_selected", properties);
     capture("assessment_started", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant });
     void captureFunnel("homepage_gateway_goal_selected", properties);
+    void captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway" }, { dedupeKey: `goal:${choiceId}` });
     void captureFunnel("assessment_started", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant });
     window.setTimeout(() => router.push("/assessment"), 180);
   }
@@ -102,6 +103,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     const properties = { gateway_variant: variant, device: device(), new_vs_returning: "returning" };
     capture("homepage_gateway_continue_clicked", properties);
     void captureFunnel("homepage_gateway_continue_clicked", properties);
+    void captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway_continue" }, { dedupeKey: "continue" });
     router.push("/assessment");
   }
 

@@ -13,9 +13,15 @@ export function parseAttribution(value: FormDataEntryValue | null): Attribution 
   catch { return null; }
 }
 
+export async function forwardFunnelToHeyCatch(event: EventName, userId: string | null, properties: AnalyticsProperties = {}, request?: Request) {
+  const safe = safeAnalyticsProperties(properties);
+  if (!userId) return;
+  await analytics.trackEvent(event, safe, { userId, ...(request ? { request } : {}) });
+}
+
 export async function captureFunnelServer(event: EventName, userId: string | null, properties: AnalyticsProperties = {}, attribution: Attribution | null = null) {
   const safe = safeAnalyticsProperties(properties);
-  await analytics.trackEvent(event, safe, userId ? { userId } : undefined);
+  await forwardFunnelToHeyCatch(event, userId, safe);
   const admin = createSupabaseAdminClient();
   if (!admin) return;
   const touch = attribution?.last ?? attribution?.first ?? {};
