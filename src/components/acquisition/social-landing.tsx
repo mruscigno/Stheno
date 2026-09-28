@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, type MouseEvent } from "react";
 import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { captureFunnel, rememberAttribution } from "@/lib/analytics/funnel-client";
 import { socialCampaigns, type SocialCampaign } from "@/modules/acquisition/social-campaigns";
@@ -19,7 +19,11 @@ export function SocialLanding({ source, campaign, touch }: Props) {
     const attribution = rememberAttribution({ ...touch, source, campaign: campaign ?? touch.campaign ?? "", variant: campaign ?? "default", first_landing_path: window.location.pathname });
     void captureFunnel("social_landing_view", { source, campaign: campaign ?? "", variant: campaign ?? "default", device: matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop", browser, session_present: Boolean(attribution.sessionId) });
   }, [campaign, source, touch]);
-  const start = () => void captureFunnel("social_primary_cta_click", { source, campaign: campaign ?? "", variant: campaign ?? "default" });
+  const start = async (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    await captureFunnel("social_primary_cta_click", { source, campaign: campaign ?? "", variant: campaign ?? "default", entry: "social_landing" });
+    window.location.assign("/assessment");
+  };
   return <main className="social-start">
     <header className="social-start-brand"><Link href="/" aria-label="STHENO Fitness home"><SthenoLogo /></Link></header>
     <section className="social-start-hero">

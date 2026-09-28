@@ -146,8 +146,7 @@ export function FreeAssessment() {
     };
     try {
       capture("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_steps: steps.length });
-      void captureFunnel("assessment_complete", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
-      void captureFunnel("assessment_completed", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
+      await captureFunnel("assessment_complete", { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
       capture("blueprint_generation_started", { assessment_version: ASSESSMENT_VERSION });
       const response = await fetch("/api/blueprint", {
         method: "POST",

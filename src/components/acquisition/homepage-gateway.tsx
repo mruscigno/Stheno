@@ -78,7 +78,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     setEntry("homepage");
   }
 
-  function selectGoal(choiceId: string, goal: string) {
+  async function selectGoal(choiceId: string, goal: string) {
     if (selected) return;
     setSelected(choiceId);
     const now = new Date().toISOString();
@@ -93,17 +93,14 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     const properties = { gateway_variant: variant, goal_selected: choiceId, device: device(), new_vs_returning: "new" };
     capture("homepage_gateway_goal_selected", properties);
     capture("assessment_started", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant });
-    void captureFunnel("homepage_gateway_goal_selected", properties);
-    void captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway" }, { dedupeKey: `goal:${choiceId}` });
-    void captureFunnel("assessment_started", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant });
-    window.setTimeout(() => router.push("/assessment"), 180);
+    await captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway" }, { dedupeKey: `goal:${choiceId}` });
+    router.push("/assessment");
   }
 
-  function continueAssessment() {
+  async function continueAssessment() {
     const properties = { gateway_variant: variant, device: device(), new_vs_returning: "returning" };
     capture("homepage_gateway_continue_clicked", properties);
-    void captureFunnel("homepage_gateway_continue_clicked", properties);
-    void captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway_continue" }, { dedupeKey: "continue" });
+    await captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway_continue" }, { dedupeKey: "continue" });
     router.push("/assessment");
   }
 
@@ -117,7 +114,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
   return (
     <main className={`homepage-gateway ${selected ? "gateway-advancing" : ""}`}>
       <div className="gateway-brand"><SthenoLogo /><p>YOUR FITNESS. HANDLED.</p><h1>A fitness plan that changes when your life does.</h1><p>Tell us what you want to accomplish. We’ll build your starting plan around your goals, schedule, experience, and real life.</p></div>
-      <section className="gateway-question" aria-labelledby="gateway-question"><p className="kicker">Let’s build around you</p><h2 id="gateway-question">What are you trying to accomplish?</h2><div className="gateway-options">{choices.map(([id, label, goal]) => <button type="button" key={id} className={selected === id ? "selected" : ""} disabled={Boolean(selected)} onClick={() => selectGoal(id, goal)}><span>{label}</span><i aria-hidden="true">{selected === id ? "✓" : "→"}</i></button>)}</div><button className="gateway-explore" type="button" onClick={explore}>Explore STHENO first <span>→</span></button></section>
+      <section className="gateway-question" aria-labelledby="gateway-question"><p className="kicker">Let’s build around you</p><h2 id="gateway-question">What are you trying to accomplish?</h2><div className="gateway-options">{choices.map(([id, label, goal]) => <button type="button" key={id} className={selected === id ? "selected" : ""} disabled={Boolean(selected)} onClick={() => void selectGoal(id, goal)}><span>{label}</span><i aria-hidden="true">{selected === id ? "✓" : "→"}</i></button>)}</div><button className="gateway-explore" type="button" onClick={explore}>Explore STHENO first <span>→</span></button></section>
     </main>
   );
 }
