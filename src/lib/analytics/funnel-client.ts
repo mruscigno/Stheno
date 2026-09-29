@@ -2,7 +2,7 @@
 
 import { analytics } from "@heycatch/sdk";
 import { capture } from "@/lib/analytics/client";
-import { isCanonicalHeyCatchFunnelEvent, type EventName } from "@/modules/analytics/events";
+import type { EventName } from "@/modules/analytics/events";
 
 export const ATTRIBUTION_STORAGE = "stheno_attribution_v1";
 export type Attribution = {
@@ -59,10 +59,7 @@ export async function captureFunnel(event: EventName, properties: Record<string,
     ...properties,
   };
   capture(event, merged);
-  // Canonical conversion milestones are forwarded by our same-origin endpoint.
-  // That gives HeyCatch a stable anonymous/user id and the request's session
-  // header. All supporting product events can use the browser SDK directly.
-  if (!isCanonicalHeyCatchFunnelEvent(event)) analytics.trackEvent(event, merged);
+  analytics.trackEvent(event, merged);
   try {
     const response = await fetch("/api/funnel/event", {
       method: "POST",
