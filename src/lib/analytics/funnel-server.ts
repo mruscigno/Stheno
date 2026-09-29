@@ -1,4 +1,4 @@
-import { analytics } from "@heycatch/sdk";
+import { analytics } from "@heycatch/sdk/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { EventName } from "@/modules/analytics/events";
 import { safeAnalyticsProperties, type AnalyticsProperties } from "@/modules/analytics/privacy";

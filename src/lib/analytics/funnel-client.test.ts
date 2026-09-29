@@ -34,9 +34,9 @@ describe("acquisition attribution and delivery",()=>{
     expect(duplicate.status).toBe(208);
   });
 
-  it("sends canonical funnel milestones to HeyCatch and the first-party endpoint",async()=>{
+  it("sends canonical funnel milestones through the authoritative first-party endpoint",async()=>{
     await captureFunnel("assessment_complete",{assessment_version:"3.0.0"});
-    expect(trackEvent).toHaveBeenCalledWith("assessment_complete",expect.objectContaining({assessment_version:"3.0.0"}));
+    expect(trackEvent).not.toHaveBeenCalledWith("assessment_complete",expect.anything());
     expect(fetch).toHaveBeenCalledWith("/api/funnel/event",expect.objectContaining({
       method:"POST",
       body:expect.stringContaining('"event":"assessment_complete"'),
