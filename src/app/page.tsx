@@ -62,7 +62,7 @@ function MarketingHomepage() {
         <div className="mr-shell mr-hero-grid">
           <div className="mr-hero-copy">
             <p className="mr-kicker">Your fitness. Handled.</p>
-            <h1>Your plan shouldn’t stop coaching you after Day 1.</h1>
+            <h1>A fitness plan that changes when your life does.</h1>
             <p className="mr-lede">
               STHENO Fitness builds your training and nutrition around your
               life—then keeps adjusting as you train, miss workouts, travel,
@@ -94,11 +94,23 @@ function MarketingHomepage() {
       <section className="mr-problem">
         <div className="mr-shell">
           <p className="mr-kicker">The plan is just the beginning</p>
-          <h2>Most fitness apps give you a plan. STHENO stays with you.</h2>
-          <p>
-            Your workouts, missed sessions, progress, equipment and check-ins
-            become new information. STHENO uses it to tell you what to do next.
-          </p>
+          <h2>Your life changed. Your plan should too.</h2>
+          <div className="mr-change-signals" aria-label="Changes STHENO can respond to">
+            {["Missed workout", "Travel week", "Got stronger", "Less time", "Different equipment", "Recovery changed"].map((signal)=><span key={signal}>{signal}</span>)}
+          </div>
+        </div>
+      </section>
+      <section className="mr-generator" aria-labelledby="generator-title">
+        <div className="mr-shell mr-generator-grid">
+          <div className="mr-generator-photo">
+            <Image src="/media/product-14/gym-training.jpg" alt="Athlete training with free weights in a gym" fill sizes="(max-width: 900px) 100vw, 52vw" />
+          </div>
+          <div>
+            <p className="mr-kicker">Not another workout generator</p>
+            <h2 id="generator-title">A generated workout is a beginning—not coaching.</h2>
+            <p>STHENO stays involved before training, during the session, between workouts, at check-in and when real life changes the plan.</p>
+            <ul><li>Starts with your context</li><li>Guides the work in front of you</li><li>Uses what you actually complete</li><li>Explains the next adjustment</li></ul>
+          </div>
         </div>
       </section>
       <section className="mr-journey mr-shell" id="how-it-works" aria-labelledby="journey-title">
@@ -130,6 +142,27 @@ function MarketingHomepage() {
       <ProductSection type="training" />
       <ProductSection type="nutrition" />
       <ProductSection type="progress" />
+      <section className="mr-exercise-proof" aria-labelledby="exercise-proof-title">
+        <div className="mr-shell mr-exercise-proof-grid">
+          <div className="mr-exercise-media">
+            <video controls preload="metadata" playsInline aria-label="Dumbbell bench press exercise demonstration">
+              <source src="/exercise-media/vital/videos/dumbbell-bench-press.mp4" type="video/mp4" />
+            </video>
+            <span>Reviewed movement demo</span>
+          </div>
+          <div>
+            <p className="mr-kicker">Exercise guidance</p>
+            <h2 id="exercise-proof-title">Know what to do. Know how to do it.</h2>
+            <p>An exercise name is not instruction. STHENO pairs the movement with setup, execution, useful cues, common mistakes, what you should feel and reviewed substitutions.</p>
+            <dl>
+              <div><dt>Set up</dt><dd>Plant your feet, set the bench, and bring the dumbbells into a stable start.</dd></div>
+              <div><dt>Useful cue</dt><dd>Lower with control; press while keeping your shoulders organized.</dd></div>
+              <div><dt>Modify when</dt><dd>The range creates sharp, worsening, or joint-focused pain.</dd></div>
+            </dl>
+            <Link className="mr-link" href="/exercises/dumbbell-bench-press">Open the full exercise guide</Link>
+          </div>
+        </div>
+      </section>
       <section className="mr-proof" aria-labelledby="proof-title">
         <div className="mr-shell">
           <header>
@@ -185,6 +218,16 @@ function MarketingHomepage() {
           </div>
         </div>
       </section>
+      <section className="mr-life" aria-labelledby="life-title">
+        <div className="mr-shell"><p className="mr-kicker">Built for the week you actually have</p><h2 id="life-title">The setting changes. The work can still count.</h2></div>
+        <div className="mr-life-strip">
+          {[
+            ["/media/product-14/phone-training.jpg","Busy week","You lost the hour. You didn’t lose the workout."],
+            ["/media/product-14/home-training.jpg","Home gym","Use the equipment you have without losing the purpose of the session."],
+            ["/media/product-14/recovery.jpg","Returning","Start from what you can repeat now—not what you used to do."],
+          ].map(([src,label,copy])=><figure key={label}><Image src={src} alt="" fill sizes="(max-width: 700px) 100vw, 34vw"/><figcaption><span>{label}</span><strong>{copy}</strong></figcaption></figure>)}
+        </div>
+      </section>
       <section className="mr-coach mr-shell">
         <div>
           <p className="mr-kicker">STHENO Coach</p>
@@ -220,9 +263,9 @@ function MarketingHomepage() {
       <section className="mr-assessment">
         <div className="mr-shell mr-split">
           <div>
-            <p className="mr-kicker">A better starting point</p>
+            <p className="mr-kicker">We ask before we build</p>
             <h2>Good coaching starts by knowing you.</h2>
-            <p>The assessment creates the starting point. But Day 1 is only the beginning—what you do next becomes new information.</p>
+            <p>Your answers shape the starting plan. They are not a promise or a prediction. The work you complete gives STHENO better information for what happens next.</p>
           </div>
           <div className="mr-assessment-list">
             {[
@@ -257,7 +300,7 @@ function MarketingHomepage() {
       <section className="mr-pricing mr-shell">
         <div>
           <p className="mr-kicker">One membership</p>
-          <h2>Ongoing guidance shouldn’t cost $100 a session.</h2>
+          <h2>Training, nutrition and the next adjustment—in one membership.</h2>
           <p>
             Start with the complete {membership.trialDays}-day trial. No payment
             method is required. STHENO is not a replacement for every use case
@@ -282,6 +325,7 @@ function MarketingHomepage() {
             <li>Daily nutrition tools</li>
             <li>Progress and goal outlook</li>
             <li>Coach and plan adjustments</li>
+            <li>30-day money-back guarantee</li>
           </ul>
           <Cta location="homepage_pricing" />
         </article>
