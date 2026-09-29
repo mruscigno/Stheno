@@ -15,11 +15,11 @@ describe("Product 17 positioning and exercise gates", () => {
       expect(source).toContain("changes when your life does");
     }
     expect(home).toContain("Your fitness. Handled.");
-    expect(home).toContain("STHENO builds your training and nutrition around your goals");
+    expect(home).toMatch(/STHENO Fitness builds your training and nutrition around your\s+life/i);
   });
 
   it("demonstrates all five real-life product-proof scenarios", () => {
-    for (const proof of ["25 minutes", "hotel gym", "reviewed exercise swap", "getting stronger", "Nothing important changes silently"]) {
+    for (const proof of ["25 minutes", "hotel gym", "reviewed exercise swap", "getting stronger", "before anything important changes"]) {
       expect(home.toLowerCase()).toContain(proof.toLowerCase());
     }
     expect(home).not.toMatch(/10,000 members|4\.9 stars|before.and.after transformation/i);

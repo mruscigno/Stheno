@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-09-29T20:28:21.573Z",
+  "productionCount": 567,
+  "auditedCount": 567,
+  "passedCount": 567,
+  "failedCount": 0,
+  "warningCount": 0,
+  "placeholderDescriptionCount": 0,
+  "semanticFlags": 0,
+  "movementTypeConflicts": 0,
+  "substitutionEdgesTotal": 2018,
+  "substitutionEdgesFlagged": 0,
+  "substitutionEdgesCorrected": 0,
+  "substitutionEdgesUnresolved": 0,
+  "mediaRows": 298,
+  "mediaProblems": 0,
+  "issues": []
+}

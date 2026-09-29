@@ -2,76 +2,49 @@ import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
-const root=process.cwd();
-const url=process.env.NEXT_PUBLIC_SUPABASE_URL;
-const key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const root=process.cwd(),url=process.env.NEXT_PUBLIC_SUPABASE_URL,key=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 if(!url||!key)throw new Error("Production Supabase public environment is required.");
 const db=createClient(url,key,{auth:{persistSession:false}});
 const {data,error,count}=await db.from("exercises").select("*",{count:"exact"}).eq("status","production").order("slug").limit(1000);
-if(error)throw error;
-if(count!==data.length)throw new Error(`Production audit was incomplete: received ${data.length} of ${count}.`);
-const records=data;
-const [{data:alternatives,error:alternativesError},{data:mediaRows,error:mediaError}]=await Promise.all([
-  db.from("exercise_alternatives").select("exercise_id,alternative_id,rank,review_status").limit(10000),
-  db.from("exercise_media").select("exercise_id,video_path,poster_path,review_status").limit(10000),
-]);
-if(alternativesError)throw alternativesError;
-if(mediaError)throw mediaError;
-const bySlug=new Map(records.map(x=>[x.slug,x]));
-const byId=new Map(records.map(x=>[x.id,x]));
-const manifest=JSON.parse(fs.readFileSync(path.join(root,"content/exercise-media/vital-animations/provider-media-manifest.json"),"utf8"));
-const mediaBySlug=new Map(manifest.map(x=>[x.sthenoId,x]));
-const issues=[];
-const add=(exercise,field,problem,severity,correction)=>issues.push({exercise:exercise.slug,field,problem,severity,correction});
-const generic=new Set(["move with control through a comfortable range.","keep your breathing steady and your joints aligned.","stop the set before technique changes.","rushing the movement or using momentum.","forcing a range that causes pain.","losing the intended starting position.","build controlled strength and skill in the listed primary muscles."]);
-const genericDescription="build controlled strength and skill in the listed primary muscles.";
-const contradictions={upper:[/sprint(?:ing| interval)?/i,/glute activation/i,/hip mobility/i,/drive through (?:the )?heel/i],lower:[/draw (?:the|your) arm/i,/elbows? toward your hips/i,/cable attachment/i,/triceps pushdown/i],core:[/all-out sprint/i,/cable (?:pulley|attachment)/i,/triceps pushdown/i,/shoulder stretch/i],cardio:[/triceps contraction/i,/cable attachment/i,/bench press/i]};
-const group=e=>{const muscles=e.primary_muscles??[];if(e.exercise_type==="cardio")return "cardio";if(muscles.includes("core"))return "core";if(muscles.some(x=>["quadriceps","hamstrings","glutes","calves"].includes(x)))return "lower";return "upper";};
-const duplicateBuckets=new Map();
-for(const exercise of records){
-  const education=exercise.education??{};
-  const combined=[exercise.purpose,...(education.setup??[]),...(education.execution??[]),...(education.cues??[]),...(education.mistakes??[])].filter(Boolean).join(" ");
-  for(const pattern of contradictions[group(exercise)]??[])if(pattern.test(combined))add(exercise,"semantic consistency",`Content conflicts with ${group(exercise)}-body movement metadata: ${pattern}.`,"critical","Review the production record against the movement identity and correct the contaminated field.");
-  if(!exercise.name||!exercise.purpose||!exercise.movement_pattern||!exercise.primary_muscles?.length||!exercise.required_equipment?.length)add(exercise,"required fields","One or more required identity fields are missing.","critical","Complete and review the identity metadata before production use.");
-  for(const field of ["setup","execution","cues","mistakes"]){
-    const values=education[field]??[];
-    if(values.length<2)add(exercise,field,"Fewer than two reviewed instructions are present.","high","Add movement-specific reviewed guidance.");
-    const templated=values.filter(x=>generic.has(String(x).trim().toLowerCase()));
-    if(templated.length)add(exercise,field,`${templated.length} generic template line(s) provide limited movement-specific value.`,"medium","Replace generic lines during editorial review; retain only safety language that is genuinely shared.");
-    for(const value of values){const normalized=String(value).trim().toLowerCase();if(normalized.length<24)continue;const list=duplicateBuckets.get(normalized)??[];list.push({slug:exercise.slug,field});duplicateBuckets.set(normalized,list);}
-  }
-  if(!education.feel)add(exercise,"what-you-should-feel","Missing expected-effort guidance.","high","Describe plausible muscular effort without implying pain is required.");
-  if(!education.stopModify)add(exercise,"caution","Missing stop/modify guidance.","high","Add conservative, non-diagnostic safety guidance.");
-  if(exercise.technical_review_status!=="reviewed"||exercise.editorial_review_status!=="reviewed"||exercise.visual_review_status!=="reviewed"||!exercise.production_ready)add(exercise,"quality state","Production record is not fully reviewed and production-ready.","critical","Return the record to review before public release.");
-  const media=mediaBySlug.get(exercise.slug);
-  if(media)for(const [field,asset] of [["video",media.hostedVideoPath],["thumbnail",media.hostedPosterPath]])if(!asset||!fs.existsSync(path.join(root,"public",asset.replace(/^\//,""))))add(exercise,"media",`${field} asset is missing or broken.`,"high","Correct the manifest mapping or leave the guide instructional-only.");
+if(error)throw error;if(count!==data.length)throw new Error(`Incomplete corpus: ${data.length} of ${count}.`);
+const records=data,byId=new Map(records.map(x=>[x.id,x])),bySlug=new Map(records.map(x=>[x.slug,x]));
+async function allRows(table,columns){const rows=[];for(let from=0;;from+=1000){const {data:page,error}=await db.from(table).select(columns).range(from,from+999);if(error)throw error;rows.push(...page);if(page.length<1000)break;}return rows;}
+const [edges,media]=await Promise.all([allRows("exercise_alternatives","exercise_id,alternative_id,rank,review_status"),allRows("exercise_media","exercise_id,video_path,poster_path,review_status,provenance")]);
+
+const validTypes=new Set(["DYNAMIC_REPS","TIMED_ISOMETRIC","LOADED_CARRY_TIME","LOADED_CARRY_DISTANCE","CARDIO_TIME","CARDIO_DISTANCE","CARDIO_INTERVAL","MOBILITY_REPS","MOBILITY_TIME"]);
+const genericPatterns=[/build controlled strength and skill in the listed primary muscles/i,/use it to build controlled strength and skill through a repeatable range of motion/i,/move with control through a comfortable range/i,/keep your breathing steady and your joints aligned/i,/reset in the stable start position before beginning the next repetition/i,/move smoothly into the working range while keeping the listed primary muscles in control/i,/prepare the .* and remove anything that could interrupt a controlled repetition/i];
+const issues=[],add=(x,field,code,severity,message)=>issues.push({exercise:x?.slug??null,field,code,severity,message}),copy=x=>`${x.purpose??""} ${JSON.stringify(x.education??{})}`;
+const requiredArray=(x,field,min=2)=>{const v=x.education?.[field];if(!Array.isArray(v)||v.length<min)add(x,field,"CONTENT_INCOMPLETE","critical",`${field} needs at least ${min} specific steps.`);};
+
+for(const x of records){
+  if(!x.slug||!x.name||!x.purpose||!x.movement_pattern||!x.primary_muscles?.length||!x.required_equipment?.length)add(x,"schema","REQUIRED_METADATA","critical","Required identity or taxonomy metadata is missing.");
+  if(!validTypes.has(x.movement_type))add(x,"movement_type","MOVEMENT_TYPE_INVALID","critical","Movement type is missing or unsupported.");
+  if(["DYNAMIC_REPS","MOBILITY_REPS"].includes(x.movement_type)&&(!(x.rep_min>0)||x.rep_max<x.rep_min))add(x,"prescription","REP_RANGE_INVALID","critical","Rep movement lacks a valid rep range.");
+  if(["TIMED_ISOMETRIC","LOADED_CARRY_TIME","CARDIO_TIME","MOBILITY_TIME"].includes(x.movement_type)&&(!(x.duration_min_seconds>0)||x.duration_max_seconds<x.duration_min_seconds))add(x,"prescription","DURATION_INVALID","critical","Timed movement lacks a valid duration.");
+  if(["LOADED_CARRY_DISTANCE","CARDIO_DISTANCE"].includes(x.movement_type)&&(!(Number(x.distance_min)>0)||Number(x.distance_max)<Number(x.distance_min)||!x.distance_unit))add(x,"prescription","DISTANCE_INVALID","critical","Distance movement lacks a valid prescription.");
+  if(x.movement_type==="CARDIO_INTERVAL"&&(!(x.interval_work_seconds>0)||!(x.interval_recovery_seconds>=0)||!(x.interval_rounds_min>0)))add(x,"prescription","INTERVAL_INVALID","critical","Interval movement lacks work, recovery, or rounds.");
+  const all=copy(x);if(genericPatterns.some(p=>p.test(all)))add(x,"content","PLACEHOLDER_COPY","critical","Customer-facing placeholder/template copy remains.");
+  for(const field of ["setup","execution","cues","mistakes"])requiredArray(x,field);if(!x.education?.feel)add(x,"feel","FEEL_MISSING","critical","Expected effort guidance is missing.");if(!x.education?.stopModify)add(x,"caution","STOP_MODIFY_MISSING","critical","Stop/modify guidance is missing.");
+  if(x.movement_type==="TIMED_ISOMETRIC"&&/(final repetition|next repetition|concentric|eccentric|\breps?\b)/i.test(all))add(x,"content","ISOMETRIC_REP_LANGUAGE","critical","Timed isometric contains rep-phase language.");
+  if(x.movement_type?.startsWith("CARDIO_")&&/(hypertrophy|weight stack|triceps contraction|final repetition)/i.test(all))add(x,"content","CARDIO_LIFT_LANGUAGE","critical","Cardio content contains lifting-template language.");
+  if(x.movement_type?.startsWith("LOADED_CARRY")&&x.movement_pattern!=="carry")add(x,"movement_pattern","CARRY_PATTERN_CONFLICT","critical","Carry type is not a carry pattern.");
+  const group=x.primary_muscles?.some(m=>["quadriceps","hamstrings","glutes","calves"].includes(m))?"lower":x.primary_muscles?.includes("core")?"core":"upper",contamination=group==="upper"?/(glute activation|drive through (?:the )?heel|all-out sprint)/i:group==="lower"?/(triceps pushdown|cable attachment.*elbow|draw your arm)/i:/(triceps pushdown|all-out sprint|shoulder stretch)/i;
+  if(contamination.test(all))add(x,"semantic","SEMANTIC_CONTAMINATION","critical","Instructions conflict with exercise identity and target region.");
+  if(!x.schema_valid||!x.movement_type_valid||!x.semantic_validation_passed)add(x,"validation","VALIDATION_STATE_FAILED","critical","Persisted deterministic validation failed.");
+  if(!x.production_ready||x.review_status!=="reviewed")add(x,"publication","PUBLICATION_GATE_FAILED","critical","Production record is not reviewed and production-ready.");
+  if(!x.content_reviewed)add(x,"review","CONTENT_REVIEW_REQUIRED","warning","Editorial/technical review is incomplete.");if(!x.substitutions_validated)add(x,"alternatives","SUBSTITUTIONS_REVIEW_REQUIRED","warning","No validated reviewed alternative is recorded.");
 }
-const knownContamination=[
-  {identity:/ab wheel/i,copy:/outer-glute activation/i},
-  {identity:/upright row/i,copy:/standing forward fold into a plank/i},
-  {identity:/jump squat/i,copy:/one-arm push-up/i},
-];
-for(const exercise of records){
-  const identity=`${exercise.name} ${exercise.slug}`;
-  const copy=`${exercise.purpose??""} ${JSON.stringify(exercise.education??{})}`;
-  for(const signature of knownContamination)if(signature.identity.test(identity)&&signature.copy.test(copy))add(exercise,"semantic consistency","Known cross-exercise contamination signature detected.","critical","Correct the production record and review its upstream source mapping.");
-}
-const alternativeKeys=new Set();
-let substitutionProblems=0;
-for(const alternative of alternatives??[]){
-  const key=`${alternative.exercise_id}:${alternative.alternative_id}`;
-  const invalid=!byId.has(alternative.exercise_id)||!byId.has(alternative.alternative_id)||alternative.exercise_id===alternative.alternative_id||alternativeKeys.has(key);
-  if(invalid)substitutionProblems++;
-  alternativeKeys.add(key);
-}
-const brokenMedia=(mediaRows??[]).filter(row=>!byId.has(row.exercise_id)||!row.video_path||!row.poster_path).length;
-const duplicateClusters=[...duplicateBuckets.entries()].filter(([,items])=>new Set(items.map(x=>x.slug)).size>=3).map(([text,items])=>({text,items}));
-for(const cluster of duplicateClusters)for(const item of cluster.items)add(bySlug.get(item.slug),item.field,`Exact customer-facing text repeats across ${new Set(cluster.items.map(x=>x.slug)).size} exercises.`,"medium","Review the cluster; preserve legitimate shared safety language and replace non-useful boilerplate.");
-const counts=issues.reduce((m,x)=>(m[x.severity]=(m[x.severity]??0)+1,m),{});
-const flagged=new Set(issues.map(x=>x.exercise)).size;
-const genericDescriptions=records.filter(x=>String(x.purpose??"").trim().toLowerCase()===genericDescription).length;
-const correctedRecords=records.filter(x=>x.content_version==="20.1.0").length;
-const correctedExamples=["pistol-squat","sit-ups-version-1","tricepss-pushdown-cable-straight-bar"].filter(slug=>bySlug.has(slug)&&!issues.some(x=>x.exercise===slug&&x.severity==="critical"));
-const lines=["# Exercise content integrity audit","",`Generated from the live production Supabase table: ${new Date().toISOString()}`,`Production exercise count: **${count}**`,`Exercises audited: **${records.length}**`,`Semantic flags found: **${issues.filter(x=>x.field==="semantic consistency").length}**`,`Generic/boilerplate descriptions found: **${genericDescriptions}**`,`Substitution problems found: **${substitutionProblems}**`,`Media problems found: **${brokenMedia+issues.filter(x=>x.field==="media").length}**`,`Records corrected by the remediation migration: **${correctedRecords}**`,`Critical unresolved semantic problems: **${counts.critical??0}**`,`Records with editorial improvement flags: **${flagged}**`,`Duplicate-content clusters: **${duplicateClusters.length}**`,"","## Production findings","",`The reported Ab Wheel Workout, Barbell Upright Row, Jump Squat, Pistol Squat, Sit Ups Version 1, and cable triceps pushdown pages now contain movement-appropriate production content. Verified examples without critical semantic flags: ${correctedExamples.join(", ")||"none"}. Remaining medium flags are editorial specificity improvements, not cross-exercise contamination.`,"","## Root cause and protections","","Product 16's catalog-expansion migration used one fallback purpose sentence for 330 records and marked records reviewed based on field presence. Product 17 later replaced some records with provider-specific copy, which explains inconsistent snapshots and why the named examples were already correct while the older boilerplate remained. The remediation updated all 330 placeholder descriptions in production, removed that fallback from both Product 16 builders, and installed a production write trigger that rejects the placeholder and known cross-exercise contamination signatures. The audit queries the live table, requires the returned row count to equal the authoritative count, validates substitutions and media references, and records unresolved editorial duplication without presenting it as a critical semantic defect.","","## Issue categories",...Object.entries(counts).map(([k,v])=>`- ${k}: ${v}`),"","## Detailed findings","","| Exercise | Field | Problem | Severity | Recommended correction |","| --- | --- | --- | --- | --- |",...issues.map(x=>`| ${x.exercise} | ${x.field} | ${x.problem.replaceAll("|","\\|")} | ${x.severity} | ${x.correction.replaceAll("|","\\|")} |`),"","## Manual QA and production verification","","Representative public pages must be checked after deployment across major muscles, equipment types, cardio, mobility, and bodyweight. Production verification results are appended after release; unresolved medium flags remain an editorial backlog and are not described as corrected."];
-fs.writeFileSync(path.join(root,"docs/exercise-content-integrity-audit.md"),lines.join("\n")+"\n");
-console.log(JSON.stringify({productionCount:count,checked:records.length,flagged,issues:issues.length,counts,genericDescriptions,correctedRecords,substitutionProblems,brokenMedia,duplicateClusters:duplicateClusters.length,mediaMapped:manifest.length},null,2));
+
+const fixtureRules=[["pistol-squat",/squat|single-leg/i,/shoulder stretch|triceps pushdown/i],["sit-ups-version-1",/sit.?up|trunk|abdominal/i,/sprint interval|triceps pushdown/i],["ab-wheel-workout",/ab wheel|roll/i,/outer-glute activation|sprint interval/i],["barbell-upright-row",/row|elbow|shoulder/i,/forward fold into a plank|one-arm push-up/i],["jump-squat",/jump|squat/i,/one-arm push-up|cable attachment/i],["dumbbell-overhead-standard",/overhead|press/i,/inchworm|plank mechanics/i],["forearm-plank",/hold|brace|position/i,/final repetition|next repetition/i]];
+for(const [slug,must,mustNot] of fixtureRules){const x=bySlug.get(slug)??records.find(row=>row.name.toLowerCase()===slug.replaceAll("-"," "));if(!x){add({slug},"fixture","FIXTURE_MISSING","critical","Regression fixture is absent.");continue;}const all=copy(x);if(!must.test(all)||mustNot.test(all))add(x,"fixture","FIXTURE_FAILED","critical","Regression fixture failed its semantic rule.");}
+for(const x of records.filter(r=>/triceps.*pushdown|pushdown.*triceps/i.test(`${r.slug} ${r.name}`)))if(!/triceps|elbow|pushdown/i.test(copy(x))||/glute activation/i.test(copy(x)))add(x,"fixture","TRICEPS_PUSHDOWN_FAILED","critical","Pushdown family semantic rule failed.");
+
+const seen=new Set();let flaggedEdges=0;
+for(const edge of edges??[]){const source=byId.get(edge.exercise_id),target=byId.get(edge.alternative_id),key=`${edge.exercise_id}:${edge.alternative_id}`;let bad=!source||!target||edge.exercise_id===edge.alternative_id||seen.has(key)||edge.review_status!=="reviewed";if(source&&target){const pattern=source.movement_pattern===target.movement_pattern,muscle=(source.primary_muscles??[]).some(m=>(target.primary_muscles??[]).includes(m));if(!pattern&&!muscle)bad=true;}if(bad){flaggedEdges++;add(source??{slug:null},"alternatives","ALTERNATIVE_EDGE_INVALID","critical",`Invalid or low-relevance edge to ${target?.slug??"missing target"}.`);}seen.add(key);}
+let mediaProblems=0;const assets=new Map();for(const m of media??[]){const x=byId.get(m.exercise_id);if(!x||!m.video_path||!m.poster_path){mediaProblems++;add(x??{slug:null},"media","MEDIA_REFERENCE_INVALID","critical","Media relation is orphaned or incomplete.");}for(const asset of [m.video_path,m.poster_path]){if(!asset)continue;const owners=assets.get(asset)??[];owners.push(x?.slug);assets.set(asset,owners);}}
+for(const [asset,owners] of assets)if(new Set(owners).size>1){mediaProblems++;issues.push({exercise:null,field:"media",code:"MEDIA_DUPLICATE_MAPPING",severity:"warning",message:`${asset} maps to ${new Set(owners).size} exercises; review equivalence.`});}
+
+const critical=issues.filter(i=>i.severity==="critical"),warnings=issues.filter(i=>i.severity==="warning"),failed=new Set(critical.map(i=>i.exercise).filter(Boolean));
+const report={generatedAt:new Date().toISOString(),productionCount:count,auditedCount:records.length,passedCount:count-failed.size,failedCount:failed.size,warningCount:warnings.length,placeholderDescriptionCount:issues.filter(i=>i.code==="PLACEHOLDER_COPY").length,semanticFlags:issues.filter(i=>/SEMANTIC|LANGUAGE/.test(i.code)).length,movementTypeConflicts:issues.filter(i=>/MOVEMENT|_INVALID|PATTERN_CONFLICT/.test(i.code)).length,substitutionEdgesTotal:edges?.length??0,substitutionEdgesFlagged:flaggedEdges,substitutionEdgesCorrected:0,substitutionEdgesUnresolved:flaggedEdges,mediaRows:media?.length??0,mediaProblems,issues};
+const arg=process.argv.indexOf("--json"),output=arg>=0?process.argv[arg+1]:"reports/exercise-content-audit.json";fs.mkdirSync(path.dirname(path.join(root,output)),{recursive:true});fs.writeFileSync(path.join(root,output),JSON.stringify(report,null,2)+"\n");
+const md=["# Exercise content integrity audit","",`Generated: ${report.generatedAt}`,`Production exercises: **${count}**`,`Audited: **${records.length}**`,`Passed: **${report.passedCount}**`,`Failed: **${report.failedCount}**`,`Warnings: **${warnings.length}**`,`Movement-type conflicts: **${report.movementTypeConflicts}**`,`Placeholder/template copy: **${report.placeholderDescriptionCount}**`,`Substitution edges: **${report.substitutionEdgesTotal}** total / **${flaggedEdges}** flagged`,`Media relations: **${report.mediaRows}** / **${mediaProblems}** problems`,"","## Severity policy","","Critical schema, prescription, semantic, substitution-graph, or media-reference failures block publication and CI. Missing optional licensed video does not fail because instruction-only pages are intentional.","","## Issues","","| Exercise | Code | Severity | Message |","|---|---|---|---|",...issues.map(i=>`| ${i.exercise??"—"} | ${i.code} | ${i.severity} | ${i.message.replaceAll("|","\\|")} |`)];fs.writeFileSync(path.join(root,"docs/exercise-content-integrity-audit.md"),md.join("\n")+"\n");console.log(JSON.stringify({...report,issues:undefined},null,2));if(critical.length)process.exitCode=1;

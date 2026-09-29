@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "verify:exercise-media": "node scripts/product17/validate_3d_factory.mjs",
     "audit:exercise-content": "node --env-file=.env.production scripts/exercise-content-integrity-audit.mjs",
+    "audit:exercises": "node --env-file=.env.production scripts/exercise-content-integrity-audit.mjs --json reports/exercise-content-audit.json",
     "backfill:training:dry-run": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --dry-run",
     "backfill:training:apply": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --apply",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"

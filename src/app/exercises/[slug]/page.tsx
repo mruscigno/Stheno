@@ -5,6 +5,7 @@ import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
 import { completeExerciseGuide } from "@/modules/training/guide-content";
 import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
+import { formatExercisePrescription } from "@/modules/training/prescription";
 async function getExercise(slug: string) {
   return getPublicExercise(slug);
 }
@@ -40,8 +41,8 @@ export default async function Exercise({
     primary = e.primary_muscles as string[],
     secondary = e.secondary_muscles as string[],
     education = completeExerciseGuide({name:e.name,movementPattern:String(e.movement_pattern),primaryMuscles:primary,equipment:e.required_equipment as string[],education:storedEducation}),
-    alternativeRows = await getPublicExerciseAlternatives(e.slug, primary),
-    alternatives = (alternativeRows??[]).filter(candidate => (candidate.primary_muscles as string[]).some(muscle=>primary.includes(muscle)) && candidate.exercise_role===e.exercise_role).slice(0,6);
+    alternativeRows = await getPublicExerciseAlternatives(e.id),
+    alternatives = alternativeRows.slice(0,6);
   return (
     <main className="exercise-profile shell">
       <nav className="breadcrumbs">
@@ -79,7 +80,7 @@ export default async function Exercise({
         <div>
           <dt>Typical range</dt>
           <dd>
-            {e.rep_min}–{e.rep_max} reps
+            {formatExercisePrescription(e)}
           </dd>
         </div>
         <div>
