@@ -1,20 +1,24 @@
 # Exercise content integrity audit
 
-Generated from the live production Supabase table: 2026-09-29T16:32:27.762Z
+Generated from the live production Supabase table: 2026-09-29T18:09:13.075Z
 Production exercise count: **567**
-Records checked: **567**
-Records flagged: **567**
-Critical flags: **0**
-Media mismatches or missing mapped assets: **0**
+Exercises audited: **567**
+Semantic flags found: **0**
+Generic/boilerplate descriptions found: **0**
+Substitution problems found: **0**
+Media problems found: **0**
+Records corrected by the remediation migration: **330**
+Critical unresolved semantic problems: **0**
+Records with editorial improvement flags: **567**
 Duplicate-content clusters: **77**
 
 ## Production findings
 
-The previously reported Pistol Squat, Sit Ups Version 1, and cable triceps pushdown examples now contain movement-appropriate production content. Verified examples without critical semantic flags: pistol-squat, sit-ups-version-1, tricepss-pushdown-cable-straight-bar. Remaining flags are reported below and are not silently rewritten.
+The reported Ab Wheel Workout, Barbell Upright Row, Jump Squat, Pistol Squat, Sit Ups Version 1, and cable triceps pushdown pages now contain movement-appropriate production content. Verified examples without critical semantic flags: pistol-squat, sit-ups-version-1, tricepss-pushdown-cable-straight-bar. Remaining medium flags are editorial specificity improvements, not cross-exercise contamination.
 
 ## Root cause and protections
 
-Historical content was assembled through multiple catalog-expansion and media-ingestion paths with different schemas. Generic fallback education could be marked complete because field presence—not semantic specificity—was the dominant gate. The production release gate already tracks technical, editorial, visual, and production-ready states. This audit now checks the live table, validates the provider manifest by stable slug, requires the returned row count to match the production count, and adds regression tests for duplicate IDs, broken media mappings, invalid taxonomy, self-substitution, and missing reviewed fields.
+Product 16's catalog-expansion migration used one fallback purpose sentence for 330 records and marked records reviewed based on field presence. Product 17 later replaced some records with provider-specific copy, which explains inconsistent snapshots and why the named examples were already correct while the older boilerplate remained. The remediation updated all 330 placeholder descriptions in production, removed that fallback from both Product 16 builders, and installed a production write trigger that rejects the placeholder and known cross-exercise contamination signatures. The audit queries the live table, requires the returned row count to equal the authoritative count, validates substitutions and media references, and records unresolved editorial duplication without presenting it as a critical semantic defect.
 
 ## Issue categories
 - medium: 5843

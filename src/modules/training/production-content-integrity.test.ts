@@ -6,6 +6,12 @@ import expansion from "../../../content/exercises/vital-provider-expansion.json"
 const records=[...restored,...expansion] as Array<Record<string,unknown>>;
 const slugs=records.map(x=>String(x.slug));
 const validMuscles=new Set(["chest","back","shoulders","biceps","triceps","quadriceps","hamstrings","glutes","calves","core","forearms","hip_flexors","adductors","abductors","full_body","cardio","neck","upper legs"]);
+const forbiddenPurpose="build controlled strength and skill in the listed primary muscles.";
+const contamination=[
+  {identity:/ab wheel/i,copy:/outer-glute activation/i},
+  {identity:/upright row/i,copy:/standing forward fold into a plank/i},
+  {identity:/jump squat/i,copy:/one-arm push-up/i},
+];
 
 describe("production content integrity",()=>{
   it("keeps stable unique exercise and provider-media identifiers",()=>{
@@ -32,6 +38,17 @@ describe("production content integrity",()=>{
       expect(new Set(values).size).toBe(values.length);
       expect(values).not.toContain(record.slug);
       expect(values.every(x=>known.has(x))).toBe(true);
+    }
+  });
+  it("rejects placeholder descriptions and known cross-exercise contamination",()=>{
+    for(const record of records){
+      const purpose=String(record.purpose??"");
+      expect(purpose.trim().toLowerCase()).not.toBe(forbiddenPurpose);
+      const identity=`${record.name??""} ${record.slug??""}`;
+      const copy=`${purpose} ${JSON.stringify(record.education??{})}`;
+      for(const signature of contamination){
+        if(signature.identity.test(identity))expect(copy).not.toMatch(signature.copy);
+      }
     }
   });
 });

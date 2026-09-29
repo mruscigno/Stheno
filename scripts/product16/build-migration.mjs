@@ -58,7 +58,7 @@ insert into product16_payload values ($product16$${JSON.stringify(payload)}$prod
 
 with source as (select value e from product16_payload, jsonb_array_elements(payload))
 update public.exercises x set
-  education=s.e->'education', purpose=coalesce(x.purpose,'Build controlled strength and skill in the listed primary muscles.'),
+  education=s.e->'education', purpose=coalesce(x.purpose,format('%s is a %s exercise using %s that primarily trains %s. Use it to build controlled strength and skill through a repeatable range of motion.',x.name,replace(x.movement_pattern,'_',' '),coalesce(nullif(array_to_string(x.required_equipment,', '),''),'bodyweight'),array_to_string(x.primary_muscles,' and '))),
   aliases=jsonb_build_array(lower(s.e->>'name'),replace(s.e->>'slug','-',' ')),
   joint_actions=array[s.e->>'motionPrimitive'],
   laterality=case when coalesce((s.e->>'unilateral')::boolean,false) then 'unilateral' else 'bilateral' end,
