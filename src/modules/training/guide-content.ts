@@ -22,6 +22,16 @@ export const humanizeExerciseText = (value: string) =>
   value.replace(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g, label);
 
 const humanizeList = (values: string[]) => values.map(humanizeExerciseText);
+const genericReaderCopy = new Set([
+  "move with control through a comfortable range.",
+  "keep your breathing steady and your joints aligned.",
+  "stop the set before technique changes.",
+  "rushing the movement or using momentum.",
+  "forcing a range that causes pain.",
+  "losing the intended starting position.",
+]);
+const isUsefulList = (values: string[] | undefined, minimum: number) =>
+  Boolean(values && values.length >= minimum && values.some(value => !genericReaderCopy.has(value.trim().toLowerCase())));
 
 const patternCopy: Record<string, { setup: string[]; execution: string[]; cues: string[]; mistakes: string[] }> = {
   squat: {
@@ -99,8 +109,8 @@ export function completeExerciseGuide(input: GuideInput): Required<ExerciseEduca
     setup: humanizeList(setup),
     execution: humanizeList(execution),
     feel: humanizeExerciseText(existing.feel ?? `You should feel the ${primary} doing most of the work, with effort building in the muscle rather than sharp pressure in a joint.`),
-    cues: humanizeList(existing.cues && existing.cues.length >= 3 ? existing.cues : base.cues),
-    mistakes: humanizeList(existing.mistakes && existing.mistakes.length >= 3 ? existing.mistakes : base.mistakes),
+    cues: humanizeList(isUsefulList(existing.cues, 3) ? existing.cues! : base.cues),
+    mistakes: humanizeList(isUsefulList(existing.mistakes, 3) ? existing.mistakes! : base.mistakes),
     stopModify: humanizeExerciseText(existing.stopModify ?? "Stop or shorten the range if you feel sharp, sudden, worsening, or joint-focused pain. Choose a reviewed alternative if a comfortable setup is not available."),
   };
 }
