@@ -217,6 +217,10 @@
   max-width: 760px;
   font-size: 1.15rem;
 }
+.mr-journey{padding-block:110px}.mr-journey>header{max-width:780px;margin-bottom:48px}.mr-journey ol{list-style:none;margin:0 0 42px;padding:0;border-top:1px solid var(--mr-line)}.mr-journey li{display:grid;grid-template-columns:130px 1fr;gap:30px;padding:25px 0;border-bottom:1px solid var(--mr-line)}.mr-journey li>span{color:var(--mr-orange-dark);font-size:.72rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase}.mr-journey li h3{margin:0 0 7px}.mr-journey li p{max-width:720px;margin:0;color:var(--mr-muted)}
+.mr-proof{padding:110px 0;background:#181a17;color:#f8f5ed}.mr-proof header{max-width:780px;margin-bottom:44px}.mr-proof .mr-kicker{color:#ff8a68}.mr-proof-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.mr-proof-grid article{padding:30px;border:1px solid #ffffff22;background:#20221f;display:grid;gap:12px;min-height:300px}.mr-proof-grid article>span,.mr-proof-grid article>b{color:#ff8a68;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}.mr-proof-grid article>p{color:#b9bcb5;margin:0}.mr-proof-grid article>i{font-style:normal;font-size:1.5rem}.mr-proof-grid article>strong{font:500 1.55rem/1.25 Georgia,serif;max-width:25ch}.mr-proof .mr-shell>small{display:block;margin-top:18px;color:#9da098}
+.mr-comparison{padding-block:110px}.mr-comparison>header{max-width:850px}.mr-comparison>div{display:grid;grid-template-columns:1fr 1fr;margin-top:45px;border:1px solid var(--mr-line)}.mr-comparison article{padding:38px}.mr-comparison article+article{border-left:1px solid var(--mr-line)}.mr-comparison article>span{font-size:.72rem;font-weight:850;letter-spacing:.14em;text-transform:uppercase}.mr-comparison article.stheno{background:var(--mr-orange)}.mr-comparison ul{list-style:none;padding:0;margin:24px 0 0}.mr-comparison li{padding:13px 0;border-top:1px solid currentColor}.mr-comparison li:before{content:"→";margin-right:12px;font-weight:900}
+.mr-founder{display:grid;grid-template-columns:1fr 1fr;gap:80px;padding-block:100px;border-top:1px solid var(--mr-line)}.mr-founder>div:last-child>p:first-child{font-size:1.22rem;max-width:570px}.mr-founder .founder-signoff{font-size:1.55rem;margin:28px 0}.mr-founder .founder-signoff small{font:600 .76rem/1.5 Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mr-muted)}.mr-founder>div:last-child>div{display:flex;gap:20px;flex-wrap:wrap}.mr-founder a{font-weight:800;border-bottom:1px solid currentColor}
 .mr-promises {
   padding: 115px 0;
 }
@@ -697,6 +701,7 @@
   .mr-faq {
     grid-template-columns: 1fr;
   }
+  .mr-founder{grid-template-columns:1fr;gap:35px}
   .mr-hero-visual {
     min-height: 640px;
   }
@@ -739,7 +744,7 @@
     gap: 44px;
   }
   .mr-hero h1 {
-    font-size: 3.55rem;
+    font-size: clamp(2.85rem, 13.5vw, 3.55rem);
     max-width: 100%;
     overflow-wrap: anywhere;
   }
@@ -776,6 +781,10 @@
     display: none;
   }
   .mr-problem,
+  .mr-journey,
+  .mr-proof,
+  .mr-comparison,
+  .mr-founder,
   .mr-promises,
   .mr-how,
   .mr-adapt,
@@ -784,6 +793,7 @@
   .mr-final {
     padding-block: 75px;
   }
+  .mr-journey li{grid-template-columns:1fr;gap:8px}.mr-proof-grid,.mr-comparison>div{grid-template-columns:1fr}.mr-proof-grid article{min-height:0;padding:24px}.mr-comparison article+article{border-left:0;border-top:1px solid var(--mr-line)}
   .mr-promises > div,
   .mr-how ol,
   .mr-resource-grid {

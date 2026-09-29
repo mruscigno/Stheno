@@ -20,9 +20,9 @@ import {
   websiteId,
 } from "@/lib/seo";
 export const metadata: Metadata = publicMetadata({
-  title: "STHENO Fitness | Personalized Training, Nutrition & Progress",
+  title: "STHENO Fitness | Ongoing Training, Nutrition & Coaching",
   description:
-    "Personalized workouts, practical nutrition guidance, progress tracking and fitness coaching that adapts as you improve and life changes.",
+    "A fitness plan that keeps coaching after Day 1—using your workouts, missed sessions, progress, travel and check-ins to guide what happens next.",
   path: "/",
 });
 const Cta = ({
@@ -41,7 +41,7 @@ const Cta = ({
     className={className}
     href="/assessment"
   >
-    Get Your Free Plan <span aria-hidden="true">→</span>
+    Build My Free Plan <span aria-hidden="true">→</span>
   </TrackedLink>
 );
 function MarketingHomepage() {
@@ -62,11 +62,11 @@ function MarketingHomepage() {
         <div className="mr-shell mr-hero-grid">
           <div className="mr-hero-copy">
             <p className="mr-kicker">Your fitness. Handled.</p>
-            <h1>A fitness plan that changes when your life does.</h1>
+            <h1>Your plan shouldn’t stop coaching you after Day 1.</h1>
             <p className="mr-lede">
-              STHENO builds your training and nutrition around your goals,
-              schedule, equipment, and progress—then keeps adjusting when life
-              changes.
+              STHENO Fitness builds your training and nutrition around your
+              life—then keeps adjusting as you train, miss workouts, travel,
+              get stronger and check in.
             </p>
             <div className="mr-actions">
               <Cta
@@ -82,7 +82,7 @@ function MarketingHomepage() {
               </TrackedLink>
             </div>
             <small>
-              Starts with a personalized assessment. No credit card required.
+              35 questions · No credit card · See your personalized starting plan
             </small>
             <Suspense fallback={null}>
               <TractionCounter />
@@ -93,105 +93,76 @@ function MarketingHomepage() {
       </section>
       <section className="mr-problem">
         <div className="mr-shell">
-          <p className="mr-kicker">The static-plan problem</p>
-          <h2>
-            A fitness plan shouldn’t stop being useful the moment real life
-            happens.
-          </h2>
+          <p className="mr-kicker">The plan is just the beginning</p>
+          <h2>Most fitness apps give you a plan. STHENO stays with you.</h2>
           <p>
-            Most plans know what you were supposed to do. They do not know what
-            you completed, what changed, or whether you are progressing. STHENO
-            connects those pieces so you can keep moving without starting over.
+            Your workouts, missed sessions, progress, equipment and check-ins
+            become new information. STHENO uses it to tell you what to do next.
           </p>
         </div>
       </section>
-      <section
-        className="mr-promises mr-shell"
-        aria-labelledby="promises-title"
-      >
+      <section className="mr-journey mr-shell" id="how-it-works" aria-labelledby="journey-title">
         <header>
-          <p className="mr-kicker">One connected membership</p>
-          <h2 id="promises-title">Know what to do next.</h2>
+          <p className="mr-kicker">Ongoing coaching</p>
+          <h2 id="journey-title">What happens after your plan is built?</h2>
         </header>
-        <div>
+        <ol>
           {[
-            [
-              "01",
-              "Training built for you",
-              "Your goals, experience, schedule, equipment and preferences shape every starting point.",
-            ],
-            [
-              "02",
-              "Nutrition made manageable",
-              "Personalized calorie and macro targets, daily logging and food search—without turning meals into a second job.",
-            ],
-            [
-              "03",
-              "See what’s working",
-              "Follow strength, personal records, consistency, body trends and your goal outlook in one place.",
-            ],
-            [
-              "04",
-              "Your plan changes when life does",
-              "Use swaps, check-ins and Coach when time, equipment, travel or recovery change.",
-            ],
-          ].map(([n, h, p]) => (
-            <article key={n}>
-              <span>{n}</span>
+            ["Day 1", "STHENO learns your life", "Goals, schedule, equipment, experience and nutrition shape your starting plan."],
+            ["Tuesday", "You complete the workout", "What you actually lifted—not what was merely scheduled—becomes the new baseline."],
+            ["Thursday", "Work blows up", "A missed session does not ruin the week. STHENO shows the next useful session."],
+            ["Next week", "Your press improves", "Hit the target cleanly? Your next load recommendation responds."],
+            ["Travel week", "The equipment changes", "Tell STHENO you have a hotel gym and your exercise options change."],
+            ["Check-in", "The estimate meets reality", "Performance, recovery, adherence and body trends guide the next adjustment."],
+            ["Next block", "Your program evolves", "The next plan starts with evidence from the work you actually completed."],
+          ].map(([when, h, p]) => (
+            <li key={when}>
+              <span>{when}</span>
+              <div>
               <h3>{h}</h3>
               <p>{p}</p>
-            </article>
+              </div>
+            </li>
           ))}
-        </div>
-      </section>
-      <section className="mr-how" id="how-it-works">
-        <div className="mr-shell">
-          <header>
-            <p className="mr-kicker">How it works</p>
-            <h2>One plan. Four useful steps.</h2>
-          </header>
-          <ol>
-            {[
-              [
-                "Tell us about you",
-                "A focused assessment covers your goals, experience, schedule, equipment, preferences and constraints.",
-              ],
-              [
-                "Get your plan",
-                "See personalized training and nutrition built around the life you actually have.",
-              ],
-              [
-                "Train, eat and track",
-                "Log workouts and meals, check in, and build a record that means something.",
-              ],
-              [
-                "Keep adapting",
-                "Progress and changing circumstances inform the next useful decision—never a silent change.",
-              ],
-            ].map(([h, p], i) => (
-              <li key={h}>
-                <b>0{i + 1}</b>
-                <div>
-                  <h3>{h}</h3>
-                  <p>{p}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <Cta location="homepage_how_it_works" />
-        </div>
+        </ol>
+        <Cta location="homepage_how_it_works" />
       </section>
       <ProductSection type="training" />
       <ProductSection type="nutrition" />
       <ProductSection type="progress" />
+      <section className="mr-proof" aria-labelledby="proof-title">
+        <div className="mr-shell">
+          <header>
+            <p className="mr-kicker">Show me the change</p>
+            <h2 id="proof-title">Real-life input. A clear next action.</h2>
+          </header>
+          <div className="mr-proof-grid">
+            {[
+              ["Missed Tuesday", "Upper A was missed", "Next action", "Continue with the next planned session—no unsafe catch-up day."],
+              ["You got stronger", "185 lb × 8 with two reps left", "Load guidance", "Try 190 lb with the same rep target."],
+              ["Hotel gym", "Dumbbells to 50 lb and one bench", "Workout change", "Keep the movement patterns; use reviewed dumbbell alternatives."],
+              ["Check-in", "Trend is slower than the starting estimate", "Nutrition review", "Review adherence and the trend before making one measured adjustment."],
+            ].map(([signal, before, label, after]) => (
+              <article key={signal}>
+                <span>{signal}</span>
+                <p>{before}</p>
+                <i aria-hidden="true">↓</i>
+                <b>{label}</b>
+                <strong>{after}</strong>
+              </article>
+            ))}
+          </div>
+          <small>Illustrative examples of existing STHENO workflows—not customer results or guaranteed outcomes.</small>
+        </div>
+      </section>
       <section className="mr-adapt">
         <div className="mr-shell mr-split">
           <div>
-            <p className="mr-kicker">Adaptation</p>
-            <h2>Your life changes. Your plan should too.</h2>
+            <p className="mr-kicker">When life changes</p>
+            <h2>Miss a workout? Your week changes.</h2>
             <p>
-              Tell STHENO what changed and review the smallest useful
-              adjustment. Nothing important changes silently.
+              Tell STHENO what changed. You’ll see the smallest useful
+              adjustment before anything important changes.
             </p>
             <ul>
               <li>Short on time today</li>
@@ -250,7 +221,8 @@ function MarketingHomepage() {
         <div className="mr-shell mr-split">
           <div>
             <p className="mr-kicker">A better starting point</p>
-            <h2>A plan should know more than your age and goal.</h2>
+            <h2>Good coaching starts by knowing you.</h2>
+            <p>The assessment creates the starting point. But Day 1 is only the beginning—what you do next becomes new information.</p>
           </div>
           <div className="mr-assessment-list">
             {[
@@ -266,14 +238,31 @@ function MarketingHomepage() {
           </div>
         </div>
       </section>
+      <section className="mr-comparison mr-shell">
+        <header>
+          <p className="mr-kicker">Static plan or ongoing direction?</p>
+          <h2>A plan built once can’t coach what happens next.</h2>
+        </header>
+        <div>
+          <article>
+            <span>Static plan</span>
+            <ul><li>Built once</li><li>Assumes the week goes perfectly</li><li>Doesn’t know what you completed</li><li>Travel breaks the schedule</li><li>Leaves you to decide what changes</li></ul>
+          </article>
+          <article className="stheno">
+            <span>STHENO</span>
+            <ul><li>Starts personalized</li><li>Tracks what actually happens</li><li>Responds to missed sessions</li><li>Uses workout performance and check-ins</li><li>Tells you what to do next</li></ul>
+          </article>
+        </div>
+      </section>
       <section className="mr-pricing mr-shell">
         <div>
           <p className="mr-kicker">One membership</p>
-          <h2>Training, nutrition, progress, adaptation and Coach.</h2>
+          <h2>Ongoing guidance shouldn’t cost $100 a session.</h2>
           <p>
             Start with the complete {membership.trialDays}-day trial. No payment
-            method is required. Get the structure of an adaptive fitness plan
-            without the cost or scheduling of a personal trainer.
+            method is required. STHENO is not a replacement for every use case
+            for an in-person trainer. It gives you connected training, nutrition,
+            exercise guidance, tracking, check-ins and plan adjustments for {membership.monthly.label} per month.
           </p>
           <Link href="/pricing" className="mr-link">
             See full pricing details
@@ -296,6 +285,17 @@ function MarketingHomepage() {
           </ul>
           <Cta location="homepage_pricing" />
         </article>
+      </section>
+      <section className="mr-founder mr-shell">
+        <div>
+          <p className="mr-kicker">Built for a clearer answer</p>
+          <h2>Fitness advice is abundant. Clear ongoing direction is not.</h2>
+        </div>
+        <div>
+          <p>STHENO was created to answer one practical question: <strong>What should I do next?</strong></p>
+          <p className="founder-signoff">Matthew David<br/><small>Certified Personal Trainer · Founder, STHENO Fitness</small></p>
+          <div><Link href="/about">Why STHENO exists</Link><Link href="/methodology">How recommendations are made</Link><Link href="/editorial-standards">Editorial standards</Link></div>
+        </div>
       </section>
       <section className="mr-resources">
         <div className="mr-shell">
@@ -441,7 +441,7 @@ function ProductSection({
       <section className="mr-product mr-shell" id="training">
         <div>
           <p className="mr-kicker">Training</p>
-          <h2>Know what to do—and what to do next.</h2>
+          <h2>Hit your reps? We’ll tell you when it’s time to progress.</h2>
           <p>
             Open a complete workout with previous performance, load guidance,
             instructions, swaps, logging, a rest timer and personal-record
@@ -481,7 +481,7 @@ function ProductSection({
       <section className="mr-product reverse mr-shell" id="nutrition">
         <div>
           <p className="mr-kicker">Nutrition</p>
-          <h2>Nutrition you can actually use every day.</h2>
+          <h2>If the starting target misses, the next decision uses your real trend.</h2>
           <p>
             Get personalized calorie and macro targets, then see how your day is
             tracking without turning nutrition into a second job.
@@ -535,7 +535,7 @@ function ProductSection({
     <section className="mr-product mr-shell" id="progress">
       <div>
         <p className="mr-kicker">Progress</p>
-        <h2>See whether the plan is working.</h2>
+        <h2>See what changed—and what to do next.</h2>
         <p>
           STHENO connects what you are doing with how you are progressing, then
           turns the numbers into guidance you can understand.
