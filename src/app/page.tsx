@@ -36,6 +36,7 @@ const Cta = ({
 }) => (
   <TrackedLink
     event={event}
+    heyCatchEvent="social_primary_cta_click"
     eventProperties={{ location }}
     className={className}
     href="/assessment"

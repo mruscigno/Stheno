@@ -59,6 +59,7 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
       const assessment = readSavedAssessment(localStorage.getItem(ASSESSMENT_STORAGE));
       const next = chooseHomepageEntry({ auth, explored: until > Date.now(), assessment, hasBlueprint: Boolean(localStorage.getItem(BLUEPRINT_STORAGE)), variant: selectedVariant });
       setEntry(next);
+      void captureFunnel("homepage_viewed", { gateway_variant: selectedVariant, experience: next, device: device(), referrer: referrerDomain() }, { dedupeKey: "home" });
       if (next === "member") router.replace("/app");
       if (next === "blueprint") router.replace("/blueprint");
       if (next === "gateway") {
