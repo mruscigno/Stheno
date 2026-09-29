@@ -95,16 +95,11 @@ export function completeExerciseGuide(input: GuideInput): Required<ExerciseEduca
   const existing = input.education ?? {};
   const equipment = input.equipment.map(label).join(", ") || "the prescribed equipment";
   const primary = input.primaryMuscles.map(label).join(" and ") || "target muscles";
-  const setup = existing.setup && existing.setup.length >= 3 ? existing.setup : [
-    `Go to the ${equipment} area, clear enough space to move, and confirm the equipment is secure before starting ${input.name}.`,
+  const setup = existing.setup && existing.setup.length >= 2 ? existing.setup : [
+    `Set the ${equipment} securely for ${input.name} and clear enough space to use the intended range.`,
     ...base.setup,
-    "Complete one unloaded or very light practice repetition and adjust the setup if the path feels awkward.",
   ];
-  const execution = existing.execution && existing.execution.length >= 4 ? existing.execution : [
-    ...base.execution,
-    "Breathe out through the hardest part of the repetition, inhale as you return, and keep each repetition on the same path.",
-    "After the final repetition, stabilize the load first and return it to the rack, stack, or floor without twisting or dropping it.",
-  ];
+  const execution = existing.execution && existing.execution.length >= 3 ? existing.execution : base.execution;
   return {
     setup: humanizeList(setup),
     execution: humanizeList(execution),
@@ -117,8 +112,8 @@ export function completeExerciseGuide(input: GuideInput): Required<ExerciseEduca
 
 export function guideCompletenessErrors(education: ExerciseEducation) {
   const errors: string[] = [];
-  if ((education.setup?.length ?? 0) < 3) errors.push("SETUP_STEPS_REQUIRED");
-  if ((education.execution?.length ?? 0) < 4) errors.push("EXECUTION_STEPS_REQUIRED");
+  if ((education.setup?.length ?? 0) < 2) errors.push("SETUP_STEPS_REQUIRED");
+  if ((education.execution?.length ?? 0) < 3) errors.push("EXECUTION_STEPS_REQUIRED");
   if (!education.feel) errors.push("FEEL_DESCRIPTION_REQUIRED");
   if ((education.cues?.length ?? 0) < 3) errors.push("COACHING_CUES_REQUIRED");
   if ((education.mistakes?.length ?? 0) < 3) errors.push("COMMON_MISTAKES_REQUIRED");
