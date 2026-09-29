@@ -94,10 +94,8 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     const properties = { gateway_variant: variant, goal_selected: choiceId, device: device(), new_vs_returning: "new" };
     capture("homepage_gateway_goal_selected", properties);
     capture("assessment_started", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant });
-    await Promise.all([
-      captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway" }, { dedupeKey: `goal:${choiceId}` }),
-      captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant }, { dedupeKey: ASSESSMENT_VERSION }),
-    ]);
+    await captureFunnel("social_primary_cta_click", { ...properties, entry: "homepage_gateway" }, { dedupeKey: `goal:${choiceId}` });
+    await captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION, entry: "homepage_gateway", gateway_variant: variant }, { dedupeKey: ASSESSMENT_VERSION });
     router.push("/assessment");
   }
 
