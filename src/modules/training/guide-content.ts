@@ -13,7 +13,11 @@ type GuideInput = {
   primaryMuscles: string[];
   equipment: string[];
   education?: ExerciseEducation | null;
+  productionReady?: boolean;
 };
+
+export type GuidanceSource = "REVIEWED" | "FALLBACK" | "MISSING";
+export type GuidanceProvenance = Record<keyof Required<ExerciseEducation>, GuidanceSource>;
 
 const label = (value: string) => value.replaceAll("_", " ");
 
@@ -22,17 +26,6 @@ export const humanizeExerciseText = (value: string) =>
   value.replace(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g, label);
 
 const humanizeList = (values: string[]) => values.map(humanizeExerciseText);
-const genericReaderCopy = new Set([
-  "move with control through a comfortable range.",
-  "keep your breathing steady and your joints aligned.",
-  "stop the set before technique changes.",
-  "rushing the movement or using momentum.",
-  "forcing a range that causes pain.",
-  "losing the intended starting position.",
-]);
-const isUsefulList = (values: string[] | undefined, minimum: number) =>
-  Boolean(values && values.length >= minimum && values.some(value => !genericReaderCopy.has(value.trim().toLowerCase())));
-
 const patternCopy: Record<string, { setup: string[]; execution: string[]; cues: string[]; mistakes: string[] }> = {
   squat: {
     setup: ["Set your feet about shoulder-width apart and turn the toes slightly out.", "Brace as if preparing for a firm push to the stomach, while keeping your ribs stacked over your pelvis."],
@@ -95,28 +88,56 @@ export function completeExerciseGuide(input: GuideInput): Required<ExerciseEduca
   const existing = input.education ?? {};
   const equipment = input.equipment.map(label).join(", ") || "the prescribed equipment";
   const primary = input.primaryMuscles.map(label).join(" and ") || "target muscles";
-  const setup = existing.setup && existing.setup.length >= 2 ? existing.setup : [
+  if (input.productionReady) {
+    const missing = guideMissingFields(existing);
+    if (missing.length) throw new Error(`PRODUCTION_GUIDANCE_INCOMPLETE:${input.name}:${missing.join(",")}`);
+    return {
+      setup: humanizeList(existing.setup!),
+      execution: humanizeList(existing.execution!),
+      feel: humanizeExerciseText(existing.feel!),
+      cues: humanizeList(existing.cues!),
+      mistakes: humanizeList(existing.mistakes!),
+      stopModify: humanizeExerciseText(existing.stopModify!),
+    };
+  }
+  const fallbackFields = guideMissingFields(existing);
+  if (fallbackFields.length) console.warn("exercise_guidance_fallback_used", {
+    slug: input.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
+    fields: fallbackFields,
+    reason: "draft_guidance_missing",
+    fallback_type: "movement_pattern_draft_only",
+  });
+  const setup = existing.setup?.length ? existing.setup : [
     `Set the ${equipment} securely for ${input.name} and clear enough space to use the intended range.`,
     ...base.setup,
   ];
-  const execution = existing.execution && existing.execution.length >= 3 ? existing.execution : base.execution;
+  const execution = existing.execution?.length ? existing.execution : base.execution;
   return {
     setup: humanizeList(setup),
     execution: humanizeList(execution),
     feel: humanizeExerciseText(existing.feel ?? `You should feel the ${primary} doing most of the work, with effort building in the muscle rather than sharp pressure in a joint.`),
-    cues: humanizeList(isUsefulList(existing.cues, 3) ? existing.cues! : base.cues),
-    mistakes: humanizeList(isUsefulList(existing.mistakes, 3) ? existing.mistakes! : base.mistakes),
+    cues: humanizeList(existing.cues?.length ? existing.cues : base.cues),
+    mistakes: humanizeList(existing.mistakes?.length ? existing.mistakes : base.mistakes),
     stopModify: humanizeExerciseText(existing.stopModify ?? "Stop or shorten the range if you feel sharp, sudden, worsening, or joint-focused pain. Choose a reviewed alternative if a comfortable setup is not available."),
   };
 }
 
+export function guideMissingFields(education: ExerciseEducation) {
+  return (["setup", "execution", "feel", "cues", "mistakes", "stopModify"] as const)
+    .filter(field => Array.isArray(education[field]) ? !(education[field] as string[]).length : !education[field]);
+}
+
+export function reviewedGuidanceProvenance(): GuidanceProvenance {
+  return {setup:"REVIEWED",execution:"REVIEWED",feel:"REVIEWED",cues:"REVIEWED",mistakes:"REVIEWED",stopModify:"REVIEWED"};
+}
+
 export function guideCompletenessErrors(education: ExerciseEducation) {
   const errors: string[] = [];
-  if ((education.setup?.length ?? 0) < 2) errors.push("SETUP_STEPS_REQUIRED");
-  if ((education.execution?.length ?? 0) < 3) errors.push("EXECUTION_STEPS_REQUIRED");
+  if (!education.setup?.length) errors.push("SETUP_REQUIRED");
+  if (!education.execution?.length) errors.push("EXECUTION_REQUIRED");
   if (!education.feel) errors.push("FEEL_DESCRIPTION_REQUIRED");
-  if ((education.cues?.length ?? 0) < 3) errors.push("COACHING_CUES_REQUIRED");
-  if ((education.mistakes?.length ?? 0) < 3) errors.push("COMMON_MISTAKES_REQUIRED");
+  if (!education.cues?.length) errors.push("COACHING_CUES_REQUIRED");
+  if (!education.mistakes?.length) errors.push("COMMON_MISTAKES_REQUIRED");
   if (!education.stopModify) errors.push("STOP_MODIFY_GUIDANCE_REQUIRED");
   return errors;
 }

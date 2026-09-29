@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { generateProgram } from "@/modules/training/generate";
 import { profileSnapshotToTrainingProfile } from "@/modules/training/profile-adapter";
 import { validateProgram } from "@/modules/training/validate";
+import { loadCanonicalTrainingLibrary } from "@/lib/exercises/canonical";
 async function authenticated() {
   const supabase = await createSupabaseServerClient();
   if (!supabase) return null;
@@ -49,7 +50,8 @@ export async function POST() {
     );
   try {
     const profile = profileSnapshotToTrainingProfile(snapshot);
-    let generated = generateProgram(profile);
+    const library = await loadCanonicalTrainingLibrary(ctx.supabase);
+    let generated = generateProgram(profile, library);
     const { data: preferences } = await ctx.supabase
       .from("exercise_replacement_preferences")
       .select("original_slug,replacement_slug")
@@ -75,7 +77,7 @@ export async function POST() {
         })),
       };
     }
-    const validation = validateProgram(generated, profile);
+    const validation = validateProgram(generated, profile, library);
     if (!validation.valid)
       return NextResponse.json(
         { error: "Program validation failed", validation },

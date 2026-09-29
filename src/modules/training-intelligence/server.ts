@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Prescription, Workout } from "@/modules/training/types";
-import { productionExerciseLibrary } from "@/modules/training/exercises";
 import {
   ADAPTIVE_LOAD_VERSION,
   E1RM_VERSION,
@@ -21,12 +20,12 @@ type ExerciseRow = { slug: string; primary_muscles?: string[] | null; secondary_
 type SetRow = { id?: string; exercise_slug: string; load_value: number | string | null; load_unit?: LoadUnit | null; repetitions: number | null; rir?: number | string | null; rpe?: number | string | null; set_type?: IntelligenceSet["setType"] | null; state: "completed" | "skipped"; workout_execution_session_id?: string; performed_at?: string };
 
 export function metadataFromRow(slug: string, row?: ExerciseRow | null): ExerciseIntelligenceMetadata {
-  const fallback = productionExerciseLibrary.find(exercise => exercise.slug === slug);
-  const equipment = row?.required_equipment ?? fallback?.requiredEquipment ?? [];
+  if(!row) throw new Error(`CANONICAL_EXERCISE_METADATA_MISSING:${slug}`);
+  const equipment = row.required_equipment ?? [];
   return {
     exerciseSlug: slug,
-    primaryMuscles: row?.primary_muscles ?? fallback?.primaryMuscles ?? [],
-    secondaryMuscles: row?.secondary_muscles ?? fallback?.secondaryMuscles ?? [],
+    primaryMuscles: row.primary_muscles ?? [],
+    secondaryMuscles: row.secondary_muscles ?? [],
     equipment,
     bodyweightOnly: equipment.length === 1 && equipment[0] === "bodyweight",
     e1rmEligible: row?.exercise_type !== "timed" && !(equipment.length === 1 && equipment[0] === "bodyweight"),

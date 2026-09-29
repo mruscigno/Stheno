@@ -55,12 +55,19 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
       localStorage.setItem(GATEWAY_VARIANT_STORAGE, selectedVariant);
       setVariant(selectedVariant);
 
+      // The public marketing page is always available. Authentication may
+      // enhance its navigation, but never replaces or redirects its body.
+      if (auth === "signed-in") {
+        setEntry("homepage");
+        void captureFunnel("homepage_viewed", { gateway_variant: selectedVariant, experience: "authenticated_marketing", device: device(), referrer: referrerDomain() }, { dedupeKey: "home" });
+        return;
+      }
+
       const until = Number(localStorage.getItem(GATEWAY_DISMISS_STORAGE) || 0);
       const assessment = readSavedAssessment(localStorage.getItem(ASSESSMENT_STORAGE));
       const next = chooseHomepageEntry({ auth, explored: until > Date.now(), assessment, hasBlueprint: Boolean(localStorage.getItem(BLUEPRINT_STORAGE)), variant: selectedVariant });
       setEntry(next);
       void captureFunnel("homepage_viewed", { gateway_variant: selectedVariant, experience: next, device: device(), referrer: referrerDomain() }, { dedupeKey: "home" });
-      if (next === "member") router.replace("/app");
       if (next === "gateway") {
         const properties = { gateway_variant: selectedVariant, device: device(), new_vs_returning: "new", referrer: referrerDomain() };
         capture("homepage_gateway_viewed", properties);

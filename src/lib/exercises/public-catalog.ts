@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCanonicalExercise } from "@/lib/exercises/canonical";
 
 const releaseGate = {
   status: "production",
@@ -7,15 +8,11 @@ const releaseGate = {
   technical_review_status: "reviewed",
   editorial_review_status: "reviewed",
   visual_review_status: "reviewed",
+  production_ready: true,
 };
 
 export async function getPublicExercise(slug: string) {
-  const db = await createSupabaseServerClient();
-  if (!db) return null;
-  const { data } = await db.from("exercises").select(
-    "id,slug,name,purpose,exercise_type,movement_type,prescription_unit,movement_pattern,exercise_role,primary_muscles,secondary_muscles,required_equipment,skill_level,rep_min,rep_max,duration_min_seconds,duration_max_seconds,distance_min,distance_max,distance_unit,interval_work_seconds,interval_recovery_seconds,interval_rounds_min,interval_rounds_max,education,caution_tags,media_provenance",
-  ).match(releaseGate).eq("slug", slug).maybeSingle();
-  return data;
+  return getCanonicalExercise(slug);
 }
 
 export async function getPublicExerciseAlternatives(exerciseId: string) {

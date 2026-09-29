@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
-import { completeExerciseGuide } from "@/modules/training/guide-content";
 import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
 import { formatExercisePrescription } from "@/modules/training/prescription";
 async function getExercise(slug: string) {
@@ -32,15 +31,9 @@ export default async function Exercise({
   const { slug } = await params,
     e = await getExercise(slug);
   if (!e) notFound();
-  const storedEducation = e.education as {
-      setup?: string[];
-      execution?: string[];
-      cues?: string[];
-      mistakes?: string[];
-    },
-    primary = e.primary_muscles as string[],
+  const primary = e.primary_muscles as string[],
     secondary = e.secondary_muscles as string[],
-    education = completeExerciseGuide({name:e.name,movementPattern:String(e.movement_pattern),primaryMuscles:primary,equipment:e.required_equipment as string[],education:storedEducation}),
+    education = e.education,
     alternativeRows = await getPublicExerciseAlternatives(e.id),
     alternatives = alternativeRows.slice(0,6);
   return (

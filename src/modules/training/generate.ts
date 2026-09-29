@@ -7,6 +7,7 @@ import {
 import { selectExercise } from "./selection";
 import type {
   ExerciseRole,
+  Exercise,
   MovementPattern,
   Prescription,
   TrainingProfile,
@@ -139,9 +140,10 @@ function makePrescription(
   pattern: MovementPattern,
   index: number,
   used: string[],
+  library: Exercise[],
 ): Prescription {
   const role = roleFor(index);
-  const selected = selectExercise({ profile, pattern, role, usedSlugs: used });
+  const selected = selectExercise({ profile, pattern, role, usedSlugs: used, library });
   const reps = methodology.goalRepRanges[profile.goal][role];
   return {
     exerciseSlug: selected.exercise.slug,
@@ -157,7 +159,7 @@ function makePrescription(
     alternatives: selected.alternatives,
   };
 }
-export function generateProgram(profile: TrainingProfile): TrainingProgram {
+export function generateProgram(profile: TrainingProfile, library: Exercise[]): TrainingProgram {
   if (
     profile.safetyClassification === "stop" ||
     profile.safetyClassification === "refer"
@@ -167,6 +169,7 @@ export function generateProgram(profile: TrainingProfile): TrainingProgram {
     throw new Error("UNSUPPORTED_FREQUENCY");
   if (profile.sessionMinutes < 25) throw new Error("SESSION_TOO_SHORT");
   if (!profile.equipment.length) throw new Error("EQUIPMENT_REQUIRED");
+  if (!library.length) throw new Error("CANONICAL_EXERCISE_LIBRARY_REQUIRED");
   const template = splits[profile.daysPerWeek];
   const workouts: Workout[] = template.map((day, dayIndex) => {
     const used: string[] = [];
@@ -183,7 +186,7 @@ export function generateProgram(profile: TrainingProfile): TrainingProgram {
       )
         break;
       try {
-        const item = makePrescription(profile, pattern, exercises.length, used);
+        const item = makePrescription(profile, pattern, exercises.length, used, library);
         used.push(item.exerciseSlug);
         exercises.push(item);
       } catch (error) {
