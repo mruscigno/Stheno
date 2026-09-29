@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-const trackEvent=vi.hoisted(()=>vi.fn());
-vi.mock("@heycatch/sdk",()=>({analytics:{trackEvent}}));
+const {trackEvent,setIdentity}=vi.hoisted(()=>({trackEvent:vi.fn(),setIdentity:vi.fn()}));
+vi.mock("@heycatch/sdk",()=>({analytics:{trackEvent,setIdentity}}));
 vi.mock("@/lib/analytics/client",()=>({capture:vi.fn()}));
 import { ATTRIBUTION_STORAGE, captureFunnel, readAttribution, rememberAttribution } from "./funnel-client";
 
 describe("acquisition attribution and delivery",()=>{
-  beforeEach(()=>{localStorage.clear();sessionStorage.clear();trackEvent.mockClear();history.replaceState({},"","/assessment");vi.stubGlobal("fetch",vi.fn(async()=>new Response(JSON.stringify({accepted:true}),{status:200,headers:{"content-type":"application/json"}})));});
+  beforeEach(()=>{localStorage.clear();sessionStorage.clear();trackEvent.mockClear();setIdentity.mockClear();history.replaceState({},"","/assessment");vi.stubGlobal("fetch",vi.fn(async()=>new Response(JSON.stringify({accepted:true}),{status:200,headers:{"content-type":"application/json"}})));});
 
   it("creates and reuses a durable anonymous session for direct assessment traffic",async()=>{
     await captureFunnel("assessment_loaded",{assessment_version:"3.0.0"});
@@ -15,6 +15,9 @@ describe("acquisition attribution and delivery",()=>{
     expect(readAttribution()?.sessionId).toBe(first?.sessionId);
     const bodies=(fetch as ReturnType<typeof vi.fn>).mock.calls.map(call=>JSON.parse(String(call[1]?.body)));
     expect(new Set(bodies.map(body=>body.sessionId)).size).toBe(1);
+    expect(new Set(bodies.map(body=>body.identityId)).size).toBe(1);
+    expect(bodies[0].identityId).toBe(first?.sessionId);
+    expect(setIdentity).toHaveBeenCalledWith(first?.sessionId);
     expect(trackEvent).toHaveBeenCalledWith("assessment_loaded",expect.objectContaining({route:"/assessment",assessment_version:"3.0.0"}));
   });
 
@@ -47,5 +50,13 @@ describe("acquisition attribution and delivery",()=>{
     await captureFunnel("social_primary_cta_click",{entry:"homepage_gateway"});
     expect(trackEvent).toHaveBeenCalledWith("social_primary_cta_click",expect.objectContaining({entry:"homepage_gateway"}));
     expect(fetch).toHaveBeenCalledWith("/api/funnel/event",expect.objectContaining({body:expect.stringContaining('"event":"social_primary_cta_click"')}));
+  });
+
+  it("uses the authenticated identity for both browser and server delivery",async()=>{
+    localStorage.setItem("stheno_heycatch_identity_v1","user-123");
+    await captureFunnel("program_viewed");
+    expect(setIdentity).toHaveBeenCalledWith("user-123");
+    const body=JSON.parse(String((fetch as ReturnType<typeof vi.fn>).mock.calls[0][1]?.body));
+    expect(body.identityId).toBe("user-123");
   });
 });

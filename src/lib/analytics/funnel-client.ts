@@ -5,6 +5,7 @@ import { capture } from "@/lib/analytics/client";
 import { isCanonicalHeyCatchFunnelEvent, type EventName } from "@/modules/analytics/events";
 
 export const ATTRIBUTION_STORAGE = "stheno_attribution_v1";
+export const HEYCATCH_IDENTITY_STORAGE = "stheno_heycatch_identity_v1";
 export type Attribution = {
   sessionId: string;
   first: Record<string, string>;
@@ -44,6 +45,11 @@ export function rememberAttribution(touch: Record<string, string>): Attribution 
 
 export async function captureFunnel(event: EventName, properties: Record<string, string | number | boolean | null> = {}, options: { dedupeKey?: string } = {}): Promise<FunnelDelivery> {
   const attribution = ensureAttribution();
+  const identityId = (() => {
+    try { return localStorage.getItem(HEYCATCH_IDENTITY_STORAGE) || attribution.sessionId; }
+    catch { return attribution.sessionId; }
+  })();
+  analytics.setIdentity(identityId);
   const dedupeKey = options.dedupeKey ? `stheno_funnel:${event}:${options.dedupeKey}` : "";
   if (dedupeKey) {
     try { if (sessionStorage.getItem(dedupeKey)) return { accepted: true, status: 208, event }; } catch { /* continue */ }
@@ -68,7 +74,7 @@ export async function captureFunnel(event: EventName, properties: Record<string,
       method: "POST",
       keepalive: true,
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ event, sessionId: attribution?.sessionId, properties: merged }),
+      body: JSON.stringify({ event, sessionId: attribution?.sessionId, identityId, properties: merged }),
     });
     const payload = await response.json().catch(() => ({})) as { accepted?: boolean; error?: string };
     const delivery = { accepted: response.ok && payload.accepted !== false, status: response.status, event, error: payload.error };

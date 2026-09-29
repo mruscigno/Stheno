@@ -10,6 +10,7 @@ import { forwardFunnelToHeyCatch } from "@/lib/analytics/funnel-server";
 const EventSchema = z.object({
   event: z.enum(eventNames),
   sessionId: z.string().max(100).optional(),
+  identityId: z.string().max(160).optional(),
   properties: z.record(z.string(), z.union([z.string().max(120), z.number(), z.boolean(), z.null()])).default({}),
 });
 const deploymentTimestamp = process.env.VERCEL_DEPLOYMENT_CREATED_AT ?? new Date().toISOString();
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   const botSignal = /bot|crawler|spider|headless|preview|facebookexternalhit|Slackbot/i.test(userAgent);
   const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.npm_package_version ?? "local";
   if (isCanonicalHeyCatchFunnelEvent(parsed.data.event) && parsed.data.event !== "social_primary_cta_click") {
-    const analyticsUserId = user?.id ?? (parsed.data.sessionId ? `anonymous:${parsed.data.sessionId}` : null);
+    const analyticsUserId = user?.id ?? parsed.data.identityId ?? parsed.data.sessionId ?? null;
     await forwardFunnelToHeyCatch(parsed.data.event, analyticsUserId, properties, request);
   }
   const admin = createSupabaseAdminClient();
