@@ -54,7 +54,9 @@ export function chooseHomepageEntry({
   const incomplete = Boolean(assessment?.startedAt && (Number(assessment.index) > 0 || assessment.review));
   if (auth === "signed-in" && incomplete) return "continue";
   if (auth === "signed-in") return "member";
-  if (hasBlueprint) return "blueprint";
+  // A saved anonymous blueprint is browser history, not an authenticated
+  // session. Never force a returning signed-out visitor away from marketing.
+  if (hasBlueprint) return "homepage";
   if (incomplete) return "continue";
   if (explored || variant === "control_homepage") return "homepage";
   return "gateway";

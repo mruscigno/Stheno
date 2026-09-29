@@ -61,7 +61,6 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
       setEntry(next);
       void captureFunnel("homepage_viewed", { gateway_variant: selectedVariant, experience: next, device: device(), referrer: referrerDomain() }, { dedupeKey: "home" });
       if (next === "member") router.replace("/app");
-      if (next === "blueprint") router.replace("/blueprint");
       if (next === "gateway") {
         const properties = { gateway_variant: selectedVariant, device: device(), new_vs_returning: "new", referrer: referrerDomain() };
         capture("homepage_gateway_viewed", properties);
