@@ -42,4 +42,10 @@ describe("acquisition attribution and delivery",()=>{
       body:expect.stringContaining('"event":"assessment_complete"'),
     }));
   });
+
+  it("keeps the first funnel milestone browser-originated for HeyCatch",async()=>{
+    await captureFunnel("social_primary_cta_click",{entry:"homepage_gateway"});
+    expect(trackEvent).toHaveBeenCalledWith("social_primary_cta_click",expect.objectContaining({entry:"homepage_gateway"}));
+    expect(fetch).toHaveBeenCalledWith("/api/funnel/event",expect.objectContaining({body:expect.stringContaining('"event":"social_primary_cta_click"')}));
+  });
 });

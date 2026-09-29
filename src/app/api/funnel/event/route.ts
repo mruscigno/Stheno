@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   const inferredDevice = /Mobile|Android|iPhone|iPad/i.test(userAgent) ? "mobile" : "desktop";
   const botSignal = /bot|crawler|spider|headless|preview|facebookexternalhit|Slackbot/i.test(userAgent);
   const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.npm_package_version ?? "local";
-  if (isCanonicalHeyCatchFunnelEvent(parsed.data.event)) {
+  if (isCanonicalHeyCatchFunnelEvent(parsed.data.event) && parsed.data.event !== "social_primary_cta_click") {
     const analyticsUserId = user?.id ?? (parsed.data.sessionId ? `anonymous:${parsed.data.sessionId}` : null);
     await forwardFunnelToHeyCatch(parsed.data.event, analyticsUserId, properties, request);
   }

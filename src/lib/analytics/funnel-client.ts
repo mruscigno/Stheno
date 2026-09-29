@@ -59,10 +59,10 @@ export async function captureFunnel(event: EventName, properties: Record<string,
     ...properties,
   };
   capture(event, merged);
-  // Canonical funnel milestones are forwarded authoritatively by the API route.
-  // This avoids losing queued browser events during navigation and prevents
-  // client/server duplicates in HeyCatch. Other product events remain client-side.
-  if (!isCanonicalHeyCatchFunnelEvent(event)) analytics.trackEvent(event, merged);
+  // HeyCatch requires the first funnel step to originate in the browser, so
+  // the CTA is client-authoritative. Later canonical milestones are forwarded
+  // by the API route to survive navigation without creating duplicates.
+  if (event === "social_primary_cta_click" || !isCanonicalHeyCatchFunnelEvent(event)) analytics.trackEvent(event, merged);
   try {
     const response = await fetch("/api/funnel/event", {
       method: "POST",
