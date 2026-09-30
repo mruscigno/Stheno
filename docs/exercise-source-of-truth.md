@@ -16,6 +16,8 @@ The legacy 20-record module in `src/modules/training/exercises.ts` is retained o
 
 `guidance_provenance` records the source of setup, execution, cues, mistakes, feel, and stop/modify guidance. Production-ready records must use reviewed or curated content and may not use `FALLBACK`.
 
+The September 29 movement-pattern backfill initially populated some records with broad scaffolding and a later migration labeled every populated field as `REVIEWED`. The September 30 quality remediation replaces the identified scaffolding upstream, marks the changed setup/execution fields as `CURATED`, and records `canonical_guidance_quality_remediation` as the review source. A database trigger now rejects the known placeholder and generic-scaffolding phrases on production-ready writes.
+
 `completeExerciseGuide()` preserves reviewed production fields exactly. It fails closed when production guidance is missing. Generic movement-pattern completion remains available only to explicit draft/internal callers; it is not part of canonical production retrieval.
 
 ## Production-ready rules
@@ -24,7 +26,7 @@ The database trigger requires a description, movement type/pattern, primary musc
 
 ## Training intelligence and substitutions
 
-Program generation loads the canonical Supabase library before selection and validation. Training intelligence fails closed when canonical metadata is missing rather than consulting the old static catalog. Public substitutions come from reviewed `exercise_alternatives` edges joined back to canonical exercise records.
+Program generation loads the canonical Supabase library before selection and validation. Training intelligence fails closed when canonical metadata is missing rather than consulting the old static catalog. Runtime substitution ranking normalizes historical family labels into training-purpose groups, then prioritizes purpose, movement pattern, primary target, equipment compatibility, secondary target, fatigue, and prescription similarity. This prevents squat variants from outranking hip hinges for an RDL and vertical pulls from outranking horizontal rows for a seated row.
 
 ## Media
 
@@ -48,6 +50,8 @@ Future updates must target a stable ID or slug, identify explicit fields, update
 4. Mark production-ready only after the database gate passes.
 5. Run `pnpm audit:exercise-content` and `pnpm audit:exercise-rendering`.
 6. Public and authenticated consumers return the same canonical guidance without request-time rewriting.
+
+`audit:exercise-rendering` also fails on known placeholder descriptions or generic migration scaffolding. It reports canonical quality counts directly and does not claim authenticated/public parity without actually exercising those boundaries.
 
 ## Homepage rendering
 

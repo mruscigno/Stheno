@@ -5,7 +5,7 @@ import {
   humanizeExerciseText,
 } from "./guide-content";
 import { productionExerciseLibrary } from "./exercises";
-import type { TrainingProfile } from "./types";
+import type { Exercise, TrainingProfile } from "./types";
 
 const profile: TrainingProfile = {
   profileId: "p",
@@ -141,4 +141,60 @@ describe("exercise guide quality gate", () => {
       ),
     ).toBe(true);
   });
+  it("ranks hip hinges ahead of squat alternatives for a dumbbell RDL", () => {
+    const library = [
+      substitutionFixture("dumbbell-rdl", "rdl", "hinge", ["hamstrings", "glutes"], ["dumbbells"]),
+      substitutionFixture("barbell-rdl", "rdl", "hinge", ["hamstrings", "glutes"], ["barbell"]),
+      substitutionFixture("rack-pull", "deadlift", "hinge", ["hamstrings", "glutes"], ["barbell"]),
+      substitutionFixture("back-squat", "squat", "squat", ["glutes", "hamstrings"], ["barbell"]),
+    ];
+    expect(getSubstitutions("dumbbell-rdl", profile, library).map((x) => x.exercise.slug)).toEqual([
+      "barbell-rdl",
+      "rack-pull",
+      "back-squat",
+    ]);
+  });
+  it("ranks horizontal rows ahead of vertical pulls for a seated cable row", () => {
+    const library = [
+      substitutionFixture("cable-row", "row", "horizontal_pull", ["back"], ["cables"]),
+      substitutionFixture("machine-row", "row", "horizontal_pull", ["back"], ["machines"]),
+      substitutionFixture("dumbbell-row", "row", "horizontal_pull", ["back"], ["dumbbells"]),
+      substitutionFixture("assisted-pull-up", "pull_up", "vertical_pull", ["back"], ["machines"]),
+    ];
+    const ranked = getSubstitutions("cable-row", profile, library).map((x) => x.exercise.slug);
+    expect(new Set(ranked.slice(0, 2))).toEqual(new Set(["machine-row", "dumbbell-row"]));
+    expect(ranked[2]).toBe("assisted-pull-up");
+  });
 });
+
+function substitutionFixture(
+  slug: string,
+  family: string,
+  pattern: Exercise["pattern"],
+  primaryMuscles: Exercise["primaryMuscles"],
+  requiredEquipment: Exercise["requiredEquipment"],
+): Exercise {
+  return {
+    slug,
+    name: slug,
+    family,
+    pattern,
+    role: "secondary",
+    primaryMuscles,
+    secondaryMuscles: [],
+    requiredEquipment,
+    skill: "beginner",
+    fatigueCost: 2,
+    setupMinutes: 2,
+    repRange: [8, 12],
+    progressionSuitability: 4,
+    unilateral: false,
+    instructions: ["Set up.", "Perform the movement."],
+    cues: ["Stay controlled."],
+    mistakes: ["Using momentum."],
+    cautionTags: [],
+    reviewStatus: "reviewed",
+    contentVersion: "test",
+    license: "STHENO_ORIGINAL",
+  };
+}

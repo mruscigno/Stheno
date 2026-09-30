@@ -11,6 +11,25 @@ import type {
 } from "./types";
 const muscleOverlap = (a: string[], b: string[]) =>
   a.filter((value) => b.includes(value));
+
+/**
+ * Family labels come from several historical import batches, so exact family
+ * equality is too narrow for substitutions (for example `rdl`, `hinge`, and
+ * `deadlift`). Normalize them into the training purpose a member is trying to
+ * preserve before comparing movement pattern, muscles, or equipment.
+ */
+function trainingPurpose(exercise: Exercise) {
+  const family = exercise.family.toLowerCase();
+  if (exercise.pattern === "hinge" || /(rdl|deadlift|hinge|hip_extension|good_morning)/.test(family)) return "hip_hinge";
+  if (exercise.pattern === "horizontal_pull" || /(row|scapular_retraction|rear_delt_row)/.test(family)) return "horizontal_row";
+  if (exercise.pattern === "vertical_pull" || /(pull_up|chin_up|pulldown|vertical_pull)/.test(family)) return "vertical_pull";
+  if (exercise.pattern === "squat" || /(squat|knee_extension)/.test(family)) return "squat";
+  if (exercise.pattern === "lunge" || /(lunge|step_up|split_squat)/.test(family)) return "single_leg_knee_dominant";
+  if (exercise.pattern === "horizontal_push" || /(bench_press|chest_press|push_up|incline_press)/.test(family)) return "horizontal_press";
+  if (exercise.pattern === "vertical_push" || /(overhead_press|landmine_press|pike_press|push_press)/.test(family)) return "vertical_press";
+  if (exercise.pattern === "carry" || /carry/.test(family)) return "loaded_carry";
+  return family;
+}
 export function getSubstitutions(
   exerciseSlug: string,
   profile: TrainingProfile,
@@ -45,19 +64,22 @@ export function getSubstitutions(
         fatigue = 1 - Math.abs(e.fatigueCost - original.fatigueCost) / 4,
         reps =
           1 - Math.min(1, Math.abs(e.repRange[0] - original.repRange[0]) / 10);
+      const purpose = trainingPurpose(e) === trainingPurpose(original) ? 1 : 0;
       return {
         exercise: e,
         score:
-          primary * 40 +
-          pattern * 20 +
-          family * 15 +
-          secondary * 5 +
-          equipmentMatch * 10 +
-          fatigue * 5 +
-          reps * 5,
+          purpose * 100 +
+          pattern * 40 +
+          primary * 20 +
+          family * 10 +
+          equipmentMatch * 8 +
+          secondary * 4 +
+          fatigue * 3 +
+          reps * 2,
         reasonCodes: [
           "PRIMARY_MUSCLE_PRESERVED",
-          pattern ? "MOVEMENT_PATTERN_PRESERVED" : "TRAINING_ROLE_PRESERVED",
+          purpose ? "TRAINING_PURPOSE_PRESERVED" : "TRAINING_ROLE_PRESERVED",
+          pattern ? "MOVEMENT_PATTERN_PRESERVED" : "MOVEMENT_PATTERN_ALTERNATIVE",
           equipmentMatch ? "EQUIPMENT_SIMILAR" : "EQUIPMENT_ALTERNATIVE",
         ],
       };
