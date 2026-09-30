@@ -28,6 +28,8 @@ The database trigger requires a description, movement type/pattern, primary musc
 
 Program generation loads the canonical Supabase library before selection and validation. Training intelligence fails closed when canonical metadata is missing rather than consulting the old static catalog. Runtime substitution ranking normalizes historical family labels into training-purpose groups, then prioritizes purpose, movement pattern, primary target, equipment compatibility, secondary target, fatigue, and prescription similarity. This prevents squat variants from outranking hip hinges for an RDL and vertical pulls from outranking horizontal rows for a seated row.
 
+Public exercise pages read reviewed edges from `exercise_alternatives`. Migration `20260930154143_rerank_public_exercise_alternatives` applies the same purpose/pattern/target/equipment hierarchy to every reviewed edge and records ranking version `purpose_pattern_target_equipment_v2` in `relevance_factors`.
+
 ## Media
 
 Canonical records expose media provenance. The UI resolves approved self-hosted provider media by stable slug; media validation remains part of the production release gate.
