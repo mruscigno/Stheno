@@ -26,7 +26,7 @@ const rows:[string,string,Pillar,string][]=[
 ["training-while-traveling","How to Keep Training When You Travel","recovery","Preserve the habit with short, equipment-flexible sessions and lower expectations for progression."],
 ["fitness-after-40","Fitness After 40: What Actually Needs to Change?","recovery","The principles stay stable; warm-up, recovery, progression rate, and individual constraints deserve closer attention."],
 ];
-export const articles=rows.map(([slug,title,pillar,thesis],i)=>({slug,title,pillar,thesis,description:thesis,audience:"Busy adults and fitness beginners",reviewStatus:"published" as const,independentReview:false,author:"Matthew David",publishedAt:"2026-08-18",updatedAt:"2026-08-18",readMinutes:14,methodologyVersion:"2026.08",evidenceVersion:"product-13",relatedTool:i<4?"workout-frequency":i<8?"weight-loss-timeline":i<14?"one-rep-max":i<18?"protein":i===18?"protein":"calorie-tdee"}));
+export const articles=rows.map(([slug,title,pillar,thesis],i)=>({slug,title,pillar,thesis,description:thesis,audience:"Busy adults and fitness beginners",reviewStatus:"published" as const,independentReview:false,author:"Matthew David",publishedAt:"2026-08-18",updatedAt:"2026-09-30",readMinutes:14,methodologyVersion:"2026.09",evidenceVersion:"product-13",relatedTool:i<4?"workout-frequency":i<8?"weight-loss-timeline":i<14?"one-rep-max":i<18?"protein":i===18?"protein":"calorie-tdee"}));
 export const pillars=[
  {slug:"training",title:"Training",description:"Build a schedule, learn progression, and make each session useful."},
  {slug:"fat-loss",title:"Fat Loss",description:"Understand weight trends and plan a sustainable rate of change."},
@@ -38,3 +38,15 @@ export const pillars=[
  {slug:"tools",title:"Calculators & Tools",description:"Use deterministic calculators that explain what their results mean."},
 ] as const;
 export function findArticle(slug:string){return articles.find(a=>a.slug===slug)}
+
+const openingContext:Record<Pillar,string>={
+ "getting-started":"A useful starting plan should fit an ordinary week, leave room to learn technique, and remain manageable when motivation or available time is lower.",
+ "fat-loss":"A useful fat-loss decision should follow a multi-week trend while protecting training performance, recovery, adequate nutrition, and day-to-day adherence.",
+ "muscle-strength":"A useful strength or muscle-building decision should preserve repeatable technique, progressive training, recoverable effort, and enough time to judge a real trend.",
+ "nutrition":"A useful nutrition decision should connect the estimate to meals, training demands, preferences, health context, and a trend observed for long enough to guide an adjustment.",
+ "supplements":"A useful supplement decision should weigh the likely benefit, studied dose, product testing, cost, side effects, and whether the same goal can be met through food or training.",
+ "recovery":"A useful recovery decision should consider recent training, sleep, soreness, illness, stress, schedule, and whether normal performance has changed across more than one day.",
+};
+export function articleOpening(article:(typeof articles)[number]){
+ return `${article.thesis} ${openingContext[article.pillar]} The best starting point is one you can repeat and evaluate.`;
+}

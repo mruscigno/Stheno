@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleWorkbook } from "@/components/library/article-workbook";
-import { articles, findArticle } from "@/modules/library/articles";
+import { articleOpening, articles, findArticle } from "@/modules/library/articles";
 import { guidance } from "@/modules/library/article-content";
 import { depth } from "@/modules/library/article-depth";
 import { extended } from "@/modules/library/article-extended";
@@ -12,7 +12,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { hasEditorialAccess } from "@/lib/editorial/access";
 import { articleCaption } from "@/modules/social-studio/captions";
 import { sourcesByPillar } from "@/modules/library/sources";
-import { authorUrl, defaultSocialImage, organizationId, safeJsonLd, siteUrl } from "@/lib/seo";
+import { articleMetaDescription, articlePageTitle, authorUrl, defaultSocialImage, organizationId, safeJsonLd, siteUrl } from "@/lib/seo";
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
 }
@@ -25,12 +25,12 @@ export async function generateMetadata({
     a = findArticle(slug);
   return a
     ? {
-        title: a.title,
-        description: a.description,
+        title: { absolute: articlePageTitle(a.title) },
+        description: articleMetaDescription(a.description),
         alternates: { canonical: `/insights/${slug}` },
         openGraph: {
-          title: a.title,
-          description: a.description,
+          title: articlePageTitle(a.title),
+          description: articleMetaDescription(a.description),
           url: `/insights/${slug}`,
           type: "article",
           publishedTime: a.publishedAt,
@@ -38,7 +38,7 @@ export async function generateMetadata({
           authors: [authorUrl],
           images: [defaultSocialImage],
         },
-        twitter: { card: "summary_large_image", title: a.title, description: a.description, images: [defaultSocialImage.url] },
+        twitter: { card: "summary_large_image", title: articlePageTitle(a.title), description: articleMetaDescription(a.description), images: [defaultSocialImage.url] },
       }
     : {};
 }
@@ -79,14 +79,14 @@ export default async function ArticlePage({
       <div className="article-layout chrome-shell">
         <aside>
           <strong>In this guide</strong>
-          <a href="#start">Start here</a>
-          <a href="#why">Why it works</a>
-          <a href="#decide">Make the decision</a>
-          <a href="#example">Practical example</a>
-          <a href="#apply">Apply it</a>
-          <a href="#measure">What to measure</a>
-          <a href="#special">Special cases</a>
-          <a href="#adjust">How to adjust</a>
+          <a href="#start">What should you do first?</a>
+          <a href="#why">Why does it work?</a>
+          <a href="#decide">How do you decide?</a>
+          <a href="#example">What does it look like?</a>
+          <a href="#apply">How do you apply it?</a>
+          <a href="#measure">What should you measure?</a>
+          <a href="#special">When does advice change?</a>
+          <a href="#adjust">How should you adjust?</a>
           <a href="#workbook">Four-week protocol</a>
           <a href="#evidence">Evidence notes</a>
         </aside>
@@ -95,22 +95,20 @@ export default async function ArticlePage({
           <details className="article-mobile-toc">
             <summary>In this guide</summary>
             <nav>
-              <a href="#start">Start here</a><a href="#why">Why it works</a>
-              <a href="#decide">Make the decision</a><a href="#example">Practical example</a>
-              <a href="#apply">Apply it</a><a href="#measure">What to measure</a>
-              <a href="#special">Special cases</a><a href="#adjust">How to adjust</a>
+              <a href="#start">What should you do first?</a><a href="#why">Why does it work?</a>
+              <a href="#decide">How do you decide?</a><a href="#example">What does it look like?</a>
+              <a href="#apply">How do you apply it?</a><a href="#measure">What should you measure?</a>
+              <a href="#special">When does advice change?</a><a href="#adjust">How should you adjust?</a>
               <a href="#workbook">Four-week protocol</a><a href="#evidence">Evidence notes</a>
             </nav>
           </details>
           <p className="article-lead">
-            {a.thesis} The useful question is not what looks most impressive on
-            paper. It is what decision you can make today, observe honestly, and
-            still support next week.
+            {articleOpening(a)}
           </p>
-          <h2 id="start">Start here</h2>
+          <h2 id="start">What should you do first?</h2>
           <p>{g.first}</p>
           <p>
-            Use this as a starting experiment rather than a permanent rule.
+            Use the recommendation as a starting experiment rather than a permanent rule.
             Record what you did, how it felt, and whether performance and
             recovery remain steady. Context matters: experience, equipment,
             time, preferences, health, and competing demands can all change the
@@ -123,7 +121,7 @@ export default async function ArticlePage({
               and adjust from evidence rather than emotion.
             </p>
           </div>
-          <h2 id="why">Why this works</h2>
+          <h2 id="why">Why does this approach work?</h2>
           <p>{d.mechanism}</p>
           <p>
             The mechanism does not produce a perfectly predictable result for
@@ -131,7 +129,7 @@ export default async function ArticlePage({
             response still has to be observed. Treat estimates as navigational
             aids, not promises.
           </p>
-          <h2 id="decide">Turn the principle into a decision</h2>
+          <h2 id="decide">How do you turn the principle into a decision?</h2>
           <p>{d.decision}</p>
           <p>
             Write the decision in behavioral terms. “Train consistently” is
@@ -139,7 +137,7 @@ export default async function ArticlePage({
             Saturday as the backup” can be acted on. Good guidance reduces the
             choices required when motivation is lowest.
           </p>
-          <h2 id="example">A practical example</h2>
+          <h2 id="example">What does the principle look like in practice?</h2>
           <p>{g.example}</p>
           <p>
             A useful plan leaves room for normal variation. Judge the direction
@@ -147,7 +145,7 @@ export default async function ArticlePage({
             verdict. If the example does not fit your circumstances, preserve
             its purpose and change its logistics.
           </p>
-          <h2 id="apply">Apply it in the real week</h2>
+          <h2 id="apply">How do you apply the principle in a real week?</h2>
           <p>{x.application}</p>
           <div className="article-table-scroll" role="region" aria-label="Decision examples" tabIndex={0}><table className="article-decision-table">
             <thead>
@@ -165,7 +163,7 @@ export default async function ArticlePage({
               ))}
             </tbody>
           </table></div>
-          <h2 id="measure">What to measure—and what to ignore</h2>
+          <h2 id="measure">What should you measure—and what should you ignore?</h2>
           <p>{d.measure}</p>
           <p>
             Measurement should earn its place by improving a decision. More data
@@ -173,11 +171,11 @@ export default async function ArticlePage({
             window is too short. Choose a few signals, collect them
             consistently, and decide in advance what change would matter.
           </p>
-          <h2 id="special">Nuance and special cases</h2>
+          <h2 id="special">When does the guidance need to change?</h2>
           <p>{x.specialCases}</p>
-          <h2>How STHENO applies the principle</h2>
+          <h2>How does STHENO apply the principle?</h2>
           <p>{x.stheno}</p>
-          <h2 id="watch">What to watch</h2>
+          <h2 id="watch">What should you watch for?</h2>
           <p>{g.watch}</p>
           <p>{d.myth}</p>
           <p>
@@ -186,7 +184,7 @@ export default async function ArticlePage({
             appropriate qualified care. Educational content cannot evaluate
             symptoms or account for an individual medical history.
           </p>
-          <h2 id="adjust">How to adjust without starting over</h2>
+          <h2 id="adjust">How can you adjust without starting over?</h2>
           <p>{d.adjust}</p>
           <p>
             Keep everything else as stable as practical after an adjustment.
@@ -195,7 +193,7 @@ export default async function ArticlePage({
             choice less arbitrary.
           </p>
           <ArticleWorkbook topic={a.title} principle={g.takeaway} />
-          <h2 id="bottom-line">The bottom line</h2>
+          <h2 id="bottom-line">What is the bottom line?</h2>
           <p>{g.takeaway}</p>
           <p>
             Consistency is not rigid perfection. It is the ability to return to
@@ -265,7 +263,7 @@ export default async function ArticlePage({
             "@type": "BlogPosting",
             "@id": `${siteUrl}/insights/${a.slug}#article`,
             headline: a.title,
-            description: a.description,
+            description: articleMetaDescription(a.description),
             image: [`${siteUrl}${defaultSocialImage.url}`],
             datePublished: a.publishedAt,
             dateModified: a.updatedAt,

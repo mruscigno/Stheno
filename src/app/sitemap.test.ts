@@ -16,6 +16,6 @@ describe("sitemap",()=>{
   });
   it("uses editorial modification dates for articles",async()=>{
     const entry=(await sitemap()).find(item=>item.url.endsWith("/insights/how-much-protein"));
-    expect(entry?.lastModified).toEqual(new Date("2026-08-18"));
+    expect(entry?.lastModified).toEqual(new Date("2026-09-30"));
   });
 });

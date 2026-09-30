@@ -13,6 +13,7 @@ import { TractionCounter } from "@/components/marketing/traction-counter";
 import { HomepageEntryGate } from "@/components/acquisition/homepage-gateway";
 import {
   organizationId,
+  organizationJsonLd,
   publicMetadata,
   safeJsonLd,
   serviceJsonLd,
@@ -398,13 +399,7 @@ function MarketingHomepage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: safeJsonLd([
-            {
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "@id": organizationId,
-              name: "STHENO Fitness",
-              url: siteUrl,
-            },
+            organizationJsonLd(),
             {
               "@context": "https://schema.org",
               "@type": "WebSite",

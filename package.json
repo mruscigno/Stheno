@@ -15,6 +15,7 @@
     "audit:exercise-content": "node --env-file=.env.production scripts/exercise-content-integrity-audit.mjs",
     "audit:exercises": "node --env-file=.env.production scripts/exercise-content-integrity-audit.mjs --json reports/exercise-content-audit.json",
     "audit:exercise-rendering": "node --env-file=.env.production scripts/exercise-render-integrity-audit.mjs",
+    "seo:indexnow": "node scripts/submit-indexnow.mjs",
     "backfill:training:dry-run": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --dry-run",
     "backfill:training:apply": "node --env-file=.env.local scripts/competitive-gap-backfill.mjs --apply",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"

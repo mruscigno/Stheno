@@ -5,6 +5,7 @@ import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
 import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
 import { formatExercisePrescription } from "@/modules/training/prescription";
+import { exerciseMetaDescription, exercisePageTitle } from "@/lib/seo";
 async function getExercise(slug: string) {
   return getPublicExercise(slug);
 }
@@ -17,8 +18,8 @@ export async function generateMetadata({
     e = await getExercise(slug);
   return e
     ? {
-        title: `${e.name} Exercise Guide`,
-        description: `Learn how to perform ${e.name}, which muscles it works, common mistakes, and practical coaching cues.`,
+        title: { absolute: exercisePageTitle(e.name) },
+        description: exerciseMetaDescription(e.name),
         alternates: { canonical: `/exercises/${slug}` },
       }
     : { title: "Exercise not found" };

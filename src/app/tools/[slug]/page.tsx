@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calculator } from "@/components/library/calculator";
 import { findTool, tools } from "@/modules/library/tools";
+import { toolMetaDescription } from "@/lib/seo";
 
 export function generateStaticParams() {
   return tools.map((tool) => ({ slug: tool.slug }));
@@ -14,9 +15,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!tool) return {};
   return {
     title: tool.title,
-    description: tool.summary,
+    description: toolMetaDescription(tool.summary, tool.title),
     alternates: { canonical: `/tools/${slug}` },
-    openGraph: { title: tool.title, description: tool.summary, url: `/tools/${slug}` },
+    openGraph: { title: tool.title, description: toolMetaDescription(tool.summary, tool.title), url: `/tools/${slug}` },
   };
 }
 
