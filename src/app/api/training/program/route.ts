@@ -4,6 +4,7 @@ import { generateProgram } from "@/modules/training/generate";
 import { profileSnapshotToTrainingProfile } from "@/modules/training/profile-adapter";
 import { validateProgram } from "@/modules/training/validate";
 import { loadCanonicalTrainingLibrary } from "@/lib/exercises/canonical";
+import { addCalendarDays, isDateOnly } from "@/modules/programs/start-date";
 async function authenticated() {
   const supabase = await createSupabaseServerClient();
   if (!supabase) return null;
@@ -30,7 +31,8 @@ export async function GET() {
       { error: "Unable to load program" },
       { status: 500 },
     );
-  return NextResponse.json({ program: data });
+  const { data: programRow } = data ? await ctx.supabase.from("programs").select("program_start_date").eq("id", data.program_id).eq("user_id", ctx.user.id).maybeSingle() : { data: null };
+  return NextResponse.json({ program: data ? { ...data, program_start_date: programRow?.program_start_date } : null });
 }
 export async function POST() {
   const ctx = await authenticated();
@@ -50,6 +52,10 @@ export async function POST() {
     );
   try {
     const profile = profileSnapshotToTrainingProfile(snapshot);
+    const { data: startResponse } = await ctx.supabase.from("assessment_responses").select("response_value").eq("assessment_id", snapshot.assessment_id).eq("user_id", ctx.user.id).eq("question_key", "programStartDate").maybeSingle();
+    const selectedStart = typeof startResponse?.response_value === "string" ? startResponse.response_value : "";
+    const today = new Date().toISOString().slice(0, 10);
+    const programStartDate = isDateOnly(selectedStart) && selectedStart >= today ? selectedStart : today;
     const library = await loadCanonicalTrainingLibrary(ctx.supabase);
     let generated = generateProgram(profile, library);
     const { data: preferences } = await ctx.supabase
@@ -90,6 +96,7 @@ export async function POST() {
         name: generated.name,
         engine_version: generated.engineVersion,
         ruleset_version: generated.rulesetVersion,
+        program_start_date: programStartDate,
       })
       .select("id")
       .single();
@@ -150,8 +157,8 @@ export async function POST() {
         }),
       ctx.supabase.from("member_review_state").upsert({
         user_id:ctx.user.id,
-        program_started_at:prescription.prescribed_at,
-        next_monthly_review_at:new Date(new Date(prescription.prescribed_at).getTime()+28*86400000).toISOString(),
+        program_started_at:`${programStartDate}T00:00:00.000Z`,
+        next_monthly_review_at:`${addCalendarDays(programStartDate,28)}T00:00:00.000Z`,
         monthly_review_due:false,
         monthly_review_status:"scheduled",
         reminder_sent_at:null,
@@ -188,3 +195,4 @@ export async function POST() {
     return NextResponse.json({ error: message }, { status });
   }
 }
+export async function PATCH(request:Request){const ctx=await authenticated();if(!ctx)return NextResponse.json({error:"Unauthorized"},{status:401});const body=await request.json().catch(()=>null)as{programStartDate?:string}|null,startDate=body?.programStartDate??"",today=new Date().toISOString().slice(0,10);if(!isDateOnly(startDate)||startDate<today)return NextResponse.json({error:"Choose today or a future date."},{status:400});const{data:program}=await ctx.supabase.from("programs").select("id,program_start_date").eq("user_id",ctx.user.id).is("retired_at",null).order("prescribed_at",{ascending:false}).limit(1).maybeSingle();if(!program)return NextResponse.json({error:"Program not found"},{status:404});if(today>=program.program_start_date)return NextResponse.json({error:"An active program cannot be re-dated. Use a schedule adjustment instead."},{status:409});const{error}=await ctx.supabase.from("programs").update({program_start_date:startDate}).eq("id",program.id).eq("user_id",ctx.user.id);if(error)return NextResponse.json({error:"Unable to update start date"},{status:500});await ctx.supabase.from("member_review_state").update({program_started_at:`${startDate}T00:00:00.000Z`,next_monthly_review_at:`${addCalendarDays(startDate,28)}T00:00:00.000Z`,updated_at:new Date().toISOString()}).eq("user_id",ctx.user.id);return NextResponse.json({programStartDate:startDate})}

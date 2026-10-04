@@ -8,6 +8,7 @@ import {
 } from "@/modules/acquisition/blueprint-storage";
 import { capture } from "@/lib/analytics/client";
 import { captureFunnel } from "@/lib/analytics/funnel-client";
+import { formatProgramDate, isDateOnly } from "@/modules/programs/start-date";
 
 function readBlueprint(): StoredBlueprint | null {
   if (typeof window === "undefined") return null;
@@ -22,6 +23,7 @@ function readBlueprint(): StoredBlueprint | null {
 
 export function BlueprintResult() {
   const [blueprint] = useState<StoredBlueprint | null>(readBlueprint);
+  const startDate = blueprint?.input && typeof blueprint.input === "object" && "programStartDate" in blueprint.input ? String(blueprint.input.programStartDate) : "";
   const reasoningRef = useRef<HTMLElement>(null);
   useEffect(() => { if (blueprint) { capture("blueprint_viewed", { blueprint_version: blueprint.version }); void captureFunnel("assessment_preview_view", { blueprint_version: blueprint.version }); void captureFunnel("blueprint_viewed", { blueprint_version: blueprint.version }); } }, [blueprint]);
   useEffect(()=>{const element=reasoningRef.current;if(!element||!blueprint)return;let sent=false;const observer=new IntersectionObserver(entries=>{if(!sent&&entries.some(entry=>entry.isIntersecting)){sent=true;void captureFunnel("assessment_preview_reasoning_view",{blueprint_version:blueprint.version});observer.disconnect()}},{threshold:.35});observer.observe(element);return()=>observer.disconnect()},[blueprint]);
@@ -53,6 +55,7 @@ export function BlueprintResult() {
           <small>DAYS / WEEK</small>
         </div>
       </header>
+      {isDateOnly(startDate) ? <aside className="blueprint-start-date"><span>Your plan starts</span><strong>{formatProgramDate(startDate)}</strong><p>You can review the plan and learn your exercises before the first scheduled workout.</p></aside> : null}
       <section className="blueprint-command">
         <div>
           <span>01 · Training direction</span>

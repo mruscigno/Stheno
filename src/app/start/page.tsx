@@ -4,7 +4,7 @@ import { approvedCampaign, approvedSource } from "@/modules/acquisition/social-c
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "Start your free fitness assessment", description: "See how STHENO would build training and nutrition around your actual life.", robots: { index: false, follow: true } };
+export const metadata: Metadata = { title: "Build a Fitness Plan That Adapts", description: "Build a free training and nutrition Blueprint, then see how STHENO keeps the plan useful when schedules, equipment, and progress change.", alternates:{canonical:"/start"}, openGraph:{title:"STHENO Helps With What Happens Next",description:"Build a free fitness plan designed to keep responding after Day 1.",url:"/start",type:"website"}, robots: { index: true, follow: true } };
 
 export default async function StartPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const db = await createSupabaseServerClient();

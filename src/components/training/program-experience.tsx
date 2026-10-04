@@ -4,18 +4,20 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { TrainingProgram } from "@/modules/training/types";
 import { captureFunnel } from "@/lib/analytics/funnel-client";
-type State = { state: "ready"; program: TrainingProgram } | { state: "empty" };
+import { dateOnlyFromLocal, formatProgramDate } from "@/modules/programs/start-date";
+type State = { state: "ready"; program: TrainingProgram; startDate?: string } | { state: "empty" };
 export function ProgramExperience() {
   const [data, setData] = useState<State | null>(null),
-    [message, setMessage] = useState("");
+    [message, setMessage] = useState(""),[editingStart,setEditingStart]=useState(false),[newStart,setNewStart]=useState("");
   const load = useCallback(async () => {
     const response = await fetch("/api/training/program", {
         cache: "no-store",
       }),
       body = await response.json(),
-      program = body.program?.prescription ?? body.program;
+      program = body.program?.prescription ?? body.program,
+      startDate = body.program?.program_start_date;
     setData(
-      response.ok && program ? { state: "ready", program } : { state: "empty" },
+      response.ok && program ? { state: "ready", program, startDate } : { state: "empty" },
     );
   }, []);
   useEffect(() => {
@@ -60,6 +62,8 @@ export function ProgramExperience() {
         {data.program.workouts.length} workouts per week · {data.program.weeks}{" "}
         week program
       </p>
+      {data.startDate ? <p className="program-start-summary"><strong>{dateOnlyFromLocal() < data.startDate ? "Starts" : "Started"} {formatProgramDate(data.startDate)}</strong>{dateOnlyFromLocal() < data.startDate ? " · Review everything now; scheduled training begins on your chosen date." : " · Your schedule and check-ins use this as Program Day 1."}</p> : null}
+      {data.startDate&&dateOnlyFromLocal()<data.startDate?<div className="program-start-edit">{editingStart?<><label>New program start date<input type="date" min={dateOnlyFromLocal()} value={newStart||data.startDate} onChange={event=>setNewStart(event.target.value)}/></label><button className="button secondary" onClick={async()=>{const value=newStart||data.startDate!,response=await fetch("/api/training/program",{method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify({programStartDate:value})}),body=await response.json();if(!response.ok)return setMessage(body.error??"Unable to change the date.");setData({...data,startDate:body.programStartDate});setEditingStart(false);setMessage("")}}>Save start date</button></>:<button className="button secondary" onClick={()=>setEditingStart(true)}>Change start date</button>}</div>:null}
       <article className="status program-block-context">
         <span>Training block {block.blockIndex}</span>
         <strong>{block.name} · Week {block.currentWeek} of {block.durationWeeks}</strong>

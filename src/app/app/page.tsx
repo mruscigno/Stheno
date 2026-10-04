@@ -3,9 +3,11 @@ import { ProgramCalendar } from "@/components/calendar/program-calendar";
 import { NutritionSummary } from "@/components/plan/nutrition-summary";
 import { MonthlyReviewDueCard } from "@/components/progress/monthly-review";
 import { ReviewPrompt } from "@/components/reviews/review-prompt";
+import { ProgramStartNotice } from "@/components/calendar/program-start-notice";
 export default function AppHome() {
   return (
     <>
+      <ProgramStartNotice />
       <section className="status">
         <p className="eyebrow">Ask STHENO Coach</p>
         <h1>Anything you want to ask your coach today?</h1>

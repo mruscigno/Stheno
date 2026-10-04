@@ -25,6 +25,7 @@ import "./logo-account-library.css";
 import "./marketing-reposition.css";
 import "./humanization.css";
 import "./social-start.css";
+import "./acquisition-v2.css";
 import "./social-funnel-admin.css";
 import "./homepage-gateway.css";
 import "./homepage-gateway-shell.css";

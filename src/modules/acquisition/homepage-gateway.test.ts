@@ -20,10 +20,10 @@ describe("homepage assessment gateway entry state", () => {
   });
 
   it("resumes conversion without restarting completed or incomplete visitors", () => {
-    expect(chooseHomepageEntry({ ...base, assessment: { version: "3.0.0", startedAt: "now", index: 4 } })).toBe("continue");
+    expect(chooseHomepageEntry({ ...base, assessment: { version: "4.0.0", startedAt: "now", index: 4 } })).toBe("continue");
     expect(chooseHomepageEntry({ ...base, hasBlueprint: true })).toBe("homepage");
     expect(chooseHomepageEntry({ ...base, auth: "signed-in" })).toBe("member");
-    expect(chooseHomepageEntry({ ...base, auth: "signed-in", assessment: { version: "3.0.0", startedAt: "now", index: 2 } })).toBe("continue");
+    expect(chooseHomepageEntry({ ...base, auth: "signed-in", assessment: { version: "4.0.0", startedAt: "now", index: 2 } })).toBe("continue");
   });
 
   it("never treats saved anonymous blueprint data as a login session", () => {

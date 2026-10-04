@@ -14,6 +14,7 @@ import { ftInToCm, lbToKg } from "@/modules/units/conversions";
 import { capture } from "@/lib/analytics/client";
 import { captureFunnel } from "@/lib/analytics/funnel-client";
 import { ASSESSMENT_STORAGE as STORAGE } from "@/modules/acquisition/homepage-gateway";
+import { addCalendarDays, dateOnlyFromLocal, daysBetween, formatProgramDate, isDateOnly, nextMonday } from "@/modules/programs/start-date";
 const initial: Intake = { diet: "flexible", heightFeet: 5, heightInches: 9 };
 function shown(value: unknown) {
   if (Array.isArray(value)) return value.join(", ").replaceAll("_", " ");
@@ -24,7 +25,7 @@ export function FreeAssessment() {
   const milestones = useRef(new Set<number>());
   const resumed = useRef(false);
   const advancing = useRef(false);
-  const viewedAt = useRef(Date.now());
+  const viewedAt = useRef(0);
   const stageRef = useRef<HTMLElement>(null);
   const router = useRouter(),
     [answers, setAnswers] = useState<Intake>(initial),
@@ -40,7 +41,7 @@ export function FreeAssessment() {
     value = step?.key ? answers[step.key] : undefined;
   useEffect(() => {
     queueMicrotask(() => {
-      try { const saved=JSON.parse(localStorage.getItem(STORAGE)||"null");if(saved?.version===ASSESSMENT_VERSION){resumed.current=Boolean(saved.startedAt);setAnswers({...initial,...saved.answers});setIndex(Math.max(0,Number(saved.index??0)));setReview(Boolean(saved.review));} } catch { /* Start clean if storage is unavailable or invalid. */ }
+      try { const saved=JSON.parse(localStorage.getItem(STORAGE)||localStorage.getItem("stheno_assessment_3.0.0")||"null");if(saved?.version===ASSESSMENT_VERSION||saved?.version==="3.0.0"){resumed.current=Boolean(saved.startedAt);setAnswers({...initial,...saved.answers});setIndex(Math.max(0,Number(saved.index??0)));setReview(Boolean(saved.review));} } catch { /* Start clean if storage is unavailable or invalid. */ }
       setHydrated(true);
     });
   }, []);
@@ -55,15 +56,14 @@ export function FreeAssessment() {
         startedAt:new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }));
-      setSavingFailed(false);
     } catch {
-      setSavingFailed(true);
+      queueMicrotask(() => setSavingFailed(true));
       void captureFunnel("assessment_save_failed", { assessment_version: ASSESSMENT_VERSION, question_number: index + 1 });
       void captureFunnel("funnel_error", { assessment_version: ASSESSMENT_VERSION, error_type: "assessment_local_save_failed", question_number: index + 1 });
     }
   }, [answers, hydrated, index, review]);
   useEffect(() => { if(!hydrated)return;void captureFunnel("assessment_loaded", { assessment_version: ASSESSMENT_VERSION, resumed: resumed.current }, { dedupeKey: ASSESSMENT_VERSION });if(resumed.current)capture("assessment_resumed",{assessment_version:ASSESSMENT_VERSION});else{capture("assessment_started", { assessment_version: ASSESSMENT_VERSION }); void captureFunnel("assessment_start", { assessment_version: ASSESSMENT_VERSION }, { dedupeKey: ASSESSMENT_VERSION });} }, [hydrated]);
-  useEffect(() => { if (step && hydrated) { viewedAt.current=Date.now(); setValidation(""); capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); void captureFunnel("assessment_question_viewed", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length }); } }, [hydrated, index, step?.key, steps.length]);
+  useEffect(() => { if (step && hydrated) { viewedAt.current=Date.now(); capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); void captureFunnel("assessment_question_viewed", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length }); } }, [hydrated, index, step, steps.length]);
   useEffect(() => { const abandon = () => { if (!completed.current) capture("assessment_abandoned", { assessment_version: ASSESSMENT_VERSION, step_key: step?.key ?? "unknown", step_number: index + 1 }); }; window.addEventListener("pagehide", abandon); return () => window.removeEventListener("pagehide", abandon); }, [index, step?.key]);
   function set(v: string | number | string[]) {
     setAnswers((a) => ({ ...a, [step.key]: v }));
@@ -86,7 +86,14 @@ export function FreeAssessment() {
     const current = Array.isArray(value) ? value : [];
     set(current.includes(v) ? current.filter((x) => x !== v) : [...current, v]);
   }
+  function selectStartDate(v: string, method: "today" | "tomorrow" | "next_monday" | "custom") {
+    setAnswers((current) => ({ ...current, programStartDate: v, programStartDateSelectionMethod: method, programStartDateLocalToday: dateOnlyFromLocal() }));
+    const delta = daysBetween(dateOnlyFromLocal(), v);
+    void captureFunnel("program_start_date_selected", { assessment_version: ASSESSMENT_VERSION, days_until_start: delta, selection_method: method });
+    if (delta > 0) void captureFunnel("future_start_selected", { assessment_version: ASSESSMENT_VERSION, days_until_start: delta, selection_method: method });
+  }
   function valid() {
+    if (step.type === "date") return typeof value === "string" && isDateOnly(value) && value >= dateOnlyFromLocal();
     return (
       step.optional ||
       (value !== undefined &&
@@ -311,6 +318,22 @@ export function FreeAssessment() {
               onChange={(e) => choose(e.target.value)}
             />
             <span>{step.unit}</span>
+          </div>
+        ) : step.type === "date" ? (
+          <div className="date-answer">
+            <div className="date-quick-options">
+              {[
+                ["Today", dateOnlyFromLocal(), "today"],
+                ["Tomorrow", addCalendarDays(dateOnlyFromLocal(), 1), "tomorrow"],
+                ["Next Monday", nextMonday(dateOnlyFromLocal()), "next_monday"],
+              ].map(([label, date, method]) => (
+                <button type="button" className={value === date ? "selected" : ""} key={method} onClick={() => selectStartDate(date, method as "today" | "tomorrow" | "next_monday")}>
+                  <span>{label}</span><small>{formatProgramDate(date)}</small>
+                </button>
+              ))}
+            </div>
+            <label><span>Choose another date</span><input type="date" min={dateOnlyFromLocal()} value={typeof value === "string" ? value : ""} onChange={(event) => selectStartDate(event.target.value, "custom")} /></label>
+            {typeof value === "string" && isDateOnly(value) ? <p className="selected-date">Your program starts <strong>{formatProgramDate(value)}</strong>.</p> : null}
           </div>
         ) : (
           <textarea

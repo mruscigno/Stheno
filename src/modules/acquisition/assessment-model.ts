@@ -1,7 +1,7 @@
 import type{BlueprintInput}from"./blueprint";
-export const ASSESSMENT_VERSION="3.0.0";
+export const ASSESSMENT_VERSION="4.0.0";
 export type Intake=Partial<BlueprintInput>&Record<string,string|number|string[]|undefined>;
-export type IntakeStep={key:string;section:string;question:string;help:string;type:"single"|"multi"|"number"|"text";options?:{value:string;label:string;detail?:string}[];optional?:boolean;min?:number;max?:number;unit?:string;show?:(a:Intake)=>boolean};
+export type IntakeStep={key:string;section:string;question:string;help:string;type:"single"|"multi"|"number"|"text"|"date";options?:{value:string;label:string;detail?:string}[];optional?:boolean;min?:number;max?:number;unit?:string;show?:(a:Intake)=>boolean};
 const options=(...rows:[string,string,string?][])=>rows.map(([value,label,detail])=>({value,label,detail}));
 export const intakeSteps:IntakeStep[]=[
 {key:"goal",section:"Your direction",question:"What should your plan accomplish first?",help:"Pick the result that matters most. This becomes the plan’s primary decision filter.",type:"single",options:options(["strength","Build strength"],["muscle","Build muscle"],["fat_loss","Lose fat sustainably"],["general","Feel fitter and more capable"])},
@@ -25,6 +25,7 @@ export const intakeSteps:IntakeStep[]=[
 {key:"preferredDays",section:"Your week",question:"Which days usually work best?",help:"Select every realistic training window.",type:"multi",options:options(["mon","Monday"],["tue","Tuesday"],["wed","Wednesday"],["thu","Thursday"],["fri","Friday"],["sat","Saturday"],["sun","Sunday"])},
 {key:"schedule",section:"Your week",question:"How predictable is your schedule?",help:"Variable weeks need backup sessions, not guilt.",type:"single",options:options(["stable","Mostly stable"],["variable","Changes week to week"],["shifts","Shift or rotating work"],["caregiving","Family or caregiving changes it"])},
 {key:"travel",section:"Your week",question:"Any travel or disruption coming up?",help:"We can prepare shorter or equipment-flexible sessions before you need them.",type:"single",optional:true,show:a=>a.schedule!=="stable",options:options(["none","Nothing planned"],["soon","Something soon"],["occasional","Occasional travel"],["frequent","Frequent travel"])},
+{key:"programStartDate",section:"Your start",question:"When do you want to start?",help:"Choose when you want your training plan to begin. You can review everything before your first workout.",type:"date"},
 {key:"location",section:"Training environment",question:"Where will you train most often?",help:"The plan should fit the environment you actually use.",type:"single",options:options(["gym","Commercial gym"],["home","Home gym"],["mixed","Home and gym"],["hotel","Travel or hotel gyms"])},
 {key:"equipment",section:"Training environment",question:"What equipment is reliably available?",help:"Select only what you can use most weeks.",type:"multi",options:options(["dumbbells","Dumbbells"],["barbell","Barbell + rack"],["bench","Bench"],["cables","Cables"],["machines","Machines"],["bands","Bands"],["cardio","Cardio equipment"],["bodyweight","Bodyweight only"])},
 {key:"dumbbellLimitLb",section:"Training environment",question:"What is your heaviest dumbbell?",help:"This helps progression stay realistic at home. Skip if it does not apply.",type:"number",optional:true,min:1,max:200,unit:"lb each",show:a=>Array.isArray(a.equipment)&&a.equipment.includes("dumbbells")&&(a.location==="home"||a.location==="mixed")},

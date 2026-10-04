@@ -11,8 +11,9 @@ import { publicIntakeToAssessment } from "@/modules/assessment/public-intake";
 import { profileSnapshotToTrainingProfile } from "@/modules/training/profile-adapter";
 import { generateProgram } from "@/modules/training/generate";
 import { validateProgram } from "@/modules/training/validate";
+import { addCalendarDays, isDateOnly } from "@/modules/programs/start-date";
 const Payload = z.object({
-  version: z.literal("3.0.0"),
+  version: z.literal("4.0.0"),
   answers: z.record(
     z.string(),
     z.union([z.string(), z.number(), z.array(z.string())]),
@@ -45,6 +46,10 @@ export async function POST(request: Request) {
       program: existing.prescription,
     });
   const answers = publicIntakeToAssessment(parsed.data.answers);
+  const programStartDate = String(parsed.data.answers.programStartDate ?? "");
+  const localToday = String(parsed.data.answers.programStartDateLocalToday ?? new Date().toISOString().slice(0, 10));
+  if (!isDateOnly(programStartDate) || !isDateOnly(localToday) || programStartDate < localToday)
+    return NextResponse.json({ error: "Choose a valid program start date." }, { status: 400 });
   const { data: version } = await supabase
     .from("assessment_versions")
     .select("id")
@@ -83,8 +88,9 @@ export async function POST(request: Request) {
       );
     assessment = created.data;
   }
+  const savedAnswers = { ...answers, programStartDate };
   const now = new Date().toISOString(),
-    rows = Object.entries(answers).map(([question_key, response_value]) => ({
+    rows = Object.entries(savedAnswers).map(([question_key, response_value]) => ({
       user_id: user.id,
       assessment_id: assessment!.id,
       question_key,
@@ -135,6 +141,7 @@ export async function POST(request: Request) {
       name: program.name,
       engine_version: program.engineVersion,
       ruleset_version: program.rulesetVersion,
+      program_start_date: programStartDate,
     })
     .select("id")
     .single();
@@ -177,9 +184,19 @@ export async function POST(request: Request) {
       .from("profiles")
       .update({ lifecycle_state: "assessment_completed", updated_at: now })
       .eq("user_id", user.id),
+    supabase.from("member_review_state").upsert({
+      user_id: user.id,
+      program_started_at: `${programStartDate}T00:00:00.000Z`,
+      next_monthly_review_at: `${addCalendarDays(programStartDate, 28)}T00:00:00.000Z`,
+      monthly_review_due: false,
+      monthly_review_status: "scheduled",
+      reminder_sent_at: null,
+      follow_up_sent_at: null,
+      updated_at: now,
+    }, { onConflict: "user_id" }),
   ]);
   return NextResponse.json(
-    { claimed: true, generated: true, program },
+    { claimed: true, generated: true, program, programStartDate },
     { status: 201 },
   );
 }
