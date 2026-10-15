@@ -48,61 +48,49 @@ export default function Pricing() {
       <p className="pricing-value-anchor chrome-shell">
         Training, nutrition, progress reviews, and coaching are included.
       </p>
-      <section className="pricing-options chrome-shell">
-        <article>
-          <span>Pay monthly</span>
-          <div className="price">
-            <strong>{membership.monthly.label}</strong>
-            <small>/ {membership.monthly.interval}</small>
+      <section className="pricing-options pricing-choice chrome-shell">
+        <article className="recommended pricing-membership-card">
+          <b>RECOMMENDED · SAVE ${annualSavings} / YEAR</b>
+          <div className="pricing-plan-grid">
+            <div className="pricing-plan-primary">
+              <span>Annual membership</span>
+              <div className="price">
+                <strong>{membership.annual.label}</strong>
+                <small>/ {membership.annual.interval}</small>
+              </div>
+              <p>
+                ${(membership.annual.amount / 12).toFixed(2)}/month after your
+                free trial. Every STHENO feature is included.
+              </p>
+              <form action="/api/billing/checkout" method="post">
+                <AttributionFields />
+                <input type="hidden" name="plan" value="annual" />
+                <TrackedButton
+                  event="pricing_checkout_click"
+                  eventProperties={{ plan: "annual", placement: "recommended" }}
+                  className="button button-large"
+                >
+                  Choose annual →
+                </TrackedButton>
+              </form>
+            </div>
+            <aside className="pricing-alternative" aria-label="Monthly billing option">
+              <span>Prefer monthly billing?</span>
+              <p>{membership.monthly.label}/month. Cancel any time.</p>
+              <form action="/api/billing/checkout" method="post">
+                <AttributionFields />
+                <input type="hidden" name="plan" value="monthly" />
+                <TrackedButton
+                  event="pricing_checkout_click"
+                  eventProperties={{ plan: "monthly", placement: "alternative" }}
+                  className="button secondary"
+                >
+                  Choose monthly
+                </TrackedButton>
+              </form>
+            </aside>
           </div>
-          <p>Flexible month-to-month access after your free trial.</p>
-          <form action="/api/billing/checkout" method="post">
-            <AttributionFields />
-            <input type="hidden" name="plan" value="monthly" />
-            <TrackedButton
-              event="pricing_checkout_click"
-              eventProperties={{ plan: "monthly" }}
-              className="button button-large"
-            >
-              Choose monthly →
-            </TrackedButton>
-          </form>
-          <small className="checkout-trust">
-            Secure checkout powered by Stripe
-          </small>
-          <p className="guarantee-note">
-            <strong>30-day money-back guarantee</strong>
-            <span>
-              Request a refund of your first paid charge within 30 days.{" "}
-              <Link href="/terms">Terms apply.</Link>
-            </span>
-          </p>
-        </article>
-        <article className="recommended">
-          <b>BEST VALUE · SAVE ${annualSavings} / YEAR</b>
-          <span>Pay annually</span>
-          <div className="price">
-            <strong>{membership.annual.label}</strong>
-            <small>/ {membership.annual.interval}</small>
-          </div>
-          <p>
-            Equivalent to ${(membership.annual.amount / 12).toFixed(2)}/month
-            after your free trial.
-          </p>
-          <form action="/api/billing/checkout" method="post">
-            <AttributionFields />
-            <input type="hidden" name="plan" value="annual" />
-            <TrackedButton
-              event="pricing_checkout_click"
-              eventProperties={{ plan: "annual" }}
-              className="button button-large"
-            >
-              Choose annual →
-            </TrackedButton>
-          </form>
-          <small className="checkout-trust">
-            Secure checkout powered by Stripe
-          </small>
+          <small className="checkout-trust">Secure checkout powered by Stripe</small>
           <p className="guarantee-note">
             <strong>30-day money-back guarantee</strong>
             <span>

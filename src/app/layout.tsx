@@ -29,6 +29,7 @@ import "./acquisition-v2.css";
 import "./social-funnel-admin.css";
 import "./homepage-gateway.css";
 import "./homepage-gateway-shell.css";
+import "./conversion-remediation.css";
 import {SiteFooter,SiteHeader} from "@/components/public/site-chrome";
 import { defaultSocialImage, organizationJsonLd, safeJsonLd } from "@/lib/seo";
 import { HeyCatchIdentity } from "@/components/analytics/heycatch-identity";

@@ -34,6 +34,7 @@ export function FreeAssessment() {
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [validation, setValidation] = useState(""),
+    [transitioning, setTransitioning] = useState(false),
     [savingFailed, setSavingFailed] = useState(false),
     [hydrated, setHydrated] = useState(false);
   const steps = visibleSteps(answers),
@@ -66,6 +67,7 @@ export function FreeAssessment() {
   useEffect(() => { if (step && hydrated) { viewedAt.current=Date.now(); capture("assessment_step_viewed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length }); void captureFunnel("assessment_question_viewed", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length }); } }, [hydrated, index, step, steps.length]);
   useEffect(() => { const abandon = () => { if (!completed.current) capture("assessment_abandoned", { assessment_version: ASSESSMENT_VERSION, step_key: step?.key ?? "unknown", step_number: index + 1 }); }; window.addEventListener("pagehide", abandon); return () => window.removeEventListener("pagehide", abandon); }, [index, step?.key]);
   function set(v: string | number | string[]) {
+    setValidation("");
     setAnswers((a) => ({ ...a, [step.key]: v }));
   }
   function choose(v: string) {
@@ -87,6 +89,7 @@ export function FreeAssessment() {
     set(current.includes(v) ? current.filter((x) => x !== v) : [...current, v]);
   }
   function selectStartDate(v: string, method: "today" | "tomorrow" | "next_monday" | "custom") {
+    setValidation("");
     setAnswers((current) => ({ ...current, programStartDate: v, programStartDateSelectionMethod: method, programStartDateLocalToday: dateOnlyFromLocal() }));
     const delta = daysBetween(dateOnlyFromLocal(), v);
     void captureFunnel("program_start_date_selected", { assessment_version: ASSESSMENT_VERSION, days_until_start: delta, selection_method: method });
@@ -105,7 +108,11 @@ export function FreeAssessment() {
     if (advancing.current) return;
     void captureFunnel("assessment_continue_click", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, valid: valid() });
     if (!valid()) {
-      const message = "Choose an answer before continuing.";
+      const message = step.type === "date"
+        ? "Choose when you want your program to start."
+        : step.type === "number"
+          ? "Enter a value before continuing."
+          : "Choose an answer before continuing.";
       setValidation(message);
       void captureFunnel("assessment_validation_error", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, error_type: "required_answer_missing" });
       stageRef.current?.focus({ preventScroll: true });
@@ -113,6 +120,7 @@ export function FreeAssessment() {
       return;
     }
     advancing.current = true;
+    setTransitioning(true);
     setValidation("");
     capture("assessment_step_completed", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1, total_steps: steps.length });
     void captureFunnel("assessment_question_answered", { assessment_version: ASSESSMENT_VERSION, question_key: step.key, question_number: index + 1, total_questions: steps.length, dwell_ms: Date.now()-viewedAt.current });
@@ -123,9 +131,12 @@ export function FreeAssessment() {
         void captureFunnel(`assessment_${threshold}_percent`, { assessment_version: ASSESSMENT_VERSION, total_questions: steps.length });
       }
     });
-    if (index < steps.length - 1) setIndex((x) => x + 1);
-    else setReview(true);
-    queueMicrotask(() => { advancing.current = false; });
+    window.setTimeout(() => {
+      if (index < steps.length - 1) setIndex((x) => x + 1);
+      else setReview(true);
+      setTransitioning(false);
+      advancing.current = false;
+    }, 180);
   }
   function edit(key: string) {
     const target = steps.findIndex((x) => x.key === key);
@@ -261,7 +272,7 @@ export function FreeAssessment() {
         <SthenoLogo compact className="assessment-logo" />
         <div>
           <p>{step.section}</p>
-          <strong>Question {index + 1}</strong>
+          <strong>Question {index + 1} of {steps.length}</strong>
         </div>
         <progress value={index + 1} max={steps.length} />
       </header>
@@ -270,22 +281,24 @@ export function FreeAssessment() {
         <h1>{step.question}</h1>
         <p className="assessment-microcopy">{index === 0 ? "Tell us about your goals and the real-life constraints your plan needs to handle. You do the work. STHENO handles the plan." : step.help}</p>
         {step.type === "single" ? (
-          <div className="answer-grid">
+          <div className="answer-grid" role="radiogroup" aria-label={step.question} aria-invalid={Boolean(validation)}>
             {step.options?.map((option) => (
               <button
                 type="button"
                 className={String(value) === option.value ? "selected" : ""}
+                role="radio"
+                aria-checked={String(value) === option.value}
                 onClick={() => choose(option.value)}
                 key={option.value}
               >
                 <span>{option.label}</span>
                 {option.detail ? <small>{option.detail}</small> : null}
-                <i>{String(value) === option.value ? "✓" : "→"}</i>
+                <i aria-hidden="true">{String(value) === option.value ? "✓" : ""}</i>
               </button>
             ))}
           </div>
         ) : step.type === "multi" ? (
-          <div className="answer-grid multi">
+          <div className="answer-grid multi" role="group" aria-label={step.question}>
             {step.options?.map((option) => (
               <button
                 type="button"
@@ -356,7 +369,7 @@ export function FreeAssessment() {
         <button
           type="button"
           className="back"
-          disabled={index === 0}
+          disabled={index === 0 || transitioning}
           onClick={() => setIndex((x) => Math.max(0, x - 1))}
         >
           ← Back
@@ -365,10 +378,16 @@ export function FreeAssessment() {
           type="button"
           className="button button-large"
           data-valid={valid()}
+          data-transitioning={transitioning}
+          aria-busy={transitioning}
+          disabled={transitioning}
           onClick={advance}
         >
-          {index === steps.length - 1 ? "Review my answers →" : "Continue →"}
+          {transitioning ? "Saved ✓" : index === steps.length - 1 ? "Review my answers →" : "Continue →"}
         </button>
+        <span className="assessment-action-status" role="status" aria-live="polite">
+          {transitioning ? "Answer saved. Loading the next question." : ""}
+        </span>
         {step.optional && value === undefined ? (
           <button type="button" className="skip" onClick={() => { capture("assessment_step_skipped", { assessment_version: ASSESSMENT_VERSION, step_key: step.key, step_number: index + 1 }); advance(); }}>
             Skip for now

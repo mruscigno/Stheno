@@ -21,10 +21,19 @@ describe("free assessment progression",()=>{
 
   it("accepts one valid transition and guards a rapid duplicate",async()=>{
     render(<FreeAssessment/>);
-    fireEvent.click(await screen.findByRole("button",{name:/Build strength/}));
+    fireEvent.click(await screen.findByRole("radio",{name:/Build strength/}));
     const button=screen.getByRole("button",{name:"Continue →"});
     fireEvent.click(button);fireEvent.click(button);
-    await waitFor(()=>expect(screen.getByText("Question 2")).toBeInTheDocument());
-    expect(screen.queryByText("Question 3")).not.toBeInTheDocument();
+    expect(screen.getByRole("button",{name:"Saved ✓"})).toHaveAttribute("aria-busy","true");
+    await waitFor(()=>expect(screen.getByText(/Question 2 of/)).toBeInTheDocument());
+    expect(screen.queryByText(/Question 3 of/)).not.toBeInTheDocument();
+  });
+
+  it("uses radio semantics so choices do not read like navigation buttons",async()=>{
+    render(<FreeAssessment/>);
+    const choice=await screen.findByRole("radio",{name:/Build strength/});
+    expect(choice).toHaveAttribute("aria-checked","false");
+    fireEvent.click(choice);
+    expect(choice).toHaveAttribute("aria-checked","true");
   });
 });
