@@ -1,0 +1,34 @@
+Route,Method,Auth,Side effects,App1 mapping,Status
+/api/assessment,"GET,POST",Cookie,"Read/start/save/complete assessment",Secure anonymous v1 deferred; authenticated route unchanged,Existing
+/api/assessment/claim,POST,Cookie,"Claim payload and generate program",Transactional anonymous session dependency documented,Existing
+/api/blueprint,POST,Public,"Generate deterministic preview; analytics",Anonymous session persistence deferred,Existing
+/api/exercises/[slug],GET,Cookie,Read exercise/alternatives,/api/v1/exercises/{id},Existing compatible
+/api/workouts/today,"GET,POST",Cookie,"Read/start/log/adapt/complete workout",v1 read/mutation endpoints,Existing compatible
+/api/plan,"GET,POST",Cookie,"Read/generate nutrition and activity targets",/api/v1/nutrition GET,Existing compatible
+/api/calendar,GET,Cookie,Read schedule,/api/v1/program plus later schedule DTO,Existing
+/api/nutrition/day,"GET,POST,DELETE",Cookie,"Read/log/complete/delete nutrition",Read is in /api/v1/nutrition; write API planned,Existing
+/api/progress/performance,GET,Cookie,Read derived progress,/api/v1/progress,Existing
+/api/progress/monthly,"GET,POST",Cookie,"Read/start/complete/decide review",v1 monthly reads/decisions; completion planned,Existing compatible
+/api/progress/photos,"GET,POST,DELETE",Cookie,"Private signed photo access and metadata",Native photo API planned after privacy design,Existing
+/api/coach,"GET,POST",Cookie or Bearer,"Read/send Coach messages and actions",/api/v1/coach/questions POST,Updated compatible
+/api/billing/checkout,POST,Cookie,Create Stripe Checkout,No native billing implementation,Existing unchanged
+/api/billing/portal,POST,Cookie,Create Stripe portal,Future provider-neutral management interface,Existing unchanged
+/api/billing/webhook,POST,Stripe signature,"Update subscriptions/entitlements",Preserved,Existing unchanged
+/api/v1/exercises,GET,Public,None,"Cursor/filter exercise listing",Implemented
+/api/v1/exercises/{id},GET,Public,None,"Exercise detail and alternatives",Implemented
+/api/v1/me,GET,Bearer or Cookie,None,"Profile/preferences/effective access",Implemented
+/api/v1/today,GET,Bearer or Cookie,None,"Today read model",Implemented
+/api/v1/program,GET,Bearer or Cookie,None,"Current prescription",Implemented
+/api/v1/nutrition,GET,Bearer or Cookie,None,"Targets/activity/preferences/supplements",Implemented
+/api/v1/progress,GET,Bearer or Cookie,None,"Reviews/recommendations/check-ins/photo metadata",Implemented
+/api/v1/workouts/sessions,POST,Bearer or Cookie,"Start/resume session; idempotency receipt",Native workout start,Implemented
+/api/v1/workouts/sessions/{id}/sets/{setId},PUT,Bearer or Cookie,"Upsert owned set; intelligence; receipt",Native replay-safe set log,Implemented
+/api/v1/workouts/sessions/{id}/complete,POST,Bearer or Cookie,"Complete owned session; summary/derived records; receipt",Native replay-safe completion,Implemented
+/api/v1/monthly-reviews,GET,Bearer or Cookie,None,"Review status/history/recommendations",Implemented
+/api/v1/monthly-reviews/{id}/decisions,POST,Bearer or Cookie,"Selective accept/decline; effects; receipt",Native decision API,Implemented
+/api/v1/coach/questions,POST,Bearer or Cookie,"Message persistence; model/action work",Native Coach adapter,Implemented
+/api/v1/assessment/sessions,POST,Anonymous scoped token,"Create anonymous session",App 3 dependency,Planned
+/api/v1/assessment/sessions/{id},"GET,PATCH",Anonymous scoped token,"Resume/save answers",App 3 dependency,Planned
+/api/v1/assessment/sessions/{id}/complete,POST,Anonymous scoped token,"Complete assessment",App 3 dependency,Planned
+/api/v1/assessment/sessions/{id}/blueprint,GET,Anonymous scoped token,None,App 3 dependency,Planned
+/api/v1/assessment/sessions/{id}/claim,POST,Bearer plus claim token,"Exactly-once account link",App 3 dependency,Planned

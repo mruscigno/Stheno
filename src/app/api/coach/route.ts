@@ -1,29 +1,27 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { z } from "zod";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { authenticateRequest } from "@/platform/server/auth";
 import { captureServerEvent } from "@/lib/analytics/server";
 import { actionIntent, answerQuality, classifyCoachRequest, COACH_SERVICE_ERROR, OUT_OF_DOMAIN, safetyResponse } from "@/modules/coach/orchestration";
 import { proposeAdjustment } from "@/modules/coaching/engine";
 
 const Input = z.object({ conversationId: z.uuid().optional(), message: z.string().trim().min(1).max(4000) });
 
-async function context() {
-  const supabase = await createSupabaseServerClient();
-  if (!supabase) return null;
-  const { data: { user } } = await supabase.auth.getUser();
-  return user ? { supabase, user } : null;
+async function context(request: Request) {
+  const authenticated = await authenticateRequest(request);
+  return authenticated ? { supabase: authenticated.db, user: authenticated.user } : null;
 }
 
-export async function GET() {
-  const c = await context();
+export async function GET(request: Request) {
+  const c = await context(request);
   if (!c) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { data } = await c.supabase.from("coach_conversations").select("id,title,updated_at,coach_messages(id,role,content,domain,created_at)").eq("user_id", c.user.id).order("updated_at", { ascending: false }).limit(20);
   return NextResponse.json({ conversations: data ?? [] });
 }
 
 export async function POST(request: Request) {
-  const c = await context();
+  const c = await context(request);
   if (!c) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const parsed = Input.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid message" }, { status: 400 });
