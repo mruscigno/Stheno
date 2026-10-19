@@ -1,0 +1,32 @@
+import type { ExpoConfig } from "expo/config";
+
+const environment = process.env.EXPO_PUBLIC_ENVIRONMENT ?? "development";
+const isDevelopment = environment === "development";
+
+const config: ExpoConfig = {
+  name: isDevelopment ? "STHENO Fitness Dev" : "STHENO Fitness",
+  slug: "stheno-fitness",
+  scheme: isDevelopment ? "stheno-dev" : "stheno",
+  version: "0.1.0",
+  orientation: "portrait",
+  userInterfaceStyle: "light",
+  icon: "./assets/icon.png",
+  splash: { image: "./assets/splash.png", resizeMode: "contain", backgroundColor: "#fffaf3" },
+  ios: {
+    bundleIdentifier: isDevelopment ? "com.sthenofitness.app.dev" : "com.sthenofitness.app",
+    supportsTablet: true,
+    associatedDomains: ["applinks:www.sthenofitness.com"],
+    config: { usesNonExemptEncryption: false },
+  },
+  android: {
+    package: isDevelopment ? "com.sthenofitness.app.dev" : "com.sthenofitness.app",
+    adaptiveIcon: { foregroundImage: "./assets/icon.png", backgroundColor: "#fffaf3" },
+    intentFilters: [{ action: "VIEW", autoVerify: true, data: [{ scheme: "https", host: "www.sthenofitness.com", pathPrefix: "/auth/mobile" }], category: ["BROWSABLE", "DEFAULT"] }],
+  },
+  web: { bundler: "metro", output: "static", favicon: "./assets/icon.png" },
+  plugins: ["expo-router", ["expo-secure-store", { configureAndroidBackup: true }], ["expo-splash-screen", { image: "./assets/splash.png", imageWidth: 220, backgroundColor: "#fffaf3" }]],
+  experiments: { typedRoutes: true, reactCompiler: true },
+  extra: { environment },
+};
+
+export default config;

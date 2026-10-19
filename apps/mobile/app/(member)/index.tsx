@@ -1,0 +1,9 @@
+import { StyleSheet, Text, View } from "react-native";
+import { Body, Button, Card, Eyebrow, Title } from "@/components/Primitives";
+import { Screen } from "@/components/Screen";
+import { SthenoLogo } from "@/components/SthenoLogo";
+import { useAuth } from "@/providers/AuthProvider";
+import { colors, spacing } from "@/theme";
+
+export default function TodayScreen() { const auth = useAuth(); const today = auth.today; const programName = today?.program?.prescription?.name ?? "Your current program"; const nextWorkout = today?.program?.prescription?.workouts?.[0]; return <Screen><SthenoLogo /><View style={styles.header}><Eyebrow>Today</Eyebrow><Title>{today?.activeWorkout ? "Your workout is waiting." : "Your plan, at a glance."}</Title><Body muted>Live, read-only data from the STHENO platform API.</Body></View><Card><Text style={styles.label}>Program</Text><Text style={styles.value}>{programName}</Text>{nextWorkout?.name ? <Body muted>Next: {nextWorkout.name}</Body> : <Body muted>No workout is scheduled in the current read model.</Body>}</Card>{today?.nutrition ? <Card><Text style={styles.label}>Daily nutrition</Text><Text style={styles.value}>{today.nutrition.calories_kcal.toLocaleString()} kcal</Text><Body muted>{today.nutrition.protein_g}g protein · {today.nutrition.carbohydrate_g}g carbohydrate · {today.nutrition.fat_g}g fat</Body></Card> : null}{today?.review?.monthly_review_due ? <Card><Text style={styles.label}>Review</Text><Text style={styles.value}>Monthly review due</Text><Body muted>Completion arrives in the Progress sprint.</Body></Card> : null}<Button variant="secondary" onPress={() => void auth.refresh()}>Refresh</Button></Screen>; }
+const styles = StyleSheet.create({ header: { paddingVertical: spacing.xl }, label: { color: colors.orangeDark, fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "800" }, value: { color: colors.ink, fontSize: 24, fontWeight: "800" } });

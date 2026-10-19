@@ -1,0 +1,5 @@
+import { Redirect, Tabs } from "expo-router";
+import { useAuth } from "@/providers/AuthProvider";
+import { colors } from "@/theme";
+
+export default function MemberLayout() { const auth = useAuth(); if (auth.status === "signedOut") return <Redirect href="/" />; if (auth.status !== "signedIn") return null; return <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: colors.orangeDark, tabBarInactiveTintColor: colors.muted, tabBarStyle: { backgroundColor: colors.paper, borderTopColor: colors.line, height: 64, paddingBottom: 8, paddingTop: 7 } }}><Tabs.Screen name="index" options={{ title: "Today" }} /><Tabs.Screen name="plan" options={{ title: "Plan" }} /><Tabs.Screen name="progress" options={{ title: "Progress" }} /><Tabs.Screen name="coach" options={{ title: "Coach" }} /><Tabs.Screen name="more" options={{ title: "More" }} /></Tabs>; }

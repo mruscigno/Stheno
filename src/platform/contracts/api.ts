@@ -76,6 +76,23 @@ export type ApiFailure = {
   error: { code: ApiErrorCode; message: string; details?: unknown };
 };
 
+export type MemberReadModel = {
+  id: string;
+  email: string | null;
+  profile: { display_name: string | null; lifecycle_state: string | null; time_zone: string | null; created_at: string; updated_at: string } | null;
+  preferences: { unit_system: string | null; locale: string | null } | null;
+  access: { hasAccess: boolean; state: string; trialEndsAt?: string | null; daysRemaining?: number };
+  subscription: { status: string; billing_interval: string | null; current_period_ends_at: string | null; updated_at: string } | null;
+  entitlements: Array<{ entitlement_key: string; active: boolean; starts_at: string | null; ends_at: string | null }>;
+};
+
+export type TodayReadModel = {
+  activeWorkout: { id: string; workout_key: string; status: string; original_workout: unknown; revised_workout: unknown; current_exercise_index: number; started_at: string; updated_at: string } | null;
+  program: { id: string; program_id: string; prescription: { name?: string; workouts?: Array<{ key?: string; name?: string; exercises?: unknown[] }> }; prescribed_at: string } | null;
+  review: { next_monthly_review_at: string | null; monthly_review_due: boolean; monthly_review_status: string | null } | null;
+  nutrition: { calories_kcal: number; protein_g: number; carbohydrate_g: number; fat_g: number; effective_from: string } | null;
+};
+
 export type OperationAcknowledgement<T> = {
   operationId: string;
   revision: number;

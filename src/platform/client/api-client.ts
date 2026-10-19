@@ -1,4 +1,4 @@
-import type { ApiFailure, ApiSuccess } from "@/platform/contracts/api";
+import type { ApiFailure, ApiSuccess, MemberReadModel, TodayReadModel } from "../contracts/api";
 
 export class SthenoApiError extends Error {
   constructor(public readonly status: number, public readonly response: ApiFailure) {
@@ -32,8 +32,8 @@ export function createSthenoApiClient(options: SthenoApiClientOptions) {
   }
   return {
     request,
-    me: () => request<unknown>("/api/v1/me"),
-    today: () => request<unknown>("/api/v1/today"),
+    me: () => request<MemberReadModel>("/api/v1/me"),
+    today: () => request<TodayReadModel>("/api/v1/today"),
     program: () => request<unknown>("/api/v1/program"),
     nutrition: () => request<unknown>("/api/v1/nutrition"),
     progress: () => request<unknown>("/api/v1/progress"),
