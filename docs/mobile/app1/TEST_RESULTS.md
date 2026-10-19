@@ -46,3 +46,16 @@ The connected Supabase API token returned `You do not have permission to perform
 | Artifact parsing | Passed: OpenAPI JSON, baseline JSON, and route CSV |
 
 Production deployment smoke-test results are recorded in `FINAL_STATUS.md` after release verification.
+
+## Production smoke tests
+
+The staged production artifact and the promoted custom domain both passed the same route checks:
+
+| Route | Expected | Result |
+|---|---|---|
+| `/` | Public homepage | 200 |
+| `/api/health` | Healthy service envelope | 200, release `cb83821` |
+| `/api/v1/exercises?limit=1` | Public versioned catalog | 200, `apiVersion: 1.0` |
+| `/api/v1/me` without bearer/cookie | Structured auth denial | 401, `AUTH_REQUIRED` |
+
+The Vercel error-log query returned 0 error records after these requests.

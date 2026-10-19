@@ -11,9 +11,9 @@ The shared platform/API foundation is implemented and the additive production mi
 | Item | Value |
 |---|---|
 | Baseline commit | `32843945e4564a5fb3dda18841841260674cb298` |
-| Release commit | Pending final commit |
+| Release commit | `cb83821b6af89fbf6c2d6cca01b89ce1d48d7bb4` |
 | Supabase migration | Applied and verified on 2026-10-19 |
-| Production deployment | Pending final quality gates |
+| Production deployment | `dpl_9BkC5ASPVnPQt41uuuqZBWSxLVmW` — READY and promoted |
 | Production URL | `https://www.sthenofitness.com` |
 
 ## Delivered API surface
@@ -44,4 +44,16 @@ The shared platform/API foundation is implemented and the additive production mi
 
 ## Final gate and deployment evidence
 
-Pending final verification and production release. This section will be replaced with exact command results, commit, deployment ID, status, and smoke checks before handoff.
+- `pnpm lint`: passed with 0 errors and 8 pre-existing warnings.
+- `pnpm typecheck`: passed.
+- `pnpm test`: 54 files and 217 tests passed.
+- `pnpm build`: passed; 140 static pages generated.
+- Vercel production-environment build: READY; deployment `dpl_9BkC5ASPVnPQt41uuuqZBWSxLVmW`.
+- The exact staged artifact was smoke-tested before promotion.
+- Live `/`: 200.
+- Live `/api/health`: 200 and version `cb83821`.
+- Live `/api/v1/exercises?limit=1`: 200 with API version `1.0`.
+- Live `/api/v1/me` without credentials: structured 401 `AUTH_REQUIRED`.
+- Vercel runtime error scan after smoke tests: 0 error records in the available 30-minute retention window.
+
+App 2 may begin with the authenticated read-only vertical slice. The P0 items above remain hard gates for the later offline/claim workflows and are not represented as complete.
