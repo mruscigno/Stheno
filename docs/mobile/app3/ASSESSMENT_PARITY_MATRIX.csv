@@ -1,0 +1,11 @@
+area,canonical_source,native_status,evidence
+registry,assessment-model.ts,implemented,"all 45 intake steps imported"
+first_question,goal,implemented,"What should your plan accomplish first?"
+branching,show predicates,implemented,"visibleSteps called after every answer"
+single_choice,options,implemented,"native radio controls"
+multi_choice,options,implemented,"native checkbox controls"
+number,min/max/unit,implemented,"server validates range; native numeric keyboard"
+text,free form,implemented,"5000-character server bound"
+date,programStartDate,implemented,"canonical date question rendered"
+autosave,revision protocol,implemented,"optimistic revision on every answer"
+review,reviewGroups,deferred,"not required for data parity; add visual review in App 4"

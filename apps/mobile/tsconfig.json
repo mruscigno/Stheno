@@ -3,7 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "paths": { "@/*": ["./src/*"], "@shared/*": ["../../src/platform/*"], "@assessment/*": ["../../src/modules/assessment/*"] }
+    "paths": { "@/*": ["./src/*"], "@shared/*": ["../../src/platform/*"], "@assessment/*": ["../../src/modules/assessment/*"], "@acquisition/*": ["../../src/modules/acquisition/*"] }
   },
   "include": ["app/**/*.ts", "app/**/*.tsx", "src/**/*.ts", "src/**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

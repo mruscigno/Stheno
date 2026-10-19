@@ -1,4 +1,4 @@
-export const mobileEvents = ["app_opened", "assessment_entry_viewed", "existing_member_signin_clicked", "auth_login_success", "auth_login_failure", "auth_reset_requested", "auth_verified", "session_expired", "signout"] as const;
+export const mobileEvents = ["app_opened", "assessment_entry_viewed", "assessment_session_created", "assessment_answer_saved", "assessment_resumed", "assessment_completed", "blueprint_viewed", "account_claim_started", "account_claim_completed", "existing_member_signin_clicked", "auth_login_success", "auth_login_failure", "auth_reset_requested", "auth_verified", "session_expired", "signout"] as const;
 export type MobileEvent = typeof mobileEvents[number];
 type SafeProperties = { route?: string; category?: "invalid_credentials" | "rate_limited" | "offline" | "service" | "unknown"; environment?: string };
 

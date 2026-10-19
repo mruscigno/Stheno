@@ -1,0 +1,19 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "STHENO App 3 anonymous assessment API", "version": "1.0.0" },
+  "servers": [{ "url": "https://www.sthenofitness.com" }],
+  "components": {
+    "securitySchemes": {
+      "capability": { "type": "apiKey", "in": "header", "name": "x-stheno-assessment-capability" },
+      "bearer": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    }
+  },
+  "paths": {
+    "/api/v1/assessment-sessions": { "post": { "summary": "Create anonymous assessment session", "responses": { "201": { "description": "Created; capability returned once" }, "503": { "description": "Unavailable" } } } },
+    "/api/v1/assessment-sessions/{sessionId}": { "get": { "summary": "Resume anonymous assessment", "security": [{ "capability": [] }], "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Session" }, "401": { "description": "Capability required" }, "404": { "description": "Not found" }, "410": { "description": "Expired" } } } },
+    "/api/v1/assessment-sessions/{sessionId}/answers": { "put": { "summary": "Optimistically save answer snapshot", "security": [{ "capability": [] }], "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Saved" }, "409": { "description": "Revision conflict" } } } },
+    "/api/v1/assessment-sessions/{sessionId}/finalize": { "post": { "summary": "Finalize and create Blueprint", "security": [{ "capability": [] }], "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Idempotent replay" }, "201": { "description": "Finalized" }, "422": { "description": "Incomplete" } } } },
+    "/api/v1/assessment-sessions/{sessionId}/blueprint": { "get": { "summary": "Read capability-protected Blueprint", "security": [{ "capability": [] }], "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Blueprint session" } } } },
+    "/api/v1/assessment-sessions/{sessionId}/claim": { "post": { "summary": "Atomically claim finalized session", "security": [{ "capability": [], "bearer": [] }], "parameters": [{ "name": "sessionId", "in": "path", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Same-user replay" }, "201": { "description": "Claimed" }, "409": { "description": "Wrong claimant or conflict" } } } }
+  }
+}

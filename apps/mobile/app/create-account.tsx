@@ -1,0 +1,8 @@
+import { useState } from "react";
+import { useRouter } from "expo-router";
+import * as Linking from "expo-linking";
+import { Body, Button, Eyebrow, Field, Notice, Title } from "@/components/Primitives";
+import { Screen } from "@/components/Screen";
+import { SthenoLogo } from "@/components/SthenoLogo";
+import { getSupabaseClient } from "@/lib/supabase";
+export default function CreateAccountScreen(){const router=useRouter(),[email,setEmail]=useState(""),[password,setPassword]=useState(""),[busy,setBusy]=useState(false),[message,setMessage]=useState<string|null>(null);async function submit(){setBusy(true);setMessage(null);const redirect=Linking.createURL("auth/callback");const{data,error}=await getSupabaseClient().auth.signUp({email:email.trim(),password,options:{emailRedirectTo:redirect}});setBusy(false);if(error){setMessage(error.message);return}if(data.session)router.replace("/blueprint");else router.replace("/verify-email")}return <Screen><SthenoLogo/><Eyebrow>Keep your Blueprint</Eyebrow><Title>Create your account.</Title><Body muted>Your assessment stays private and is claimed only after authentication. Progress photos remain optional and are offered later.</Body>{message?<Notice tone="error">{message}</Notice>:null}<Field label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email"/><Field label="Password" value={password} onChangeText={setPassword} secureTextEntry autoComplete="new-password"/><Button busy={busy} disabled={!email.includes("@")||password.length<8} onPress={()=>void submit()}>Create account</Button><Button variant="text" onPress={()=>router.replace("/blueprint")}>Back to Blueprint</Button></Screen>}
