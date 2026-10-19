@@ -9,6 +9,7 @@ import {
 import { capture } from "@/lib/analytics/client";
 import { captureFunnel } from "@/lib/analytics/funnel-client";
 import { formatProgramDate, isDateOnly } from "@/modules/programs/start-date";
+import { BlueprintEmailForm } from "./blueprint-email-form";
 
 function readBlueprint(): StoredBlueprint | null {
   if (typeof window === "undefined") return null;
@@ -129,6 +130,7 @@ export function BlueprintResult() {
           <p key={item}>{item}</p>
         ))}
       </section>
+      <BlueprintEmailForm blueprint={blueprint} />
       <aside className="blueprint-cta">
         <div>
           <p className="kicker">A fitness plan that changes when your life does</p>
