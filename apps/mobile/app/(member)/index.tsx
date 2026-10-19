@@ -1,9 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Body, Button, Card, Eyebrow, Title } from "@/components/Primitives";
+import { useRouter } from "expo-router";
+import { StyleSheet, Text } from "react-native";
+import { Body, Button, Card, Eyebrow, Row, SectionTitle, Title } from "@/components/Primitives";
 import { Screen } from "@/components/Screen";
 import { SthenoLogo } from "@/components/SthenoLogo";
 import { useAuth } from "@/providers/AuthProvider";
 import { colors, spacing } from "@/theme";
 
-export default function TodayScreen() { const auth = useAuth(); const today = auth.today; const programName = today?.program?.prescription?.name ?? "Your current program"; const nextWorkout = today?.program?.prescription?.workouts?.[0]; return <Screen><SthenoLogo /><View style={styles.header}><Eyebrow>Today</Eyebrow><Title>{today?.activeWorkout ? "Your workout is waiting." : "Your plan, at a glance."}</Title><Body muted>Live, read-only data from the STHENO platform API.</Body></View><Card><Text style={styles.label}>Program</Text><Text style={styles.value}>{programName}</Text>{nextWorkout?.name ? <Body muted>Next: {nextWorkout.name}</Body> : <Body muted>No workout is scheduled in the current read model.</Body>}</Card>{today?.nutrition ? <Card><Text style={styles.label}>Daily nutrition</Text><Text style={styles.value}>{today.nutrition.calories_kcal.toLocaleString()} kcal</Text><Body muted>{today.nutrition.protein_g}g protein · {today.nutrition.carbohydrate_g}g carbohydrate · {today.nutrition.fat_g}g fat</Body></Card> : null}{today?.review?.monthly_review_due ? <Card><Text style={styles.label}>Review</Text><Text style={styles.value}>Monthly review due</Text><Body muted>Completion arrives in the Progress sprint.</Body></Card> : null}<Button variant="secondary" onPress={() => void auth.refresh()}>Refresh</Button></Screen>; }
-const styles = StyleSheet.create({ header: { paddingVertical: spacing.xl }, label: { color: colors.orangeDark, fontSize: 12, textTransform: "uppercase", letterSpacing: 1.5, fontWeight: "800" }, value: { color: colors.ink, fontSize: 24, fontWeight: "800" } });
+export default function TodayScreen() {
+  const auth = useAuth(), router = useRouter(), today = auth.today;
+  const name = auth.member?.profile?.display_name?.trim()?.split(/\s+/)[0];
+  const workouts = auth.program?.prescription.workouts ?? [], active = today?.activeWorkout;
+  const next = active ? workouts.find((item) => item.key === active.workout_key) : workouts[0];
+  return <Screen><SthenoLogo/><Eyebrow>Today</Eyebrow><Title>{name ? `Ready, ${name}?` : "Your plan for today."}</Title>
+    <Card><Row><SectionTitle>{active ? "Continue workout" : next?.name ?? "Training day"}</SectionTitle><Text style={styles.pill}>{active ? "In progress" : auth.program?.prescription.phase ?? "Current phase"}</Text></Row><Body muted>{next?.estimatedMinutes ? `${next.estimatedMinutes} minutes · ` : ""}{next?.exercises?.length ?? 0} exercises</Body><Button onPress={() => router.push("/(member)/plan")}>{active ? "Open current workout" : "View workout"}</Button></Card>
+    <Row><Button variant="secondary" onPress={() => router.push("/(member)/adapt")}>Adjust today</Button><Button variant="secondary" onPress={() => router.push("/(member)/coach")}>Ask Coach</Button></Row>
+    {today?.nutrition ? <Card><Eyebrow>Nutrition</Eyebrow><SectionTitle>{today.nutrition.calories_kcal.toLocaleString()} kcal</SectionTitle><Body muted>{today.nutrition.protein_g}g protein · {today.nutrition.carbohydrate_g}g carbs · {today.nutrition.fat_g}g fat</Body><Button variant="text" onPress={() => router.push("/(member)/nutrition")}>See nutrition plan →</Button></Card> : <Card><SectionTitle>Nutrition targets unavailable</SectionTitle><Body muted>Complete or refresh your plan before using nutrition targets.</Body></Card>}
+    <Card><Eyebrow>Review</Eyebrow><SectionTitle>{today?.review?.monthly_review_due ? "Your monthly review is due" : "Your plan is monitoring progress"}</SectionTitle><Body muted>{today?.review?.next_monthly_review_at ? `Next review ${new Date(today.review.next_monthly_review_at).toLocaleDateString()}.` : "Review timing will appear when enough plan history exists."}</Body><Button variant="text" onPress={() => router.push("/(member)/progress")}>View progress →</Button></Card>
+    <Button variant="text" onPress={() => void auth.refresh()}>Refresh today</Button>
+  </Screen>;
+}
+const styles=StyleSheet.create({pill:{color:colors.orangeDark,backgroundColor:colors.soft,paddingHorizontal:spacing.sm,paddingVertical:spacing.xs,borderRadius:999,fontWeight:"700"}});

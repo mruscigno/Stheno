@@ -93,6 +93,27 @@ export type TodayReadModel = {
   nutrition: { calories_kcal: number; protein_g: number; carbohydrate_g: number; fat_g: number; effective_from: string } | null;
 };
 
+export type ProgramExercise = { exerciseSlug?: string; name?: string; sets?: number; repRange?: [number, number] | number[]; reps?: number; rir?: number; reasonCodes?: string[] };
+export type ProgramWorkout = { key?: string; name?: string; day?: string; estimatedMinutes?: number; exercises?: ProgramExercise[] };
+export type ProgramReadModel = {
+  id: string; program_id: string; profile_snapshot_id?: string | null; assessment_id?: string | null;
+  prescription: { name?: string; phase?: string; goal?: string; workouts?: ProgramWorkout[]; [key: string]: unknown };
+  validation_result?: unknown; engine_version?: string; ruleset_version?: string; prescribed_at: string;
+} | null;
+export type NutritionReadModel = {
+  nutrition: { calories_kcal: number | null; protein_g: number | null; carbohydrate_g: number | null; fat_g: number | null; fiber_g?: number | null; hydration_ml?: number | null; target_range?: unknown; effective_from: string; reason_code?: string } | null;
+  activity: Record<string, unknown> | null;
+  preferences: { diet_style?: string | null; allergies?: string[]; dislikes?: string[]; tracking_style?: string; meals_per_day?: number } | null;
+  supplements: Array<{ state: string; supplement_profiles: { slug: string; name: string; purpose: string; evidence_grade: string; guidance: string; safety_note: string } | null }>;
+};
+export type ProgressReadModel = { state: Record<string, unknown> | null; reviews: Array<Record<string, unknown>>; recommendations: Array<Record<string, unknown>>; checkins: Array<Record<string, unknown>>; photoSets: Array<Record<string, unknown>> };
+export type CoachConversation = { id: string; title: string | null; updated_at: string; coach_messages: Array<{ id: string; role: string; content: string; domain: string | null; created_at: string }> };
+export type CoachReply = { conversationId: string; messageId: string; domain: string; answer: string; action: AdaptationRequest | null; evidenceIds: string[] };
+export type AdaptationIntent = "traveling" | "different_equipment" | "schedule_changed" | "short_on_time" | "extra_rest_day" | "pain" | "other";
+export type AdaptationScope = "session_only" | "date_range" | "week" | "current_program" | "until_changed" | "persistent";
+export type AdaptationRequest = { id: string; proposal: Record<string, unknown> | null; reason_codes: string[]; confirmation_status: string; safety_classification?: string };
+export type AdaptationPreview = { request: AdaptationRequest; reviewRequired: boolean; safetyMessage: string | null };
+
 export type OperationAcknowledgement<T> = {
   operationId: string;
   revision: number;
