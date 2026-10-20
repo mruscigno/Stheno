@@ -111,18 +111,27 @@ select lives_ok($$select public.claim_anonymous_assessment(
   '{"goal":"strength"}'::jsonb,'{}'::jsonb,'normal',
   '{"name":"Claimed plan"}'::jsonb,'{"valid":true}'::jsonb,current_date,'app47','app47','app47')$$,
   'valid owner claim succeeds');
+
+reset role;
 select results_eq($$select state from public.anonymous_assessment_sessions where id = 'c3000000-0000-4000-8000-000000000001'$$,
   $$values ('claimed'::text)$$, 'claim finalizes ownership');
 select results_eq($$select count(*)::bigint from public.assessments where source_anonymous_session_id = 'c3000000-0000-4000-8000-000000000001'$$,
   $$values (1::bigint)$$, 'claim creates exactly one assessment');
+
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"a1111111-1111-4111-8111-111111111111","role":"authenticated"}', true);
 select lives_ok($$select public.claim_anonymous_assessment(
   'c3000000-0000-4000-8000-000000000001',repeat('a',64),'a1111111-1111-4111-8111-111111111111',
   '{"goal":"strength"}'::jsonb,'{}'::jsonb,'normal',
   '{"name":"Claimed plan"}'::jsonb,'{"valid":true}'::jsonb,current_date,'app47','app47','app47')$$,
   'same owner retry is idempotent');
+
+reset role;
 select results_eq($$select count(*)::bigint from public.assessments where source_anonymous_session_id = 'c3000000-0000-4000-8000-000000000001'$$,
   $$values (1::bigint)$$, 'idempotent retry creates no duplicate assessment');
 
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"a1111111-1111-4111-8111-111111111111","role":"authenticated"}', true);
 select throws_ok($$insert into public.entitlements (user_id, entitlement_key, active)
   values ('a1111111-1111-4111-8111-111111111111','paid',true)$$,
   '42501', null, 'client cannot grant itself entitlement');
