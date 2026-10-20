@@ -135,10 +135,7 @@ jobs:
             sleep 30
             adb shell uiautomator dump /sdcard/app47-provisional.xml
             adb pull /sdcard/app47-provisional.xml artifacts/app47/android/provisional-ui.xml
-            if grep -qi "Quickstep isn't responding" artifacts/app47/android/provisional-ui.xml; then
-              adb shell input tap 540 1332
-              sleep 5
-            fi
+            grep -qi "Quickstep isn't responding" artifacts/app47/android/provisional-ui.xml && (adb shell input tap 540 1332; sleep 5) || true
             adb shell getprop ro.build.version.sdk > artifacts/app47/android/api-level.txt
             adb shell dumpsys window windows > artifacts/app47/android/window.txt
             adb shell uiautomator dump /sdcard/app47-window.xml
