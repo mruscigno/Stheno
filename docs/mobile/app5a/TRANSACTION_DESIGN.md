@@ -1,0 +1,3 @@
+# Transaction design
+
+`public.apply_workout_operation` is a `SECURITY DEFINER` function with an empty `search_path`, schema-qualified objects, explicit execute grants, and `auth.uid()` principal verification. It checks a receipt before revision validation so an identical post-commit retry succeeds even when its original base revision is now stale. New work locks the owned session `FOR UPDATE`, validates the base revision, performs the mutation, advances the aggregate revision, inserts receipt and outbox rows, then commits as one unit. An injected pre-commit failure proves all three writes roll back together.

@@ -13,8 +13,8 @@ describe("mobile-safe API contracts", () => {
 
   it("requires stable operation IDs for every replayable mutation", () => {
     expect(StartWorkoutInput.parse({ operationId: uuid, clientSessionKey: uuid }).operationId).toBe(uuid);
-    expect(UpsertWorkoutSetInput.safeParse({ operationId: uuid, exerciseSlug: "goblet-squat", setOrdinal: 1, prescribed: {}, state: "completed" }).success).toBe(true);
-    expect(CompleteWorkoutInput.safeParse({ operationId: uuid, effort: "about_right" }).success).toBe(true);
+    expect(UpsertWorkoutSetInput.safeParse({ operationId: uuid, baseRevision: 0, exerciseSlug: "goblet-squat", setOrdinal: 1, prescribed: {}, state: "completed" }).success).toBe(true);
+    expect(CompleteWorkoutInput.safeParse({ operationId: uuid, baseRevision: 0, effort: "about_right" }).success).toBe(true);
     expect(MonthlyDecisionInput.safeParse({ operationId: uuid, action: "keep" }).success).toBe(true);
   });
 

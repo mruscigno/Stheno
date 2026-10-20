@@ -29,13 +29,17 @@ export const ExerciseListQuery = PaginationQuery.extend({
 
 export const StartWorkoutInput = z.object({
   operationId: z.uuid(),
+  schemaVersion: z.literal(1).default(1),
+  clientCreatedAt: z.iso.datetime().optional(),
   clientSessionKey: z.uuid(),
   workoutKey: z.string().trim().min(1).max(120).optional(),
 });
 
 export const UpsertWorkoutSetInput = z.object({
   operationId: z.uuid(),
-  baseRevision: z.number().int().min(0).optional(),
+  schemaVersion: z.literal(1).default(1),
+  clientCreatedAt: z.iso.datetime().optional(),
+  baseRevision: z.number().int().min(0),
   exerciseSlug: z.string().trim().min(1).max(160),
   setOrdinal: z.number().int().min(1).max(20),
   setType: z.enum(["warmup", "working", "backoff", "drop", "failure", "optional"]).default("working"),
@@ -51,10 +55,22 @@ export const UpsertWorkoutSetInput = z.object({
 
 export const CompleteWorkoutInput = z.object({
   operationId: z.uuid(),
-  baseRevision: z.number().int().min(0).optional(),
+  schemaVersion: z.literal(1).default(1),
+  clientCreatedAt: z.iso.datetime().optional(),
+  baseRevision: z.number().int().min(0),
   effort: z.enum(["too_easy", "about_right", "very_hard", "couldnt_finish"]),
   note: z.string().trim().max(2000).optional(),
   allowIncomplete: z.boolean().default(false),
+});
+
+export const DeleteWorkoutSetInput = z.object({
+  operationId: z.uuid(), schemaVersion: z.literal(1).default(1), clientCreatedAt: z.iso.datetime().optional(),
+  baseRevision: z.number().int().min(0),
+});
+
+export const SaveWorkoutNoteInput = z.object({
+  operationId: z.uuid(), schemaVersion: z.literal(1).default(1), clientCreatedAt: z.iso.datetime().optional(),
+  baseRevision: z.number().int().min(0), note: z.string().trim().max(2000),
 });
 
 export const MonthlyDecisionInput = z.object({
@@ -120,4 +136,9 @@ export type OperationAcknowledgement<T> = {
   acknowledgedAt: string;
   replayed: boolean;
   result: T;
+};
+
+export type WorkoutOperationReceipt<T> = {
+  operationId: string; sessionId: string; revision: number; serverTimestamp: string;
+  receiptState: "committed"; replayed: boolean; result: T;
 };

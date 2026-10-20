@@ -1,0 +1,25 @@
+name: App 5A workout transaction safety
+on:
+  workflow_dispatch:
+  push:
+    branches: [product-13-assessment-contact-us-units-content-depth]
+    paths: ["supabase/**", "src/platform/**", "src/app/api/v1/workouts/**", ".github/workflows/app5a-workout-transaction-safety.yml"]
+permissions: { contents: read }
+jobs:
+  atomic-replay-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env: { TEST_ENVIRONMENT: "true", PRODUCTION_SUPABASE_REF: svtmyxbjlbfmtysqqqwt }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with: { version: 2.121.0 }
+      - name: Prove isolated zero-cost database
+        run: |
+          test "$TEST_ENVIRONMENT" = true
+          test "$(awk -F '"' '/^project_id/ {print $2;exit}' supabase/config.toml)" != "$PRODUCTION_SUPABASE_REF"
+          ! env | grep -Eq '^(NEXT_PUBLIC_)?SUPABASE_(URL|KEY|SERVICE_ROLE_KEY)='
+      - run: supabase start
+      - run: supabase test db supabase/tests/app5a_workout_atomicity.sql
+      - name: Database lint and advisors
+        run: supabase db lint --level warning

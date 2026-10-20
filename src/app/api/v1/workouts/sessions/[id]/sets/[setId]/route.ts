@@ -1,8 +1,8 @@
 import { UpsertWorkoutSetInput } from "@/platform/contracts/api";
 import { authorizeMemberRequest } from "@/platform/server/auth";
 import { apiError, apiSuccess, parseJson, requestId } from "@/platform/server/http";
-import { findOperation, recordOperation } from "@/platform/server/idempotency";
-import { upsertWorkoutSet } from "@/platform/server/workouts";
+import { DeleteWorkoutSetInput } from "@/platform/contracts/api";
+import { applyWorkoutOperation, workoutOperationError } from "@/platform/server/workout-operations";
 
 export const dynamic = "force-dynamic";
 
@@ -15,16 +15,17 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   if (parsed.error) return apiError(requestIdValue, 400, "VALIDATION_FAILED", "Invalid set update.", parsed.error);
   const { id, setId } = await params;
   if (![id, setId].every((value) => /^[0-9a-f-]{36}$/i.test(value))) return apiError(requestIdValue, 400, "VALIDATION_FAILED", "Invalid resource identifier.");
-  const scope = `workout:${id}:set:${setId}`;
   try {
-    const operation = await findOperation(context.db, context.user.id, scope, parsed.data.operationId, parsed.data);
-    if (operation.state === "conflict") return apiError(requestIdValue, 409, "IDEMPOTENCY_CONFLICT", "Operation ID was already used with a different set update.");
-    if (operation.state === "replay") return apiSuccess(requestIdValue, operation.record.response_body, undefined, { replayed: true });
-    const result = await upsertWorkoutSet(context.db, context.user.id, id, setId, parsed.data);
-    if (result.state === "not_found" || result.state === "exercise_not_found") return apiError(requestIdValue, 404, "NOT_FOUND", "Workout session or exercise was not found.");
-    if (result.state === "completed") return apiError(requestIdValue, 409, "CONFLICT", "Completed workouts cannot accept new sets.");
-    const response = { ...result, operationId: parsed.data.operationId, revision: Number(parsed.data.baseRevision ?? 0) + 1, acknowledgedAt: new Date().toISOString() };
-    await recordOperation(context.db, { userId: context.user.id, scope, operationId: parsed.data.operationId, payloadHash: operation.hash, responseBody: response, statusCode: 200, resourceRevision: response.revision });
-    return apiSuccess(requestIdValue, response);
-  } catch { return apiError(requestIdValue, 503, "SERVICE_UNAVAILABLE", "Set update could not be saved."); }
+    const result=await applyWorkoutOperation(context.db,{operationId:parsed.data.operationId,sessionId:id,kind:"upsert_set",baseRevision:parsed.data.baseRevision,schemaVersion:parsed.data.schemaVersion,clientCreatedAt:parsed.data.clientCreatedAt,payload:{...parsed.data,setId}});
+    return apiSuccess(requestIdValue,result);
+  } catch(error) { const mapped=workoutOperationError(error); return apiError(requestIdValue,mapped.status,mapped.code,mapped.message,mapped.details); }
+}
+
+export async function DELETE(request:Request,{params}:{params:Promise<{id:string;setId:string}>}){
+ const rid=requestId(request),authorization=await authorizeMemberRequest(request);
+ if(!authorization.context)return apiError(rid,401,"AUTH_REQUIRED","Authentication is required.");
+ const parsed=await parseJson(request,DeleteWorkoutSetInput);if(parsed.error)return apiError(rid,400,"VALIDATION_FAILED","Invalid set deletion.",parsed.error);
+ const {id,setId}=await params;
+ try{return apiSuccess(rid,await applyWorkoutOperation(authorization.context.db,{operationId:parsed.data.operationId,sessionId:id,kind:"delete_set",baseRevision:parsed.data.baseRevision,schemaVersion:parsed.data.schemaVersion,clientCreatedAt:parsed.data.clientCreatedAt,payload:{setId}}));}
+ catch(error){const mapped=workoutOperationError(error);return apiError(rid,mapped.status,mapped.code,mapped.message,mapped.details);}
 }

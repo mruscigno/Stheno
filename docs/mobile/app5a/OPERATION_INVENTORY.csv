@@ -1,0 +1,7 @@
+operation,route,method,revision,receipt,tombstone,outbox
+start_session,/api/v1/workouts/sessions,POST,server-assigned,atomic,n/a,yes
+upsert_set,/api/v1/workouts/sessions/{id}/sets/{setId},PUT,required,atomic,no,yes
+delete_set,/api/v1/workouts/sessions/{id}/sets/{setId},DELETE,required,atomic,yes,yes
+save_note,/rpc/apply_workout_operation,RPC,required,atomic,n/a,yes
+complete_session,/api/v1/workouts/sessions/{id}/complete,POST,required,atomic,n/a,yes
+substitute_exercise,/rpc/apply_workout_operation,RPC,required,atomic,n/a,yes
