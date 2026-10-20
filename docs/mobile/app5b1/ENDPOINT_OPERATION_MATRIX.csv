@@ -8,5 +8,5 @@ endpoint,auth,operation,input,transaction owner,side effects,web caller,mobile c
 /api/v1/workouts/sessions/{id}/sets/{setId} DELETE,cookie or bearer,delete_set,typed DeleteWorkoutSetInput,private.apply_workout_operation,receipt+tombstone+revision+outbox,no,yes
 /api/v1/workouts/sessions/{id}/complete POST,cookie or bearer,complete_session,typed CompleteWorkoutInput,private.apply_workout_operation,receipt+completion+revision+outbox,no,yes
 /api/v1/workouts/operations/{operationId} GET,cookie or bearer,receipt lookup,operation UUID,RLS/security-invoker,read only,no,yes
-/api/workouts/today short_time,cookie,legacy adaptation,minutes,legacy route,session adaptation,yes,no
-/api/workouts/today adjust_today,cookie,legacy adaptation,constraint+idempotency key,legacy route,session+Coach decision,yes,no
+/api/workouts/today short_time,cookie,adapt_session,minutes+operationId+base revision,private.apply_workout_adaptation,receipt+revised workout+adaptation+revision+outbox,yes,no
+/api/workouts/today adjust_today,cookie,adapt_session,constraint+operationId+base revision,private.apply_workout_adaptation,receipt+revised workout+adaptation+revision+outbox then idempotent Coach decision,yes,no
