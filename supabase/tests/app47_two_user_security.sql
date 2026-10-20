@@ -15,10 +15,10 @@ where user_id = 'a1111111-1111-4111-8111-111111111111';
 update public.profiles set display_name = 'App47 User B'
 where user_id = 'b2222222-2222-4222-8222-222222222222';
 
-insert into public.programs (id, user_id, name, engine_version, ruleset_version)
+insert into public.programs (id, user_id, name, engine_version, ruleset_version, program_start_date)
 values
-  ('a1000000-0000-4000-8000-000000000001', 'a1111111-1111-4111-8111-111111111111', 'A program', 'app47', 'app47'),
-  ('b2000000-0000-4000-8000-000000000002', 'b2222222-2222-4222-8222-222222222222', 'B program', 'app47', 'app47');
+  ('a1000000-0000-4000-8000-000000000001', 'a1111111-1111-4111-8111-111111111111', 'A program', 'app47', 'app47', current_date),
+  ('b2000000-0000-4000-8000-000000000002', 'b2222222-2222-4222-8222-222222222222', 'B program', 'app47', 'app47', current_date);
 
 insert into public.workout_sessions (id, user_id, started_at, time_zone)
 values

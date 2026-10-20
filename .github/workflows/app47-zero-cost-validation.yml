@@ -100,11 +100,10 @@ jobs:
           disable-animations: true
           emulator-boot-timeout: 600
           script: |
-            set -eu
             mkdir -p artifacts/app47/android
-            apk="apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk"
-            sha256sum "$apk" | tee artifacts/app47/android/apk-sha256.txt
-            adb install -r "$apk" | tee artifacts/app47/android/install.txt
+            test -s apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk
+            sha256sum apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk | tee artifacts/app47/android/apk-sha256.txt
+            adb install -r apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk | tee artifacts/app47/android/install.txt
             adb shell am force-stop com.sthenofitness.app.dev
             adb shell monkey -p com.sthenofitness.app.dev -c android.intent.category.LAUNCHER 1 | tee artifacts/app47/android/launch.txt
             sleep 12
@@ -113,10 +112,8 @@ jobs:
             adb logcat -d > artifacts/app47/android/logcat.txt
             adb exec-out screencap -p > artifacts/app47/android/assessment-first-launch.png
             test -s artifacts/app47/android/assessment-first-launch.png
-            if grep -E "FATAL EXCEPTION|AndroidRuntime.*FATAL" artifacts/app47/android/logcat.txt; then
-              echo "Native fatal exception detected" >&2
-              exit 1
-            fi
+            grep -q "Events injected: 1" artifacts/app47/android/launch.txt
+            ! grep -Eq "FATAL EXCEPTION|AndroidRuntime.*FATAL" artifacts/app47/android/logcat.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
