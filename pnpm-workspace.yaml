@@ -1,6 +1,10 @@
 packages:
   - apps/*
 
+# React Native CMake resolves package roots into object paths. The hoisted
+# layout keeps those paths below Windows' legacy MAX_PATH boundary.
+nodeLinker: hoisted
+
 allowBuilds:
   '@sentry/cli': true
   core-js: true

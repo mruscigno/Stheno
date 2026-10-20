@@ -1,0 +1,17 @@
+{
+  "status": "built",
+  "artifact": "artifacts/mobile/app46/stheno-dev-x86_64-debug.apk",
+  "sourceArtifact": "C:/s46/apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk",
+  "bytes": 77733518,
+  "sha256": "576F1C19E5026C4FBE7A571A6AF19A60073E34DC6438F28EF36969AB5303229B",
+  "packageName": "com.sthenofitness.app.dev",
+  "versionCode": 1,
+  "versionName": "0.1.0",
+  "minSdk": 24,
+  "targetSdk": 36,
+  "compileSdk": 37,
+  "abi": "x86_64",
+  "buildType": "debug",
+  "signed": true,
+  "runtimeValidated": false
+}

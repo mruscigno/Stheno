@@ -27,7 +27,12 @@ const config: ExpoConfig = {
     ], category: ["BROWSABLE", "DEFAULT"] }],
   },
   web: { bundler: "metro", output: "static", favicon: "./assets/icon.png" },
-  plugins: ["expo-router", ["expo-secure-store", { configureAndroidBackup: true }], ["expo-splash-screen", { image: "./assets/splash.png", imageWidth: 220, backgroundColor: "#fffaf3" }]],
+  plugins: [
+    "expo-router",
+    "./plugins/with-windows-native-build-paths",
+    ["expo-secure-store", { configureAndroidBackup: true }],
+    ["expo-splash-screen", { image: "./assets/splash.png", imageWidth: 220, backgroundColor: "#fffaf3" }],
+  ],
   experiments: { typedRoutes: true, reactCompiler: true },
   extra: { environment },
 };
