@@ -1,0 +1,118 @@
+name: App 4.7 zero-cost validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - "apps/mobile/**"
+      - ".github/workflows/app47-zero-cost-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-supabase-security:
+    name: Isolated Supabase security matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TEST_ENVIRONMENT: "true"
+      PRODUCTION_SUPABASE_REF: svtmyxbjlbfmtysqqqwt
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.121.0
+      - name: Prove isolation guardrails
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$TEST_ENVIRONMENT" = "true"
+          local_ref="$(awk -F '"' '/^project_id/ { print $2; exit }' supabase/config.toml)"
+          test -n "$local_ref"
+          test "$local_ref" != "$PRODUCTION_SUPABASE_REF"
+          if env | grep -Eq '^(NEXT_PUBLIC_)?SUPABASE_(URL|KEY|SERVICE_ROLE_KEY)='; then
+            echo "Production-shaped Supabase credentials must not enter this job." >&2
+            exit 1
+          fi
+      - name: Start ephemeral local Supabase and apply migrations
+        run: supabase start
+      - name: Run pgTAP two-user security suite
+        run: supabase test db
+      - name: Capture migration and service evidence
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts/app47/supabase
+          supabase status > artifacts/app47/supabase/status.txt 2>&1 || true
+          sha256sum supabase/migrations/*.sql > artifacts/app47/supabase/migration-sha256.txt
+          docker ps -a > artifacts/app47/supabase/docker-ps.txt 2>&1 || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app47-supabase-security-evidence
+          path: artifacts/app47/supabase
+          retention-days: 14
+
+  android-runtime:
+    name: Android native runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate Android project
+        run: pnpm --dir apps/mobile exec expo prebuild --platform android --no-install
+      - name: Build x86_64 debug APK for hosted emulator
+        working-directory: apps/mobile/android
+        run: ./gradlew assembleDebug --no-daemon --max-workers=2 -PreactNativeArchitectures=x86_64
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install, launch, and capture genuine native evidence
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-boot-timeout: 600
+          script: |
+            set -euo pipefail
+            mkdir -p artifacts/app47/android
+            apk="apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk"
+            sha256sum "$apk" | tee artifacts/app47/android/apk-sha256.txt
+            adb install -r "$apk" | tee artifacts/app47/android/install.txt
+            adb shell am force-stop com.sthenofitness.app.dev
+            adb shell monkey -p com.sthenofitness.app.dev -c android.intent.category.LAUNCHER 1 | tee artifacts/app47/android/launch.txt
+            sleep 12
+            adb shell getprop ro.build.version.sdk > artifacts/app47/android/api-level.txt
+            adb shell dumpsys window windows > artifacts/app47/android/window.txt
+            adb logcat -d > artifacts/app47/android/logcat.txt
+            adb exec-out screencap -p > artifacts/app47/android/assessment-first-launch.png
+            test -s artifacts/app47/android/assessment-first-launch.png
+            if grep -E "FATAL EXCEPTION|AndroidRuntime.*FATAL" artifacts/app47/android/logcat.txt; then
+              echo "Native fatal exception detected" >&2
+              exit 1
+            fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app47-android-runtime-evidence
+          path: artifacts/app47/android
+          retention-days: 14
