@@ -9,10 +9,11 @@ insert into auth.users (
   ('a1111111-1111-4111-8111-111111111111', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'app47-user-a@example.test', '', now(), now(), now()),
   ('b2222222-2222-4222-8222-222222222222', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'app47-user-b@example.test', '', now(), now(), now());
 
-insert into public.profiles (user_id, display_name)
-values
-  ('a1111111-1111-4111-8111-111111111111', 'App47 User A'),
-  ('b2222222-2222-4222-8222-222222222222', 'App47 User B');
+-- The production-equivalent auth trigger creates the matching profile rows.
+update public.profiles set display_name = 'App47 User A'
+where user_id = 'a1111111-1111-4111-8111-111111111111';
+update public.profiles set display_name = 'App47 User B'
+where user_id = 'b2222222-2222-4222-8222-222222222222';
 
 insert into public.programs (id, user_id, name, engine_version, ruleset_version)
 values
