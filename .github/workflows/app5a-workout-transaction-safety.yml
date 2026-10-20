@@ -21,5 +21,7 @@ jobs:
           ! env | grep -Eq '^(NEXT_PUBLIC_)?SUPABASE_(URL|KEY|SERVICE_ROLE_KEY)='
       - run: supabase start
       - run: supabase test db supabase/tests/app5a_workout_atomicity.sql
+      - name: Run real concurrent revision race
+        run: bash scripts/app5a/run-concurrent-workout-operations.sh
       - name: Database lint and advisors
         run: supabase db lint --level warning
