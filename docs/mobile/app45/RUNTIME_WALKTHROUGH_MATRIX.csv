@@ -1,0 +1,10 @@
+area,scenario,result,evidence_or_blocker
+bootstrap,Native Android app reaches first screen,BLOCKED,"Both Android 15 and 16 AVDs remained ADB offline"
+authentication,Sign in and restore session,BLOCKED,"No booted Android runtime"
+assessment,Anonymous assessment and Blueprint claim,BLOCKED,"No booted Android runtime and no staging backend"
+member_home,Member dashboard renders,BLOCKED,"No booted Android runtime"
+plan,Plan and workout navigation,BLOCKED,"No booted Android runtime"
+nutrition,Nutrition targets render,BLOCKED,"No booted Android runtime"
+progress,Progress and monthly review render,BLOCKED,"No booted Android runtime"
+coach,Coach request and safety behavior,BLOCKED,"No booted Android runtime and no staging backend"
+account,Account and sign-out,BLOCKED,"No booted Android runtime"

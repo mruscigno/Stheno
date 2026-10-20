@@ -21,7 +21,10 @@ const config: ExpoConfig = {
   android: {
     package: isDevelopment ? "com.sthenofitness.app.dev" : "com.sthenofitness.app",
     adaptiveIcon: { foregroundImage: "./assets/icon.png", backgroundColor: "#fffaf3" },
-    intentFilters: [{ action: "VIEW", autoVerify: true, data: [{ scheme: "https", host: "www.sthenofitness.com", pathPrefix: "/auth/mobile" }], category: ["BROWSABLE", "DEFAULT"] }],
+    intentFilters: [{ action: "VIEW", autoVerify: true, data: [
+      { scheme: "https", host: "www.sthenofitness.com", pathPrefix: "/auth/mobile" },
+      { scheme: "https", host: "www.sthenofitness.com", pathPrefix: "/auth/callback" },
+    ], category: ["BROWSABLE", "DEFAULT"] }],
   },
   web: { bundler: "metro", output: "static", favicon: "./assets/icon.png" },
   plugins: ["expo-router", ["expo-secure-store", { configureAndroidBackup: true }], ["expo-splash-screen", { image: "./assets/splash.png", imageWidth: 220, backgroundColor: "#fffaf3" }]],
