@@ -1,0 +1,12 @@
+endpoint,auth,operation,input,transaction owner,side effects,web caller,mobile caller
+/api/workouts/today POST,cookie,start_session,clientSessionKey+operationId,private.apply_workout_operation,receipt+session+outbox,yes,no
+/api/workouts/today POST,cookie,upsert_set,set payload+base revision,private.apply_workout_operation,receipt+set+revision+outbox then idempotent metrics,yes,no
+/api/workouts/today POST,cookie,substitute_exercise,revised workout+scope+base revision,private.apply_workout_operation,receipt+session adaptation+outbox then idempotent preference,yes,no
+/api/workouts/today POST,cookie,complete_session,effort+summary+base revision,private.apply_workout_operation,receipt+completion+outbox then idempotent workload/achievement,yes,no
+/api/v1/workouts/sessions POST,cookie or bearer,start_session,typed StartWorkoutInput,private.apply_workout_operation,receipt+session+outbox,no,yes
+/api/v1/workouts/sessions/{id}/sets/{setId} PUT,cookie or bearer,upsert_set,typed UpsertWorkoutSetInput,private.apply_workout_operation,receipt+set+revision+outbox,no,yes
+/api/v1/workouts/sessions/{id}/sets/{setId} DELETE,cookie or bearer,delete_set,typed DeleteWorkoutSetInput,private.apply_workout_operation,receipt+tombstone+revision+outbox,no,yes
+/api/v1/workouts/sessions/{id}/complete POST,cookie or bearer,complete_session,typed CompleteWorkoutInput,private.apply_workout_operation,receipt+completion+revision+outbox,no,yes
+/api/v1/workouts/operations/{operationId} GET,cookie or bearer,receipt lookup,operation UUID,RLS/security-invoker,read only,no,yes
+/api/workouts/today short_time,cookie,legacy adaptation,minutes,legacy route,session adaptation,yes,no
+/api/workouts/today adjust_today,cookie,legacy adaptation,constraint+idempotency key,legacy route,session+Coach decision,yes,no

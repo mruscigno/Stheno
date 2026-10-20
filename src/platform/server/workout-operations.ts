@@ -22,6 +22,13 @@ export async function applyWorkoutOperation(db:SupabaseClient,envelope:WorkoutOp
   return data;
 }
 
+export async function applyWorkoutAdaptation(db:SupabaseClient,envelope:Omit<WorkoutOperationEnvelope,"kind">){
+ const hash=payloadHash({kind:"adapt_session",sessionId:envelope.sessionId,baseRevision:envelope.baseRevision,schemaVersion:envelope.schemaVersion,payload:envelope.payload});
+ const {data,error}=await db.rpc("apply_workout_adaptation",{p_operation_id:envelope.operationId,p_session_id:envelope.sessionId,p_base_revision:envelope.baseRevision,p_schema_version:envelope.schemaVersion,p_client_created_at:envelope.clientCreatedAt??null,p_payload:envelope.payload,p_payload_hash:hash});
+ if(error)throw new Error(`${error.message}:${error.details??""}`);
+ return data;
+}
+
 export function workoutOperationError(error:unknown){
   const message=error instanceof Error?error.message:String(error);
   if(message.includes("IDEMPOTENCY_CONFLICT")) return {status:409 as const,code:"IDEMPOTENCY_CONFLICT" as const,message:"Operation ID was already committed with different content."};

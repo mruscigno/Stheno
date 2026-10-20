@@ -175,9 +175,15 @@ begin
 
   v_revision := coalesce(v_session.revision,1);
   if v_result is null then v_result := jsonb_build_object('state','active','sessionId',v_session.id); end if;
+  if coalesce(p_payload->>'testFailurePoint','')='after_domain_before_receipt' then
+    raise exception using errcode='P0001', message='INJECTED_AFTER_DOMAIN_FAILURE';
+  end if;
   insert into public.workout_operation_receipts
     (user_id,operation_id,session_id,operation_kind,schema_version,payload_hash,base_revision,resulting_revision,result,client_created_at,committed_at)
   values(v_user,p_operation_id,v_session.id,p_kind,p_schema_version,p_payload_hash,p_base_revision,v_revision,v_result,p_client_created_at,v_now);
+  if coalesce(p_payload->>'testFailurePoint','')='after_receipt_before_outbox' then
+    raise exception using errcode='P0001', message='INJECTED_AFTER_RECEIPT_FAILURE';
+  end if;
   insert into public.workout_operation_outbox(user_id,operation_id,session_id,event_type,payload)
   values(v_user,p_operation_id,v_session.id,'workout.'||p_kind,v_result);
 

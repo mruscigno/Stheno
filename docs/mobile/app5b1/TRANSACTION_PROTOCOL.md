@@ -1,0 +1,3 @@
+# Transaction protocol
+
+The client retains one UUID per intent. The server hashes normalized kind, aggregate identity, expected revision, schema version, and payload. Identical owner/key/hash returns the original canonical receipt before revision checks. Changed content under the same key returns deterministic 409. New work locks the owner-scoped session, validates revision and completion state, applies the mutation, increments the aggregate revision, inserts one receipt and one outbox event, then commits. Pre-commit failure rolls all writes back. Late set/substitution after completion is rejected. Receipt retention is 180 days.

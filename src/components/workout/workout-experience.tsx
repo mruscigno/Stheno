@@ -36,7 +36,7 @@ type SetLog = {
 type Performance = { load: number; reps: number } | null;
 type Data = {
   state: string;
-  session?: { id: string; started_at?: string };
+  session?: { id: string; started_at?: string; revision?: number };
   workout?: Workout;
   sets?: SetLog[];
   lastPerformance?: Performance;
@@ -465,10 +465,10 @@ export function WorkoutExperience({ enhanced = true }: { enhanced?: boolean }) {
   async function act(payload: Record<string, unknown>) {
     setBusy(true);
     setMessage("");
-    try{const response = await fetch("/api/workouts/today", {
+    try{const action=String(payload.action??""),operationPayload={...payload,...(data?.session&&action!=="start"&&payload.baseRevision===undefined?{baseRevision:Number(data.session.revision??0)}:{}),...(["replace","complete","short_time"].includes(action)&&payload.idempotencyKey===undefined?{idempotencyKey:crypto.randomUUID()}:{}),...(action==="start"&&payload.operationId===undefined?{operationId:payload.clientSessionKey}: {})},response = await fetch("/api/workouts/today", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(operationPayload),
       }),
       body = await response.json();
     setBusy(false);

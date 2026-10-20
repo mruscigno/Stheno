@@ -16,21 +16,19 @@ import {
   persistWeeklyWorkload,
   processSetIntelligence,
 } from "@/modules/training-intelligence/server";
-import {
-  TRAINING_ENGINE_VERSION,
-  TRAINING_RULESET_VERSION,
-} from "@/modules/training/methodology";
 import type { TrainingProgram, Workout } from "@/modules/training/types";
 import {
   adaptWorkoutForTime,
   ADAPTIVE_RULESET_VERSION,
 } from "@/modules/adaptive-coaching/engine";
+import {applyWorkoutAdaptation,applyWorkoutOperation,workoutOperationError} from "@/platform/server/workout-operations";
 const Action = z.discriminatedUnion("action", [
-  z.object({ action: z.literal("start"), clientSessionKey: z.uuid() }),
+  z.object({ action: z.literal("start"), clientSessionKey: z.uuid(), operationId:z.uuid().optional() }),
   z.object({
     action: z.literal("set"),
     sessionId: z.uuid(),
     idempotencyKey: z.uuid(),
+    baseRevision:z.number().int().min(0).optional(),
     exerciseSlug: z.string(),
     setOrdinal: z.number().int().min(1).max(20),
     load: z.number().min(0),
@@ -62,11 +60,14 @@ const Action = z.discriminatedUnion("action", [
     ]),
     scope: z.enum(["session_only", "program", "persistent"]),
     confirmedSafety: z.boolean().optional(),
+    idempotencyKey:z.uuid().optional(),
+    baseRevision:z.number().int().min(0).optional(),
   }),
   z.object({
     action: z.literal("short_time"),
     sessionId: z.uuid(),
     availableMinutes: z.number().int().min(15).max(180),
+    idempotencyKey:z.uuid().optional(),baseRevision:z.number().int().min(0).optional(),
   }),
   z.object({
     action: z.literal("adjust_today"),
@@ -88,6 +89,8 @@ const Action = z.discriminatedUnion("action", [
     effort: z.enum(["too_easy", "about_right", "very_hard", "couldnt_finish"]),
     note: z.string().trim().max(2000).optional(),
     allowIncomplete: z.boolean().optional(),
+    idempotencyKey:z.uuid().optional(),
+    baseRevision:z.number().int().min(0).optional(),
   }),
 ]);
 async function auth() {
@@ -237,21 +240,10 @@ export async function POST(request: Request) {
         { error: "No scheduled workout" },
         { status: 409 },
       );
-    const { data, error } = await ctx.supabase
-      .from("workout_execution_sessions")
-      .insert({
-        user_id: ctx.user.id,
-        program_prescription_id: prescription.id,
-        workout_key: workout.key,
-        status: "active",
-        original_workout: workout,
-        client_session_key: body.clientSessionKey,
-      })
-      .select("id")
-      .single();
-    return error
-      ? NextResponse.json({ error: "Unable to start workout" }, { status: 500 })
-      : NextResponse.json({ sessionId: data.id }, { status: 201 });
+    try{
+      const result=await applyWorkoutOperation(ctx.supabase,{operationId:body.operationId??body.clientSessionKey,sessionId:crypto.randomUUID(),kind:"start_session",baseRevision:null,schemaVersion:1,payload:{programPrescriptionId:prescription.id,workoutKey:workout.key,workout,clientSessionKey:body.clientSessionKey}});
+      return NextResponse.json({sessionId:result.sessionId,revision:result.revision,resumed:result.replayed,operationId:result.operationId},{status:result.replayed?200:201});
+    }catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
   }
   const { data: session } = await ctx.supabase
     .from("workout_execution_sessions")
@@ -289,75 +281,10 @@ export async function POST(request: Request) {
         { error: "Exercise not found in this workout" },
         { status: 404 },
       );
-    const now = new Date().toISOString(),
-      values = {
-        prescribed: body.prescribed,
-        prescribed_load:
-          typeof body.prescribed.loadValue === "number"
-            ? body.prescribed.loadValue
-            : null,
-        prescribed_reps_min: prescription.repMin,
-        prescribed_reps_max: prescription.repMax,
-        prescribed_rest_seconds: prescription.restSeconds,
-        load_value: body.load,
-        repetitions: body.reps,
-        rir: body.rir ?? null,
-        rpe: body.rpe ?? null,
-        set_type: body.setType,
-        state: body.state,
-        is_user_added: body.isUserAdded ?? false,
-        recommendation_id: body.recommendationId ?? null,
-        client_performed_at: body.clientTimestamp ?? null,
-        updated_at: now,
-        invalidated_at: null,
-      };
-    let result;
-    if (body.editSetId) {
-      result = await ctx.supabase
-        .from("workout_set_logs")
-        .update(values)
-        .eq("id", body.editSetId)
-        .eq("user_id", ctx.user.id)
-        .eq("workout_execution_session_id", session.id)
-        .select("*")
-        .single();
-    } else {
-      const { data: existing } = await ctx.supabase
-        .from("workout_set_logs")
-        .select("id")
-        .eq("user_id", ctx.user.id)
-        .eq("workout_execution_session_id", session.id)
-        .eq("exercise_slug", body.exerciseSlug)
-        .eq("set_ordinal", body.setOrdinal)
-        .maybeSingle();
-      result = existing
-        ? await ctx.supabase
-            .from("workout_set_logs")
-            .update(values)
-            .eq("id", existing.id)
-            .eq("user_id", ctx.user.id)
-            .select("*")
-            .single()
-        : await ctx.supabase
-            .from("workout_set_logs")
-            .insert({
-              user_id: ctx.user.id,
-              workout_execution_session_id: session.id,
-              exercise_slug: body.exerciseSlug,
-              set_ordinal: body.setOrdinal,
-              idempotency_key: body.idempotencyKey,
-              performed_at: now,
-              ...values,
-            })
-            .select("*")
-            .single();
-    }
-    const { data: savedSet, error } = result;
-    if (error)
-      return NextResponse.json(
-        { error: "That set didn’t save. Check your connection and try again." },
-        { status: 500 },
-      );
+    let operation;
+    try{operation=await applyWorkoutOperation(ctx.supabase,{operationId:body.idempotencyKey,sessionId:session.id,kind:"upsert_set",baseRevision:body.baseRevision??Number(session.revision??0),schemaVersion:1,clientCreatedAt:body.clientTimestamp,payload:{setId:body.editSetId??crypto.randomUUID(),exerciseSlug:body.exerciseSlug,setOrdinal:body.setOrdinal,setType:body.setType,prescribed:body.prescribed,load:body.load,loadUnit:"lb",repetitions:body.reps,rir:body.rir??null,rpe:body.rpe??null,state:body.state,isUserAdded:body.isUserAdded??false,recommendationId:body.recommendationId??null}});}
+    catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
+    const savedSet=operation.result.set;
     const derived = await processSetIntelligence(
       ctx.supabase,
       ctx.user.id,
@@ -393,6 +320,9 @@ export async function POST(request: Request) {
       .eq("user_id", ctx.user.id);
     return NextResponse.json({
       saved: true,
+      operationId:operation.operationId,
+      revision:operation.revision,
+      replayed:operation.replayed,
       set: savedSet,
       personalRecords: derived.personalRecords,
       estimated1RM: derived.e1rm,
@@ -439,31 +369,10 @@ export async function POST(request: Request) {
         ...workout,
         exercises: workout.exercises.map(replaceExercise),
       },
-      writes = [
-        ctx.supabase
-          .from("workout_execution_sessions")
-          .update({
-            revised_workout: revised,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", session.id)
-          .eq("user_id", ctx.user.id),
-        ctx.supabase.from("workout_session_adaptations").insert({
-          user_id: ctx.user.id,
-          workout_execution_session_id: session.id,
-          adaptation_type: "exercise_replacement",
-          reason: body.reason,
-          scope: body.scope,
-          original_state: target,
-          revised_state: revised.exercises[index],
-          reason_codes: [
-            "ENGINE_RANKED_REPLACEMENT",
-            `SCOPE_${body.scope.toUpperCase()}`,
-          ],
-          engine_version: TRAINING_ENGINE_VERSION,
-          ruleset_version: TRAINING_RULESET_VERSION,
-        }),
-      ];
+      writes=[];
+    let replacementOperation;
+    try{replacementOperation=await applyWorkoutOperation(ctx.supabase,{operationId:body.idempotencyKey??crypto.randomUUID(),sessionId:session.id,kind:"substitute_exercise",baseRevision:body.baseRevision??Number(session.revision??0),schemaVersion:1,payload:{revisedWorkout:revised,reason:body.reason,scope:body.scope,reasonCodes:["ENGINE_RANKED_REPLACEMENT",`SCOPE_${body.scope.toUpperCase()}`],safetyClassification:body.reason==="discomfort"?"modify":"normal"}});}
+    catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
     if (body.scope !== "session_only") {
       const { data: current } = await ctx.supabase
         .from("program_prescriptions")
@@ -510,6 +419,9 @@ export async function POST(request: Request) {
       );
     return NextResponse.json({
       workout: revised,
+      operationId:replacementOperation.operationId,
+      revision:replacementOperation.revision,
+      replayed:replacementOperation.replayed,
       message:
         body.scope === "session_only"
           ? "Replacement applied for today."
@@ -542,28 +454,8 @@ export async function POST(request: Request) {
       exercises,
       reasonCodes: [...workout.reasonCodes, "TIME_BUDGET_HONORED"],
     };
-    await Promise.all([
-      ctx.supabase
-        .from("workout_execution_sessions")
-        .update({
-          revised_workout: revised,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", session.id)
-        .eq("user_id", ctx.user.id),
-      ctx.supabase.from("workout_session_adaptations").insert({
-        user_id: ctx.user.id,
-        workout_execution_session_id: session.id,
-        adaptation_type: "time_constraint",
-        reason: "short_on_time",
-        original_state: workout,
-        revised_state: revised,
-        reason_codes: ["PRIORITY_STIMULUS_PRESERVED", "TIME_BUDGET_HONORED"],
-        engine_version: TRAINING_ENGINE_VERSION,
-        ruleset_version: TRAINING_RULESET_VERSION,
-      }),
-    ]);
-    return NextResponse.json({ workout: revised });
+    try{const operation=await applyWorkoutAdaptation(ctx.supabase,{operationId:body.idempotencyKey??crypto.randomUUID(),sessionId:session.id,baseRevision:body.baseRevision??Number(session.revision??0),schemaVersion:1,payload:{revisedWorkout:revised,adaptationType:"time_constraint",reason:"short_on_time",scope:"session_only",reasonCodes:["PRIORITY_STIMULUS_PRESERVED","TIME_BUDGET_HONORED"]}});return NextResponse.json({workout:revised,operationId:operation.operationId,revision:operation.revision,replayed:operation.replayed});}
+    catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
   }
   if (body.action === "adjust_today") {
     let revised = workout,
@@ -602,15 +494,10 @@ export async function POST(request: Request) {
         "CONTINUE_WITH_NEXT_PLANNED_SESSION",
       ];
     const now = new Date().toISOString();
-    const [sessionWrite, decisionWrite] = await Promise.all([
-      ctx.supabase
-        .from("workout_execution_sessions")
-        .update({ revised_workout: revised, updated_at: now })
-        .eq("id", session.id)
-        .eq("user_id", ctx.user.id),
-      ctx.supabase
-        .from("adaptive_coaching_decisions")
-        .insert({
+    let operation;
+    try{operation=await applyWorkoutAdaptation(ctx.supabase,{operationId:body.idempotencyKey,sessionId:session.id,baseRevision:Number(session.revision??0),schemaVersion:1,payload:{revisedWorkout:revised,adaptationType:body.constraint==="time"?"time_constraint":"reorder",reason:body.constraint,scope:body.scope==="plan"?"program":"session_only",reasonCodes}});}
+    catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
+    const decisionWrite=await ctx.supabase.from("adaptive_coaching_decisions").upsert({
           user_id: ctx.user.id,
           decision_type:
             body.constraint === "missed_session"
@@ -629,15 +516,17 @@ export async function POST(request: Request) {
           algorithm_version: ADAPTIVE_RULESET_VERSION,
           idempotency_key: body.idempotencyKey,
           applied_at: now,
-        }),
-    ]);
-    if (sessionWrite.error || decisionWrite.error)
+        },{onConflict:"idempotency_key"});
+    if (decisionWrite.error)
       return NextResponse.json(
         { error: "Today’s adjustment could not be saved." },
         { status: 500 },
       );
     return NextResponse.json({
       workout: revised,
+      operationId:operation.operationId,
+      revision:operation.revision,
+      replayed:operation.replayed,
       reasonCodes,
       explanation:
         body.constraint === "missed_session"
@@ -695,20 +584,9 @@ export async function POST(request: Request) {
     prs: prs ?? [],
     effort: body.effort as SessionEffort,
   });
-  await ctx.supabase
-    .from("workout_execution_sessions")
-    .update({
-      status: "completed",
-      completed_at: completedAt,
-      duration_seconds: summary.durationSeconds,
-      session_effort: body.effort,
-      completion_notes: body.note ?? null,
-      completion_summary: summary,
-      completion_summary_version: summary.version,
-      updated_at: completedAt,
-    })
-    .eq("id", session.id)
-    .eq("user_id", ctx.user.id);
+  let completionOperation;
+  try{completionOperation=await applyWorkoutOperation(ctx.supabase,{operationId:body.idempotencyKey??crypto.randomUUID(),sessionId:session.id,kind:"complete_session",baseRevision:body.baseRevision??Number(session.revision??0),schemaVersion:1,payload:{effort:body.effort,note:body.note,allowIncomplete:body.allowIncomplete??false,summary,summaryVersion:summary.version}});}
+  catch(error){const mapped=workoutOperationError(error);return NextResponse.json({error:mapped.message,code:mapped.code,details:mapped.details},{status:mapped.status});}
   const [workload, achievements] = await Promise.all([
     persistWeeklyWorkload(
       ctx.supabase,
@@ -727,6 +605,9 @@ export async function POST(request: Request) {
   ]);
   return NextResponse.json({
     completed: true,
+    operationId:completionOperation.operationId,
+    revision:completionOperation.revision,
+    replayed:completionOperation.replayed,
     summary,
     personalRecords: prs ?? [],
     achievements,

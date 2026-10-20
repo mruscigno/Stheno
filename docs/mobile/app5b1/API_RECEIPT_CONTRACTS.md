@@ -1,0 +1,3 @@
+# API and receipt contracts
+
+Success returns `operationId`, canonical `sessionId`, authoritative `revision`, `serverTimestamp`, `receiptState: committed`, `replayed`, and `result`. `GET /api/v1/workouts/operations/{operationId}` recovers an owned receipt after a network timeout. Responses use 401 for absent/invalid authentication, 402 for expired membership on member mutations, 404 for absent or foreign resources/receipts, 409 for stale revision/reused operation/completed aggregate/tombstone conflicts, 400 for malformed requests, and 503 for unavailable persistence. Validation currently maps to 400; no 422 or 429 behavior is invented.
