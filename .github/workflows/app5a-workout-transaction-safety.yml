@@ -37,6 +37,6 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
+      - run: pnpm exec next typegen && pnpm typecheck
       - run: pnpm test --run src/platform/contracts/api.test.ts src/platform/server/workout-operations.test.ts src/platform/contracts/exercise-baseline.test.ts src/platform/client/api-client.test.ts
       - run: pnpm build
