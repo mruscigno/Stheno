@@ -148,6 +148,9 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
+      '@react-native-community/cli':
+        specifier: ^20.2.0
+        version: 20.2.0(supports-color@8.1.1)(typescript@6.0.3)
       '@types/node':
         specifier: ^20.19.0
         version: 20.19.43
@@ -7543,13 +7546,11 @@ snapshots:
       chalk: 4.1.2
       js-yaml: 4.3.1
 
-  '@hapi/hoek@9.3.0':
-    optional: true
+  '@hapi/hoek@9.3.0': {}
 
   '@hapi/topo@5.1.0':
     dependencies:
       '@hapi/hoek': 9.3.0
-    optional: true
 
   '@heycatch/sdk@0.7.0(expo-file-system@58.0.10(expo@58.0.16)(react-native@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.18)(react@19.2.8)(supports-color@8.1.1)))(expo-router@58.0.24)(react-native-safe-area-context@5.10.1(react-native@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.18)(react@19.2.8)(supports-color@8.1.1))(react@19.2.8))(react@19.2.8)':
     dependencies:
@@ -7824,8 +7825,7 @@ snapshots:
   '@next/swc-win32-x64-msvc@16.3.1':
     optional: true
 
-  '@nodable/entities@3.1.0':
-    optional: true
+  '@nodable/entities@3.1.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -8212,7 +8212,6 @@ snapshots:
       execa: 5.1.1
       fast-glob: 3.3.3
       picocolors: 1.1.1
-    optional: true
 
   '@react-native-community/cli-config-android@20.2.0':
     dependencies:
@@ -8220,7 +8219,6 @@ snapshots:
       fast-glob: 3.3.3
       fast-xml-parser: 5.11.2
       picocolors: 1.1.1
-    optional: true
 
   '@react-native-community/cli-config-apple@20.2.0':
     dependencies:
@@ -8228,7 +8226,6 @@ snapshots:
       execa: 5.1.1
       fast-glob: 3.3.3
       picocolors: 1.1.1
-    optional: true
 
   '@react-native-community/cli-config@20.2.0(typescript@5.9.3)':
     dependencies:
@@ -8252,7 +8249,6 @@ snapshots:
       picocolors: 1.1.1
     transitivePeerDependencies:
       - typescript
-    optional: true
 
   '@react-native-community/cli-doctor@20.2.0(typescript@5.9.3)':
     dependencies:
@@ -8294,7 +8290,6 @@ snapshots:
       yaml: 2.9.1
     transitivePeerDependencies:
       - typescript
-    optional: true
 
   '@react-native-community/cli-platform-android@20.2.0':
     dependencies:
@@ -8303,7 +8298,6 @@ snapshots:
       execa: 5.1.1
       logkitty: 0.7.1
       picocolors: 1.1.1
-    optional: true
 
   '@react-native-community/cli-platform-apple@20.2.0':
     dependencies:
@@ -8312,12 +8306,10 @@ snapshots:
       execa: 5.1.1
       fast-xml-parser: 5.11.2
       picocolors: 1.1.1
-    optional: true
 
   '@react-native-community/cli-platform-ios@20.2.0':
     dependencies:
       '@react-native-community/cli-platform-apple': 20.2.0
-    optional: true
 
   '@react-native-community/cli-server-api@20.2.0(supports-color@8.1.1)':
     dependencies:
@@ -8335,7 +8327,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-    optional: true
 
   '@react-native-community/cli-tools@20.2.0':
     dependencies:
@@ -8349,12 +8340,10 @@ snapshots:
       picocolors: 1.1.1
       prompts: 2.4.2
       semver: 7.8.5
-    optional: true
 
   '@react-native-community/cli-types@20.2.0':
     dependencies:
       joi: 17.13.8
-    optional: true
 
   '@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3)':
     dependencies:
@@ -8402,7 +8391,6 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
-    optional: true
 
   '@react-native-masked-view/masked-view@0.3.2(react-native@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(@react-native-community/cli@20.2.0(supports-color@8.1.1)(typescript@5.9.3))(@react-native/metro-config@0.88.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(@types/react@19.2.18)(react@19.2.8)(supports-color@8.1.1))(react@19.2.8)':
     dependencies:
@@ -8929,13 +8917,10 @@ snapshots:
   '@sideway/address@4.1.5':
     dependencies:
       '@hapi/hoek': 9.3.0
-    optional: true
 
-  '@sideway/formula@3.0.1':
-    optional: true
+  '@sideway/formula@3.0.1': {}
 
-  '@sideway/pinpoint@2.0.0':
-    optional: true
+  '@sideway/pinpoint@2.0.0': {}
 
   '@sinclair/typebox@0.27.12': {}
 
@@ -9483,8 +9468,7 @@ snapshots:
       convert-source-map: 2.0.0
       tinyrainbow: 3.1.1
 
-  '@vscode/sudo-prompt@9.3.2':
-    optional: true
+  '@vscode/sudo-prompt@9.3.2': {}
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -9630,7 +9614,6 @@ snapshots:
       colorette: 1.4.0
       slice-ansi: 2.1.0
       strip-ansi: 5.2.0
-    optional: true
 
   ansi-regex@4.1.1: {}
 
@@ -9646,11 +9629,9 @@ snapshots:
 
   ansi-styles@5.2.0: {}
 
-  anynum@1.0.1:
-    optional: true
+  anynum@1.0.1: {}
 
-  appdirsjs@1.2.8:
-    optional: true
+  appdirsjs@1.2.8: {}
 
   arg@5.0.2: {}
 
@@ -9741,15 +9722,13 @@ snapshots:
       estree-walker: 3.0.3
       js-tokens: 10.0.0
 
-  astral-regex@1.0.0:
-    optional: true
+  astral-regex@1.0.0: {}
 
   astring@1.9.0: {}
 
   async-function@1.0.0: {}
 
-  async-limiter@1.0.1:
-    optional: true
+  async-limiter@1.0.1: {}
 
   available-typed-arrays@1.0.7:
     dependencies:
@@ -9870,7 +9849,6 @@ snapshots:
       buffer: 5.7.1
       inherits: 2.0.4
       readable-stream: 3.6.2
-    optional: true
 
   body-parser@2.3.0(supports-color@8.1.1):
     dependencies:
@@ -9885,7 +9863,6 @@ snapshots:
       type-is: 2.1.0
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   bplist-creator@0.1.0:
     dependencies:
@@ -9930,7 +9907,6 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-    optional: true
 
   bytes@3.1.2: {}
 
@@ -9953,8 +9929,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  camelcase@5.3.1:
-    optional: true
+  camelcase@5.3.1: {}
 
   camelcase@6.3.0: {}
 
@@ -9988,7 +9963,6 @@ snapshots:
   cli-cursor@3.1.0:
     dependencies:
       restore-cursor: 3.1.0
-    optional: true
 
   cli-spinners@2.9.2: {}
 
@@ -9999,7 +9973,6 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 6.2.0
-    optional: true
 
   cliui@8.0.1:
     dependencies:
@@ -10031,11 +10004,9 @@ snapshots:
       color-convert: 2.0.1
       color-string: 1.9.1
 
-  colorette@1.4.0:
-    optional: true
+  colorette@1.4.0: {}
 
-  command-exists@1.2.9:
-    optional: true
+  command-exists@1.2.9: {}
 
   commander@12.1.0: {}
 
@@ -10043,8 +10014,7 @@ snapshots:
 
   commander@7.2.0: {}
 
-  commander@9.5.0:
-    optional: true
+  commander@9.5.0: {}
 
   commondir@1.0.1: {}
 
@@ -10115,7 +10085,6 @@ snapshots:
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 6.0.3
-    optional: true
 
   cross-fetch@3.2.0:
     dependencies:
@@ -10169,8 +10138,7 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.2
 
-  dayjs@1.11.23:
-    optional: true
+  dayjs@1.11.23: {}
 
   debug@2.6.9(supports-color@8.1.1):
     dependencies:
@@ -10190,8 +10158,7 @@ snapshots:
     optionalDependencies:
       supports-color: 8.1.1
 
-  decamelize@1.2.0:
-    optional: true
+  decamelize@1.2.0: {}
 
   decimal.js@10.6.0: {}
 
@@ -10270,13 +10237,11 @@ snapshots:
 
   env-paths@2.2.1: {}
 
-  envinfo@7.21.0:
-    optional: true
+  envinfo@7.21.0: {}
 
   error-ex@1.3.4:
     dependencies:
       is-arrayish: 0.2.1
-    optional: true
 
   error-stack-parser@2.1.4:
     dependencies:
@@ -10286,7 +10251,6 @@ snapshots:
     dependencies:
       accepts: 1.3.8
       escape-html: 1.0.3
-    optional: true
 
   es-abstract-get@1.0.0:
     dependencies:
@@ -10723,7 +10687,6 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
-    optional: true
 
   expect-type@1.4.0: {}
 
@@ -11120,7 +11083,6 @@ snapshots:
       glob-parent: 5.1.2
       merge2: 1.4.1
       micromatch: 4.0.8
-    optional: true
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -11134,7 +11096,6 @@ snapshots:
     dependencies:
       path-expression-matcher: 1.6.2
       xml-naming: 0.3.0
-    optional: true
 
   fast-xml-parser@5.11.2:
     dependencies:
@@ -11144,7 +11105,6 @@ snapshots:
       path-expression-matcher: 1.6.2
       strnum: 2.5.1
       xml-naming: 0.3.0
-    optional: true
 
   fastq@1.20.1:
     dependencies:
@@ -11211,7 +11171,6 @@ snapshots:
     dependencies:
       locate-path: 5.0.0
       path-exists: 4.0.0
-    optional: true
 
   find-up@5.0.0:
     dependencies:
@@ -11250,7 +11209,6 @@ snapshots:
       graceful-fs: 4.2.11
       jsonfile: 4.0.0
       universalify: 0.1.2
-    optional: true
 
   fsevents@2.3.3:
     optional: true
@@ -11295,8 +11253,7 @@ snapshots:
       dunder-proto: 1.0.1
       es-object-atoms: 1.1.2
 
-  get-stream@6.0.1:
-    optional: true
+  get-stream@6.0.1: {}
 
   get-symbol-description@1.1.0:
     dependencies:
@@ -11413,8 +11370,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  human-signals@2.1.0:
-    optional: true
+  human-signals@2.1.0: {}
 
   hyphenate-style-name@1.1.0: {}
 
@@ -11423,10 +11379,8 @@ snapshots:
   iconv-lite@0.7.3:
     dependencies:
       safer-buffer: 2.1.2
-    optional: true
 
-  ieee754@1.2.1:
-    optional: true
+  ieee754@1.2.1: {}
 
   ignore@5.3.2: {}
 
@@ -11471,8 +11425,7 @@ snapshots:
       call-bound: 1.0.4
       get-intrinsic: 1.3.0
 
-  is-arrayish@0.2.1:
-    optional: true
+  is-arrayish@0.2.1: {}
 
   is-arrayish@0.3.4: {}
 
@@ -11530,8 +11483,7 @@ snapshots:
     dependencies:
       call-bound: 1.0.4
 
-  is-fullwidth-code-point@2.0.0:
-    optional: true
+  is-fullwidth-code-point@2.0.0: {}
 
   is-fullwidth-code-point@3.0.0: {}
 
@@ -11547,8 +11499,7 @@ snapshots:
     dependencies:
       is-extglob: 2.1.1
 
-  is-interactive@1.0.0:
-    optional: true
+  is-interactive@1.0.0: {}
 
   is-map@2.0.3: {}
 
@@ -11580,8 +11531,7 @@ snapshots:
     dependencies:
       call-bound: 1.0.4
 
-  is-stream@2.0.1:
-    optional: true
+  is-stream@2.0.1: {}
 
   is-string@1.1.1:
     dependencies:
@@ -11598,11 +11548,9 @@ snapshots:
     dependencies:
       which-typed-array: 1.1.22
 
-  is-unicode-supported@0.1.0:
-    optional: true
+  is-unicode-supported@0.1.0: {}
 
-  is-unsafe@2.0.2:
-    optional: true
+  is-unsafe@2.0.2: {}
 
   is-weakmap@2.0.2: {}
 
@@ -11615,8 +11563,7 @@ snapshots:
       call-bound: 1.0.4
       get-intrinsic: 1.3.0
 
-  is-wsl@1.1.0:
-    optional: true
+  is-wsl@1.1.0: {}
 
   is-wsl@2.2.0:
     dependencies:
@@ -11694,7 +11641,6 @@ snapshots:
       '@sideway/address': 4.1.5
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
-    optional: true
 
   js-tokens@10.0.0: {}
 
@@ -11736,8 +11682,7 @@ snapshots:
 
   json-buffer@3.0.1: {}
 
-  json-parse-even-better-errors@2.3.1:
-    optional: true
+  json-parse-even-better-errors@2.3.1: {}
 
   json-schema-traverse@0.4.1: {}
 
@@ -11754,7 +11699,6 @@ snapshots:
   jsonfile@4.0.0:
     optionalDependencies:
       graceful-fs: 4.2.11
-    optional: true
 
   jsx-ast-utils@3.3.5:
     dependencies:
@@ -11788,7 +11732,6 @@ snapshots:
     dependencies:
       picocolors: 1.1.1
       shell-quote: 1.12.0
-    optional: true
 
   leven@3.1.0: {}
 
@@ -11899,13 +11842,11 @@ snapshots:
       lightningcss-win32-arm64-msvc: 1.33.0
       lightningcss-win32-x64-msvc: 1.33.0
 
-  lines-and-columns@1.2.4:
-    optional: true
+  lines-and-columns@1.2.4: {}
 
   locate-path@5.0.0:
     dependencies:
       p-locate: 4.1.0
-    optional: true
 
   locate-path@6.0.0:
     dependencies:
@@ -11925,14 +11866,12 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       is-unicode-supported: 0.1.0
-    optional: true
 
   logkitty@0.7.1:
     dependencies:
       ansi-fragments: 0.2.1
       dayjs: 1.11.23
       yargs: 15.4.1
-    optional: true
 
   loose-envify@1.4.0:
     dependencies:
@@ -11970,8 +11909,7 @@ snapshots:
 
   mdn-data@2.27.1: {}
 
-  media-typer@1.1.1:
-    optional: true
+  media-typer@1.1.1: {}
 
   memoize-one@5.2.1: {}
 
@@ -12172,13 +12110,11 @@ snapshots:
 
   mime@1.6.0: {}
 
-  mime@2.6.0:
-    optional: true
+  mime@2.6.0: {}
 
   mimic-fn@1.2.0: {}
 
-  mimic-fn@2.1.0:
-    optional: true
+  mimic-fn@2.1.0: {}
 
   min-indent@1.0.1: {}
 
@@ -12256,8 +12192,7 @@ snapshots:
       - '@types/node'
       - babel-plugin-macros
 
-  nocache@3.0.4:
-    optional: true
+  nocache@3.0.4: {}
 
   node-exports-info@1.6.2:
     dependencies:
@@ -12276,8 +12211,7 @@ snapshots:
 
   node-releases@2.0.53: {}
 
-  node-stream-zip@1.16.0:
-    optional: true
+  node-stream-zip@1.16.0: {}
 
   noxcturnal@0.1.5:
     dependencies:
@@ -12303,7 +12237,6 @@ snapshots:
   npm-run-path@4.0.1:
     dependencies:
       path-key: 3.1.1
-    optional: true
 
   nullthrows@1.1.1: {}
 
@@ -12372,12 +12305,10 @@ snapshots:
   onetime@5.1.2:
     dependencies:
       mimic-fn: 2.1.0
-    optional: true
 
   open@6.4.0:
     dependencies:
       is-wsl: 1.1.0
-    optional: true
 
   open@8.4.2:
     dependencies:
@@ -12419,7 +12350,6 @@ snapshots:
       log-symbols: 4.1.0
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
-    optional: true
 
   own-keys@1.0.2:
     dependencies:
@@ -12431,7 +12361,6 @@ snapshots:
   p-limit@2.3.0:
     dependencies:
       p-try: 2.2.0
-    optional: true
 
   p-limit@3.1.0:
     dependencies:
@@ -12440,14 +12369,12 @@ snapshots:
   p-locate@4.1.0:
     dependencies:
       p-limit: 2.3.0
-    optional: true
 
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
 
-  p-try@2.2.0:
-    optional: true
+  p-try@2.2.0: {}
 
   pako@1.0.11: {}
 
@@ -12463,7 +12390,6 @@ snapshots:
       error-ex: 1.3.4
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
-    optional: true
 
   parse-png@2.1.0:
     dependencies:
@@ -12477,8 +12403,7 @@ snapshots:
 
   path-exists@4.0.0: {}
 
-  path-expression-matcher@1.6.2:
-    optional: true
+  path-expression-matcher@1.6.2: {}
 
   path-key@3.1.1: {}
 
@@ -12595,7 +12520,6 @@ snapshots:
     dependencies:
       es-define-property: 1.0.1
       side-channel: 1.1.1
-    optional: true
 
   query-selector-shadow-dom@1.0.1: {}
 
@@ -12609,7 +12533,6 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.3
       unpipe: 1.0.0
-    optional: true
 
   react-devtools-core@6.1.5:
     dependencies:
@@ -12988,8 +12911,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  require-main-filename@2.0.0:
-    optional: true
+  require-main-filename@2.0.0: {}
 
   resend@6.20.0:
     dependencies:
@@ -13029,7 +12951,6 @@ snapshots:
     dependencies:
       onetime: 5.1.2
       signal-exit: 3.0.7
-    optional: true
 
   reusify@1.1.0: {}
 
@@ -13112,8 +13033,7 @@ snapshots:
       es-errors: 1.3.0
       is-regex: 1.2.1
 
-  safer-buffer@2.1.2:
-    optional: true
+  safer-buffer@2.1.2: {}
 
   sandbox-cli-detector@0.2.0: {}
 
@@ -13171,8 +13091,7 @@ snapshots:
 
   server-only@0.0.1: {}
 
-  set-blocking@2.0.0:
-    optional: true
+  set-blocking@2.0.0: {}
 
   set-function-length@1.2.2:
     dependencies:
@@ -13293,7 +13212,6 @@ snapshots:
       ansi-styles: 3.2.1
       astral-regex: 1.0.0
       is-fullwidth-code-point: 2.0.0
-    optional: true
 
   slugify@1.6.9: {}
 
@@ -13409,8 +13327,7 @@ snapshots:
 
   strip-bom@3.0.0: {}
 
-  strip-final-newline@2.0.0:
-    optional: true
+  strip-final-newline@2.0.0: {}
 
   strip-indent@3.0.0:
     dependencies:
@@ -13425,7 +13342,6 @@ snapshots:
   strnum@2.5.1:
     dependencies:
       anynum: 1.0.1
-    optional: true
 
   structured-headers@0.4.1: {}
 
@@ -13544,7 +13460,6 @@ snapshots:
       content-type: 2.1.0
       media-typer: 1.1.1
       mime-types: 3.0.2
-    optional: true
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -13620,8 +13535,7 @@ snapshots:
 
   unicode-property-aliases-ecmascript@2.2.0: {}
 
-  universalify@0.1.2:
-    optional: true
+  universalify@0.1.2: {}
 
   unpipe@1.0.0: {}
 
@@ -13849,8 +13763,7 @@ snapshots:
       is-weakmap: 2.0.2
       is-weakset: 2.0.4
 
-  which-module@2.0.1:
-    optional: true
+  which-module@2.0.1: {}
 
   which-typed-array@1.1.22:
     dependencies:
@@ -13878,7 +13791,6 @@ snapshots:
       ansi-styles: 4.3.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
-    optional: true
 
   wrap-ansi@7.0.0:
     dependencies:
@@ -13889,7 +13801,6 @@ snapshots:
   ws@6.2.6:
     dependencies:
       async-limiter: 1.0.1
-    optional: true
 
   ws@7.5.13: {}
 
@@ -13902,8 +13813,7 @@ snapshots:
 
   xml-name-validator@5.0.0: {}
 
-  xml-naming@0.3.0:
-    optional: true
+  xml-naming@0.3.0: {}
 
   xml2js@0.6.0:
     dependencies:
@@ -13916,21 +13826,18 @@ snapshots:
 
   xmlchars@2.2.0: {}
 
-  y18n@4.0.3:
-    optional: true
+  y18n@4.0.3: {}
 
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
 
-  yaml@2.9.1:
-    optional: true
+  yaml@2.9.1: {}
 
   yargs-parser@18.1.3:
     dependencies:
       camelcase: 5.3.1
       decamelize: 1.2.0
-    optional: true
 
   yargs-parser@21.1.1: {}
 
@@ -13947,7 +13854,6 @@ snapshots:
       which-module: 2.0.1
       y18n: 4.0.3
       yargs-parser: 18.1.3
-    optional: true
 
   yargs@17.7.3:
     dependencies:
