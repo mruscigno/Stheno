@@ -2,6 +2,13 @@ name: App 4.7 zero-cost validation
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - product-13-assessment-contact-us-units-content-depth
+    paths:
+      - "supabase/**"
+      - "apps/mobile/**"
+      - ".github/workflows/app47-zero-cost-validation.yml"
   pull_request:
     paths:
       - "supabase/**"
