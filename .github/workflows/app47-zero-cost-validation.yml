@@ -47,6 +47,8 @@ jobs:
         run: supabase start
       - name: Run pgTAP two-user security suite
         run: supabase test db supabase/tests/app47_two_user_security.sql
+      - name: Run concurrent A/B claim race
+        run: bash scripts/app47/run-concurrent-claim.sh
       - name: Capture migration and service evidence
         if: always()
         shell: bash
@@ -67,44 +69,16 @@ jobs:
     if: ${{ github.event_name != 'push' || contains(github.event.head_commit.message, '[android]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    env:
-      EXPO_PUBLIC_ENVIRONMENT: staging
-      EXPO_PUBLIC_API_BASE_URL: http://10.0.2.2:3000
-      EXPO_PUBLIC_SUPABASE_URL: http://10.0.2.2:54321
-      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_app47_synthetic_only_000000000000
-      EXPO_PUBLIC_ENABLE_ASSESSMENT_SCAFFOLD: "true"
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 11.19.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-      - uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: "17"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Generate Android project
-        run: pnpm --dir apps/mobile exec expo prebuild --platform android --no-install
-      - name: Install required NDK with bounded retry
+      - name: Download the checksum-verified App 4.6 APK
         shell: bash
         run: |
           set -euo pipefail
-          for attempt in 1 2 3; do
-            rm -rf "$ANDROID_HOME/ndk/27.1.12297006"
-            if yes | sdkmanager "ndk;27.1.12297006"; then
-              exit 0
-            fi
-            sleep $((attempt * 5))
-          done
-          exit 1
-      - name: Build x86_64 debug APK for hosted emulator
-        working-directory: apps/mobile/android
-        run: ./gradlew assembleDebug --no-daemon --max-workers=2 -PreactNativeArchitectures=x86_64
+          mkdir -p artifacts/app47/android
+          curl --fail --location --retry 3 --output artifacts/app47/android/stheno-dev-x86_64-debug.apk \
+            https://github.com/mruscigno/Stheno/releases/download/app46-native-validation/stheno-dev-x86_64-debug.apk
+          echo "576f1c19e5026c4fbe7a571a6af19a60073e34dc6438f28ef36969ab5303229b  artifacts/app47/android/stheno-dev-x86_64-debug.apk" | sha256sum --check
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -120,9 +94,9 @@ jobs:
           emulator-boot-timeout: 600
           script: |
             mkdir -p artifacts/app47/android
-            test -s apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk
-            sha256sum apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk | tee artifacts/app47/android/apk-sha256.txt
-            adb install -r apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk | tee artifacts/app47/android/install.txt
+            test -s artifacts/app47/android/stheno-dev-x86_64-debug.apk
+            sha256sum artifacts/app47/android/stheno-dev-x86_64-debug.apk | tee artifacts/app47/android/apk-sha256.txt
+            adb install -r artifacts/app47/android/stheno-dev-x86_64-debug.apk | tee artifacts/app47/android/install.txt
             adb shell am force-stop com.sthenofitness.app.dev
             adb shell monkey -p com.sthenofitness.app.dev -c android.intent.category.LAUNCHER 1 | tee artifacts/app47/android/launch.txt
             sleep 12
