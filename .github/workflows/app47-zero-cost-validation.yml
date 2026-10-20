@@ -133,6 +133,12 @@ jobs:
             adb shell am force-stop com.sthenofitness.app.dev
             adb shell monkey -p com.sthenofitness.app.dev -c android.intent.category.LAUNCHER 1 | tee artifacts/app47/android/launch.txt
             sleep 30
+            adb shell uiautomator dump /sdcard/app47-provisional.xml
+            adb pull /sdcard/app47-provisional.xml artifacts/app47/android/provisional-ui.xml
+            if grep -qi "Quickstep isn't responding" artifacts/app47/android/provisional-ui.xml; then
+              adb shell input tap 540 1332
+              sleep 5
+            fi
             adb shell getprop ro.build.version.sdk > artifacts/app47/android/api-level.txt
             adb shell dumpsys window windows > artifacts/app47/android/window.txt
             adb shell uiautomator dump /sdcard/app47-window.xml
@@ -142,6 +148,8 @@ jobs:
             test -s artifacts/app47/android/assessment-first-launch.png
             grep -q "Events injected: 1" artifacts/app47/android/launch.txt
             test -n "$(adb shell pidof com.sthenofitness.app.dev)"
+            grep -q 'package="com.sthenofitness.app.dev"' artifacts/app47/android/ui.xml
+            ! grep -Eqi "isn't responding|Close app" artifacts/app47/android/ui.xml
             ! grep -Eqi "Unable to load script|React Native Dev Bundle|redbox" artifacts/app47/android/ui.xml
             ! grep -Eq "FATAL EXCEPTION|AndroidRuntime.*FATAL" artifacts/app47/android/logcat.txt
       - uses: actions/upload-artifact@v4
