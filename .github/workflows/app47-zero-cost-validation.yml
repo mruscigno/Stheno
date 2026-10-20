@@ -69,8 +69,24 @@ jobs:
     if: ${{ github.event_name != 'push' || contains(github.event.head_commit.message, '[android]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      CI: "1"
+      EXPO_PUBLIC_ENVIRONMENT: staging
+      EXPO_PUBLIC_API_BASE_URL: http://10.0.2.2:3000
+      EXPO_PUBLIC_SUPABASE_URL: http://10.0.2.2:54321
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_app47_isolated_runtime_000000000000
+      EXPO_PUBLIC_ENABLE_ASSESSMENT_SCAFFOLD: "true"
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install the locked mobile workspace
+        run: pnpm install --frozen-lockfile
       - name: Download the checksum-verified App 4.6 APK
         shell: bash
         run: |
@@ -84,6 +100,22 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      - name: Start Metro for the checksum-verified debug APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          nohup pnpm --dir apps/mobile exec expo start --dev-client --localhost \
+            > artifacts/app47/android/metro.log 2>&1 &
+          echo $! > artifacts/app47/android/metro.pid
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:8081/status | grep -q "packager-status:running"; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat artifacts/app47/android/metro.log
+          echo "Metro did not become ready." >&2
+          exit 1
       - name: Install, launch, and capture genuine native evidence
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -96,16 +128,21 @@ jobs:
             mkdir -p artifacts/app47/android
             test -s artifacts/app47/android/stheno-dev-x86_64-debug.apk
             sha256sum artifacts/app47/android/stheno-dev-x86_64-debug.apk | tee artifacts/app47/android/apk-sha256.txt
+            adb reverse tcp:8081 tcp:8081
             adb install -r artifacts/app47/android/stheno-dev-x86_64-debug.apk | tee artifacts/app47/android/install.txt
             adb shell am force-stop com.sthenofitness.app.dev
             adb shell monkey -p com.sthenofitness.app.dev -c android.intent.category.LAUNCHER 1 | tee artifacts/app47/android/launch.txt
-            sleep 12
+            sleep 30
             adb shell getprop ro.build.version.sdk > artifacts/app47/android/api-level.txt
             adb shell dumpsys window windows > artifacts/app47/android/window.txt
+            adb shell uiautomator dump /sdcard/app47-window.xml
+            adb pull /sdcard/app47-window.xml artifacts/app47/android/ui.xml
             adb logcat -d > artifacts/app47/android/logcat.txt
             adb exec-out screencap -p > artifacts/app47/android/assessment-first-launch.png
             test -s artifacts/app47/android/assessment-first-launch.png
             grep -q "Events injected: 1" artifacts/app47/android/launch.txt
+            test -n "$(adb shell pidof com.sthenofitness.app.dev)"
+            ! grep -Eqi "Unable to load script|React Native Dev Bundle|redbox" artifacts/app47/android/ui.xml
             ! grep -Eq "FATAL EXCEPTION|AndroidRuntime.*FATAL" artifacts/app47/android/logcat.txt
       - uses: actions/upload-artifact@v4
         if: always()
