@@ -35,8 +35,9 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@types/react": "~19.3.0",
+    "@react-native-community/cli": "^20.2.0",
     "@types/node": "^20.19.0",
+    "@types/react": "~19.3.0",
     "eslint": "^9.39.0",
     "eslint-config-expo": "~58.0.4",
     "expo-doctor": "1.21.5",
