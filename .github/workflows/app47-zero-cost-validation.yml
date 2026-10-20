@@ -104,7 +104,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          nohup pnpm --dir apps/mobile exec react-native start --host 127.0.0.1 --port 8081 \
+          nohup pnpm --dir apps/mobile exec expo start --localhost --scheme stheno \
             > artifacts/app47/android/metro.log 2>&1 &
           echo $! > artifacts/app47/android/metro.pid
           for attempt in $(seq 1 60); do
