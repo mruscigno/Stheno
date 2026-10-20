@@ -108,7 +108,7 @@ jobs:
             > artifacts/app47/android/metro.log 2>&1 &
           echo $! > artifacts/app47/android/metro.pid
           for attempt in $(seq 1 60); do
-            if (echo > /dev/tcp/127.0.0.1/8081) 2>/dev/null; then
+            if (echo > /dev/tcp/localhost/8081) 2>/dev/null; then
               exit 0
             fi
             sleep 2
