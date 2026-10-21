@@ -1,6 +1,13 @@
 # Two-user 13-case results
 
-The App 6B-1 13-assertion pgTAP suite covers owner read/update, cross-user read/update/delete isolation, worker RPC denial to member/anonymous roles, anonymous table denial, private bucket configuration, 50 MB limit, and owner-policy presence. App 6B-2 adds an 8-assertion atomic budget ledger suite.
+GitHub Actions run `39659424516` completed successfully on 2026-10-21 in an isolated ephemeral Supabase environment.
 
-Final isolated GitHub runner results are recorded after the workflow completes. Production migrations remain unapplied regardless of outcome.
+- App 6B-1 security suite: **13/13 passed**.
+- App 6B-2 atomic evaluation-budget suite: **8/8 passed**.
+- Existing App 4.7 security suite: **24/24 passed**.
+- Concurrent anonymous-assessment claim race: **passed**.
+
+The App 6B-1 suite proves owner read/update behavior, cross-user read/update/delete isolation, worker RPC denial to member and anonymous roles, anonymous table denial, private bucket configuration, the 50 MB object limit, and owner-policy presence. The App 6B-2 suite proves atomic reservation/reconciliation and the hard $5 authorization ceiling.
+
+Production migrations remain intentionally unapplied.
 
