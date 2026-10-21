@@ -31,7 +31,7 @@ select is((select member_question from public.coach_form_reviews where id='6b100
 
 reset role;
 set local role anon;
-select is_empty($$select id from public.coach_form_reviews$$,'anonymous users read no reviews');
+select throws_ok($$select id from public.coach_form_reviews$$,'42501','permission denied for table coach_form_reviews','anonymous query is denied');
 select ok(not has_table_privilege('anon','public.coach_form_reviews','select'),'anonymous role has no table grant');
 
 reset role;

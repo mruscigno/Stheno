@@ -1,17 +1,32 @@
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import ffmpegPath from "ffmpeg-static";
 import { FORM_REVIEW_MAX_BYTES, FORM_REVIEW_MAX_SECONDS } from "./contracts";
 
 export type ExtractedFrame = { timestampSeconds: number; jpeg: Buffer };
 export type DecodedVideo = { durationSeconds: number; codec: string; frames: ExtractedFrame[] };
 
+const runtimeRequire = createRequire(import.meta.url);
+export function resolveFfmpegPath() {
+  if (ffmpegPath && existsSync(ffmpegPath)) return ffmpegPath;
+  const binary = process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg";
+  try {
+    const packaged = join(dirname(runtimeRequire.resolve("ffmpeg-static/package.json")), binary);
+    if (existsSync(packaged)) return packaged;
+  } catch { /* Fall through to the traced workspace path. */ }
+  const traced = join(process.cwd(), "node_modules", "ffmpeg-static", binary);
+  return existsSync(traced) ? traced : ffmpegPath;
+}
+
 function runFfmpeg(args: string[]) {
   return new Promise<{ stderr: string }>((resolve, reject) => {
-    if (!ffmpegPath) return reject(new Error("FFMPEG_UNAVAILABLE"));
-    const child = spawn(ffmpegPath, args, { windowsHide: true, stdio: ["ignore", "ignore", "pipe"] });
+    const executable = resolveFfmpegPath();
+    if (!executable) return reject(new Error("FFMPEG_UNAVAILABLE"));
+    const child = spawn(executable, args, { windowsHide: true, stdio: ["ignore", "ignore", "pipe"] });
     let stderr = "";
     child.stderr.on("data", (chunk) => { stderr += String(chunk).slice(0, 20_000); });
     child.once("error", reject);

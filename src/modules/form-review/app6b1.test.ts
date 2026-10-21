@@ -4,12 +4,15 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { budgetAllowsReview, estimateReviewCost, readBudgetConfig } from "./budget";
 import { analyzeFormFrames } from "./inference";
-import { decodeAndSampleVideo, sampleTimestamps } from "./media";
+import { decodeAndSampleVideo, resolveFfmpegPath, sampleTimestamps } from "./media";
 
 const originalEnvironment = { ...process.env };
 afterEach(() => { process.env = { ...originalEnvironment }; vi.restoreAllMocks(); });
 
 describe("App 6B-1 bounded processing", () => {
+  it("resolves the bundled FFmpeg executable at runtime", () => {
+    expect(resolveFfmpegPath()).toMatch(/ffmpeg(?:\.exe)?$/);
+  });
   it("samples the full clip in at most twelve phases", () => {
     const timestamps = sampleTimestamps(30);
     expect(timestamps).toHaveLength(12);
