@@ -26,7 +26,7 @@ function runFfmpeg(args: string[]) {
   return new Promise<{ stderr: string }>((resolve, reject) => {
     const executable = resolveFfmpegPath();
     if (!executable) return reject(new Error("FFMPEG_UNAVAILABLE"));
-    const child = spawn(executable, args, { windowsHide: true, stdio: ["ignore", "ignore", "pipe"] });
+    const child = spawn(/*turbopackIgnore: true*/ executable, args, { windowsHide: true, stdio: ["ignore", "ignore", "pipe"] });
     let stderr = "";
     child.stderr.on("data", (chunk) => { stderr += String(chunk).slice(0, 20_000); });
     child.once("error", reject);

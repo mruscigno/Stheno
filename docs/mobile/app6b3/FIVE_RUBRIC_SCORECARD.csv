@@ -1,0 +1,6 @@
+exercise_slug,rubric_version,authorized_real_person_clips,qualified_reviewer,asserted_observations,supported,partially_supported,unsupported,cannot_assess,actionable_reviews,critical_unsafe_assertions,abstention_test,status
+goblet-squat,2026.10.1,0,no,0,0,0,0,0,0,0,not_run,BLOCKED_MISSING_CLIPS_AND_REVIEWER
+barbell-rdl,2026.10.1,0,no,0,0,0,0,0,0,0,not_run,BLOCKED_MISSING_CLIPS_AND_REVIEWER
+lat-pulldown,2026.10.1,0,no,0,0,0,0,0,0,0,not_run,BLOCKED_MISSING_CLIPS_AND_REVIEWER
+dumbbell-bench-press,2026.10.1,0,no,0,0,0,0,0,0,0,not_run,BLOCKED_MISSING_CLIPS_AND_REVIEWER
+one-arm-dumbbell-row,2026.10.1,0,no,0,0,0,0,0,0,0,not_run,BLOCKED_MISSING_CLIPS_AND_REVIEWER
