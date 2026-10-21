@@ -42,6 +42,7 @@ create policy coach_form_reviews_insert_own on public.coach_form_reviews for ins
 create policy coach_form_reviews_update_own on public.coach_form_reviews for update to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
 create policy coach_form_reviews_delete_own on public.coach_form_reviews for delete to authenticated using ((select auth.uid()) = user_id);
 grant select, insert, update, delete on public.coach_form_reviews to authenticated;
+revoke all on public.coach_form_reviews from anon;
 
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
 values ('coach-form-videos','coach-form-videos',false,52428800,array['video/mp4','video/quicktime'])
