@@ -2,9 +2,12 @@
 
 The temporary Vercel runtime probe deployment `dpl_B2ofabcyAzWo3s7gB128rw8i5TQH` and its preview-only secret were deleted after evidence capture.
 
-Production plan:
+Production release:
 
-- application code may be deployed inertly with all form-review flags absent/off;
+- inert application deployment `dpl_HgZF6gHdUQyQ63cxYTHjoEACcEnd` was promoted after smoke testing;
+- homepage returned 200, unauthenticated upload intent returned 401, and the cron worker returned 401 without its credential;
+- post-release runtime error query returned zero records;
+- all form-review flags were confirmed absent/off;
 - `20261021204105_app6b3_retention_cleanup_hardening.sql` must not be applied to production in this sprint;
 - no private-pilot user IDs may be configured;
 - no processing or public flags may be enabled.

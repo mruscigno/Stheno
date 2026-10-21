@@ -14,5 +14,6 @@ Final results:
 - temporary runtime endpoint unauthenticated behavior was concealed as 404 by design;
 - preview deployment and secret removal: passed.
 - isolated Supabase run `39673419709`: migrations passed; pgTAP 24 + 13 + 8 + 12 = 57/57; concurrent A/B claim race passed.
+- inert production smoke: homepage 200, anonymous upload-intent POST 401, unauthenticated worker 401, and zero runtime error records in the first 15-minute window.
 
 The build initially reported a Turbopack trace warning at dynamic `spawn`; the documented `turbopackIgnore` annotation was added while the explicit FFmpeg output-file trace remains configured.
