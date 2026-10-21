@@ -31,6 +31,7 @@ const config: ExpoConfig = {
     "expo-router",
     "./plugins/with-windows-native-build-paths",
     ["expo-secure-store", { configureAndroidBackup: true }],
+    ["expo-image-picker", { photosPermission: "Allow STHENO to choose a recorded exercise clip for a private form review.", cameraPermission: "Allow STHENO to record an exercise clip for a private form review.", microphonePermission: false }],
     ["expo-splash-screen", { image: "./assets/splash.png", imageWidth: 220, backgroundColor: "#fffaf3" }],
   ],
   experiments: { typedRoutes: true, reactCompiler: true },

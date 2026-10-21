@@ -1,1 +1,1 @@
-import{CoachExperience}from"@/components/coach/coach-experience";export default function CoachPage(){return <CoachExperience/>}
+import{CoachExperience}from"@/components/coach/coach-experience";import{FormReviewPanel}from"@/components/coach/form-review-panel";export default function CoachPage(){const enabled=process.env.FORM_REVIEW_PUBLIC_ENABLED==="true";return <>{enabled&&<FormReviewPanel/>}<CoachExperience/></>}
