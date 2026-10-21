@@ -22,8 +22,11 @@ jobs:
       - run: supabase start
       - run: supabase test db supabase/tests/app5a_workout_atomicity.sql
       - run: supabase test db supabase/tests/app5b1_protocol_integration.sql
+      - run: supabase test db supabase/tests/app5b1r_durable_outbox.sql
       - name: Run real concurrent revision race
         run: bash scripts/app5a/run-concurrent-workout-operations.sh
+      - name: Run real concurrent outbox claim race
+        run: bash scripts/app5b1r/run-concurrent-outbox-claims.sh
       - name: Database lint and advisors
         run: supabase db lint --level warning
 

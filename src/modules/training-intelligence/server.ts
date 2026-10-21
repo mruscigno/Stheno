@@ -111,25 +111,54 @@ export async function processSetIntelligence(db: SupabaseClient, userId: string,
 }
 
 export async function persistWeeklyWorkload(db: SupabaseClient, userId: string, workout: Workout, sets: SetRow[], completedAt: string) {
-  const slugs = workout.exercises.map(exercise => exercise.exerciseSlug);
-  const metadata = await loadExerciseMetadata(db, slugs);
   const date = new Date(completedAt), day = date.getUTCDay(), monday = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - ((day + 6) % 7))).toISOString().slice(0, 10);
+  const nextMonday = new Date(`${monday}T00:00:00.000Z`); nextMonday.setUTCDate(nextMonday.getUTCDate() + 7);
+  const { data: sessions, error: sessionError } = await db.from("workout_execution_sessions")
+    .select("id,original_workout,revised_workout")
+    .eq("user_id", userId).eq("status", "completed")
+    .gte("completed_at", `${monday}T00:00:00.000Z`).lt("completed_at", nextMonday.toISOString());
+  if (sessionError) throw new Error(`WORKLOAD_SESSION_READ_FAILED:${sessionError.message}`);
+  const sessionIds = (sessions ?? []).map(session => session.id);
+  const { data: weeklySets, error: setError } = sessionIds.length
+    ? await db.from("workout_set_logs").select("exercise_slug,load_value,load_unit,repetitions,rir,rpe,set_type,state,workout_execution_session_id,performed_at")
+      .eq("user_id", userId).in("workout_execution_session_id", sessionIds).is("deleted_at", null)
+    : { data: [], error: null };
+  if (setError) throw new Error(`WORKLOAD_SET_READ_FAILED:${setError.message}`);
+  const weeklyWorkouts = (sessions ?? []).map(session => ({
+    id: session.id,
+    workout: effectiveWorkoutForWorkload(session.original_workout as Workout, session.revised_workout as Workout | null),
+  }));
+  // Include the just-completed values for callers running before a read replica observes them.
+  if (!weeklyWorkouts.length) weeklyWorkouts.push({ id: "current", workout });
+  const slugs = [...new Set(weeklyWorkouts.flatMap(item => item.workout.exercises.map(exercise => exercise.exerciseSlug)))];
+  const metadata = await loadExerciseMetadata(db, slugs);
   const muscles = new Map<string, { planned: number; completed: number }>();
-  for (const exercise of workout.exercises) {
-    const info = metadata.get(exercise.exerciseSlug)!;
-    const plannedSets = Array.from({ length: exercise.sets }, () => ({ exerciseSlug: exercise.exerciseSlug, load: 0, unit: "lb" as const, reps: exercise.repMin, setType: "working" as const, state: "completed" as const }));
-    const planned = calculateMuscleContributions(info, plannedSets).contributions;
-    const completed = calculateMuscleContributions(info, sets.filter(set => set.exercise_slug === exercise.exerciseSlug).map(set => intelligenceSet(set))).contributions;
-    for (const muscle of new Set([...Object.keys(planned), ...Object.keys(completed)])) {
-      const value = muscles.get(muscle) ?? { planned: 0, completed: 0 };
-      value.planned += planned[muscle] ?? 0; value.completed += completed[muscle] ?? 0; muscles.set(muscle, value);
+  for (const session of weeklyWorkouts) {
+    const sourceSets = session.id === "current" ? sets : (weeklySets ?? []).filter(set => set.workout_execution_session_id === session.id) as SetRow[];
+    for (const exercise of session.workout.exercises) {
+      const info = metadata.get(exercise.exerciseSlug)!;
+      const plannedSets = Array.from({ length: exercise.sets }, () => ({ exerciseSlug: exercise.exerciseSlug, load: 0, unit: "lb" as const, reps: exercise.repMin, setType: "working" as const, state: "completed" as const }));
+      const planned = calculateMuscleContributions(info, plannedSets).contributions;
+      const completed = calculateMuscleContributions(info, sourceSets.filter(set => set.exercise_slug === exercise.exerciseSlug).map(set => intelligenceSet(set))).contributions;
+      for (const muscle of new Set([...Object.keys(planned), ...Object.keys(completed)])) {
+        const value = muscles.get(muscle) ?? { planned: 0, completed: 0 };
+        value.planned += planned[muscle] ?? 0; value.completed += completed[muscle] ?? 0; muscles.set(muscle, value);
+      }
     }
   }
-  const { data: existing } = await db.from("muscle_workload_weekly").select("muscle_group,planned_set_equivalents,completed_set_equivalents").eq("user_id", userId).eq("period_start", monday).eq("algorithm_version", WORKLOAD_VERSION);
-  const prior = new Map((existing ?? []).map(row => [row.muscle_group, { planned: Number(row.planned_set_equivalents), completed: Number(row.completed_set_equivalents) }]));
-  if (muscles.size) await db.from("muscle_workload_weekly").upsert([...muscles].map(([muscle, value]) => ({ user_id: userId, period_start: monday, muscle_group: muscle, planned_set_equivalents: value.planned + (prior.get(muscle)?.planned ?? 0), completed_set_equivalents: value.completed + (prior.get(muscle)?.completed ?? 0), algorithm_version: WORKLOAD_VERSION, updated_at: completedAt })), { onConflict: "user_id,period_start,muscle_group,algorithm_version" });
+  const muscleNames = [...muscles.keys()];
+  let stale = db.from("muscle_workload_weekly").delete().eq("user_id", userId).eq("period_start", monday).eq("algorithm_version", WORKLOAD_VERSION);
+  if (muscleNames.length) stale = stale.not("muscle_group", "in", `(${muscleNames.map(name => `"${name.replaceAll('"','\\"')}"`).join(",")})`);
+  const staleResult = await stale;
+  if (staleResult.error) throw new Error(`WORKLOAD_RECONCILE_FAILED:${staleResult.error.message}`);
+  if (muscles.size) {
+    const saved = await db.from("muscle_workload_weekly").upsert([...muscles].map(([muscle, value]) => ({ user_id: userId, period_start: monday, muscle_group: muscle, planned_set_equivalents: value.planned, completed_set_equivalents: value.completed, algorithm_version: WORKLOAD_VERSION, updated_at: completedAt })), { onConflict: "user_id,period_start,muscle_group,algorithm_version" });
+    if (saved.error) throw new Error(`WORKLOAD_SAVE_FAILED:${saved.error.message}`);
+  }
   return Object.fromEntries(muscles);
 }
+
+function effectiveWorkoutForWorkload(original: Workout, revised: Workout | null) { return revised ?? original; }
 
 export async function earnWorkoutAchievements(db: SupabaseClient, userId: string, sessionId: string, completedAt: string, prCount: number) {
   const { count } = await db.from("workout_execution_sessions").select("id", { count: "exact", head: true }).eq("user_id", userId).eq("status", "completed");
