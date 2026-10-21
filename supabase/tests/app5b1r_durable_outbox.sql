@@ -29,7 +29,7 @@ insert into public.workout_operation_outbox(id,user_id,operation_id,session_id,e
 
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"5b1a1111-1111-4111-8111-111111111111","role":"authenticated"}',true);
-select is_empty($$select id from public.workout_operation_outbox$$,'members cannot read outbox rows');
+select ok(not has_table_privilege('authenticated','public.workout_operation_outbox','select'),'members cannot read outbox rows');
 reset role;
 set local role service_role;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
