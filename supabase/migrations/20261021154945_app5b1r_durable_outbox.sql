@@ -35,6 +35,7 @@ create table if not exists private.workout_outbox_effect_receipts (
   consumer_version text not null,
   completed_at timestamptz not null default clock_timestamp()
 );
+grant usage on schema private to service_role;
 revoke all on private.workout_outbox_effect_receipts from public,anon,authenticated;
 grant select,insert,update,delete on private.workout_outbox_effect_receipts to service_role;
 
