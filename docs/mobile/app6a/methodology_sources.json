@@ -1,0 +1,17 @@
+{
+  "version": "2026.10-app6a.1",
+  "verifiedOn": "2026-10-21",
+  "sources": [
+    {"id":"ACSM_RT_2026","title":"Resistance Training Guidelines Update","organization":"American College of Sports Medicine","url":"https://acsm.org/resistance-training-guidelines-update-2026/","type":"position-stand-summary"},
+    {"id":"ISSN_PROTEIN_2017","title":"International Society of Sports Nutrition Position Stand: protein and exercise","doi":"10.1186/s12970-017-0177-8","url":"https://pubmed.ncbi.nlm.nih.gov/28642676/","type":"position-stand"},
+    {"id":"ISSN_DIETS_2017","title":"International Society of Sports Nutrition position stand: diets and body composition","doi":"10.1186/s12970-017-0174-y","url":"https://pubmed.ncbi.nlm.nih.gov/28630601/","type":"position-stand"},
+    {"id":"ISSN_CREATINE_2017","title":"ISSN position stand: safety and efficacy of creatine supplementation","doi":"10.1186/s12970-017-0173-z","url":"https://pubmed.ncbi.nlm.nih.gov/28615996/","type":"position-stand"},
+    {"id":"ISSN_CAFFEINE_2021","title":"ISSN position stand: caffeine and exercise performance","doi":"10.1186/s12970-020-00383-4","url":"https://pubmed.ncbi.nlm.nih.gov/33388079/","type":"position-stand"},
+    {"id":"SCHOENFELD_VOLUME_2017","title":"Dose-response relationship between weekly resistance training volume and increases in muscle mass","doi":"10.1080/02640414.2016.1210197","url":"https://pubmed.ncbi.nlm.nih.gov/27433992/","type":"systematic-review"},
+    {"id":"GRGIC_FAILURE_2022","title":"Resistance training to repetition failure or non-failure","doi":"10.1016/j.jshs.2021.01.007","url":"https://pubmed.ncbi.nlm.nih.gov/33497853/","type":"systematic-review"},
+    {"id":"BIOLAYNE_PHAT","title":"PHAT: Power Hypertrophy Adaptive Training","url":"https://biolayne.com/articles/training/phat-power-hypertrophy-adaptive-training/","type":"public-expert-perspective"},
+    {"id":"BIOLAYNE_KEYS_2023","title":"Keys to Building Muscle Part 1: Training","url":"https://biolayne.com/podcasts/dr-layne-norton-podcast/keys-to-building-muscle-part-1-training-episode-17/","type":"public-expert-perspective"},
+    {"id":"STOPPANI_PERIODIZATION","title":"Periodization for Greater Muscle Size and Strength","url":"https://www.jimstoppani.com/training/periodization","type":"public-expert-perspective"},
+    {"id":"MATTHEWS_PROGRESSIVE_OVERLOAD","title":"Progressive Overload: The Key to Getting Stronger","url":"https://legionathletics.com/progressive-overload/","type":"public-expert-perspective"}
+  ]
+}

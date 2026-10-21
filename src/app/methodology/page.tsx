@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackView } from "@/components/analytics/tracked-link";
+import { METHODOLOGY_VERSION, methodologySources } from "@/modules/methodology/registry";
 
 export const metadata: Metadata = {
   title: "Methodology & Editorial Standard",
@@ -56,6 +57,28 @@ export default function Methodology() {
             <div>
               <h2>{standard.title}</h2>
               <p>{standard.copy}</p>
+            </div>
+          </section>
+        ))}
+      </div>
+      <header className="methodology-hero">
+        <p className="eyebrow">Current methodology · {METHODOLOGY_VERSION}</p>
+        <h2>Evidence is linked, bounded, and revisable.</h2>
+        <p className="lede">
+          Each coaching policy names the evidence claim it relies on, its
+          confidence, its limits, and the decision it is allowed to produce.
+          Public expert approaches are comparison inputs—not endorsements and
+          not personas copied into STHENO Coach.
+        </p>
+      </header>
+      <div className="methodology-grid" aria-label="Selected methodology sources">
+        {methodologySources.slice(0, 7).map((source, index) => (
+          <section key={source.id}>
+            <span aria-hidden="true">S{index + 1}</span>
+            <div>
+              <h2>{source.title}</h2>
+              <p>{source.organization} · {source.year} · {source.kind.replaceAll("-", " ")}</p>
+              <a className="methodology-link" href={source.url} rel="noreferrer" target="_blank">Review source ↗</a>
             </div>
           </section>
         ))}

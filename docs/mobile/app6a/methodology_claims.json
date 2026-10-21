@@ -1,0 +1,13 @@
+{
+  "version":"2026.10-app6a.1",
+  "claims":[
+    {"id":"TRN_CONSISTENCY","confidence":"high","sources":["ACSM_RT_2026"],"boundary":"Individualize frequency and volume."},
+    {"id":"TRN_VOLUME","confidence":"moderate","sources":["ACSM_RT_2026","SCHOENFELD_VOLUME_2017"],"boundary":"Starting ranges have diminishing returns and individual variation."},
+    {"id":"TRN_FAILURE","confidence":"moderate","sources":["GRGIC_FAILURE_2022","BIOLAYNE_KEYS_2023"],"boundary":"Failure is not universally required."},
+    {"id":"NUT_PROTEIN","confidence":"high","sources":["ISSN_PROTEIN_2017"],"boundary":"Use a practical range; clinical needs require qualified care."},
+    {"id":"NUT_ENERGY_TREND","confidence":"moderate","sources":["ISSN_DIETS_2017"],"boundary":"Adjust estimates only with adherence and trend evidence."},
+    {"id":"SUP_CREATINE","confidence":"high","sources":["ISSN_CREATINE_2017"],"boundary":"Optional, not required; clinical cautions apply."},
+    {"id":"SUP_CAFFEINE","confidence":"high","sources":["ISSN_CAFFEINE_2021"],"boundary":"Response and side effects vary; protect sleep."},
+    {"id":"COACH_MIN_CHANGE","confidence":"moderate","sources":["ACSM_RT_2026","BIOLAYNE_PHAT"],"boundary":"No-change is valid; safety overrides optimization."}
+  ]
+}
