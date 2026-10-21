@@ -42,10 +42,10 @@ describe("App 6B-1 bounded processing", () => {
 
   it("opens only when the kill switch and both caps cover the conservative estimate", () => {
     process.env.FORM_REVIEW_BUDGET_KILL_SWITCH = "open";
-    process.env.FORM_REVIEW_MAX_COST_USD = "0.01";
+    process.env.FORM_REVIEW_MAX_COST_USD = "0.05";
     process.env.FORM_REVIEW_MONTHLY_BUDGET_USD = "1";
     expect(budgetAllowsReview(0)).toBe(true);
-    expect(estimateReviewCost(40_000, 2_000)).toBeCloseTo(0.005);
+    expect(estimateReviewCost(40_000, 2_000)).toBeCloseTo(0.039);
   });
 
   it("accepts only rubric checkpoints and sampled timestamps", async () => {
@@ -54,9 +54,10 @@ describe("App 6B-1 bounded processing", () => {
       observations: [{ checkpoint_id: "feet remain planted", timestamp_range: { start: 0, end: 1 }, observation: "Both feet appear planted.", evidence_description: "Visible in the sampled frames.", confidence: "medium", actionable_cue: "Keep the whole foot in contact." }],
       positives: ["Foot contact appears consistent."], priorities: ["Keep the whole foot planted."], recommended_camera_view: null, caution_note: "Video cannot diagnose injury or guarantee safety.", model_version: "ignored", processing_version: "ignored", review_cost_estimate: 0, abstained: false,
     };
-    const client = { responses: { parse: vi.fn().mockResolvedValue({ output_parsed: output, usage: { input_tokens: 1000, output_tokens: 200 } }) } } as unknown as OpenAI;
+    const client = { responses: { parse: vi.fn().mockResolvedValue({ id: "resp_test", output_parsed: output, usage: { input_tokens: 1000, output_tokens: 200 } }) } } as unknown as OpenAI;
     const result = await analyzeFormFrames({ reviewId: "review-a", exerciseSlug: "goblet-squat", cameraView: "side", frames: [{ timestampSeconds: 0, jpeg: Buffer.from("a") }, { timestampSeconds: 1, jpeg: Buffer.from("b") }], client });
     expect(result.result.observations[0]?.checkpoint_id).toBe("feet remain planted");
+    expect(result.providerResponseId).toBe("resp_test");
     expect(result.costUsd).toBeGreaterThan(0);
   });
 
@@ -66,7 +67,7 @@ describe("App 6B-1 bounded processing", () => {
       observations: [{ checkpoint_id: "exact knee angle", timestamp_range: { start: 0, end: 1 }, observation: "Invented", evidence_description: "Invented", confidence: "high", actionable_cue: "Invented" }],
       positives: [], priorities: [], recommended_camera_view: null, caution_note: "Limitations apply.", model_version: "ignored", processing_version: "ignored", review_cost_estimate: 0, abstained: false,
     };
-    const client = { responses: { parse: vi.fn().mockResolvedValue({ output_parsed: output, usage: { input_tokens: 1, output_tokens: 1 } }) } } as unknown as OpenAI;
+    const client = { responses: { parse: vi.fn().mockResolvedValue({ id: "resp_ungrounded", output_parsed: output, usage: { input_tokens: 1, output_tokens: 1 } }) } } as unknown as OpenAI;
     await expect(analyzeFormFrames({ reviewId: "review-a", exerciseSlug: "goblet-squat", cameraView: "side", frames: [{ timestampSeconds: 0, jpeg: Buffer.from("a") }, { timestampSeconds: 1, jpeg: Buffer.from("b") }], client })).rejects.toThrow("UNGROUNDED_MODEL_OUTPUT");
   });
 });

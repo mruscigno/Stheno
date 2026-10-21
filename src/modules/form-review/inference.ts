@@ -6,7 +6,7 @@ import { formReviewResultSchema, type FormReviewResult } from "./contracts";
 import { estimateReviewCost, FORM_REVIEW_MODEL } from "./budget";
 import type { ExtractedFrame } from "./media";
 
-export type InferenceOutput = { result: FormReviewResult; inputTokens: number; outputTokens: number; costUsd: number };
+export type InferenceOutput = { result: FormReviewResult; providerResponseId: string; inputTokens: number; outputTokens: number; costUsd: number };
 
 export async function analyzeFormFrames(input: {
   reviewId: string;
@@ -14,20 +14,24 @@ export async function analyzeFormFrames(input: {
   cameraView: string;
   frames: ExtractedFrame[];
   client?: OpenAI;
+  model?: string;
+  maxOutputTokens?: number;
 }): Promise<InferenceOutput> {
   const rubric = formRubricFor(input.exerciseSlug);
   if (!rubric) throw new Error("UNSUPPORTED_EXERCISE");
   if (!process.env.OPENAI_API_KEY && !input.client) throw new Error("OPENAI_NOT_CONFIGURED");
   const client = input.client ?? new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const model = input.model ?? FORM_REVIEW_MODEL;
+  const maxOutputTokens = Math.max(1, Math.min(1800, input.maxOutputTokens ?? 1800));
   const sampledTimes = input.frames.map((frame) => frame.timestampSeconds);
   const response = await client.responses.parse({
-    model: FORM_REVIEW_MODEL,
+    model,
     reasoning: { effort: "low" },
-    max_output_tokens: 1800,
+    max_output_tokens: maxOutputTokens,
     text: { format: zodTextFormat(formReviewResultSchema, "stheno_form_review") },
     instructions: "You are a conservative fitness form-review assistant. Describe only visible evidence in the supplied sampled frames and only against the supplied reviewed rubric. Never diagnose, infer pain or exact joint loading, estimate angles, guarantee safety, or invent motion between frames. If framing, lighting, phase coverage, exercise identity, or evidence is insufficient, abstain. Use at most three practical priorities and neutral language.",
     input: [{ role: "user", content: [
-      { type: "input_text", text: JSON.stringify({ reviewId: input.reviewId, exercise: input.exerciseSlug, cameraView: input.cameraView, sampledTimes, rubric, methodologyVersion: METHODOLOGY_VERSION, outputRules: "Timestamp ranges must use only supplied sampledTimes. checkpoint_id must exactly match one observable checkpoint. Set model_version and processing_version exactly as supplied.", modelVersion: FORM_REVIEW_MODEL, processingVersion: "app6b1.1" }) },
+      { type: "input_text", text: JSON.stringify({ reviewId: input.reviewId, exercise: input.exerciseSlug, cameraView: input.cameraView, sampledTimes, rubric, methodologyVersion: METHODOLOGY_VERSION, outputRules: "Timestamp ranges must use only supplied sampledTimes. checkpoint_id must exactly match one observable checkpoint. Set model_version and processing_version exactly as supplied.", modelVersion: model, processingVersion: "app6b2.1" }) },
       ...input.frames.map((frame) => ({ type: "input_image" as const, image_url: `data:image/jpeg;base64,${frame.jpeg.toString("base64")}`, detail: "low" as const })),
     ] }],
   });
@@ -40,7 +44,7 @@ export async function analyzeFormFrames(input: {
   const inputTokens = response.usage?.input_tokens ?? 0;
   const outputTokens = response.usage?.output_tokens ?? 0;
   const costUsd = estimateReviewCost(inputTokens, outputTokens);
-  const result = formReviewResultSchema.parse({ ...parsed, review_id: input.reviewId, exercise_id: input.exerciseSlug, rubric_version: rubric.version, methodology_version: METHODOLOGY_VERSION, model_version: FORM_REVIEW_MODEL, processing_version: "app6b1.1", review_cost_estimate: costUsd });
-  return { result, inputTokens, outputTokens, costUsd };
+  const result = formReviewResultSchema.parse({ ...parsed, review_id: input.reviewId, exercise_id: input.exerciseSlug, rubric_version: rubric.version, methodology_version: METHODOLOGY_VERSION, model_version: model, processing_version: "app6b2.1", review_cost_estimate: costUsd });
+  return { result, providerResponseId: response.id, inputTokens, outputTokens, costUsd };
 }
 

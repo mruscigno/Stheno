@@ -1,6 +1,7 @@
-export const FORM_REVIEW_MODEL = process.env.FORM_REVIEW_MODEL ?? "gpt-6-luna";
-export const FORM_REVIEW_INPUT_USD_PER_MILLION = 0.1;
-export const FORM_REVIEW_OUTPUT_USD_PER_MILLION = 0.5;
+// Verified against the official OpenAI model and pricing pages on 2026-10-21.
+export const FORM_REVIEW_MODEL = process.env.FORM_REVIEW_MODEL ?? "gpt-5.4-mini";
+export const FORM_REVIEW_INPUT_USD_PER_MILLION = 0.75;
+export const FORM_REVIEW_OUTPUT_USD_PER_MILLION = 4.5;
 export const FORM_REVIEW_ESTIMATED_MAX_INPUT_TOKENS = 40_000;
 export const FORM_REVIEW_ESTIMATED_MAX_OUTPUT_TOKENS = 2_000;
 

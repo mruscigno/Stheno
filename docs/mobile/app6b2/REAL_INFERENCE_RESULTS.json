@@ -1,0 +1,49 @@
+{
+  "evaluationRunId": "app6b2-20261021",
+  "authorizedBudgetUsd": 5,
+  "conservativeAccountedUsd": 0.3070665,
+  "knownCalculatedProviderCostUsd": 0.0070665,
+  "remainingBudgetUsd": 4.6929335,
+  "model": "gpt-5.4-mini",
+  "source": "STHENO-owned procedural-original Goblet Squat asset; no member or Vital media",
+  "providerCalls": 3,
+  "successfulStructuredCalls": 2,
+  "results": [
+    {
+      "case": "four-frame grounded review",
+      "providerResponseId": null,
+      "providerResponseIdNote": "Adapter did not expose the response ID on this first success; corrected before the next call.",
+      "exercise_id": "goblet-squat",
+      "rubric_version": "2026.10.1",
+      "frames_used": 4,
+      "timestamps": [0.15, 0.886, 1.868, 2.85],
+      "input_tokens": 1504,
+      "output_tokens": 821,
+      "calculated_cost_usd": 0.0048225,
+      "latency_ms": 6847,
+      "status": "completed",
+      "visibility_quality": "partial",
+      "observation_checkpoint_ids": ["feet remain planted", "knees track consistently with toes", "torso and pelvis move under control", "depth stays within the member's controlled range"],
+      "unsupported_frame_citations": 0,
+      "limitations": ["Four sampled frames do not show interim motion.", "Camera view limits knee-to-toe assessment.", "No diagnosis, pain inference, or safety guarantee."]
+    },
+    {
+      "case": "single-frame abstention",
+      "providerResponseId": "resp_09940a0a2a94af11006ad90b174b9887d29ba98a8c932a0419",
+      "exercise_id": "goblet-squat",
+      "rubric_version": "2026.10.1",
+      "frames_used": 1,
+      "timestamps": [0.15],
+      "input_tokens": 844,
+      "output_tokens": 358,
+      "calculated_cost_usd": 0.002244,
+      "latency_ms": 4025,
+      "status": "abstained",
+      "visibility_quality": "insufficient",
+      "observations": [],
+      "recommended_camera_view": "front three-quarter",
+      "unsupported_frame_citations": 0
+    }
+  ]
+}
+

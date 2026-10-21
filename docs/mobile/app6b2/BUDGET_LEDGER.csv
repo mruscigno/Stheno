@@ -1,0 +1,7 @@
+run_id,request_key,state,provider_call,model,frames,input_tokens,output_tokens,reserved_usd,actual_usd,accounted_usd,remaining_usd,note
+app6b2-20261021,ffmpeg-package-1,unknown_no_provider,false,gpt-5.4-mini,0,,,0.100000,,0.100000,4.900000,FFmpeg missing before provider call; reservation held conservatively
+app6b2-20261021,ffmpeg-package-2,unknown_no_provider,false,gpt-5.4-mini,0,,,0.100000,,0.100000,4.800000,Second trace attempt failed before provider; reservation held
+app6b2-20261021,structured-800,invalid_output,true,gpt-5.4-mini,4,,,0.100000,,0.100000,4.700000,Provider reached but 800-token structured response was invalid; full reservation held
+app6b2-20261021,grounded-1200,reconciled,true,gpt-5.4-mini,4,1504,821,0.100000,0.0048225,0.0048225,4.6951775,Grounded structured result
+app6b2-20261021,abstention-1200,reconciled,true,gpt-5.4-mini,1,844,358,0.100000,0.0022440,0.0022440,4.6929335,Correct insufficient-evidence abstention
+
