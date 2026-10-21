@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const FORM_REVIEW_CONSENT_VERSION = "2026.10-app6b.1";
-export const FORM_REVIEW_MAX_BYTES = 75 * 1024 * 1024;
+export const FORM_REVIEW_MAX_BYTES = 50 * 1024 * 1024;
 export const FORM_REVIEW_MAX_SECONDS = 30;
 export const FORM_REVIEW_RETENTION_DAYS = 30;
 export const FORM_REVIEW_MONTHLY_QUOTA = 4;
@@ -26,17 +26,30 @@ export const submitReviewSchema = z.object({
   durationSeconds: z.number().positive().max(FORM_REVIEW_MAX_SECONDS),
 });
 
-export type FormReviewResult = {
-  review_id: string;
-  exercise_id: string;
-  rubric_version: string;
-  camera_view: z.infer<typeof cameraViewSchema>;
-  video_quality: "adequate" | "poor" | "unsupported";
-  confidence: "high" | "moderate" | "low" | "insufficient";
-  observations: Array<{ checkpoint_id: string; behavior: string; actual_evidence_timestamps: number[]; confidence: number }>;
-  cues: Array<{ cue: string; why: string; priority: number }>;
-  limitations: string[];
-  rerecord_guidance: string | null;
-  abstained: boolean;
-  safety_flags: string[];
-};
+export const formReviewResultSchema = z.object({
+  review_id: z.string(),
+  exercise_id: z.string(),
+  rubric_version: z.string(),
+  methodology_version: z.string(),
+  status: z.enum(["completed", "abstained"]),
+  visibility_quality: z.enum(["good", "partial", "insufficient"]),
+  limitations: z.array(z.string()).max(8),
+  observations: z.array(z.object({
+    checkpoint_id: z.string(),
+    timestamp_range: z.object({ start: z.number().nonnegative(), end: z.number().nonnegative() }),
+    observation: z.string(),
+    evidence_description: z.string(),
+    confidence: z.enum(["low", "medium", "high"]),
+    actionable_cue: z.string(),
+  })).max(6),
+  positives: z.array(z.string()).max(3),
+  priorities: z.array(z.string()).max(3),
+  recommended_camera_view: z.string().nullable(),
+  caution_note: z.string(),
+  model_version: z.string(),
+  processing_version: z.string(),
+  review_cost_estimate: z.number().nonnegative(),
+  abstained: z.boolean(),
+});
+
+export type FormReviewResult = z.infer<typeof formReviewResultSchema>;

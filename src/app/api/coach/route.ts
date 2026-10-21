@@ -7,7 +7,7 @@ import { actionIntent, answerQuality, classifyCoachRequest, COACH_SERVICE_ERROR,
 import { proposeAdjustment } from "@/modules/coaching/engine";
 import { coachMethodologyContext, METHODOLOGY_VERSION } from "@/modules/methodology";
 
-const Input = z.object({ conversationId: z.uuid().optional(), message: z.string().trim().min(1).max(4000) });
+const Input = z.object({ conversationId: z.uuid().optional(), formReviewId: z.uuid().optional(), message: z.string().trim().min(1).max(4000) });
 
 async function context(request: Request) {
   const authenticated = await authenticateRequest(request);
@@ -26,6 +26,10 @@ export async function POST(request: Request) {
   if (!c) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const parsed = Input.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid message" }, { status: 400 });
+  const { data: formReview } = parsed.data.formReviewId
+    ? await c.supabase.from("coach_form_reviews").select("id,exercise_slug,structured_result,processing_status").eq("id", parsed.data.formReviewId).eq("user_id", c.user.id).in("processing_status", ["completed", "abstained"]).maybeSingle()
+    : { data: null };
+  if (parsed.data.formReviewId && !formReview) return NextResponse.json({ error: "Form review not found" }, { status: 404 });
 
   let conversationId = parsed.data.conversationId;
   if (!conversationId) {
@@ -83,7 +87,7 @@ export async function POST(request: Request) {
         reasoning: { effort: "low" },
         max_output_tokens: 700,
         instructions: "You are STHENO Coach, an evidence-led fitness coach. Answer immediately, directly, calmly, and concisely. No praise, filler, canned headings, fake certainty, diagnosis, or invented citations. Use supplied member context when it changes the practical recommendation, including goal, current frequency, experience, schedule, equipment, recovery, adherence, and current program. Use only supplied reviewed evidence for scientific claims. Mention uncertainty and a practical next action when useful. Never claim to change a plan. If the user asks for a change, say it must go through STHENO's deterministic engine.",
-        input: JSON.stringify({ question: parsed.data.message, domain, methodologyContext: coachMethodologyContext(domain), verifiedMemberContext: profile.data?.profile ?? null, currentNutritionTargets: nutrition.data, nutritionLoggingSnapshot: nutritionHistory.data ?? [], nutritionContextInstruction: "Only logging_status=complete may support adherence conclusions. Partial days are not evidence of under-eating. Never change a target or recommend a calorie cut when adherence evidence is poor; route changes through the deterministic review flow.", reviewedEvidence: evidence.data ?? [], recentConversation: (history.data ?? []).reverse(), authoritativeTrainingSnapshot: { last3Workouts: trainingSessions.data ?? [], recentPersonalRecords: recentPrs.data ?? [], currentMuscleWorkload: workload.data ?? [], loadRecommendations: loadRecommendations.data ?? [], instruction: "These persisted deterministic facts are authoritative. Never invent or alter a load, PR, adherence value, or workout result. When history is sparse, say so." } }),
+        input: JSON.stringify({ question: parsed.data.message, domain, methodologyContext: coachMethodologyContext(domain), verifiedFormReview: formReview ? { id: formReview.id, exercise: formReview.exercise_slug, result: formReview.structured_result, instruction: "This validated owner-scoped review is authoritative only for visible observations. Preserve its limitations; never infer from raw frames or diagnose injury." } : null, verifiedMemberContext: profile.data?.profile ?? null, currentNutritionTargets: nutrition.data, nutritionLoggingSnapshot: nutritionHistory.data ?? [], nutritionContextInstruction: "Only logging_status=complete may support adherence conclusions. Partial days are not evidence of under-eating. Never change a target or recommend a calorie cut when adherence evidence is poor; route changes through the deterministic review flow.", reviewedEvidence: evidence.data ?? [], recentConversation: (history.data ?? []).reverse(), authoritativeTrainingSnapshot: { last3Workouts: trainingSessions.data ?? [], recentPersonalRecords: recentPrs.data ?? [], currentMuscleWorkload: workload.data ?? [], loadRecommendations: loadRecommendations.data ?? [], instruction: "These persisted deterministic facts are authoritative. Never invent or alter a load, PR, adherence value, or workout result. When history is sparse, say so." } }),
       });
       answer = response.output_text.trim();
       if (!answerQuality(answer).passes) answer = "I don’t have a concise, evidence-aligned answer I can stand behind yet. Rephrase the fitness question with the specific goal or constraint that matters.";

@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { authorizeMemberRequest } from "@/platform/server/auth";
 import { FORM_REVIEW_BUCKET, FORM_REVIEW_RETENTION_DAYS, uploadIntentSchema } from "@/modules/form-review/contracts";
-import { formReviewFlags, safeObjectPath, validateReviewEligibility } from "@/modules/form-review/service";
+import { isFormReviewUserEnabled, safeObjectPath, validateReviewEligibility } from "@/modules/form-review/service";
 import { formRubricFor } from "@/modules/methodology/form-rubrics";
 
 export async function POST(request: Request) {
-  if (!formReviewFlags.publicEnabled) return NextResponse.json({ error: "Form review is not yet publicly enabled." }, { status: 503 });
   const authorization = await authorizeMemberRequest(request);
   if (!authorization.context) return NextResponse.json({ error: "Authentication is required." }, { status: 401 });
   if (authorization.state === "expired") return NextResponse.json({ error: "Membership access is required.", upgradeUrl: "/pricing" }, { status: 402 });
+  if (!isFormReviewUserEnabled(authorization.context.user.id)) return NextResponse.json({ error: "Form review is not yet enabled for this account." }, { status: 503 });
   const parsed = uploadIntentSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid upload request.", details: parsed.error.flatten() }, { status: 400 });
   const { db, user } = authorization.context;
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const { data: exercise } = await exerciseQuery.maybeSingle();
   if (!exercise || !formRubricFor(exercise.slug)) return NextResponse.json({ error: "This exercise does not yet have a reviewed form rubric." }, { status: 422 });
   const since = new Date(); since.setUTCDate(1); since.setUTCHours(0, 0, 0, 0);
-  const { count } = await db.from("coach_form_reviews").select("id", { count: "exact", head: true }).eq("user_id", user.id).gte("created_at", since.toISOString()).neq("processing_status", "deleted");
+  const { count } = await db.from("coach_form_reviews").select("id", { count: "exact", head: true }).eq("user_id", user.id).gte("created_at", since.toISOString()).not("processing_status", "in", "(deleted,failed,expired)");
   const eligibility = validateReviewEligibility({ exerciseSlug: exercise.slug, byteSize: parsed.data.byteSize, mediaType: parsed.data.mediaType, monthlyCount: count ?? 0 });
   if (!eligibility.ok) return NextResponse.json({ error: eligibility.message, code: eligibility.code }, { status: 422 });
   const existing = await db.from("coach_form_reviews").select("id,object_path,processing_status,upload_expires_at").eq("user_id", user.id).eq("idempotency_key", parsed.data.idempotencyKey).maybeSingle();

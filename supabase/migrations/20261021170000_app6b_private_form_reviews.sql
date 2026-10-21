@@ -44,7 +44,7 @@ create policy coach_form_reviews_delete_own on public.coach_form_reviews for del
 grant select, insert, update, delete on public.coach_form_reviews to authenticated;
 
 insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
-values ('coach-form-videos','coach-form-videos',false,78643200,array['video/mp4','video/quicktime'])
+values ('coach-form-videos','coach-form-videos',false,52428800,array['video/mp4','video/quicktime'])
 on conflict (id) do update set public=false,file_size_limit=excluded.file_size_limit,allowed_mime_types=excluded.allowed_mime_types;
 
 create policy "form videos owner select" on storage.objects for select to authenticated

@@ -16,7 +16,7 @@ describe("App 6B form review safety foundation", () => {
     const result = providerUnavailableResult("r1", "lat-pulldown", "front");
     expect(result.abstained).toBe(true);
     expect(result.observations).toHaveLength(0);
-    expect(result.limitations.join(" ")).toMatch(/not enabled/);
+    expect(result.limitations.join(" ")).toMatch(/not been authorized/);
   });
   it("keeps objects in the authenticated owner's folder", () => expect(safeObjectPath("user-a", "review-1", "clip.MOV")).toBe("user-a/review-1/set.mov"));
 });

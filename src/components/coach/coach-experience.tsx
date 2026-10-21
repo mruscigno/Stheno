@@ -1,19 +1,20 @@
 "use client";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import "./coach.css";
 
 type Message = { id?: string; role: "user" | "assistant"; content: string; action?: { id: string; proposal: Record<string, unknown>; reason_codes: string[]; confirmation_status: string } | null };
 const SERVICE_ERROR = "Something went wrong while I was answering that. Please try again.";
 
 export function CoachExperience() {
-  const [conversationId, setConversationId] = useState<string>(), [messages, setMessages] = useState<Message[]>([]), [question, setQuestion] = useState(""), [busy, setBusy] = useState(false), [error, setError] = useState(""), [photo, setPhoto] = useState<{ id: string; candidates: { equipment: string; confidence: number; note: string }[] } | null>(null), fileRef = useRef<HTMLInputElement>(null);
+  const [conversationId, setConversationId] = useState<string>(), [formReviewId, setFormReviewId] = useState<string>(), [messages, setMessages] = useState<Message[]>([]), [question, setQuestion] = useState(""), [busy, setBusy] = useState(false), [error, setError] = useState(""), [photo, setPhoto] = useState<{ id: string; candidates: { equipment: string; confidence: number; note: string }[] } | null>(null), fileRef = useRef<HTMLInputElement>(null);
+  useEffect(() => { const listener = (event: Event) => { const id = (event as CustomEvent<{ reviewId?: string }>).detail?.reviewId; if (id) { setFormReviewId(id); setQuestion("What should I focus on in my next set based on this form review?"); } }; window.addEventListener("stheno:form-review-ready", listener); return () => window.removeEventListener("stheno:form-review-ready", listener); }, []);
   async function ask(event: FormEvent) {
     event.preventDefault();
     const value = question.trim();
     if (!value || busy) return;
     setQuestion(""); setError(""); setMessages((current) => [...current, { role: "user", content: value }]); setBusy(true);
     try {
-      const response = await fetch("/api/coach", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId, message: value }) });
+      const response = await fetch("/api/coach", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ conversationId, formReviewId, message: value }) });
       const body = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(body.error ?? SERVICE_ERROR);
       setConversationId(body.conversationId);
