@@ -27,6 +27,7 @@ create table if not exists public.monthly_review_decisions (
 alter table public.monthly_review_decisions enable row level security;
 revoke all on table public.monthly_review_decisions from anon;
 grant select on table public.monthly_review_decisions to authenticated;
+drop policy if exists "monthly_review_decisions_select_own" on public.monthly_review_decisions;
 create policy "monthly_review_decisions_select_own" on public.monthly_review_decisions
   for select to authenticated using ((select auth.uid()) = user_id);
 
