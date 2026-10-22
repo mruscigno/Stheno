@@ -79,6 +79,18 @@ export const MonthlyDecisionInput = z.object({
   acceptedIds: z.array(z.uuid()).max(50).default([]),
 });
 
+export const MonthlyReviewIntakeInput = z.object({
+  operationId: z.uuid(),
+  baseRevision: z.number().int().min(0),
+  intake: z.record(z.string(), z.unknown()),
+});
+
+export type MonthlyReviewSummary = {
+  state: Record<string, unknown> | null;
+  reviews: Array<Record<string, unknown>>;
+  recommendations: Array<Record<string, unknown>>;
+};
+
 export type ApiSuccess<T> = {
   apiVersion: typeof API_VERSION;
   requestId: string;

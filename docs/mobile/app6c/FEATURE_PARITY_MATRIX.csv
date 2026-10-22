@@ -1,0 +1,10 @@
+capability,web_before,shared_after,native_app6c,activation
+28-day scheduler,yes,unchanged,reads same state,production
+review summary/history,yes,/api/v1/progress,yes,flagged
+review start,yes,/api/v1/monthly-reviews POST,yes,flagged
+intake resume,no revision guard,/api/v1/monthly-reviews/:id PATCH,contract ready,flagged
+recommendation decisions,yes,atomic RPC,yes,flagged
+private photo list,yes,/api/v1/progress/photos GET,yes,flagged
+private photo upload,yes,/api/v1/progress/photos PUT,yes,flagged
+delete set/all,yes,/api/v1/progress/photos DELETE,yes,flagged
+photo comparison,yes,signed URLs,history ready,flagged

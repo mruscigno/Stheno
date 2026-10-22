@@ -51,6 +51,7 @@ jobs:
           supabase test db supabase/tests/app6b1_form_review_security.sql
           supabase test db supabase/tests/app6b2_evaluation_budget.sql
           supabase test db supabase/tests/app6b3_retention_cleanup.sql
+          supabase test db supabase/tests/app6c_monthly_progress_security.sql
       - name: Run concurrent A/B claim race
         run: bash scripts/app47/run-concurrent-claim.sh
       - name: Capture migration and service evidence

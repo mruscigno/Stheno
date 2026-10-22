@@ -19,7 +19,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const operation = await findOperation(context.db, context.user.id, scope, parsed.data.operationId, parsed.data);
     if (operation.state === "conflict") return apiError(requestIdValue, 409, "IDEMPOTENCY_CONFLICT", "Operation ID was already used with a different decision.");
     if (operation.state === "replay") return apiSuccess(requestIdValue, operation.record.response_body, undefined, { replayed: true });
-    const result = await decideMonthlyRecommendations(context.db, context.user.id, id, parsed.data.action, parsed.data.acceptedIds);
+    const result = await decideMonthlyRecommendations(context.db, context.user.id, id, parsed.data.action, parsed.data.acceptedIds, parsed.data.operationId);
     if (!result) return apiError(requestIdValue, 404, "NOT_FOUND", "Monthly review was not found.");
     const response = { ...result, operationId: parsed.data.operationId, revision: 1, acknowledgedAt: new Date().toISOString() };
     await recordOperation(context.db, { userId: context.user.id, scope, operationId: parsed.data.operationId, payloadHash: operation.hash, responseBody: response, statusCode: 200, resourceRevision: 1 });
