@@ -18,7 +18,7 @@ function nodes() {
   adb(["shell", "uiautomator", "dump", "/sdcard/app5b2g.xml"]);
   adb(["pull", "/sdcard/app5b2g.xml", path.join(evidence, "current-ui.xml")]);
   const xml = fs.readFileSync(path.join(evidence, "current-ui.xml"), "utf8");
-  return [...xml.matchAll(/<node\s+([^>]+)\/>/g)].map((match) => {
+  return [...xml.matchAll(/<node\s+([^>]+)>/g)].map((match) => {
     const attrs = Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map((item) => [item[1], decode(item[2])]));
     const bounds = attrs.bounds?.match(/\[(\d+),(\d+)]\[(\d+),(\d+)]/);
     return { ...attrs, center: bounds ? [Math.round((+bounds[1] + +bounds[3]) / 2), Math.round((+bounds[2] + +bounds[4]) / 2)] : null };

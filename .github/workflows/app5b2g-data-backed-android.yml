@@ -130,12 +130,26 @@ jobs:
         run: |
           sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
+      - name: Generate current Android project
+        shell: bash
+        run: |
+          pnpm --dir apps/mobile exec expo prebuild --platform android --clean --no-install
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: app5b2g-gradle-${{ runner.os }}-${{ hashFiles('apps/mobile/android/**/*.gradle*', 'apps/mobile/android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            app5b2g-gradle-${{ runner.os }}-
+
       - name: Build fresh APK from checked-out commit
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p artifacts/app5b2g/android
-          pnpm --dir apps/mobile exec expo prebuild --platform android --clean --no-install
           (cd apps/mobile/android && ./gradlew --no-daemon assembleDebug)
           apk="apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk"
           test -s "$apk"
