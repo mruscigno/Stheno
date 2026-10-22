@@ -26,7 +26,14 @@ function nodes() {
 }
 function locate(identifier, attempts = 16) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const found = nodes().find((node) =>
+    const currentNodes = nodes();
+    const systemWait = currentNodes.find((node) => node.text === "Wait" && node.center);
+    if (systemWait?.center) {
+      adb(["shell", "input", "tap", String(systemWait.center[0]), String(systemWait.center[1])]);
+      sleep(1000);
+      continue;
+    }
+    const found = currentNodes.find((node) =>
       node["resource-id"] === identifier
       || node["resource-id"]?.endsWith(`/${identifier}`)
       || node["content-desc"] === identifier
