@@ -128,7 +128,6 @@ jobs:
       - name: Install Android SDK components
         shell: bash
         run: |
-          yes | sdkmanager --licenses >/dev/null
           sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       - name: Build fresh APK from checked-out commit
