@@ -50,6 +50,8 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - uses: supabase/setup-cli@v1
         with:
           version: 2.121.0
