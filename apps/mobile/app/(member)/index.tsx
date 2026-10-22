@@ -16,7 +16,7 @@ export default function TodayScreen() {
     <Row><Button variant="secondary" onPress={() => router.push("/(member)/adapt")}>Adjust today</Button><Button variant="secondary" onPress={() => router.push("/(member)/coach")}>Ask Coach</Button></Row>
     {today?.nutrition ? <Card><Eyebrow>Nutrition</Eyebrow><SectionTitle>{today.nutrition.calories_kcal.toLocaleString()} kcal</SectionTitle><Body muted>{today.nutrition.protein_g}g protein · {today.nutrition.carbohydrate_g}g carbs · {today.nutrition.fat_g}g fat</Body><Button variant="text" onPress={() => router.push("/(member)/nutrition")}>See nutrition plan →</Button></Card> : <Card><SectionTitle>Nutrition targets unavailable</SectionTitle><Body muted>Complete or refresh your plan before using nutrition targets.</Body></Card>}
     <Card><Eyebrow>Review</Eyebrow><SectionTitle>{today?.review?.monthly_review_due ? "Your monthly review is due" : "Your plan is monitoring progress"}</SectionTitle><Body muted>{today?.review?.next_monthly_review_at ? `Next review ${new Date(today.review.next_monthly_review_at).toLocaleDateString()}.` : "Review timing will appear when enough plan history exists."}</Body><Button variant="text" onPress={() => router.push("/(member)/progress")}>View progress →</Button></Card>
-    <Button variant="text" onPress={() => void auth.refresh()}>Refresh today</Button>
+    <Button testID="member-today-ready" accessibilityLabel="Member Today loaded" variant="text" onPress={() => void auth.refresh()}>Refresh today</Button>
   </Screen>;
 }
 const styles=StyleSheet.create({pill:{color:colors.orangeDark,backgroundColor:colors.soft,paddingHorizontal:spacing.sm,paddingVertical:spacing.xs,borderRadius:999,fontWeight:"700"}});
