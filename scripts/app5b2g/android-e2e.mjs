@@ -26,7 +26,12 @@ function nodes() {
 }
 function locate(identifier, attempts = 16) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const found = nodes().find((node) => node["resource-id"]?.endsWith(`/${identifier}`) || node["content-desc"] === identifier || node.text === identifier);
+    const found = nodes().find((node) =>
+      node["resource-id"] === identifier
+      || node["resource-id"]?.endsWith(`/${identifier}`)
+      || node["content-desc"] === identifier
+      || node.text === identifier
+    );
     if (found?.center) return found;
     if (attempt < 2) adb(["shell", "input", "swipe", "540", "500", "540", "1500", "350"]);
     else adb(["shell", "input", "swipe", "540", "1500", "540", "500", "350"]);
