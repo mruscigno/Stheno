@@ -1,6 +1,6 @@
 import "react-native-url-polyfill/auto";
 import { AppState, Platform } from "react-native";
-import { createClient, processLock, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { readEnvironment } from "./env";
 import { secureSessionStorage } from "./secure-store";
 
@@ -12,7 +12,7 @@ export function getSupabaseClient() {
   if (client) return client;
   const env = readEnvironment();
   client = createClient(env.EXPO_PUBLIC_SUPABASE_URL, env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
-    auth: { storage: Platform.OS === "web" ? webPreviewStorage : secureSessionStorage, autoRefreshToken: true, persistSession: Platform.OS !== "web", detectSessionInUrl: false, lock: processLock, flowType: "pkce" },
+    auth: { storage: Platform.OS === "web" ? webPreviewStorage : secureSessionStorage, autoRefreshToken: true, persistSession: Platform.OS !== "web", detectSessionInUrl: false, flowType: "pkce" },
   });
   return client;
 }
