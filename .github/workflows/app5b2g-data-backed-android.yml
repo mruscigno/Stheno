@@ -142,7 +142,9 @@ jobs:
           cp "$apk" artifacts/app5b2g/android/stheno-current-debug.apk
           sha256sum artifacts/app5b2g/android/stheno-current-debug.apk | tee artifacts/app5b2g/android/apk-sha256.txt
           git rev-parse HEAD | tee artifacts/app5b2g/android/source-commit.txt
-          aapt dump badging "$apk" | head -1 | tee artifacts/app5b2g/android/apk-package.txt
+          aapt_bin="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)"
+          test -x "$aapt_bin"
+          "$aapt_bin" dump badging "$apk" | head -1 | tee artifacts/app5b2g/android/apk-package.txt
 
       - name: Start Metro for current-source debug APK
         shell: bash
