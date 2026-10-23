@@ -109,7 +109,9 @@ for (const [key, raw] of fixtureEntries) {
     const labels = {
       muscle:"Build muscle", energy:"More energy", "3-6":"3–6 months", strength:"Strength", prefer_not:"Prefer not to say", returning:"Returning after time away", intermittent:"Starts and stops", "1-2":"1–2 days", "3":"3 days", "45":"45 minutes", variable:"Changes week to week", occasional:"Occasional travel", mixed:key === "location" ? "Home and gym" : "Inconsistent", some:"I know common movements", moderate:key === "activity" ? "A mix of sitting and moving" : "Busy but workable", "7-10k":"7,000–10,000", flexible:key === "diet" ? "No specific pattern" : "Flexible backup options", portions:"Simple portions", most:"At most meals", maybe:"Only when relevant", time:"Time"
     };
-    tap(`Select ${labels[raw] ?? raw} for ${key}`);
+    const option = `Select ${labels[raw] ?? raw} for ${key}`;
+    if (nextKey) pressUntilStep(option, nextKey);
+    else tap(option);
   } else {
     input(`assessment-input-${key}`, raw === "" ? "No current limitations" : raw);
     if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
