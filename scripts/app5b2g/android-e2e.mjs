@@ -81,7 +81,10 @@ function input(identifier, value) {
     const filled = locate(identifier);
     const verifiedPassword = filled.password === "true" && filled.text?.length === expected.length;
     if (filled.text === expected || verifiedPassword) {
-      adb(["shell", "input", "keyevent", "4"]);
+      const inputMethod = adb(["shell", "dumpsys", "input_method"]);
+      if (/mInputShown=true|isInputViewShown=true/.test(inputMethod)) {
+        adb(["shell", "input", "keyevent", "4"]);
+      }
       sleep(300);
       return;
     }
