@@ -73,7 +73,8 @@ function input(identifier, value) {
     adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
     sleep(500);
     const filled = locate(identifier);
-    if (filled.text === expected) {
+    const verifiedPassword = filled.password === "true" && filled.text?.length === expected.length;
+    if (filled.text === expected || verifiedPassword) {
       adb(["shell", "input", "keyevent", "4"]);
       sleep(300);
       return;
