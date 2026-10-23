@@ -102,6 +102,17 @@ function pressUntilStep(button, nextStep, attempts = 3) {
   }
   throw new Error(`Android assessment did not advance from ${button} to ${nextStep}`);
 }
+function pressUntilVisible(button, target, attempts = 3) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    tap(button);
+    try {
+      return assertVisible(target, 5);
+    } catch {
+      sleep(500);
+    }
+  }
+  throw new Error(`Android UI did not advance from ${button} to ${target}`);
+}
 
 console.log(`Starting native journey for ${email}`);
 assertVisible("assessment-step-goal", 40); screenshot("01-opening-question");
@@ -142,12 +153,13 @@ for (const [key, raw] of fixtureEntries) {
 }
 
 assertVisible("Create account and claim Blueprint", 50); screenshot("03-real-blueprint");
-tap("Create account and claim Blueprint");
+pressUntilVisible("Create account and claim Blueprint", "create-account-email");
 input("create-account-email", email);
 input("create-account-password", password);
-tap("Create test account");
-assertVisible("Member Today loaded", 80); screenshot("04-member-today");
-tap("Plan"); assertVisible("Need to change this week?", 40); screenshot("05-real-program");
+pressUntilVisible("Create test account", "Member Today loaded");
+screenshot("04-member-today");
+pressUntilVisible("Plan", "Need to change this week?");
+screenshot("05-real-program");
 
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);
