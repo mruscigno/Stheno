@@ -65,8 +65,22 @@ function tap(identifier) {
   sleep(550);
 }
 function input(identifier, value) {
-  const node = locate(identifier); adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
-  adb(["shell", "input", "text", String(value).replaceAll(" ", "%s")]); adb(["shell", "input", "keyevent", "4"]); sleep(250);
+  const expected = String(value);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const node = locate(identifier);
+    adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
+    sleep(500);
+    adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
+    sleep(500);
+    const filled = locate(identifier);
+    if (filled.text === expected) {
+      adb(["shell", "input", "keyevent", "4"]);
+      sleep(300);
+      return;
+    }
+    if (filled.text) throw new Error(`Android field ${identifier} contained unexpected text: ${filled.text}`);
+  }
+  throw new Error(`Android field did not accept text: ${identifier}`);
 }
 function screenshot(name) { const target = path.join(evidence, `${name}.png`); fs.writeFileSync(target, execFileSync("adb", ["exec-out", "screencap", "-p"])); }
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
