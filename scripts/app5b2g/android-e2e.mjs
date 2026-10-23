@@ -33,6 +33,12 @@ function locate(identifier, attempts = 16) {
       sleep(1000);
       continue;
     }
+    const retry = currentNodes.find((node) => node.text === "Try again" && node.center);
+    if (retry?.center) {
+      adb(["shell", "input", "tap", String(retry.center[0]), String(retry.center[1])]);
+      sleep(2000);
+      continue;
+    }
     if (!currentNodes.some((node) => node.package === appId)) {
       adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]);
       sleep(2500);
