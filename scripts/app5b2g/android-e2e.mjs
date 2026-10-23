@@ -88,6 +88,7 @@ assertVisible("assessment-step-goal", 40); screenshot("01-opening-question");
 let index = 0;
 const fixtureEntries = Object.entries(assessmentFixture);
 for (const [key, raw] of fixtureEntries) {
+  const nextKey = fixtureEntries[index + 1]?.[0];
   assertVisible(`assessment-step-${key}`, 30);
   if (index === 8) {
     screenshot("02-assessment-progress");
@@ -102,7 +103,6 @@ for (const [key, raw] of fixtureEntries) {
       waitForNode(option, (candidate) => candidate.checked === "true");
       waitForNode(`Continue from ${key}`, (candidate) => candidate.enabled === "true");
     }
-    const nextKey = fixtureEntries[index + 1]?.[0];
     if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
     else tap(`Continue from ${key}`);
   } else if (["goal","secondaryGoal","timeframe","priorityStyle","sex","experience","consistencyHistory","currentFrequency","days","duration","schedule","travel","location","familiarity","activity","steps","sleep","stress","diet","meals","tracking","proteinContext","supplementGuidance","barriers","supportStyle"].includes(key)) {
@@ -112,7 +112,8 @@ for (const [key, raw] of fixtureEntries) {
     tap(`Select ${labels[raw] ?? raw} for ${key}`);
   } else {
     input(`assessment-input-${key}`, raw === "" ? "No current limitations" : raw);
-    tap(`Continue from ${key}`);
+    if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
+    else tap(`Continue from ${key}`);
   }
   index += 1;
 }
