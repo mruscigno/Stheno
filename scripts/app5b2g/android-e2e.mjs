@@ -70,12 +70,24 @@ function input(identifier, value) {
 }
 function screenshot(name) { const target = path.join(evidence, `${name}.png`); fs.writeFileSync(target, execFileSync("adb", ["exec-out", "screencap", "-p"])); }
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
+function pressUntilStep(button, nextStep, attempts = 3) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    tap(button);
+    try {
+      return assertVisible(`assessment-step-${nextStep}`, 5);
+    } catch {
+      sleep(500);
+    }
+  }
+  throw new Error(`Android assessment did not advance from ${button} to ${nextStep}`);
+}
 
 console.log(`Starting native journey for ${email}`);
 assertVisible("assessment-step-goal", 40); screenshot("01-opening-question");
 
 let index = 0;
-for (const [key, raw] of Object.entries(assessmentFixture)) {
+const fixtureEntries = Object.entries(assessmentFixture);
+for (const [key, raw] of fixtureEntries) {
   assertVisible(`assessment-step-${key}`, 30);
   if (index === 8) {
     screenshot("02-assessment-progress");
@@ -90,7 +102,9 @@ for (const [key, raw] of Object.entries(assessmentFixture)) {
       waitForNode(option, (candidate) => candidate.checked === "true");
       waitForNode(`Continue from ${key}`, (candidate) => candidate.enabled === "true");
     }
-    tap(`Continue from ${key}`);
+    const nextKey = fixtureEntries[index + 1]?.[0];
+    if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
+    else tap(`Continue from ${key}`);
   } else if (["goal","secondaryGoal","timeframe","priorityStyle","sex","experience","consistencyHistory","currentFrequency","days","duration","schedule","travel","location","familiarity","activity","steps","sleep","stress","diet","meals","tracking","proteinContext","supplementGuidance","barriers","supportStyle"].includes(key)) {
     const labels = {
       muscle:"Build muscle", energy:"More energy", "3-6":"3–6 months", strength:"Strength", prefer_not:"Prefer not to say", returning:"Returning after time away", intermittent:"Starts and stops", "1-2":"1–2 days", "3":"3 days", "45":"45 minutes", variable:"Changes week to week", occasional:"Occasional travel", mixed:key === "location" ? "Home and gym" : "Inconsistent", some:"I know common movements", moderate:key === "activity" ? "A mix of sitting and moving" : "Busy but workable", "7-10k":"7,000–10,000", flexible:key === "diet" ? "No specific pattern" : "Flexible backup options", portions:"Simple portions", most:"At most meals", maybe:"Only when relevant", time:"Time"
