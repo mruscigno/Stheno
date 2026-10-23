@@ -51,7 +51,19 @@ function locate(identifier, attempts = 16) {
   }
   throw new Error(`Unable to locate Android UI node: ${identifier}`);
 }
-function tap(identifier) { const node = locate(identifier); adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]); sleep(550); }
+function waitForNode(identifier, predicate, attempts = 30) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const node = locate(identifier);
+    if (predicate(node)) return node;
+    sleep(300);
+  }
+  throw new Error(`Android UI node did not reach the expected state: ${identifier}`);
+}
+function tap(identifier) {
+  const node = waitForNode(identifier, (candidate) => candidate.enabled !== "false");
+  adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
+  sleep(550);
+}
 function input(identifier, value) {
   const node = locate(identifier); adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
   adb(["shell", "input", "text", String(value).replaceAll(" ", "%s")]); adb(["shell", "input", "keyevent", "4"]); sleep(250);
@@ -72,7 +84,12 @@ for (const [key, raw] of Object.entries(assessmentFixture)) {
     assertVisible(`assessment-step-${key}`, 30);
   }
   if (Array.isArray(raw)) {
-    for (const value of raw) tap(`Select ${value === "mon" ? "Monday" : value === "wed" ? "Wednesday" : value === "fri" ? "Friday" : value === "gym" ? "Gym programs" : value === "dumbbells" ? "Dumbbells" : value === "bench" ? "Bench" : value === "bands" ? "Bands" : value === "none" ? "None" : value} for ${key}`);
+    for (const value of raw) {
+      const option = `Select ${value === "mon" ? "Monday" : value === "wed" ? "Wednesday" : value === "fri" ? "Friday" : value === "gym" ? "Gym programs" : value === "dumbbells" ? "Dumbbells" : value === "bench" ? "Bench" : value === "bands" ? "Bands" : value === "none" ? "None" : value} for ${key}`;
+      tap(option);
+      waitForNode(option, (candidate) => candidate.checked === "true");
+      waitForNode(`Continue from ${key}`, (candidate) => candidate.enabled === "true");
+    }
     tap(`Continue from ${key}`);
   } else if (["goal","secondaryGoal","timeframe","priorityStyle","sex","experience","consistencyHistory","currentFrequency","days","duration","schedule","travel","location","familiarity","activity","steps","sleep","stress","diet","meals","tracking","proteinContext","supplementGuidance","barriers","supportStyle"].includes(key)) {
     const labels = {
