@@ -70,7 +70,7 @@ function tap(identifier) {
   adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
   sleep(550);
 }
-function input(identifier, value) {
+function input(identifier, value, hideKeyboard = true) {
   const expected = String(value);
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const node = locate(identifier);
@@ -82,7 +82,7 @@ function input(identifier, value) {
     const verifiedPassword = filled.password === "true" && filled.text?.length === expected.length;
     if (filled.text === expected || verifiedPassword) {
       const inputMethod = adb(["shell", "dumpsys", "input_method"]);
-      if (/mInputShown=true|isInputViewShown=true/.test(inputMethod)) {
+      if (hideKeyboard && /mInputShown=true|isInputViewShown=true/.test(inputMethod)) {
         adb(["shell", "input", "keyevent", "4"]);
       }
       sleep(300);
@@ -157,8 +157,8 @@ for (const [key, raw] of fixtureEntries) {
 
 assertVisible("Create account and claim Blueprint", 50); screenshot("03-real-blueprint");
 pressUntilVisible("Create account and claim Blueprint", "create-account-email");
-input("create-account-email", email);
-input("create-account-password", password);
+input("create-account-email", email, false);
+input("create-account-password", password, false);
 pressUntilVisible("Create test account", "Member Today loaded");
 screenshot("04-member-today");
 pressUntilVisible("Plan", "Need to change this week?");
