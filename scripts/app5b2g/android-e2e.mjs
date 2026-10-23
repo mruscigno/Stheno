@@ -33,6 +33,11 @@ function locate(identifier, attempts = 16) {
       sleep(1000);
       continue;
     }
+    if (!currentNodes.some((node) => node.package === appId)) {
+      adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]);
+      sleep(2500);
+      continue;
+    }
     const found = currentNodes.find((node) =>
       node["resource-id"] === identifier
       || node["resource-id"]?.endsWith(`/${identifier}`)
