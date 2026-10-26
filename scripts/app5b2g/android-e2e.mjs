@@ -198,7 +198,7 @@ snapshot("07-verification-required");
 await verifyLatestLocalEmail(email);
 assertVisible("Member Today loaded", 80);
 snapshot("08-member-today");
-pressUntilVisible("Plan", "Need to change this week?");
+pressUntilVisible("member-plan-tab", "Need to change this week?");
 snapshot("09-real-program");
 
 adb(["shell", "am", "force-stop", appId]);
