@@ -70,10 +70,11 @@ function tap(identifier) {
   adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
   sleep(550);
 }
-function tapExposedBottom(identifier) {
-  const node = waitForNode(identifier, (candidate) => candidate.enabled !== "false" && Boolean(candidate.bounds));
-  const [, , , bottom] = node.bounds;
-  adb(["shell", "input", "tap", String(node.center[0]), String(bottom - 10)]);
+function dismissExpoWarning() {
+  const warning = nodes().find((node) => node["content-desc"]?.includes("Open debugger to view warnings") && node.bounds);
+  if (!warning?.bounds) return;
+  const [, top, right, bottom] = warning.bounds;
+  adb(["shell", "input", "tap", String(right - 55), String(Math.round((top + bottom) / 2))]);
   sleep(550);
 }
 function input(identifier, value, hideKeyboard = true) {
@@ -204,7 +205,8 @@ snapshot("07-verification-required");
 await verifyLatestLocalEmail(email);
 assertVisible("Member Today loaded", 80);
 snapshot("08-member-today");
-tapExposedBottom("member-plan-tab");
+dismissExpoWarning();
+tap("member-plan-tab");
 assertVisible("Need to change this week?", 15);
 snapshot("09-real-program");
 
