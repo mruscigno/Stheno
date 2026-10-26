@@ -21,7 +21,7 @@ function nodes() {
   return [...xml.matchAll(/<node\s+([^>]+)>/g)].map((match) => {
     const attrs = Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map((item) => [item[1], decode(item[2])]));
     const bounds = attrs.bounds?.match(/\[(\d+),(\d+)]\[(\d+),(\d+)]/);
-    return { ...attrs, center: bounds ? [Math.round((+bounds[1] + +bounds[3]) / 2), Math.round((+bounds[2] + +bounds[4]) / 2)] : null };
+    return { ...attrs, bounds: bounds ? [+bounds[1], +bounds[2], +bounds[3], +bounds[4]] : null, center: bounds ? [Math.round((+bounds[1] + +bounds[3]) / 2), Math.round((+bounds[2] + +bounds[4]) / 2)] : null };
   });
 }
 function locate(identifier, attempts = 16) {
@@ -68,6 +68,12 @@ function waitForNode(identifier, predicate, attempts = 30) {
 function tap(identifier) {
   const node = waitForNode(identifier, (candidate) => candidate.enabled !== "false");
   adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
+  sleep(550);
+}
+function tapExposedBottom(identifier) {
+  const node = waitForNode(identifier, (candidate) => candidate.enabled !== "false" && Boolean(candidate.bounds));
+  const [, , , bottom] = node.bounds;
+  adb(["shell", "input", "tap", String(node.center[0]), String(bottom - 10)]);
   sleep(550);
 }
 function input(identifier, value, hideKeyboard = true) {
@@ -198,7 +204,8 @@ snapshot("07-verification-required");
 await verifyLatestLocalEmail(email);
 assertVisible("Member Today loaded", 80);
 snapshot("08-member-today");
-pressUntilVisible("member-plan-tab", "Need to change this week?");
+tapExposedBottom("member-plan-tab");
+assertVisible("Need to change this week?", 15);
 snapshot("09-real-program");
 
 adb(["shell", "am", "force-stop", appId]);
