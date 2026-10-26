@@ -3,8 +3,9 @@ set -euo pipefail
 : "${STHENO_E2E_EMAIL:?STHENO_E2E_EMAIL is required}"
 : "${POSTGRES_URL:?POSTGRES_URL is required}"
 mkdir -p artifacts/app5b2h/database
-psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -Atc \
-  "select case when exists(select 1 from public.assessment_versions where version='4.0.0' and status='active') then 'assessment_version_contract=passed' else cast(1/0 as text) end;"
+psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -c \
+  'do $$ begin if not exists(select 1 from public.assessment_versions where version='"'"'4.0.0'"'"' and status='"'"'active'"'"') then raise exception '"'"'assessment_version_contract_failed'"'"'; end if; end $$;'
+echo "assessment_version_contract=passed"
 psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -v email="$STHENO_E2E_EMAIL" -At <<'SQL' | tee artifacts/app5b2h/database/assertions.txt
 select set_config('app.e2e_email', :'email', false);
 do $$
