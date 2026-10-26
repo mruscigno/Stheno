@@ -13,6 +13,18 @@ export type SthenoApiClientOptions = {
   timeoutMs?: number;
 };
 
+type RandomUuidProvider = { randomUUID?: () => string } | undefined;
+
+// Hermes does not guarantee a Web Crypto global. These UUIDs identify requests
+// and idempotent operations; they are not authentication secrets.
+export function createPortableUuid(provider: RandomUuidProvider = globalThis.crypto) {
+  if (typeof provider?.randomUUID === "function") return provider.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (token) => {
+    const value = Math.floor(Math.random() * 16);
+    return (token === "x" ? value : (value & 0x3) | 0x8).toString(16);
+  });
+}
+
 export function createSthenoApiClient(options: SthenoApiClientOptions) {
   const fetcher = options.fetchImplementation ?? fetch;
   async function request<T>(path: string, init: RequestInit = {}) {
@@ -26,7 +38,7 @@ export function createSthenoApiClient(options: SthenoApiClientOptions) {
         accept: "application/json",
         ...(init.body && !(init.body instanceof FormData) ? { "content-type": "application/json" } : {}),
         ...(token ? { authorization: `Bearer ${token}` } : {}),
-        "x-request-id": crypto.randomUUID(),
+        "x-request-id": createPortableUuid(),
         ...init.headers,
       },
     });

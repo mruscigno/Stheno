@@ -1,7 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { createSthenoApiClient, SthenoApiError } from "./api-client";
+import { createPortableUuid, createSthenoApiClient, SthenoApiError } from "./api-client";
 
 describe("typed STHENO API client foundation", () => {
+  it("creates a UUID when Web Crypto is unavailable in a native runtime", () => {
+    expect(createPortableUuid(undefined)).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  });
+
   it("sends the Supabase bearer token without embedding a privileged key", async () => {
     let observedInit: RequestInit | undefined;
     const fetcher = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
