@@ -5,6 +5,7 @@ import { createMobileApiClient } from "../lib/api";
 import { track } from "../lib/analytics";
 import { clearUserScopedCache } from "../lib/secure-store";
 import { getSupabaseClient, installAuthRefreshLifecycle } from "../lib/supabase";
+import { journeyDiagnostic } from "../lib/journey-diagnostics";
 
 type AuthState = { status: "loading" | "signedOut" | "signedIn" | "error"; session: Session | null; member: MemberReadModel | null; today: TodayReadModel | null; program: ProgramReadModel; nutrition: NutritionReadModel | null; progress: ProgressReadModel | null; error: unknown; refresh: () => Promise<void>; signOut: () => Promise<void> };
 const AuthContext = createContext<AuthState | null>(null);
@@ -21,15 +22,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const bootstrap = useCallback(async (nextSession: Session | null) => {
     setSession(nextSession); setError(null);
-    if (!nextSession) { setMember(null); setToday(null); setProgram(null); setNutrition(null); setProgress(null); setStatus("signedOut"); return; }
+    if (!nextSession) { journeyDiagnostic("auth_bootstrap_signed_out"); setMember(null); setToday(null); setProgram(null); setNutrition(null); setProgress(null); setStatus("signedOut"); return; }
+    journeyDiagnostic("auth_bootstrap_started");
     setStatus("loading");
     try {
       const api = createMobileApiClient();
       const [memberResponse, todayResponse, programResponse, nutritionResponse, progressResponse] = await Promise.all([api.me(), api.today(), api.program(), api.nutrition(), api.progress()]);
       if (memberResponse.apiVersion !== "1.0" || todayResponse.apiVersion !== "1.0") throw new Error("API_VERSION_MISMATCH");
       setMember(memberResponse.data); setToday(todayResponse.data); setProgram(programResponse.data); setNutrition(nutritionResponse.data); setProgress(progressResponse.data); setStatus("signedIn");
+      journeyDiagnostic("auth_bootstrap_completed");
     } catch (nextError) {
       setError(nextError); setStatus("error");
+      journeyDiagnostic("auth_bootstrap_failed", { reason: nextError instanceof Error ? nextError.message : "unknown" });
     }
   }, []);
 
@@ -38,6 +42,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const removeLifecycle = installAuthRefreshLifecycle(supabase);
     void supabase.auth.getSession().then(({ data }) => bootstrap(data.session));
     const { data: listener } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      journeyDiagnostic("auth_state_changed", { authEvent: event, hasSession: Boolean(nextSession) });
       if (event === "SIGNED_OUT") { void clearUserScopedCache(); }
       if (event === "TOKEN_REFRESHED" && !nextSession) track("session_expired");
       void bootstrap(nextSession);

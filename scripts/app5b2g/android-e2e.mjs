@@ -4,7 +4,7 @@ import path from "node:path";
 import { assessmentFixture } from "./assessment-fixture.mjs";
 
 const appId = process.env.STHENO_ANDROID_APP_ID ?? "com.sthenofitness.app";
-const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2g/android";
+const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2h/android";
 const email = process.env.STHENO_E2E_EMAIL ?? `app5b2g-${Date.now()}@example.test`;
 const password = process.env.STHENO_E2E_PASSWORD ?? "Stheno-CI-Only-2026!";
 fs.mkdirSync(evidence, { recursive: true });
@@ -93,6 +93,11 @@ function input(identifier, value, hideKeyboard = true) {
   throw new Error(`Android field did not accept text: ${identifier}`);
 }
 function screenshot(name) { const target = path.join(evidence, `${name}.png`); fs.writeFileSync(target, execFileSync("adb", ["exec-out", "screencap", "-p"])); }
+function snapshot(name) {
+  screenshot(name);
+  adb(["shell", "uiautomator", "dump", `/sdcard/${name}.xml`]);
+  adb(["pull", `/sdcard/${name}.xml`, path.join(evidence, `${name}.xml`)]);
+}
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
 function pressUntilStep(button, nextStep, attempts = 3) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
@@ -115,6 +120,31 @@ function pressUntilVisible(button, target, attempts = 3) {
     }
   }
   throw new Error(`Android UI did not advance from ${button} to ${target}`);
+}
+
+async function verifyLatestLocalEmail(address) {
+  let message;
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    const response = await fetch("http://127.0.0.1:54324/api/v1/messages");
+    if (response.ok) {
+      const mailbox = await response.json();
+      const summary = mailbox.messages?.find((candidate) => candidate.To?.some((recipient) => recipient.Address === address));
+      if (summary?.ID) {
+        const detail = await fetch(`http://127.0.0.1:54324/api/v1/message/${summary.ID}`);
+        if (detail.ok) { message = await detail.json(); break; }
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  if (!message) throw new Error("Supabase local confirmation email did not arrive");
+  const source = JSON.stringify(message).replaceAll("\\u0026", "&").replaceAll("&amp;", "&");
+  const link = source.match(/https?:\\?\/\\?\/[^\"'<> ]+\/auth\/v1\/verify\?[^\"'<> ]+/)?.[0]?.replaceAll("\\/", "/");
+  if (!link) throw new Error("Supabase local confirmation email did not contain a verification link");
+  const confirmation = await fetch(link, { redirect: "manual" });
+  const deepLink = confirmation.headers.get("location");
+  if (!deepLink?.startsWith("stheno://auth/callback")) throw new Error("Supabase verification did not return the expected native callback");
+  adb(["shell", "am", "start", "-W", "-a", "android.intent.action.VIEW", "-d", deepLink, appId]);
+  sleep(1500);
 }
 
 console.log(`Starting native journey for ${email}`);
@@ -157,16 +187,23 @@ for (const [key, raw] of fixtureEntries) {
 
 assertVisible("Create account and claim Blueprint", 50); screenshot("03-real-blueprint");
 pressUntilVisible("Create account and claim Blueprint", "create-account-email");
+snapshot("04-account-before-input");
 input("create-account-email", email, false);
+snapshot("05-account-after-email");
 input("create-account-password", password, false);
-pressUntilVisible("Create test account", "Member Today loaded");
-screenshot("04-member-today");
+snapshot("06-account-after-password");
+tap("Create test account");
+assertVisible("Verify, then come back.", 30);
+snapshot("07-verification-required");
+await verifyLatestLocalEmail(email);
+assertVisible("Member Today loaded", 80);
+snapshot("08-member-today");
 pressUntilVisible("Plan", "Need to change this week?");
-screenshot("05-real-program");
+snapshot("09-real-program");
 
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);
-assertVisible("Member Today loaded", 50); screenshot("06-cold-restart-restored");
+assertVisible("Member Today loaded", 50); snapshot("10-cold-restart-restored");
 adb(["shell", "uiautomator", "dump", "/sdcard/app5b2g-final.xml"]);
 adb(["pull", "/sdcard/app5b2g-final.xml", path.join(evidence, "final-ui.xml")]);
 fs.writeFileSync(path.join(evidence, "test-identity.txt"), `${email}\n`);

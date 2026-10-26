@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 const base = (process.env.STHENO_API_BASE_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
-const evidence = "artifacts/app5b2g/backend";
+const evidence = "artifacts/app5b2h/backend";
 fs.mkdirSync(evidence, { recursive: true });
 const results = [];
 

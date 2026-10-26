@@ -2,8 +2,8 @@
 set -euo pipefail
 : "${STHENO_E2E_EMAIL:?STHENO_E2E_EMAIL is required}"
 : "${POSTGRES_URL:?POSTGRES_URL is required}"
-mkdir -p artifacts/app5b2g/database
-psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -v email="$STHENO_E2E_EMAIL" -At <<'SQL' | tee artifacts/app5b2g/database/assertions.txt
+mkdir -p artifacts/app5b2h/database
+psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -v email="$STHENO_E2E_EMAIL" -At <<'SQL' | tee artifacts/app5b2h/database/assertions.txt
 select set_config('app.e2e_email', :'email', false);
 do $$
 declare uid uuid;
