@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, Linking, Pressable, StyleSheet, Text, TextInput, View, type AlertButton } from "react-native";
 import { createPortableUuid } from "@shared/client/api-client";
 import { Body, Button, Card, Eyebrow, Notice, Row, SectionTitle, Title } from "@/components/Primitives";
@@ -10,6 +10,7 @@ import { useWorkout } from "@/providers/WorkoutProvider";
 import { colors, radius, spacing } from "@/theme";
 import type { LocalWorkoutSet } from "@/lib/workout-store";
 import { createMobileApiClient } from "@/lib/api";
+import { journeyDiagnostic } from "@/lib/journey-diagnostics";
 
 type ExercisePrescription={exerciseSlug:string;exerciseName?:string;name?:string;sets?:number;repMin?:number;repMax?:number;rir?:number;restSeconds?:number;alternatives?:string[];instructions?:string[]};
 function prescriptions(value:Record<string,unknown>|undefined){return Array.isArray(value?.exercises)?value.exercises as ExercisePrescription[]:[];}
@@ -26,12 +27,14 @@ export default function WorkoutScreen(){
   const auth=useAuth(),state=useWorkout(),router=useRouter(),params=useLocalSearchParams<{workoutKey?:string}>(),[clock,setClock]=useState(0),[finishing,setFinishing]=useState(false);
   const [history,setHistory]=useState<Record<string,{load_value:number|null;load_unit:string;repetitions:number|null}[]>>({});
   const programWorkouts=auth.program?.prescription.workouts??[],fallback=(programWorkouts.find(item=>item.key===params.workoutKey)??programWorkouts[0]) as unknown as Record<string,unknown>|undefined;
-  useEffect(()=>{const id=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(id);},[]);
+  useEffect(()=>{journeyDiagnostic("workout_route_mounted",{route:"/workout"});const id=setInterval(()=>setClock(Date.now()),1000);return()=>{clearInterval(id);journeyDiagnostic("workout_route_unmounted",{route:"/workout"});};},[]);
   const startWorkout=state.start,workout=state.workout;
   useEffect(()=>{if(workout||!fallback)return;const key=String(fallback.key??"workout-1");void startWorkout(key,fallback);},[fallback,startWorkout,workout]);
   const exerciseList=useMemo(()=>prescriptions(workout?.workout),[workout?.workout]);
   const online=state.online;
   useEffect(()=>{const slugs=exerciseList.map(item=>item.exerciseSlug);if(!slugs.length||!online)return;void createMobileApiClient().workoutHistory(slugs).then(response=>setHistory(response.data)).catch(()=>undefined);},[exerciseList,online]);
+  if(auth.status==="signedOut")return <Redirect href="/"/>;
+  if(auth.status!=="signedIn")return null;
   if(!workout)return <Screen><SthenoLogo/><Title>Preparing your workout…</Title><Body muted>Your session is being saved on this device first.</Body></Screen>;
   const elapsed=clock?Math.max(0,Math.floor((clock-new Date(workout.startedAt).getTime())/1000)):0,rest=clock&&workout.restExpiresAt?Math.max(0,Math.ceil((new Date(workout.restExpiresAt).getTime()-clock)/1000)):0;
   const completed=workout.sets.filter(set=>set.state==="completed").length,total=exerciseList.reduce((sum,item)=>sum+(item.sets??0),0);
