@@ -210,7 +210,8 @@ tap("member-plan-tab");
 assertVisible("Need to change this week?", 15);
 snapshot("09-real-program");
 
-tap("plan-workout-2");
+tap("member-today-tab");
+tap("Start workout");
 assertVisible("Workout elapsed time",30);
 snapshot("10-workout-online");
 adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);sleep(1500);
