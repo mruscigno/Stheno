@@ -79,11 +79,15 @@ function dismissExpoWarning() {
 }
 function input(identifier, value, hideKeyboard = true) {
   const expected = String(value);
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < 6; attempt += 1) {
     const node = locate(identifier);
     adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
     sleep(500);
-    adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
+    if(/^\d+$/.test(expected)){
+      adb(["shell","input","keyevent",...expected.split("").map(digit=>String(7+Number(digit)))]);
+    }else{
+      adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
+    }
     sleep(500);
     const filled = locate(identifier);
     const verifiedPassword = filled.password === "true" && filled.text?.length === expected.length;
