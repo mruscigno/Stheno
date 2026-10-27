@@ -1,4 +1,3 @@
 # Web regression
 
-No application source, API route, database migration, or web behavior changed in this blocked sprint. Workout operation and 330-catalog contract tests pass. A production deployment was intentionally not created because there is no deployable product change and the package forbids proceeding past the failed gate.
-
+The additions are versioned read/substitution API routes and shared DTO fields. Existing routes and web UI were not replaced. The production Next build, shared TypeScript check, workout protocol tests, and canonical exercise invariant are required before release. Production promotion remains blocked until the Android runtime gate passes.

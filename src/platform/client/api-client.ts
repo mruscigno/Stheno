@@ -1,4 +1,4 @@
-import type { AdaptationIntent, AdaptationPreview, AdaptationScope, ApiFailure, ApiSuccess, CoachConversation, CoachReply, MemberReadModel, NutritionReadModel, ProgramReadModel, ProgressReadModel, TodayReadModel, WorkoutOperationReceipt } from "../contracts/api";
+import type { AdaptationIntent, AdaptationPreview, AdaptationScope, ApiFailure, ApiSuccess, CoachConversation, CoachReply, MemberReadModel, NutritionReadModel, ProgramReadModel, ProgressReadModel, TodayReadModel, WorkoutOperationReceipt, WorkoutSessionReadModel } from "../contracts/api";
 
 export class SthenoApiError extends Error {
   constructor(public readonly status: number, public readonly response: ApiFailure) {
@@ -74,6 +74,9 @@ export function createSthenoApiClient(options: SthenoApiClientOptions) {
     updatePreferences: (preferences: { unitSystem?: "imperial" | "metric"; locale?: string; timeZone?: string }) => request<MemberReadModel>("/api/v1/me", { method: "PATCH", body: JSON.stringify(preferences) }),
     exercises: (query = "") => request<unknown[]>(`/api/v1/exercises${query ? `?${query}` : ""}`),
     startWorkout: (input:{operationId:string;clientSessionKey:string;workoutKey?:string;clientCreatedAt?:string}) => request<WorkoutOperationReceipt<unknown>>("/api/v1/workouts/sessions",{method:"POST",body:JSON.stringify(input)}),
+    workoutSession: (sessionId:string) => request<WorkoutSessionReadModel>(`/api/v1/workouts/sessions/${sessionId}`),
+    workoutHistory: (exerciseSlugs:string[]) => request<Record<string,Array<{set_ordinal:number;load_value:number|null;load_unit:string;repetitions:number|null;rir:number|null;performed_at:string}>>>(`/api/v1/workouts/history?exerciseSlugs=${encodeURIComponent(exerciseSlugs.join(","))}`),
+    substituteWorkoutExercise:(sessionId:string,input:Record<string,unknown>)=>request<WorkoutOperationReceipt<unknown>>(`/api/v1/workouts/sessions/${sessionId}/substitute`,{method:"POST",body:JSON.stringify(input)}),
     saveWorkoutSet: (sessionId:string,setId:string,input:Record<string,unknown>) => request<WorkoutOperationReceipt<unknown>>(`/api/v1/workouts/sessions/${sessionId}/sets/${setId}`,{method:"PUT",body:JSON.stringify(input)}),
     deleteWorkoutSet: (sessionId:string,setId:string,input:Record<string,unknown>) => request<WorkoutOperationReceipt<unknown>>(`/api/v1/workouts/sessions/${sessionId}/sets/${setId}`,{method:"DELETE",body:JSON.stringify(input)}),
     completeWorkout: (sessionId:string,input:Record<string,unknown>) => request<WorkoutOperationReceipt<unknown>>(`/api/v1/workouts/sessions/${sessionId}/complete`,{method:"POST",body:JSON.stringify(input)}),

@@ -67,6 +67,7 @@ export const DeleteWorkoutSetInput = z.object({
   operationId: z.uuid(), schemaVersion: z.literal(1).default(1), clientCreatedAt: z.iso.datetime().optional(),
   baseRevision: z.number().int().min(0),
 });
+export const SubstituteWorkoutExerciseInput=z.object({operationId:z.uuid(),schemaVersion:z.literal(1).default(1),clientCreatedAt:z.iso.datetime().optional(),baseRevision:z.number().int().min(0),exerciseSlug:z.string().trim().min(1).max(160),replacementSlug:z.string().trim().min(1).max(160),reason:z.string().trim().min(1).max(500).default("Member selected reviewed alternative")});
 
 export const SaveWorkoutNoteInput = z.object({
   operationId: z.uuid(), schemaVersion: z.literal(1).default(1), clientCreatedAt: z.iso.datetime().optional(),
@@ -114,14 +115,17 @@ export type MemberReadModel = {
   entitlements: Array<{ entitlement_key: string; active: boolean; starts_at: string | null; ends_at: string | null }>;
 };
 
+export type WorkoutSetReadModel = { id: string; exercise_slug: string; set_ordinal: number; set_type: string; prescribed: Record<string, unknown>; load_value: number | null; load_unit: "lb" | "kg"; repetitions: number | null; rir: number | null; rpe: number | null; state: "completed" | "skipped"; performed_at: string; revision: number };
+export type WorkoutSessionReadModel = { id: string; workout_key: string; status: string; original_workout: unknown; revised_workout: unknown; current_exercise_index: number; revision: number; started_at: string; updated_at: string; sets: WorkoutSetReadModel[] };
+
 export type TodayReadModel = {
-  activeWorkout: { id: string; workout_key: string; status: string; original_workout: unknown; revised_workout: unknown; current_exercise_index: number; started_at: string; updated_at: string } | null;
+  activeWorkout: Omit<WorkoutSessionReadModel, "sets"> | null;
   program: { id: string; program_id: string; prescription: { name?: string; workouts?: Array<{ key?: string; name?: string; exercises?: unknown[] }> }; prescribed_at: string } | null;
   review: { next_monthly_review_at: string | null; monthly_review_due: boolean; monthly_review_status: string | null } | null;
   nutrition: { calories_kcal: number; protein_g: number; carbohydrate_g: number; fat_g: number; effective_from: string } | null;
 };
 
-export type ProgramExercise = { exerciseSlug?: string; name?: string; sets?: number; repRange?: [number, number] | number[]; reps?: number; rir?: number; reasonCodes?: string[] };
+export type ProgramExercise = { exerciseSlug?: string; exerciseName?: string; name?: string; sets?: number; repMin?:number; repMax?:number; restSeconds?:number; alternatives?:string[]; repRange?: [number, number] | number[]; reps?: number; rir?: number; reasonCodes?: string[] };
 export type ProgramWorkout = { key?: string; name?: string; day?: string; estimatedMinutes?: number; exercises?: ProgramExercise[] };
 export type ProgramReadModel = {
   id: string; program_id: string; profile_snapshot_id?: string | null; assessment_id?: string | null;

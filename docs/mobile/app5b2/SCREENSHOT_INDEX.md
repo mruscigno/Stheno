@@ -1,4 +1,11 @@
 # Screenshot index
 
-No App 5B-2 screenshots exist because the mandatory flows did not execute. The `app47-android-runtime-evidence` artifact from run `39806733118` contains a genuine first-launch screenshot, UI dump, logcat, and APK evidence, but it is explicitly a connection-error/baseline artifact and is not relabeled as assessment, App 6C, or workout proof.
+CI produces real emulator captures under the uploaded `app5b2-updated-offline-workout-native-evidence` artifact:
 
+- `10-workout-online.png`
+- `11-workout-offline-saved.png`
+- `12-workout-process-kill-restored.png`
+- `13-workout-reconciled.png`
+- `14-cold-restart-restored.png`
+
+No synthetic or browser screenshot is accepted as native evidence.

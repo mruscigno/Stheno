@@ -53,7 +53,7 @@ export async function progressReadModel(db: SupabaseClient, userId: string) {
 
 export async function todayReadModel(db: SupabaseClient, userId: string) {
   const [active, program, review, nutrition] = await Promise.all([
-    db.from("workout_execution_sessions").select("id,workout_key,status,original_workout,revised_workout,current_exercise_index,started_at,updated_at").eq("user_id", userId).in("status", ["active", "paused"]).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
+    db.from("workout_execution_sessions").select("id,workout_key,status,original_workout,revised_workout,current_exercise_index,revision,started_at,updated_at").eq("user_id", userId).in("status", ["active", "paused"]).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     programReadModel(db, userId),
     db.from("member_review_state").select("next_monthly_review_at,monthly_review_due,monthly_review_status").eq("user_id", userId).maybeSingle(),
     db.from("nutrition_targets").select("calories_kcal,protein_g,carbohydrate_g,fat_g,effective_from").eq("user_id", userId).order("effective_from", { ascending: false }).limit(1).maybeSingle(),

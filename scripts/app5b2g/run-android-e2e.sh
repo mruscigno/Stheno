@@ -14,19 +14,19 @@ trap capture_failure EXIT
 adb wait-for-device
 test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1"
 adb reverse tcp:8081 tcp:8081
-adb install -r artifacts/app5b2h/android/stheno-current-debug.apk \
-  | tee artifacts/app5b2h/android/install.txt
+adb install -r "$STHENO_E2E_EVIDENCE/stheno-current-debug.apk" \
+  | tee "$STHENO_E2E_EVIDENCE/install.txt"
 adb shell am force-stop "$STHENO_ANDROID_APP_ID"
 adb shell monkey -p "$STHENO_ANDROID_APP_ID" -c android.intent.category.LAUNCHER 1 \
-  | tee artifacts/app5b2h/android/launch.txt
+  | tee "$STHENO_E2E_EVIDENCE/launch.txt"
 sleep 20
 adb logcat -c
 node scripts/app5b2g/android-e2e.mjs \
-  | tee artifacts/app5b2h/android/e2e.log
+  | tee "$STHENO_E2E_EVIDENCE/e2e.log"
 bash scripts/app5b2g/assert-database.sh
-adb logcat -d > artifacts/app5b2h/android/logcat.txt
+adb logcat -d > "$STHENO_E2E_EVIDENCE/logcat.txt"
 adb shell dumpsys package "$STHENO_ANDROID_APP_ID" \
-  > artifacts/app5b2h/android/package.txt
+  > "$STHENO_E2E_EVIDENCE/package.txt"
 ! grep -Eq "FATAL EXCEPTION|AndroidRuntime.*FATAL" \
-  artifacts/app5b2h/android/logcat.txt
+  "$STHENO_E2E_EVIDENCE/logcat.txt"
 trap - EXIT

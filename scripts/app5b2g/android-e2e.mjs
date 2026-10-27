@@ -4,7 +4,7 @@ import path from "node:path";
 import { assessmentFixture } from "./assessment-fixture.mjs";
 
 const appId = process.env.STHENO_ANDROID_APP_ID ?? "com.sthenofitness.app";
-const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2h/android";
+const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2-updated/android";
 const email = process.env.STHENO_E2E_EMAIL ?? `app5b2g-${Date.now()}@example.test`;
 const password = process.env.STHENO_E2E_PASSWORD ?? "Stheno-CI-Only-2026!";
 fs.mkdirSync(evidence, { recursive: true });
@@ -210,9 +210,22 @@ tap("member-plan-tab");
 assertVisible("Need to change this week?", 15);
 snapshot("09-real-program");
 
+tap("Open workout");
+assertVisible("Workout elapsed time",30);
+snapshot("10-workout-online");
+adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);sleep(1500);
+input("Set 1 weight","50");input("Set 1 repetitions","8");input("Set 1 repetitions in reserve","2");
+tap("Complete set 1");
+assertVisible("Offline · saved locally",20);snapshot("11-workout-offline-saved");
+adb(["shell","am","force-stop",appId]);
+adb(["shell","monkey","-p",appId,"-c","android.intent.category.LAUNCHER","1"]);sleep(3000);
+assertVisible("Member Today loaded",50);tap("Open current workout");assertVisible("Workout elapsed time",30);snapshot("12-workout-process-kill-restored");
+adb(["shell","svc","wifi","enable"]);adb(["shell","svc","data","enable"]);sleep(4000);
+assertVisible("Saved",30);snapshot("13-workout-reconciled");
+
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);
-assertVisible("Member Today loaded", 50); snapshot("10-cold-restart-restored");
+assertVisible("Member Today loaded", 50); snapshot("14-cold-restart-restored");
 adb(["shell", "uiautomator", "dump", "/sdcard/app5b2g-final.xml"]);
 adb(["pull", "/sdcard/app5b2g-final.xml", path.join(evidence, "final-ui.xml")]);
 fs.writeFileSync(path.join(evidence, "test-identity.txt"), `${email}\n`);

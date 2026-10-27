@@ -1,19 +1,14 @@
-# App 5B-2 final status
+# Final status
 
-## Decision
+Current decision: **GO WITH BLOCKERS** pending the required Android CI runtime gate.
 
-**BLOCKED FOR NATIVE EXPANSION**.
+- Baseline: `4387f716c40643ed7b3664e9b1605ec8342ec12b`
+- Final commit: pending
+- Android run/URL: pending
+- APK SHA-256: pending
+- Local tests: passing
+- Exercise contract: 330 IDs / `607bbb3eba2ff60e98bf41ef68f733f6033c0f99c795b8e1f82e7c7fde07370b`
+- Purchased mappings: 298
+- Deployment: disabled pending runtime evidence
 
-- Baseline commit: `2e504b7`.
-- Final commit: recorded after commit creation.
-- Implemented paths: `docs/mobile/app5b2/*` evidence and blocker record only.
-- Android CI run: no new qualifying run; `39806733118` is baseline launch evidence, not an App 5B-2 gate pass.
-- Real screenshot paths: none for App 5B-2; no screenshots fabricated.
-- Commands: catalog/workout Vitest exit 0; mobile typecheck exit 0; mobile tests exit 0; mobile lint exit 0.
-- Catalog: 330 IDs; checksum `607bbb3eba2ff60e98bf41ef68f733f6033c0f99c795b8e1f82e7c7fde07370b`.
-- Purchased mappings: 298.
-- Feature flags: App 6C native Progress remains `false`; App 6B real analysis remains off; App 5B-2 does not exist/has no activation flag.
-- Deployment: **NOT DEPLOYED**.
-- iOS: entirely unvalidated and pending macOS/cloud availability.
-
-Source implemented and runtime verified are deliberately separated: existing source contracts pass automated tests, but the required native flows are not runtime verified. The blocking cause is the Android job's missing API/Supabase services plus its use of the old App 4.6 APK and first-launch-only script.
+The implementation is not declared full GO until a current-source APK proves offline save, process-kill restoration, reconnect reconciliation, no duplicate server write, and owner isolation.
