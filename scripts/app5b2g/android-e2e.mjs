@@ -95,7 +95,12 @@ function input(identifier, value, hideKeyboard = true) {
       sleep(300);
       return;
     }
-    if (filled.text) throw new Error(`Android field ${identifier} contained unexpected text: ${filled.text}`);
+    if (filled.text) {
+      adb(["shell","input","tap",String(filled.center[0]),String(filled.center[1])]);
+      adb(["shell","input","keyevent","123",...Array(Math.max(80,filled.text.length+10)).fill("67")]);
+      sleep(500);
+      continue;
+    }
   }
   throw new Error(`Android field did not accept text: ${identifier}`);
 }
