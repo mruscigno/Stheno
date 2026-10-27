@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, Linking, Pressable, StyleSheet, Text, TextInput, View, type AlertButton } from "react-native";
 import { createPortableUuid } from "@shared/client/api-client";
 import { Body, Button, Card, Eyebrow, Notice, Row, SectionTitle, Title } from "@/components/Primitives";
@@ -23,9 +23,9 @@ function SetRow({exercise,ordinal,saved,onSave}:{exercise:ExercisePrescription;o
 }
 
 export default function WorkoutScreen(){
-  const auth=useAuth(),state=useWorkout(),router=useRouter(),[clock,setClock]=useState(0),[finishing,setFinishing]=useState(false);
+  const auth=useAuth(),state=useWorkout(),router=useRouter(),params=useLocalSearchParams<{workoutKey?:string}>(),[clock,setClock]=useState(0),[finishing,setFinishing]=useState(false);
   const [history,setHistory]=useState<Record<string,{load_value:number|null;load_unit:string;repetitions:number|null}[]>>({});
-  const programWorkouts=auth.program?.prescription.workouts??[],fallback=programWorkouts[0] as unknown as Record<string,unknown>|undefined;
+  const programWorkouts=auth.program?.prescription.workouts??[],fallback=(programWorkouts.find(item=>item.key===params.workoutKey)??programWorkouts[0]) as unknown as Record<string,unknown>|undefined;
   useEffect(()=>{const id=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(id);},[]);
   const startWorkout=state.start,workout=state.workout;
   useEffect(()=>{if(workout||!fallback)return;const key=String(fallback.key??"workout-1");void startWorkout(key,fallback);},[fallback,startWorkout,workout]);
