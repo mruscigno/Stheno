@@ -102,8 +102,18 @@ function input(identifier, value, hideKeyboard = true) {
 function screenshot(name) { const target = path.join(evidence, `${name}.png`); fs.writeFileSync(target, execFileSync("adb", ["exec-out", "screencap", "-p"])); }
 function snapshot(name) {
   screenshot(name);
-  adb(["shell", "uiautomator", "dump", `/sdcard/${name}.xml`]);
-  adb(["pull", `/sdcard/${name}.xml`, path.join(evidence, `${name}.xml`)]);
+  const remote=`/sdcard/${name}.xml`,local=path.join(evidence,`${name}.xml`);
+  for(let attempt=0;attempt<6;attempt+=1){
+    try{
+      adb(["shell","rm","-f",remote]);
+      adb(["shell","uiautomator","dump",remote]);
+      adb(["pull",remote,local]);
+      if(fs.existsSync(local)&&fs.statSync(local).size>0)return;
+    }catch{
+      sleep(750);
+    }
+  }
+  throw new Error(`Unable to capture Android UI snapshot: ${name}`);
 }
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
 function pressUntilStep(button, nextStep, attempts = 3) {
