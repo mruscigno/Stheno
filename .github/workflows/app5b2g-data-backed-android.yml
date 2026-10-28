@@ -62,6 +62,7 @@ jobs:
 
       - name: Verify canonical E2E fixture and product invariants
         run: |
+          node --test scripts/app5b2g/android-accessibility-contract.test.mjs
           node scripts/app5b2g/verify-fixture.mjs
           pnpm exec vitest run src/platform/contracts/exercise-baseline.test.ts src/platform/server/workout-operations.test.ts
           pnpm --dir apps/mobile typecheck

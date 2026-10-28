@@ -236,12 +236,12 @@ snapshot("10-workout-online");
 adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);sleep(1500);
 input("Set 1 weight","50");input("Set 1 repetitions","8");input("Set 1 repetitions in reserve","2");
 tap("Complete set 1");
-waitForNode("workout-sync-status",candidate=>candidate.text==="Offline · saved locally",20);snapshot("11-workout-offline-saved");
+waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Offline · saved locally",20);snapshot("11-workout-offline-saved");
 adb(["shell","am","force-stop",appId]);
 adb(["shell","monkey","-p",appId,"-c","android.intent.category.LAUNCHER","1"]);sleep(3000);
 assertVisible("Member Today loaded",50);tap("Open current workout");assertVisible("workout-sync-status",30);snapshot("12-workout-process-kill-restored");
 adb(["shell","svc","wifi","enable"]);adb(["shell","svc","data","enable"]);sleep(4000);
-waitForNode("workout-sync-status",candidate=>candidate.text==="Saved",30);snapshot("13-workout-reconciled");
+waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Saved",30);snapshot("13-workout-reconciled");
 
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);
