@@ -99,9 +99,19 @@ function input(identifier, value, hideKeyboard = true) {
       // API 35 can acknowledge keyevent commands without delivering them to
       // a focused React Native numeric field. Inject and verify each digit as
       // text so a dropped character is caught by the existing bounded retry.
+      let partial="";
       for(const digit of expected){
+        partial+=digit;
         adb(["shell","input","text",digit]);
         sleep(180);
+        const afterText=locate(identifier);
+        if(afterText.text!==partial){
+          // Some API 35 numeric keyboards intermittently discard `input text`
+          // while offline. Retry the same digit through its Android keycode and
+          // let the outer loop verify the complete value before advancing.
+          adb(["shell","input","keyevent",String(7+Number(digit))]);
+          sleep(180);
+        }
       }
     }else{
       adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
