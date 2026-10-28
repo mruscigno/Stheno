@@ -84,7 +84,12 @@ function input(identifier, value, hideKeyboard = true) {
     adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
     sleep(500);
     if(/^\d+$/.test(expected)){
-      adb(["shell","input","keyevent",...expected.split("").map(digit=>String(7+Number(digit)))]);
+      // API 35 reliably delivers one key code per invocation. A combined
+      // keyevent command can succeed without changing a React Native field.
+      for(const digit of expected){
+        adb(["shell","input","keyevent",String(7+Number(digit))]);
+        sleep(120);
+      }
     }else{
       adb(["shell", "input", "text", expected.replaceAll(" ", "%s")]);
     }

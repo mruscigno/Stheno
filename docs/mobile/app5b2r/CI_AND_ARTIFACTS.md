@@ -6,4 +6,13 @@
 - Failed-run source: `979b6fe205c275a907c4cb0a03822770659386eb`
 - Failed-run APK SHA-256: `bdb23295a8952185b0ce68526e5435605c2d09d4017cad7ab8935da781689501`
 
-Final remediation commit, run/job, artifact and APK checksum will be recorded after the fresh gate finishes.
+## First remediation run
+
+- Run: https://github.com/mruscigno/Stheno/actions/runs/40746234944
+- Job: https://github.com/mruscigno/Stheno/actions/runs/40746234944/job/123020664599
+- Source: `7821446c05583818c5295f14ea1603bbe82b24dc`
+- APK SHA-256: `bdb23295a8952185b0ce68526e5435605c2d09d4017cad7ab8935da781689501`
+- Result: failed before workout navigation at `assessment-input-age`.
+- Evidence: the age EditText was focused, empty and enabled while Continue remained disabled. API 35 returned success for the combined multi-keycode command without delivering either digit. The corrected harness sends one bounded ADB key event per digit.
+
+The passing post-correction run/job, artifact inventory and final checksum will be recorded after the next fresh gate finishes.
