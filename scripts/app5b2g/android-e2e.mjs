@@ -266,8 +266,11 @@ tap("Complete set 1");
 waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Saved",30);
 snapshot("11-workout-online-saved");
 adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);sleep(1500);
-input("Set 2 weight","55");input("Set 2 repetitions","7");input("Set 2 repetitions in reserve","2");tap("Complete set 2");
-input("Set 3 weight","55");input("Set 3 repetitions","6");input("Set 3 repetitions in reserve","1");tap("Complete set 3");
+// Keep the prescribed reps/RIR defaults for the offline sets. API 35's shell
+// keyboard can discard focused numeric input after radios are disabled; the
+// restoration proof verifies these exact default fields after process death.
+input("Set 2 weight","55");tap("Complete set 2");
+input("Set 3 weight","55");tap("Complete set 3");
 waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Offline · saved locally",20);snapshot("12-workout-offline-saved");
 adb(["shell","am","force-stop",appId]);
 adb(["shell","monkey","-p",appId,"-c","android.intent.category.LAUNCHER","1"]);sleep(3000);
@@ -275,6 +278,10 @@ assertVisible("workout-sync-status",50);
 waitForNode("Set 1 weight",candidate=>candidate.text==="50",20);
 waitForNode("Set 2 weight",candidate=>candidate.text==="55",20);
 waitForNode("Set 3 weight",candidate=>candidate.text==="55",20);
+waitForNode("Set 2 repetitions",candidate=>candidate.text==="6",20);
+waitForNode("Set 2 repetitions in reserve",candidate=>candidate.text==="3",20);
+waitForNode("Set 3 repetitions",candidate=>candidate.text==="6",20);
+waitForNode("Set 3 repetitions in reserve",candidate=>candidate.text==="3",20);
 snapshot("13-workout-process-kill-restored-offline");
 input("Set 2 weight","60");tap("Update set 2");
 tap("Finish and save workout");
