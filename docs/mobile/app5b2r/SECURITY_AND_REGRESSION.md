@@ -4,6 +4,7 @@
 - Workout/exercise server contracts: 4 tests pass.
 - Next production build: pass.
 - Failed-run isolated two-user ownership/security matrix: pass.
+- Final run `40756034444` isolated Supabase migrations, ownership matrix and real API capability checks: pass before the native blocker.
 - Canonical exercise contract: 330 / `607bbb3eba2ff60e98bf41ef68f733f6033c0f99c795b8e1f82e7c7fde07370b`.
 - Purchased media mappings: 298.
 - No production data, privileged APK key, public activation or production deployment used.
