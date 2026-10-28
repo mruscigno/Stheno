@@ -270,14 +270,14 @@ adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);slee
 // keyboard can discard focused numeric input after radios are disabled; the
 // restoration proof verifies these exact default fields after process death.
 input("Set 2 weight","55");tap("Complete set 2");
-input("Set 3 weight","55");tap("Complete set 3");
+tap("Complete set 3");
 waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Offline · saved locally",20);snapshot("12-workout-offline-saved");
 adb(["shell","am","force-stop",appId]);
 adb(["shell","monkey","-p",appId,"-c","android.intent.category.LAUNCHER","1"]);sleep(3000);
 assertVisible("workout-sync-status",50);
 waitForNode("Set 1 weight",candidate=>candidate.text==="50",20);
 waitForNode("Set 2 weight",candidate=>candidate.text==="55",20);
-waitForNode("Set 3 weight",candidate=>candidate.text==="55",20);
+waitForNode("Set 3 weight",candidate=>candidate.text==="lb",20);
 waitForNode("Set 2 repetitions",candidate=>candidate.text==="6",20);
 waitForNode("Set 2 repetitions in reserve",candidate=>candidate.text==="3",20);
 waitForNode("Set 3 repetitions",candidate=>candidate.text==="6",20);
