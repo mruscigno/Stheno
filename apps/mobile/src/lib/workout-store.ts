@@ -95,7 +95,7 @@ export async function getLocalWorkout(userId: string, localSessionKey?: string):
   const db=await database();
   const session=localSessionKey
     ? await db.getFirstAsync<Record<string,unknown>>("SELECT * FROM local_workout_sessions WHERE user_id=? AND local_session_key=?",userId,localSessionKey)
-    : await db.getFirstAsync<Record<string,unknown>>("SELECT * FROM local_workout_sessions WHERE user_id=? AND status IN ('active','conflict') ORDER BY updated_at DESC LIMIT 1",userId);
+    : await db.getFirstAsync<Record<string,unknown>>(`SELECT * FROM local_workout_sessions s WHERE s.user_id=? AND (s.status IN ('active','conflict') OR EXISTS (SELECT 1 FROM workout_pending_operations p WHERE p.user_id=s.user_id AND p.local_session_key=s.local_session_key AND p.state IN ('pending','sending','conflict'))) ORDER BY s.updated_at DESC LIMIT 1`,userId);
   if(!session)return null;
   const key=String(session.local_session_key), rows=await db.getAllAsync<Record<string,unknown>>("SELECT * FROM local_workout_sets WHERE user_id=? AND local_session_key=? ORDER BY exercise_slug,ordinal",userId,key);
   const pending=await db.getFirstAsync<{count:number}>("SELECT count(*) AS count FROM workout_pending_operations WHERE user_id=? AND local_session_key=? AND state IN ('pending','sending','conflict')",userId,key);
@@ -111,7 +111,9 @@ async function commitReceipt(db:SQLite.SQLiteDatabase,userId:string,operation:Pe
   });
 }
 
-export async function syncWorkoutOutbox(userId:string){
+const activeOutboxSyncs=new Map<string,Promise<number>>();
+
+async function runWorkoutOutboxSync(userId:string){
   const db=await database(),api=createMobileApiClient(); let synced=0;
   const operations=await db.getAllAsync<PendingOperation>("SELECT user_id,operation_id,local_session_key,server_session_id,kind,payload_json,retry_count FROM workout_pending_operations WHERE user_id=? AND state IN ('pending','sending') AND next_attempt_at<=? ORDER BY created_at",userId,now());
   for(const operation of operations){
@@ -134,6 +136,12 @@ export async function syncWorkoutOutbox(userId:string){
     }
   }
   return synced;
+}
+
+export async function syncWorkoutOutbox(userId:string){
+  const active=activeOutboxSyncs.get(userId);if(active)return active;
+  const next=runWorkoutOutboxSync(userId).finally(()=>activeOutboxSyncs.delete(userId));
+  activeOutboxSyncs.set(userId,next);return next;
 }
 
 export async function pendingWorkoutCount(userId:string){const db=await database(),row=await db.getFirstAsync<{count:number}>("SELECT count(*) AS count FROM workout_pending_operations WHERE user_id=?",userId);return Number(row?.count??0);}

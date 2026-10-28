@@ -1,13 +1,15 @@
 import type { Session } from "@supabase/supabase-js";
 import type { MemberReadModel, NutritionReadModel, ProgramReadModel, ProgressReadModel, TodayReadModel } from "@shared/contracts/api";
+import * as Network from "expo-network";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import { createMobileApiClient } from "../lib/api";
 import { track } from "../lib/analytics";
 import { clearUserScopedCache } from "../lib/secure-store";
 import { getSupabaseClient, installAuthRefreshLifecycle } from "../lib/supabase";
 import { journeyDiagnostic } from "../lib/journey-diagnostics";
+import { classifyAuthenticatedBootstrap } from "../lib/auth-bootstrap-policy";
 
-type AuthState = { status: "loading" | "signedOut" | "signedIn" | "error"; session: Session | null; member: MemberReadModel | null; today: TodayReadModel | null; program: ProgramReadModel; nutrition: NutritionReadModel | null; progress: ProgressReadModel | null; error: unknown; refresh: () => Promise<void>; signOut: () => Promise<void> };
+type AuthState = { status: "loading" | "signedOut" | "signedIn" | "authenticatedOffline" | "reauthRequired" | "error"; session: Session | null; member: MemberReadModel | null; today: TodayReadModel | null; program: ProgramReadModel; nutrition: NutritionReadModel | null; progress: ProgressReadModel | null; error: unknown; refresh: () => Promise<void>; signOut: () => Promise<void> };
 const AuthContext = createContext<AuthState | null>(null);
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -25,6 +27,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (!nextSession) { journeyDiagnostic("auth_bootstrap_signed_out"); setMember(null); setToday(null); setProgram(null); setNutrition(null); setProgress(null); setStatus("signedOut"); return; }
     journeyDiagnostic("auth_bootstrap_started");
     setStatus("loading");
+    const network = await Network.getNetworkStateAsync();
+    if (network.isConnected === false || network.isInternetReachable === false) {
+      setStatus("authenticatedOffline");
+      journeyDiagnostic("auth_bootstrap_offline", { hasPersistedIdentity: true });
+      return;
+    }
     try {
       const api = createMobileApiClient();
       const [memberResponse, todayResponse, programResponse, nutritionResponse, progressResponse] = await Promise.all([api.me(), api.today(), api.program(), api.nutrition(), api.progress()]);
@@ -32,8 +40,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setMember(memberResponse.data); setToday(todayResponse.data); setProgram(programResponse.data); setNutrition(nutritionResponse.data); setProgress(progressResponse.data); setStatus("signedIn");
       journeyDiagnostic("auth_bootstrap_completed");
     } catch (nextError) {
-      setError(nextError); setStatus("error");
-      journeyDiagnostic("auth_bootstrap_failed", { reason: nextError instanceof Error ? nextError.message : "unknown" });
+      const nextStatus=classifyAuthenticatedBootstrap(nextError,true);
+      setError(nextError); setStatus(nextStatus);
+      journeyDiagnostic("auth_bootstrap_failed", { reason: nextError instanceof Error ? nextError.message : "unknown", nextStatus });
     }
   }, []);
 
@@ -49,6 +58,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
     });
     return () => { listener.subscription.unsubscribe(); removeLifecycle(); };
   }, [bootstrap]);
+
+  useEffect(()=>{const subscription=Network.addNetworkStateListener(state=>{
+    if(state.isConnected!==false&&state.isInternetReachable!==false&&session&&status==="authenticatedOffline")void bootstrap(session);
+  });return()=>subscription.remove();},[bootstrap,session,status]);
 
   const value = useMemo<AuthState>(() => ({ status, session, member, today, program, nutrition, progress, error, refresh: () => bootstrap(session), signOut: async () => { await getSupabaseClient().auth.signOut({ scope: "local" }); await clearUserScopedCache(); track("signout"); } }), [bootstrap, error, member, nutrition, program, progress, session, status, today]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

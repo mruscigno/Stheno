@@ -7,7 +7,7 @@ type WorkoutContextValue={workout:LocalWorkout|null;loading:boolean;online:boole
 const WorkoutContext=createContext<WorkoutContextValue|null>(null);
 
 export function WorkoutProvider({children}:PropsWithChildren){
-  const auth=useAuth(),userId=auth.member?.id??null,[workout,setWorkout]=useState<LocalWorkout|null>(null),[loading,setLoading]=useState(false),[online,setOnline]=useState(true);
+  const auth=useAuth(),userId=auth.session?.user.id??null,[workout,setWorkout]=useState<LocalWorkout|null>(null),[loading,setLoading]=useState(false),[online,setOnline]=useState(true);
   const refresh=useCallback(async()=>{if(!userId){setWorkout(null);return;}setWorkout(await getLocalWorkout(userId));},[userId]);
   const sync=useCallback(async()=>{if(!userId)return;await syncWorkoutOutbox(userId);await refresh();},[refresh,userId]);
   useEffect(()=>{let active=true;if(!userId){void Promise.resolve().then(()=>{if(active)setWorkout(null);});return()=>{active=false;};}void getLocalWorkout(userId).then(value=>{if(active)setWorkout(value);});return()=>{active=false;};},[userId]);

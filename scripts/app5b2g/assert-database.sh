@@ -18,8 +18,10 @@ begin
   if (select count(*) from public.assessments where user_id=uid) <> 1 then raise exception 'expected exactly one assessment'; end if;
   if (select count(*) from public.program_prescriptions where user_id=uid) <> 1 then raise exception 'expected exactly one program prescription'; end if;
   if (select count(*) from public.workout_execution_sessions where user_id=uid) <> 1 then raise exception 'expected exactly one replay-safe workout session'; end if;
-  if (select count(*) from public.workout_set_logs where user_id=uid and state='completed' and deleted_at is null) <> 1 then raise exception 'expected exactly one reconciled workout set'; end if;
-  if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='upsert_set') <> 1 then raise exception 'expected exactly one set receipt'; end if;
+  if (select count(*) from public.workout_execution_sessions where user_id=uid and status='completed') <> 1 then raise exception 'expected exactly one completed workout session'; end if;
+  if (select count(*) from public.workout_set_logs where user_id=uid and state='completed' and deleted_at is null) <> 3 then raise exception 'expected exactly three reconciled workout sets'; end if;
+  if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='upsert_set') <> 4 then raise exception 'expected four set receipts including the offline edit'; end if;
+  if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='complete') <> 1 then raise exception 'expected exactly one completion receipt'; end if;
 end $$;
 select 'isolated_native_journey=passed';
 SQL
