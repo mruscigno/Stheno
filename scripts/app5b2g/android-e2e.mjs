@@ -15,9 +15,21 @@ function adb(args, options = {}) {
 function sleep(ms) { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); }
 function decode(value) { return value.replaceAll("&quot;", '"').replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">"); }
 function nodes() {
-  adb(["shell", "uiautomator", "dump", "/sdcard/app5b2g.xml"]);
-  adb(["pull", "/sdcard/app5b2g.xml", path.join(evidence, "current-ui.xml")]);
-  const xml = fs.readFileSync(path.join(evidence, "current-ui.xml"), "utf8");
+  const remote="/sdcard/app5b2g.xml",local=path.join(evidence,"current-ui.xml");
+  let xml="";
+  for(let attempt=0;attempt<4;attempt+=1){
+    try{
+      adb(["shell","rm","-f",remote]);
+      fs.rmSync(local,{force:true});
+      adb(["shell","uiautomator","dump","--compressed",remote]);
+      adb(["pull",remote,local]);
+      xml=fs.readFileSync(local,"utf8");
+      if(xml.includes("<hierarchy"))break;
+    }catch{
+      sleep(500);
+    }
+  }
+  if(!xml.includes("<hierarchy"))throw new Error("Unable to capture a fresh Android UI hierarchy");
   return [...xml.matchAll(/<node\s+([^>]+)>/g)].map((match) => {
     const attrs = Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map((item) => [item[1], decode(item[2])]));
     const bounds = attrs.bounds?.match(/\[(\d+),(\d+)]\[(\d+),(\d+)]/);

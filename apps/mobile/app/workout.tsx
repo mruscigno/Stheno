@@ -27,7 +27,7 @@ export default function WorkoutScreen(){
   const auth=useAuth(),state=useWorkout(),router=useRouter(),params=useLocalSearchParams<{workoutKey?:string}>(),[clock,setClock]=useState(0),[finishing,setFinishing]=useState(false);
   const [history,setHistory]=useState<Record<string,{load_value:number|null;load_unit:string;repetitions:number|null}[]>>({});
   const programWorkouts=auth.program?.prescription.workouts??[],fallback=(programWorkouts.find(item=>item.key===params.workoutKey)??programWorkouts[0]) as unknown as Record<string,unknown>|undefined;
-  useEffect(()=>{journeyDiagnostic("workout_route_mounted",{route:"/workout"});const id=setInterval(()=>setClock(Date.now()),1000);return()=>{clearInterval(id);journeyDiagnostic("workout_route_unmounted",{route:"/workout"});};},[]);
+  useEffect(()=>{journeyDiagnostic("workout_route_mounted",{route:"/workout"});const diagnosticTick=process.env.EXPO_PUBLIC_NATIVE_JOURNEY_DIAGNOSTICS==="true",id=setInterval(()=>setClock(Date.now()),diagnosticTick?5000:1000);return()=>{clearInterval(id);journeyDiagnostic("workout_route_unmounted",{route:"/workout"});};},[]);
   const startWorkout=state.start,workout=state.workout;
   useEffect(()=>{if(workout||!fallback)return;const key=String(fallback.key??"workout-1");void startWorkout(key,fallback);},[fallback,startWorkout,workout]);
   const exerciseList=useMemo(()=>prescriptions(workout?.workout),[workout?.workout]);
