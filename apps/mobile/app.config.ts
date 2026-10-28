@@ -20,6 +20,9 @@ const config: ExpoConfig = {
   },
   android: {
     package: isDevelopment ? "com.sthenofitness.app.dev" : "com.sthenofitness.app",
+    // Isolated staging and CI use host-forwarded HTTP services. Production
+    // remains HTTPS-only.
+    usesCleartextTraffic: environment !== "production",
     adaptiveIcon: { foregroundImage: "./assets/icon.png", backgroundColor: "#fffaf3" },
     intentFilters: [{ action: "VIEW", autoVerify: true, data: [
       { scheme: "https", host: "www.sthenofitness.com", pathPrefix: "/auth/mobile" },
