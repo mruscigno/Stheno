@@ -6,7 +6,8 @@
 4. Run `40782660655` confirmed the API-35 shell keyboard still discards input for that focused field after radios are disabled. The journey now uses the real prescription's existing reps/RIR values and verifies those exact values, along with changed loads, after process death. A fresh run must continue through both process kills and reconciliation.
 5. Run `40787050743` completed set 2 offline, then reproduced the shell-keyboard loss on set 3's load after the rest-state rerender. Set 3 now uses and verifies its valid prescribed unloaded state; set 2 remains the offline changed-load/edit target. A fresh run must continue through both process kills and reconciliation.
 6. Run `40790540383` passed both offline set writes and the first process-kill exact restoration checks, then stopped while replacing restored load `55` with `60`. Workout numeric inputs now select their existing value on focus, improving real member editing and making the replacement deterministic. A fresh run must complete the edit, offline completion, second kill, and reconciliation.
-7. Native duplicate retry, timeout-after-commit, stale-revision preservation and A/B account isolation require runtime evidence.
-8. iOS runtime validation remains pending and is not claimed.
+7. Run `40794655253` built the final current-source APK but stopped when the emulator discarded the unrelated `specificOutcome` assessment fixture text. The assessment step passed in the four preceding runs; this is a harness flake, not an App 5B-2S product result.
+8. Native duplicate retry, timeout-after-commit, stale-revision preservation and A/B account isolation require runtime evidence.
+9. iOS runtime validation remains pending and is not claimed.
 
 No user action is currently required. Production activation remains off.
