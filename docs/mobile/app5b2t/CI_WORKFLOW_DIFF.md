@@ -4,6 +4,8 @@
 - Kept the no-cost API-35 GitHub emulator and isolated local Supabase stack.
 - Added independent evidence labels for timeout/duplicate, conflict, ownership, and the genuine Android journey.
 - Disabled emulator spellchecking to remove irrelevant IME transformations.
+- Allocated four emulator cores and 4 GB RAM, used deterministic headless graphics options, and stopped the irrelevant Quickstep launcher after STHENO opened.
 - Added local SQLite checkpoint extraction and assertions.
+- Captured Expo SQLite from `files/SQLite` with WAL/SHM files and selected the session that owns the completed set evidence.
 - Preserved bounded timeouts, current-source APK checksum, failure artifacts, token scanning, and real PostgreSQL assertions.
 

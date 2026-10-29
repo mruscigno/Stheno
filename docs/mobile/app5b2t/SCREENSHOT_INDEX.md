@@ -1,6 +1,6 @@
 # Screenshot index
 
-Genuine screenshots are uploaded by GitHub Actions in artifact `app5b2-updated-offline-workout-native-evidence`.
+Genuine screenshots are uploaded by GitHub Actions run [40922283448](https://github.com/mruscigno/Stheno/actions/runs/40922283448) in artifact `app5b2-updated-offline-workout-native-evidence`.
 
 - `01-opening-question.png`
 - `02-assessment-progress.png`
