@@ -270,7 +270,7 @@ for (const [key, raw] of fixtureEntries) {
   } else {
     // Free-form wording is not under test here. A short deterministic fixture
     // removes API-35 IME throughput as a source of false onboarding failures.
-    input(`assessment-input-${key}`, raw === "" ? "None" : "Progress");
+    input(`assessment-input-${key}`, key === "specificOutcome" ? "Progress" : raw === "" ? "None" : String(raw));
     if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
     else tap(`Continue from ${key}`);
   }
