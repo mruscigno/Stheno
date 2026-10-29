@@ -201,9 +201,12 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6
+          cores: 4
+          ram-size: 4096M
           disable-animations: true
           disable-spellchecker: true
           emulator-boot-timeout: 600
+          emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader_indirect -camera-back none
           script: bash scripts/app5b2g/run-android-e2e.sh
 
       - name: Sanitize and inventory evidence

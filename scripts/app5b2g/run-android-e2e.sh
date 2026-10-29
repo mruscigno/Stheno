@@ -20,6 +20,11 @@ adb shell am force-stop "$STHENO_ANDROID_APP_ID"
 adb shell monkey -p "$STHENO_ANDROID_APP_ID" -c android.intent.category.LAUNCHER 1 \
   | tee "$STHENO_E2E_EVIDENCE/launch.txt"
 sleep 20
+# Quickstep is not part of the application under test. On the headless API-35
+# runner it can enter a recurring ANR loop and steal IME focus from the app.
+# Stop the background launcher after STHENO is foregrounded; later app process
+# restarts target the package directly and do not require the home activity.
+adb shell am force-stop com.android.launcher3 || true
 adb logcat -c
 node scripts/app5b2g/android-e2e.mjs \
   | tee "$STHENO_E2E_EVIDENCE/e2e.log"
