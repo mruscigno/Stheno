@@ -1,0 +1,11 @@
+scenario,expected,actual,screenshot,ui_dump,db_assertion,run_id
+A,"online save then two offline sets and local outbox","pending final run","11-workout-online-saved.png;12-workout-offline-saved.png","matching XML snapshots","13-first-kill-restored SQLite",40884720428
+B,"exact owner/workout/values/timer/pending restored after kill","pending final run","13-workout-process-kill-restored-offline.png","13-workout-process-kill-restored-offline.xml","13-first-kill-restored SQLite",40884720428
+C,"offline edit, third set, completion persist","pending final run","14-workout-completed-offline.png","transition dump on failure","15-second-kill-restored SQLite",40884720428
+D,"completed session and pending operations survive second kill","pending final run","15-workout-completion-restored-offline.png","15-workout-completion-restored-offline.xml","15-second-kill-restored SQLite",40884720428
+E,"ordered replay gives one completion and correct final sets","pending final run","16-workout-reconciled.png","16-workout-reconciled.xml","SQLite zero pending plus final PostgreSQL assertions",40884720428
+F,"response-loss retry creates no duplicate domain effects","protocol SQL passes; native response-loss checkpoint not yet rerun","n/a","n/a","app5a atomicity and app5b1r receipt assertions",40884720428
+G,"concurrent revision returns 409 and preserves local work visibly","protocol and UI policy tests pass; genuine Android conflict injection pending","n/a","n/a","stale-revision and conflict assertions",40884720428
+H,"second user cannot see/replay first user's local or server data","server ownership passes; second native login pending","n/a","n/a","app47 and app5b1 protocol ownership assertions",40884720428
+I,"full Assessment through workout entry remains intact","pending final run","01-opening-question.png through 10-workout-online.png","matching XML snapshots","claim/program/session assertions",40884720428
+
