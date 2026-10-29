@@ -12,4 +12,5 @@ GitHub run [40884720428](https://github.com/mruscigno/Stheno/actions/runs/408847
 
 - Run `40884720428`: blocked at age because the first shortened fixture incorrectly replaced a numeric answer; app validation correctly rejected it.
 - Run `40888006569`: progressed through 15 assessment steps, then exposed an overly conservative selector viewport cutoff on a valid Continue button.
+- Run `40891861003`: the full native UI journey passed through final cold restart; the post-journey evidence step failed because the first archive path captured Android `databases` but Expo SQLite lives in `files/SQLite`.
 

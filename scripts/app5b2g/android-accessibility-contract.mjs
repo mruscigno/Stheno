@@ -18,4 +18,5 @@ test("native workout sync status remains a stable Android accessibility node",()
   assert.match(journey,/captureSQLite\("13-first-kill-restored"\)/);
   assert.match(journey,/captureSQLite\("15-second-kill-restored"\)/);
   assert.match(journey,/captureSQLite\("16-reconciled"\)/);
+  assert.match(journey,/files\/SQLite databases/);
 });

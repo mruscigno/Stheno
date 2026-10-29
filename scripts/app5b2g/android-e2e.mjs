@@ -185,7 +185,9 @@ function snapshot(name) {
 }
 function captureSQLite(name) {
   const target = path.join(evidence, `${name}-sqlite.tar`);
-  const archive = execFileSync("adb", ["exec-out", "run-as", appId, "sh", "-c", "tar -cf - databases"], { maxBuffer: 32 * 1024 * 1024 });
+  // expo-sqlite stores application databases in files/SQLite on Android;
+  // include the platform databases directory as well for a complete snapshot.
+  const archive = execFileSync("adb", ["exec-out", "run-as", appId, "sh", "-c", "tar -cf - files/SQLite databases"], { maxBuffer: 32 * 1024 * 1024 });
   fs.writeFileSync(target, archive);
 }
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
