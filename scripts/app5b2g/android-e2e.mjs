@@ -408,6 +408,8 @@ captureSQLite("18-conflict-preserved");
 
 // H: switch to a separately created real account, prove A's local workout is
 // not selected and A's server session is not readable, then switch back.
+adb(["shell","input","keyevent","4"]);sleep(800);
+assertVisible("Member Today loaded",30);
 tap("member-more-tab");tap("Sign out");
 confirmSignOutIfNeeded();
 assertVisible("Already a member? Sign in",40);tap("Already a member? Sign in");
