@@ -46,7 +46,29 @@ assert_snapshot() {
   fi
 }
 
-assert_snapshot "$STHENO_E2E_EVIDENCE/13-first-kill-restored-sqlite.tar" active 3 2
+assert_conflict_snapshot() {
+  local archive="$1" label db conflict_sessions conflict_ops owners
+  label="$(basename "$archive" -sqlite.tar)"
+  mkdir -p "$work/$label-conflict"
+  tar -xf "$archive" -C "$work/$label-conflict"
+  db="$(find "$work/$label-conflict" -type f -name 'stheno-workouts-v1.db' -print -quit)"
+  test -n "$db"
+  conflict_sessions="$(sqlite3 "$db" "select count(*) from local_workout_sessions where status='conflict'")"
+  conflict_ops="$(sqlite3 "$db" "select count(*) from workout_pending_operations where state='conflict'")"
+  owners="$(sqlite3 "$db" "select count(distinct user_id) from local_workout_sessions")"
+  printf '%s conflict_sessions=%s conflict_ops=%s local_workout_owners=%s\n' "$label" "$conflict_sessions" "$conflict_ops" "$owners" | tee -a "$output"
+  test "$conflict_sessions" -eq 1
+  test "$conflict_ops" -eq 1
+  test "$owners" -eq 1
+}
+
+assert_snapshot "$STHENO_E2E_EVIDENCE/13-first-kill-restored-sqlite.tar" active 3 1
 assert_snapshot "$STHENO_E2E_EVIDENCE/15-second-kill-restored-sqlite.tar" completed 3 3
 assert_snapshot "$STHENO_E2E_EVIDENCE/16-reconciled-sqlite.tar" completed 3 0
+assert_snapshot "$STHENO_E2E_EVIDENCE/18-conflict-preserved-sqlite.tar" completed 4 1
+assert_conflict_snapshot "$STHENO_E2E_EVIDENCE/18-conflict-preserved-sqlite.tar"
+assert_snapshot "$STHENO_E2E_EVIDENCE/19-second-user-isolated-sqlite.tar" completed 4 1
+assert_conflict_snapshot "$STHENO_E2E_EVIDENCE/19-second-user-isolated-sqlite.tar"
+assert_snapshot "$STHENO_E2E_EVIDENCE/20-first-user-restored-sqlite.tar" completed 4 1
+assert_conflict_snapshot "$STHENO_E2E_EVIDENCE/20-first-user-restored-sqlite.tar"
 

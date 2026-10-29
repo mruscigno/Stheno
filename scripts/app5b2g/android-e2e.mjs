@@ -4,9 +4,14 @@ import path from "node:path";
 import { assessmentFixture } from "./assessment-fixture.mjs";
 
 const appId = process.env.STHENO_ANDROID_APP_ID ?? "com.sthenofitness.app";
-const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2-updated/android";
+const evidence = process.env.STHENO_E2E_EVIDENCE ?? "artifacts/app5b2u/android";
 const email = process.env.STHENO_E2E_EMAIL ?? `app5b2g-${Date.now()}@example.test`;
+const secondEmail = email.replace("@", "+second@");
 const password = process.env.STHENO_E2E_PASSWORD ?? "Stheno-CI-Only-2026!";
+const apiBaseUrl = process.env.STHENO_API_BASE_URL ?? "http://127.0.0.1:3000";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "http://127.0.0.1:54321";
+const publishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 fs.mkdirSync(evidence, { recursive: true });
 
 function adb(args, options = {}) {
@@ -239,6 +244,44 @@ async function verifyLatestLocalEmail(address) {
   sleep(1500);
 }
 
+async function passwordSession(address) {
+  if (!publishableKey) throw new Error("EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY is required");
+  const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, { method:"POST", headers:{ apikey:publishableKey,"content-type":"application/json" }, body:JSON.stringify({email:address,password}) });
+  if (!response.ok) throw new Error(`Password session failed: ${response.status} ${await response.text()}`);
+  return response.json();
+}
+async function api(pathname, token, init={}) {
+  const response = await fetch(`${apiBaseUrl}${pathname}`, { ...init, headers:{ accept:"application/json",authorization:`Bearer ${token}`,...(init.body?{"content-type":"application/json"}:{}),...init.headers } });
+  const body = await response.json().catch(()=>null);
+  return {response,body};
+}
+async function createSecondUser() {
+  if (!serviceRoleKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
+  const response=await fetch(`${supabaseUrl}/auth/v1/admin/users`,{method:"POST",headers:{apikey:serviceRoleKey,authorization:`Bearer ${serviceRoleKey}`,"content-type":"application/json"},body:JSON.stringify({email:secondEmail,password,email_confirm:true})});
+  if (!response.ok) throw new Error(`Second user creation failed: ${response.status} ${await response.text()}`);
+  return response.json();
+}
+async function armResponseLoss(token) {
+  const result=await api("/api/v1/test/native-acceptance",token,{method:"POST",body:JSON.stringify({action:"lose-next-workout-response"})});
+  if(!result.response.ok)throw new Error(`Could not arm response loss: ${result.response.status} ${JSON.stringify(result.body)}`);
+}
+async function concurrentServerSet(token, sessionId, baseRevision, exerciseSlug) {
+  const operationId=crypto.randomUUID(),setId=crypto.randomUUID();
+  const result=await api(`/api/v1/workouts/sessions/${sessionId}/sets/${setId}`,token,{method:"PUT",body:JSON.stringify({operationId,baseRevision,schemaVersion:1,exerciseSlug,setOrdinal:99,setType:"working",prescribed:{},load:1,loadUnit:"lb",repetitions:1,rir:1,state:"completed",clientCreatedAt:new Date().toISOString()})});
+  if(!result.response.ok)throw new Error(`Concurrent server update failed: ${result.response.status} ${JSON.stringify(result.body)}`);
+  return result.body.data;
+}
+function signInThroughUi(address) {
+  input("Email",address,false);input("Password",password,false);tap("Sign in");assertVisible("Member Today loaded",60);
+}
+function confirmSignOutIfNeeded() {
+  for(let attempt=0;attempt<10;attempt+=1){
+    const candidates=nodes().filter(node=>node.text==="Sign out"&&isActionable(node));
+    if(candidates.length>1){const node=candidates.at(-1);adb(["shell","input","tap",String(node.center[0]),String(node.center[1])]);sleep(1200);return;}
+    sleep(250);
+  }
+}
+
 console.log(`Starting native journey for ${email}`);
 assertVisible("assessment-step-goal", 40); screenshot("01-opening-question");
 
@@ -291,6 +334,8 @@ assertVisible("Verify, then come back.", 30);
 snapshot("07-verification-required");
 await verifyLatestLocalEmail(email);
 assertVisible("Member Today loaded", 80);
+const firstSession=await passwordSession(email);
+await createSecondUser();
 snapshot("08-member-today");
 dismissExpoWarning();
 tap("member-plan-tab");
@@ -305,11 +350,14 @@ input("Set 1 weight","50");input("Set 1 repetitions","8");input("Set 1 repetitio
 tap("Complete set 1");
 waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Saved",30);
 snapshot("11-workout-online-saved");
+await armResponseLoss(firstSession.access_token);
+input("Set 2 weight","55");tap("Complete set 2");
+waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Saved",30);
+snapshot("11f-response-loss-recovered-from-receipt");
 adb(["shell","svc","wifi","disable"]);adb(["shell","svc","data","disable"]);sleep(1500);
 // Keep the prescribed reps/RIR defaults for the offline sets. API 35's shell
 // keyboard can discard focused numeric input after radios are disabled; the
 // restoration proof verifies these exact default fields after process death.
-input("Set 2 weight","55");tap("Complete set 2");
 tap("Complete set 3");
 waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Offline · saved locally",20);snapshot("12-workout-offline-saved");
 adb(["shell","am","force-stop",appId]);
@@ -338,9 +386,42 @@ captureSQLite("16-reconciled");
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);
 assertVisible("Member Today loaded", 50); snapshot("17-cold-restart-restored");
+
+// G: create a second genuine session, change its server revision out of band,
+// then submit from the stale native revision and prove the app preserves local work.
+tap("today-open-workout");
+assertVisible("workout-sync-status",30);
+waitForNode("workout-sync-status",candidate=>candidate["content-desc"]==="Workout sync status: Saved",30);
+const today=await api("/api/v1/today",firstSession.access_token);
+const conflictSession=today.body?.data?.activeWorkout;
+if(!today.response.ok||!conflictSession?.id)throw new Error(`Second active workout missing: ${JSON.stringify(today.body)}`);
+const conflictExerciseSlug=conflictSession.revised_workout?.exercises?.[0]?.exerciseSlug??conflictSession.original_workout?.exercises?.[0]?.exerciseSlug;
+if(!conflictExerciseSlug)throw new Error("Second active workout has no canonical exercise slug");
+await concurrentServerSet(firstSession.access_token,conflictSession.id,conflictSession.revision,conflictExerciseSlug);
+input("Set 1 weight","65");tap("Complete set 1");
+assertVisible("This workout changed elsewhere. Your local work is preserved; reconnect and retry before continuing.",40);
+snapshot("18-native-visible-revision-conflict");
+captureSQLite("18-conflict-preserved");
+
+// H: switch to a separately created real account, prove A's local workout is
+// not selected and A's server session is not readable, then switch back.
+tap("member-more-tab");tap("Sign out");
+confirmSignOutIfNeeded();
+assertVisible("Already a member? Sign in",40);tap("Already a member? Sign in");
+signInThroughUi(secondEmail);
+assertVisible("Start workout",30);snapshot("19-second-user-isolated-today");captureSQLite("19-second-user-isolated");
+const secondSession=await passwordSession(secondEmail);
+const crossUser=await api(`/api/v1/workouts/sessions/${conflictSession.id}`,secondSession.access_token);
+if(crossUser.response.status!==404)throw new Error(`Cross-user workout read was not hidden: ${crossUser.response.status}`);
+tap("member-more-tab");tap("Sign out");
+confirmSignOutIfNeeded();
+assertVisible("Already a member? Sign in",40);tap("Already a member? Sign in");
+signInThroughUi(email);
+assertVisible("Open current workout",30);snapshot("20-first-user-conflict-restored-after-switch");captureSQLite("20-first-user-restored");
 adb(["shell", "uiautomator", "dump", "/sdcard/app5b2g-final.xml"]);
 adb(["pull", "/sdcard/app5b2g-final.xml", path.join(evidence, "final-ui.xml")]);
 fs.writeFileSync(path.join(evidence, "test-identity.txt"), `${email}\n`);
+fs.writeFileSync(path.join(evidence, "second-test-identity.txt"), `${secondEmail}\n`);
 console.log(`STHENO_E2E_EMAIL=${email}`);
 console.log("Native Assessment → Blueprint → Account → Claim → Program journey passed.");
 

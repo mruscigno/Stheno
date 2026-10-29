@@ -1,4 +1,4 @@
-name: App 5B-2T Android offline acceptance
+name: App 5B-2U final offline acceptance repeatability
 
 on:
   workflow_dispatch:
@@ -15,14 +15,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: app5b2t-${{ github.ref }}
+  group: app5b2u-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   native-data-backed-gate:
     name: API-35 current APK + isolated backend + offline acceptance
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 90
     env:
       CI: "1"
       TEST_ENVIRONMENT: "true"
@@ -36,7 +36,7 @@ jobs:
       STHENO_ANDROID_APP_ID: com.sthenofitness.app
       STHENO_E2E_EMAIL: app5b2g-${{ github.run_id }}@example.test
       STHENO_E2E_PASSWORD: Stheno-CI-Only-2026!
-      STHENO_E2E_EVIDENCE: artifacts/app5b2-updated/android
+      STHENO_E2E_EVIDENCE: artifacts/app5b2u/android
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -115,27 +115,27 @@ jobs:
           supabase test db supabase/tests/app5b1_protocol_integration.sql
           supabase test db supabase/tests/app5b1r_durable_outbox.sql
 
-      - name: Record independent protocol scenario evidence
+      - name: Record acceptance scenario definitions
         shell: bash
         run: |
-          mkdir -p artifacts/app5b2-updated/database
-          cat > artifacts/app5b2-updated/database/scenario-coverage.txt <<'EOF'
-          F timeout/duplicate: app5a_workout_atomicity.sql + app5b1r_durable_outbox.sql
-          G deterministic conflict: app5a_workout_atomicity.sql stale revision and idempotency conflict assertions
-          H server ownership: app47_two_user_security.sql + app5b1_protocol_integration.sql
-          A-E and I: genuine API-35 journey plus SQLite and final PostgreSQL assertions
+          mkdir -p artifacts/app5b2u/database
+          cat > artifacts/app5b2u/database/scenario-coverage.txt <<'EOF'
+          A-E and I: genuine API-35 journey plus SQLite and PostgreSQL assertions
+          F: API-35 submits an operation whose response is lost after commit; native receipt recovery proves exactly-once effect
+          G: a second authenticated API client advances the revision; API-35 receives 409 and displays preserved local work
+          H: API-35 signs into a second real user, proves no local workout exposure or server read, then restores user A
           EOF
 
       - name: Start real STHENO API and prove capability behavior
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p artifacts/app5b2-updated/backend
-          nohup pnpm dev --hostname 0.0.0.0 > artifacts/app5b2-updated/backend/next.log 2>&1 &
-          echo $! > artifacts/app5b2-updated/backend/next.pid
+          mkdir -p artifacts/app5b2u/backend
+          nohup pnpm dev --hostname 0.0.0.0 > artifacts/app5b2u/backend/next.log 2>&1 &
+          echo $! > artifacts/app5b2u/backend/next.pid
           for attempt in $(seq 1 90); do
-            if curl --fail --silent http://127.0.0.1:3000/api/health > artifacts/app5b2-updated/backend/health.json; then break; fi
-            if [ "$attempt" = 90 ]; then cat artifacts/app5b2-updated/backend/next.log; exit 1; fi
+            if curl --fail --silent http://127.0.0.1:3000/api/health > artifacts/app5b2u/backend/health.json; then break; fi
+            if [ "$attempt" = 90 ]; then cat artifacts/app5b2u/backend/next.log; exit 1; fi
             sleep 2
           done
           STHENO_API_BASE_URL=http://127.0.0.1:3000 node scripts/app5b2g/backend-negative.mjs
@@ -164,29 +164,29 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p artifacts/app5b2-updated/android
+          mkdir -p artifacts/app5b2u/android
           (cd apps/mobile/android && ./gradlew --no-daemon --build-cache assembleDebug)
           apk="apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk"
           test -s "$apk"
-          cp "$apk" artifacts/app5b2-updated/android/stheno-current-debug.apk
-          sha256sum artifacts/app5b2-updated/android/stheno-current-debug.apk | tee artifacts/app5b2-updated/android/apk-sha256.txt
-          git rev-parse HEAD | tee artifacts/app5b2-updated/android/source-commit.txt
+          cp "$apk" artifacts/app5b2u/android/stheno-current-debug.apk
+          sha256sum artifacts/app5b2u/android/stheno-current-debug.apk | tee artifacts/app5b2u/android/apk-sha256.txt
+          git rev-parse HEAD | tee artifacts/app5b2u/android/source-commit.txt
           aapt_bin="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -1)"
           test -x "$aapt_bin"
-          "$aapt_bin" dump badging "$apk" | head -1 | tee artifacts/app5b2-updated/android/apk-package.txt
+          "$aapt_bin" dump badging "$apk" | head -1 | tee artifacts/app5b2u/android/apk-package.txt
 
       - name: Start Metro for current-source debug APK
         shell: bash
         run: |
           set -euo pipefail
           nohup pnpm --dir apps/mobile exec expo start --localhost --scheme stheno \
-            > artifacts/app5b2-updated/android/metro.log 2>&1 &
-          echo $! > artifacts/app5b2-updated/android/metro.pid
+            > artifacts/app5b2u/android/metro.log 2>&1 &
+          echo $! > artifacts/app5b2u/android/metro.pid
           for attempt in $(seq 1 60); do
             if (echo > /dev/tcp/localhost/8081) 2>/dev/null; then exit 0; fi
             sleep 2
           done
-          cat artifacts/app5b2-updated/android/metro.log
+          cat artifacts/app5b2u/android/metro.log
           exit 1
 
       - name: Enable KVM
@@ -213,13 +213,13 @@ jobs:
         if: always()
         shell: bash
         run: |
-          mkdir -p artifacts/app5b2-updated/diagnostics
-          printf 'api_health=' > artifacts/app5b2-updated/diagnostics/service-health.txt
-          curl --silent --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:54321/auth/v1/health >> artifacts/app5b2-updated/diagnostics/service-health.txt || true
-          docker ps -a > artifacts/app5b2-updated/diagnostics/docker-ps.txt 2>&1 || true
-          git status --short > artifacts/app5b2-updated/diagnostics/git-status.txt
-          find artifacts/app5b2-updated -type f -print | sort > artifacts/app5b2-updated/diagnostics/artifact-index.txt
-          if rg -l "(eyJhbGci|sb_secret_|service_role|x-stheno-assessment-capability)" artifacts/app5b2-updated; then
+          mkdir -p artifacts/app5b2u/diagnostics
+          printf 'api_health=' > artifacts/app5b2u/diagnostics/service-health.txt
+          curl --silent --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:54321/auth/v1/health >> artifacts/app5b2u/diagnostics/service-health.txt || true
+          docker ps -a > artifacts/app5b2u/diagnostics/docker-ps.txt 2>&1 || true
+          git status --short > artifacts/app5b2u/diagnostics/git-status.txt
+          find artifacts/app5b2u -type f -print | sort > artifacts/app5b2u/diagnostics/artifact-index.txt
+          if rg -l "(eyJhbGci|sb_secret_|service_role|x-stheno-assessment-capability)" artifacts/app5b2u; then
             echo "Sensitive token material found in CI artifacts." >&2
             exit 1
           fi
@@ -227,7 +227,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: app5b2-updated-offline-workout-native-evidence
-          path: artifacts/app5b2-updated
+          name: app5b2u-final-offline-acceptance-evidence
+          path: artifacts/app5b2u
           retention-days: 14
 

@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 const base = (process.env.STHENO_API_BASE_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
-const evidence = "artifacts/app5b2-updated/backend";
+const evidence = process.env.STHENO_E2E_EVIDENCE
+  ? `${process.env.STHENO_E2E_EVIDENCE.replace(/[/\\]android$/, "")}/backend`
+  : "artifacts/app5b2u/backend";
 fs.mkdirSync(evidence, { recursive: true });
 const results = [];
 

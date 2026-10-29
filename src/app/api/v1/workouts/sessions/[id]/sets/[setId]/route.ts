@@ -3,6 +3,7 @@ import { authorizeMemberRequest } from "@/platform/server/auth";
 import { apiError, apiSuccess, parseJson, requestId } from "@/platform/server/http";
 import { DeleteWorkoutSetInput } from "@/platform/contracts/api";
 import { applyWorkoutOperation, workoutOperationError } from "@/platform/server/workout-operations";
+import { consumeResponseLoss } from "@/platform/server/native-acceptance-controls";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   if (![id, setId].every((value) => /^[0-9a-f-]{36}$/i.test(value))) return apiError(requestIdValue, 400, "VALIDATION_FAILED", "Invalid resource identifier.");
   try {
     const result=await applyWorkoutOperation(context.db,{operationId:parsed.data.operationId,sessionId:id,kind:"upsert_set",baseRevision:parsed.data.baseRevision,schemaVersion:parsed.data.schemaVersion,clientCreatedAt:parsed.data.clientCreatedAt,payload:{...parsed.data,setId}});
+    if (consumeResponseLoss(context.user.id)) return apiError(requestIdValue, 503, "SERVICE_UNAVAILABLE", "Simulated post-commit response loss.");
     return apiSuccess(requestIdValue,result);
   } catch(error) { const mapped=workoutOperationError(error); return apiError(requestIdValue,mapped.status,mapped.code,mapped.message,mapped.details); }
 }

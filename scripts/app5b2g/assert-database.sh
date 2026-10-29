@@ -17,10 +17,11 @@ begin
   if (select count(*) from public.anonymous_assessment_sessions where claimed_by=uid and state='claimed') <> 1 then raise exception 'expected exactly one claimed anonymous assessment'; end if;
   if (select count(*) from public.assessments where user_id=uid) <> 1 then raise exception 'expected exactly one assessment'; end if;
   if (select count(*) from public.program_prescriptions where user_id=uid) <> 1 then raise exception 'expected exactly one program prescription'; end if;
-  if (select count(*) from public.workout_execution_sessions where user_id=uid) <> 1 then raise exception 'expected exactly one replay-safe workout session'; end if;
+  if (select count(*) from public.workout_execution_sessions where user_id=uid) <> 2 then raise exception 'expected completed journey plus conflict session'; end if;
   if (select count(*) from public.workout_execution_sessions where user_id=uid and status='completed') <> 1 then raise exception 'expected exactly one completed workout session'; end if;
-  if (select count(*) from public.workout_set_logs where user_id=uid and state='completed' and deleted_at is null) <> 3 then raise exception 'expected exactly three reconciled workout sets'; end if;
-  if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='upsert_set') <> 4 then raise exception 'expected four set receipts including the offline edit'; end if;
+  if (select count(*) from public.workout_set_logs where user_id=uid and state='completed' and deleted_at is null) <> 4 then raise exception 'expected three reconciled sets plus one concurrent-revision probe'; end if;
+  if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='upsert_set') <> 5 then raise exception 'expected four member set receipts plus one concurrent-revision probe'; end if;
+  if (select count(*) from public.workout_operation_receipts where user_id=uid) <> (select count(distinct operation_id) from public.workout_operation_receipts where user_id=uid) then raise exception 'duplicate receipt effect detected'; end if;
   if (select count(*) from public.workout_operation_receipts where user_id=uid and operation_kind='complete_session') <> 1 then raise exception 'expected exactly one completion receipt'; end if;
 end $$;
 select 'isolated_native_journey=passed';
