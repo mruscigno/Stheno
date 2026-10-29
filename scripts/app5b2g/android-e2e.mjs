@@ -13,7 +13,27 @@ function adb(args, options = {}) {
   return execFileSync("adb", args, { encoding: "utf8", stdio: options.stdio ?? ["ignore", "pipe", "pipe"] }).trim();
 }
 function sleep(ms) { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); }
+function captureTransitionFailure(identifier) {
+  const safe = String(identifier).replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 64) || "unknown";
+  try { screenshot(`failure-${safe}`); } catch {}
+  try {
+    const remote = `/sdcard/failure-${safe}.xml`;
+    adb(["shell", "uiautomator", "dump", remote]);
+    adb(["pull", remote, path.join(evidence, `failure-${safe}.xml`)]);
+  } catch {}
+  try { fs.writeFileSync(path.join(evidence, `failure-${safe}-logcat.txt`), adb(["logcat", "-d"])); } catch {}
+}
 function decode(value) { return value.replaceAll("&quot;", '"').replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">"); }
+function isActionable(node) {
+  if (!node?.bounds || !node.center) return false;
+  const [left, top, right, bottom] = node.bounds;
+  // UIAutomator includes clipped React Native descendants with inverted or
+  // off-screen bounds. Tapping those coordinates is acknowledged by adb but
+  // rejected by Android's InputManager, which was the source of the API-35
+  // "input loss" in runs 40790540383 and 40794655253.
+  return right > left && bottom > top && node.center[0] >= 0 && node.center[0] <= 1080
+    && node.center[1] >= 128 && node.center[1] <= 2128;
+}
 function nodes() {
   const remote="/sdcard/app5b2g.xml",local=path.join(evidence,"current-ui.xml");
   let xml="";
@@ -62,12 +82,13 @@ function locate(identifier, attempts = 16) {
       || node["content-desc"] === identifier
       || node.text === identifier
     );
-    if (found?.center) return found;
+    if (found && isActionable(found)) return found;
     if (attempt < 2) adb(["shell", "input", "swipe", "540", "500", "540", "1500", "350"]);
     else adb(["shell", "input", "swipe", "540", "1500", "540", "500", "350"]);
     sleep(350);
   }
-  throw new Error(`Unable to locate Android UI node: ${identifier}`);
+  captureTransitionFailure(identifier);
+  throw new Error(`Unable to locate actionable Android UI node: ${identifier}`);
 }
 function waitForNode(identifier, predicate, attempts = 30) {
   for (let attempt = 0; attempt < attempts; attempt += 1) {
@@ -75,6 +96,7 @@ function waitForNode(identifier, predicate, attempts = 30) {
     if (predicate(node)) return node;
     sleep(300);
   }
+  captureTransitionFailure(identifier);
   throw new Error(`Android UI node did not reach the expected state: ${identifier}`);
 }
 function tap(identifier) {
@@ -95,6 +117,11 @@ function input(identifier, value, hideKeyboard = true) {
     const node = locate(identifier);
     adb(["shell", "input", "tap", String(node.center[0]), String(node.center[1])]);
     sleep(500);
+    const focused = locate(identifier);
+    if (focused.focused !== "true") {
+      sleep(350);
+      continue;
+    }
     if(/^\d+$/.test(expected)){
       // API 35 can acknowledge keyevent commands without delivering them to
       // a focused React Native numeric field. Inject and verify each digit as
@@ -129,12 +156,16 @@ function input(identifier, value, hideKeyboard = true) {
     }
     if (filled.text) {
       adb(["shell","input","tap",String(filled.center[0]),String(filled.center[1])]);
-      adb(["shell","input","keyevent","123",...Array(Math.max(80,filled.text.length+10)).fill("67")]);
+      adb(["shell","input","keyevent","123"]);
+      for (let index = 0; index < Math.max(12, filled.text.length + 4); index += 1) {
+        adb(["shell","input","keyevent","67"]);
+      }
       sleep(500);
       continue;
     }
   }
-  throw new Error(`Android field did not accept text: ${identifier}`);
+  captureTransitionFailure(identifier);
+  throw new Error(`Android field did not accept verified text: ${identifier}`);
 }
 function screenshot(name) { const target = path.join(evidence, `${name}.png`); fs.writeFileSync(target, execFileSync("adb", ["exec-out", "screencap", "-p"])); }
 function snapshot(name) {
@@ -151,6 +182,11 @@ function snapshot(name) {
     }
   }
   throw new Error(`Unable to capture Android UI snapshot: ${name}`);
+}
+function captureSQLite(name) {
+  const target = path.join(evidence, `${name}-sqlite.tar`);
+  const archive = execFileSync("adb", ["exec-out", "run-as", appId, "sh", "-c", "tar -cf - databases"], { maxBuffer: 32 * 1024 * 1024 });
+  fs.writeFileSync(target, archive);
 }
 function assertVisible(identifier, attempts = 30) { return locate(identifier, attempts); }
 function pressUntilStep(button, nextStep, attempts = 3) {
@@ -232,7 +268,9 @@ for (const [key, raw] of fixtureEntries) {
     if (nextKey) pressUntilStep(option, nextKey);
     else tap(option);
   } else {
-    input(`assessment-input-${key}`, raw === "" ? "No current limitations" : raw);
+    // Free-form wording is not under test here. A short deterministic fixture
+    // removes API-35 IME throughput as a source of false onboarding failures.
+    input(`assessment-input-${key}`, raw === "" ? "None" : "Progress");
     if (nextKey) pressUntilStep(`Continue from ${key}`, nextKey);
     else tap(`Continue from ${key}`);
   }
@@ -283,14 +321,17 @@ waitForNode("Set 2 repetitions in reserve",candidate=>candidate.text==="3",20);
 waitForNode("Set 3 repetitions",candidate=>candidate.text==="6",20);
 waitForNode("Set 3 repetitions in reserve",candidate=>candidate.text==="3",20);
 snapshot("13-workout-process-kill-restored-offline");
+captureSQLite("13-first-kill-restored");
 input("Set 2 weight","60");tap("Update set 2");
 tap("Finish and save workout");
 assertVisible("Member Today loaded",30);snapshot("14-workout-completed-offline");
 adb(["shell","am","force-stop",appId]);
 adb(["shell","monkey","-p",appId,"-c","android.intent.category.LAUNCHER","1"]);sleep(3000);
 assertVisible("workout-sync-status",50);snapshot("15-workout-completion-restored-offline");
+captureSQLite("15-second-kill-restored");
 adb(["shell","svc","wifi","enable"]);adb(["shell","svc","data","enable"]);sleep(4000);
 sleep(8000);adb(["shell","input","keyevent","4"]);assertVisible("Member Today loaded",50);snapshot("16-workout-reconciled");
+captureSQLite("16-reconciled");
 
 adb(["shell", "am", "force-stop", appId]);
 adb(["shell", "monkey", "-p", appId, "-c", "android.intent.category.LAUNCHER", "1"]); sleep(3000);

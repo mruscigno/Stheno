@@ -11,4 +11,11 @@ test("native workout sync status remains a stable Android accessibility node",()
   assert.match(journey,/assertVisible\("workout-sync-status"/);
   assert.match(journey,/Workout sync status: Offline · saved locally/);
   assert.match(journey,/Workout sync status: Saved/);
+  assert.match(journey,/function isActionable/);
+  assert.match(journey,/bottom > top/);
+  assert.match(journey,/focused !== "true"/);
+  assert.match(journey,/captureTransitionFailure/);
+  assert.match(journey,/captureSQLite\("13-first-kill-restored"\)/);
+  assert.match(journey,/captureSQLite\("15-second-kill-restored"\)/);
+  assert.match(journey,/captureSQLite\("16-reconciled"\)/);
 });

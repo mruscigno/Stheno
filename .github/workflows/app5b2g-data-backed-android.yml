@@ -1,4 +1,4 @@
-name: App 5B-2 Updated offline workout native gate
+name: App 5B-2T Android offline acceptance
 
 on:
   workflow_dispatch:
@@ -15,12 +15,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: app5b2g-${{ github.ref }}
+  group: app5b2t-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   native-data-backed-gate:
-    name: Current APK + isolated backend + native journey
+    name: API-35 current APK + isolated backend + offline acceptance
     runs-on: ubuntu-latest
     timeout-minutes: 75
     env:
@@ -115,6 +115,17 @@ jobs:
           supabase test db supabase/tests/app5b1_protocol_integration.sql
           supabase test db supabase/tests/app5b1r_durable_outbox.sql
 
+      - name: Record independent protocol scenario evidence
+        shell: bash
+        run: |
+          mkdir -p artifacts/app5b2-updated/database
+          cat > artifacts/app5b2-updated/database/scenario-coverage.txt <<'EOF'
+          F timeout/duplicate: app5a_workout_atomicity.sql + app5b1r_durable_outbox.sql
+          G deterministic conflict: app5a_workout_atomicity.sql stale revision and idempotency conflict assertions
+          H server ownership: app47_two_user_security.sql + app5b1_protocol_integration.sql
+          A-E and I: genuine API-35 journey plus SQLite and final PostgreSQL assertions
+          EOF
+
       - name: Start real STHENO API and prove capability behavior
         shell: bash
         run: |
@@ -191,6 +202,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
+          disable-spellchecker: true
           emulator-boot-timeout: 600
           script: bash scripts/app5b2g/run-android-e2e.sh
 

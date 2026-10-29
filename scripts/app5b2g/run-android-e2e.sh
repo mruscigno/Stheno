@@ -23,6 +23,7 @@ sleep 20
 adb logcat -c
 node scripts/app5b2g/android-e2e.mjs \
   | tee "$STHENO_E2E_EVIDENCE/e2e.log"
+bash scripts/app5b2g/assert-local-sqlite.sh
 bash scripts/app5b2g/assert-database.sh
 adb logcat -d > "$STHENO_E2E_EVIDENCE/logcat.txt"
 adb shell dumpsys package "$STHENO_ANDROID_APP_ID" \
