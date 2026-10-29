@@ -16,21 +16,37 @@ assert_snapshot() {
   local db
   db="$(find "$work/$label" -type f -name 'stheno-workouts-v1.db' -print -quit)"
   test -n "$db"
-  local status sets pending owners duplicate_sessions
-  status="$(sqlite3 "$db" "select status from local_workout_sessions order by updated_at desc limit 1")"
+  local status sets pending synced owners duplicate_sessions
+  status="$(sqlite3 "$db" "
+    select s.status
+    from local_workout_sessions s
+    order by (
+      select count(*)
+      from local_workout_sets ws
+      where ws.user_id = s.user_id
+        and ws.local_session_key = s.local_session_key
+        and ws.state = 'completed'
+    ) desc, s.updated_at desc
+    limit 1
+  ")"
   sets="$(sqlite3 "$db" "select count(*) from local_workout_sets where state='completed'")"
   pending="$(sqlite3 "$db" "select count(*) from workout_pending_operations where state in ('pending','sending','conflict')")"
+  synced="$(sqlite3 "$db" "select count(*) from local_workout_sets where state='completed' and sync_state='synced'")"
   owners="$(sqlite3 "$db" "select count(distinct user_id) from local_workout_sessions")"
   duplicate_sessions="$(sqlite3 "$db" "select count(*) from (select user_id,local_session_key,count(*) c from local_workout_sessions group by user_id,local_session_key having c>1)")"
+  printf '%s status=%s completed_sets=%s pending=%s synced=%s owners=%s duplicate_sessions=%s\n' "$label" "$status" "$sets" "$pending" "$synced" "$owners" "$duplicate_sessions" | tee -a "$output"
   test "$status" = "$expected_status"
   test "$sets" -eq "$expected_sets"
   test "$pending" -ge "$min_pending"
   test "$owners" -eq 1
   test "$duplicate_sessions" -eq 0
-  printf '%s status=%s completed_sets=%s pending=%s owners=%s duplicate_sessions=%s\n' "$label" "$status" "$sets" "$pending" "$owners" "$duplicate_sessions" | tee -a "$output"
+  if [ "$min_pending" -eq 0 ]; then
+    test "$pending" -eq 0
+    test "$synced" -eq "$expected_sets"
+  fi
 }
 
-assert_snapshot "$STHENO_E2E_EVIDENCE/13-first-kill-restored-sqlite.tar" active 2 2
+assert_snapshot "$STHENO_E2E_EVIDENCE/13-first-kill-restored-sqlite.tar" active 3 2
 assert_snapshot "$STHENO_E2E_EVIDENCE/15-second-kill-restored-sqlite.tar" completed 3 3
 assert_snapshot "$STHENO_E2E_EVIDENCE/16-reconciled-sqlite.tar" completed 3 0
 
