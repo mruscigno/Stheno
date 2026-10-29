@@ -267,7 +267,10 @@ async function armResponseLoss(token) {
 }
 async function concurrentServerSet(token, sessionId, baseRevision, exerciseSlug) {
   const operationId=crypto.randomUUID(),setId=crypto.randomUUID();
-  const result=await api(`/api/v1/workouts/sessions/${sessionId}/sets/${setId}`,token,{method:"PUT",body:JSON.stringify({operationId,baseRevision,schemaVersion:1,exerciseSlug,setOrdinal:99,setType:"working",prescribed:{},load:1,loadUnit:"lb",repetitions:1,rir:1,state:"completed",clientCreatedAt:new Date().toISOString()})});
+  // The external writer must be a valid client. Ordinal 20 is deliberately
+  // outside this fixture's three prescribed sets while remaining inside the
+  // public API contract (1..20), so G tests revision conflict—not validation.
+  const result=await api(`/api/v1/workouts/sessions/${sessionId}/sets/${setId}`,token,{method:"PUT",body:JSON.stringify({operationId,baseRevision,schemaVersion:1,exerciseSlug,setOrdinal:20,setType:"working",prescribed:{},load:1,loadUnit:"lb",repetitions:1,rir:1,state:"completed",clientCreatedAt:new Date().toISOString()})});
   if(!result.response.ok)throw new Error(`Concurrent server update failed: ${result.response.status} ${JSON.stringify(result.body)}`);
   return result.body.data;
 }
