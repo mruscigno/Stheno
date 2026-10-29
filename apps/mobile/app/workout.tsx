@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import { Alert, Linking, Pressable, StyleSheet, Text, TextInput, View, type AlertButton } from "react-native";
 import { createPortableUuid } from "@shared/client/api-client";
@@ -11,6 +11,7 @@ import { colors, radius, spacing } from "@/theme";
 import type { LocalWorkoutSet } from "@/lib/workout-store";
 import { createMobileApiClient } from "@/lib/api";
 import { journeyDiagnostic } from "@/lib/journey-diagnostics";
+import { shouldAutoStartWorkout } from "@/lib/workout-route-policy";
 
 type ExercisePrescription={exerciseSlug:string;exerciseName?:string;name?:string;sets?:number;repMin?:number;repMax?:number;rir?:number;restSeconds?:number;alternatives?:string[];instructions?:string[]};
 function prescriptions(value:Record<string,unknown>|undefined){return Array.isArray(value?.exercises)?value.exercises as ExercisePrescription[]:[];}
@@ -25,11 +26,22 @@ function SetRow({exercise,ordinal,saved,onSave}:{exercise:ExercisePrescription;o
 
 export default function WorkoutScreen(){
   const auth=useAuth(),state=useWorkout(),router=useRouter(),params=useLocalSearchParams<{workoutKey?:string}>(),[clock,setClock]=useState(0),[finishing,setFinishing]=useState(false);
+  const observedWorkout=useRef(false),autoStartAttempted=useRef(false);
   const [history,setHistory]=useState<Record<string,{load_value:number|null;load_unit:string;repetitions:number|null}[]>>({});
   const programWorkouts=auth.program?.prescription.workouts??[],fallback=(programWorkouts.find(item=>item.key===params.workoutKey)??programWorkouts[0]) as unknown as Record<string,unknown>|undefined;
   useEffect(()=>{journeyDiagnostic("workout_route_mounted",{route:"/workout"});const diagnosticTick=process.env.EXPO_PUBLIC_NATIVE_JOURNEY_DIAGNOSTICS==="true",id=setInterval(()=>setClock(Date.now()),diagnosticTick?5000:1000);return()=>{clearInterval(id);journeyDiagnostic("workout_route_unmounted",{route:"/workout"});};},[]);
   const startWorkout=state.start,workout=state.workout;
-  useEffect(()=>{if(workout||!fallback)return;const key=String(fallback.key??"workout-1");void startWorkout(key,fallback);},[fallback,startWorkout,workout]);
+  useEffect(()=>{
+    if(workout){observedWorkout.current=true;return;}
+    // A completed offline workout remains visible while its outbox drains. Once
+    // reconciliation removes it from the active selector, this route must not
+    // interpret that transition as permission to start a second session.
+    if(!fallback)return;
+    if(!shouldAutoStartWorkout({hasWorkout:false,hasFallback:true,observedWorkout:observedWorkout.current,autoStartAttempted:autoStartAttempted.current}))return;
+    autoStartAttempted.current=true;
+    const key=String(fallback.key??"workout-1");
+    void startWorkout(key,fallback);
+  },[fallback,startWorkout,workout]);
   const exerciseList=useMemo(()=>prescriptions(workout?.workout),[workout?.workout]);
   const online=state.online;
   useEffect(()=>{const slugs=exerciseList.map(item=>item.exerciseSlug);if(!slugs.length||!online)return;void createMobileApiClient().workoutHistory(slugs).then(response=>setHistory(response.data)).catch(()=>undefined);},[exerciseList,online]);
