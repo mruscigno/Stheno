@@ -10,3 +10,6 @@ Local pre-push results:
 
 GitHub run [40884720428](https://github.com/mruscigno/Stheno/actions/runs/40884720428) performs the fresh APK, isolated Supabase/Postgres/Auth/Storage, API, SQL, native, SQLite, and final database gates.
 
+- Run `40884720428`: blocked at age because the first shortened fixture incorrectly replaced a numeric answer; app validation correctly rejected it.
+- Run `40888006569`: progressed through 15 assessment steps, then exposed an overly conservative selector viewport cutoff on a valid Continue button.
+

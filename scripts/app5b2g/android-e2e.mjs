@@ -32,7 +32,7 @@ function isActionable(node) {
   // rejected by Android's InputManager, which was the source of the API-35
   // "input loss" in runs 40790540383 and 40794655253.
   return right > left && bottom > top && node.center[0] >= 0 && node.center[0] <= 1080
-    && node.center[1] >= 128 && node.center[1] <= 2128;
+    && node.center[1] >= 128 && node.center[1] < 2274;
 }
 function nodes() {
   const remote="/sdcard/app5b2g.xml",local=path.join(evidence,"current-ui.xml");

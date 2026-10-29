@@ -15,5 +15,7 @@ The latest prior run also exposed an independent fixture weakness: a long, nones
 - Capture screenshot, UI hierarchy, and logcat on every failed transition.
 - Capture device SQLite archives after the first restart, second restart, and final replay; assert status, set counts, pending operations, owner count, and duplicate-session count.
 
+Run `40888006569` also showed why the actionable threshold must use the actual app viewport rather than the workout screen's content-footer boundary: an assessment Continue button at `[63,2074][1017,2211]` is valid inside the 2274px app viewport. The selector now rejects inverted geometry while accepting valid controls anywhere above the navigation bar.
+
 No workout storage, protocol, or user-facing workflow was replaced.
 
