@@ -18,7 +18,6 @@ export default function MoreScreen() {
     router = useRouter();
   async function completeSignOut() {
     await auth.signOut();
-    router.dismissAll();
     router.replace("/");
   }
   async function signOut() {

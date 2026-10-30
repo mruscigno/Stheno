@@ -63,7 +63,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if(state.isConnected!==false&&state.isInternetReachable!==false&&session&&status==="authenticatedOffline")void bootstrap(session);
   });return()=>subscription.remove();},[bootstrap,session,status]);
 
-  const value = useMemo<AuthState>(() => ({ status, session, member, today, program, nutrition, progress, error, refresh: () => bootstrap(session), signOut: async () => { await getSupabaseClient().auth.signOut({ scope: "local" }); await clearUserScopedCache(); track("signout"); } }), [bootstrap, error, member, nutrition, program, progress, session, status, today]);
+  const value = useMemo<AuthState>(() => ({ status, session, member, today, program, nutrition, progress, error, refresh: () => bootstrap(session), signOut: async () => { await getSupabaseClient().auth.signOut({ scope: "local" }); await clearUserScopedCache(); await bootstrap(null); track("signout"); } }), [bootstrap, error, member, nutrition, program, progress, session, status, today]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
