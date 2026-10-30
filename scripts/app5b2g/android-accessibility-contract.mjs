@@ -41,9 +41,10 @@ test("acceptance actions use stable identifiers and split scenario entry points"
   assert.match(signIn, /testID="sign-in-submit"/);
   assert.match(more, /testID="member-sign-out"/);
   assert.doesNotMatch(memberLayout, /<Redirect/);
-  assert.match(memberLayout, /signedOutRedirectQueued/);
-  assert.match(memberLayout, /if \(!signedOutRedirectQueued\.current\)/);
-  assert.match(memberLayout, /router\.replace\("\/"\)/);
+  assert.doesNotMatch(memberLayout, /router\.replace\("\/"\)/);
+  assert.match(more, /await auth\.signOut\(\)/);
+  assert.match(more, /router\.dismissAll\(\)/);
+  assert.match(more, /router\.replace\("\/"\)/);
   assert.match(workout, /testID=\{`workout-set-\$\{ordinal\}-commit`\}/);
   assert.match(workout, /testID="workout-conflict-notice"/);
   assert.doesNotMatch(journey, /node\.text === identifier/);

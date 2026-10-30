@@ -16,6 +16,11 @@ import { pendingWorkoutCount } from "@/lib/workout-store";
 export default function MoreScreen() {
   const auth = useAuth(),
     router = useRouter();
+  async function completeSignOut() {
+    await auth.signOut();
+    router.dismissAll();
+    router.replace("/");
+  }
   async function signOut() {
     const ownerId = auth.session?.user.id,
       count = ownerId ? await pendingWorkoutCount(ownerId) : 0;
@@ -28,13 +33,13 @@ export default function MoreScreen() {
           {
             text: "Sign out",
             style: "destructive",
-            onPress: () => void auth.signOut(),
+            onPress: () => void completeSignOut(),
           },
         ],
       );
       return;
     }
-    await auth.signOut();
+    await completeSignOut();
   }
   return (
     <Screen>
