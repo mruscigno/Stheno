@@ -29,6 +29,7 @@ test("acceptance actions use stable identifiers and split scenario entry points"
   const assessment = fs.readFileSync("apps/mobile/app/index.tsx", "utf8");
   const signIn = fs.readFileSync("apps/mobile/app/sign-in.tsx", "utf8");
   const more = fs.readFileSync("apps/mobile/app/(member)/more.tsx", "utf8");
+  const memberLayout = fs.readFileSync("apps/mobile/app/(member)/_layout.tsx", "utf8");
   const workout = fs.readFileSync("apps/mobile/app/workout.tsx", "utf8");
   const journey = fs.readFileSync("scripts/app5b2g/android-e2e.mjs", "utf8");
   const runner = fs.readFileSync("scripts/app5b2g/run-android-e2e.sh", "utf8");
@@ -39,6 +40,8 @@ test("acceptance actions use stable identifiers and split scenario entry points"
   assert.match(signIn, /testID="sign-in-password"/);
   assert.match(signIn, /testID="sign-in-submit"/);
   assert.match(more, /testID="member-sign-out"/);
+  assert.doesNotMatch(memberLayout, /<Redirect/);
+  assert.match(memberLayout, /router\.replace\("\/"\)/);
   assert.match(workout, /testID=\{`workout-set-\$\{ordinal\}-commit`\}/);
   assert.match(workout, /testID="workout-conflict-notice"/);
   assert.doesNotMatch(journey, /node\.text === identifier/);
