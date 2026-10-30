@@ -1,5 +1,5 @@
 import { Tabs, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { colors } from "@/theme";
@@ -10,8 +10,16 @@ export default function MemberLayout() {
     auth = useAuth(),
     workout = useWorkout(),
     insets = useSafeAreaInsets();
+  const signedOutRedirectQueued = useRef(false);
   useEffect(() => {
-    if (auth.status === "signedOut") router.replace("/");
+    if (auth.status === "signedOut") {
+      if (!signedOutRedirectQueued.current) {
+        signedOutRedirectQueued.current = true;
+        router.replace("/");
+      }
+      return;
+    }
+    signedOutRedirectQueued.current = false;
   }, [auth.status, router]);
   if (auth.status === "signedOut") return null;
   if (auth.status !== "signedIn" && auth.status !== "authenticatedOffline")
