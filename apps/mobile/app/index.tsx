@@ -5,21 +5,333 @@ import { type Intake, visibleSteps } from "@acquisition/assessment-model";
 import { Body, Button, Field, Notice } from "@/components/Primitives";
 import { Screen } from "@/components/Screen";
 import { SthenoLogo } from "@/components/SthenoLogo";
-import { createSession, finalizeSession, loadCapability, resumeSession, saveAnswers, type SessionState } from "@/lib/anonymous-assessment";
+import {
+  createSession,
+  finalizeSession,
+  loadCapability,
+  resumeSession,
+  saveAnswers,
+  type SessionState,
+} from "@/lib/anonymous-assessment";
 import { track } from "@/lib/analytics";
 import { useAuth } from "@/providers/AuthProvider";
 import { colors, radius, spacing } from "@/theme";
 import { getLocalWorkout } from "@/lib/workout-store";
 
-export default function AssessmentScreen(){
- const router=useRouter(),auth=useAuth(),[session,setSession]=useState<SessionState|null>(null),[loading,setLoading]=useState(true),[busy,setBusy]=useState(false),[message,setMessage]=useState<string|null>(null),[index,setIndex]=useState(0),[drafts,setDrafts]=useState<Record<string,string>>({}),[retryNonce,setRetryNonce]=useState(0);
- useEffect(()=>{track("app_opened",{route:"/"});if(auth.status==="signedIn"){router.replace("/(member)");return}if(auth.status==="authenticatedOffline"&&auth.session){void getLocalWorkout(auth.session.user.id).then(local=>router.replace(local?"/workout":"/(member)"));return}if(auth.status==="reauthRequired"){router.replace("/sign-in");return}if(auth.status!=="signedOut")return;void(async()=>{try{const capability=await loadCapability();const next=capability?await resumeSession(capability):await createSession();setSession(next);if(capability)track("assessment_resumed");else track("assessment_session_created");if(next.state!=="in_progress"&&next.blueprint){router.replace("/blueprint");return}const steps=visibleSteps(next.answers as Intake),found=steps.findIndex(x=>x.key===next.currentStepKey);setIndex(found>=0?found:0)}catch{setMessage("Your assessment could not load. Check your connection and try again.")}finally{setLoading(false)}})()},[auth.session,auth.status,router,retryNonce]);
- const steps=useMemo(()=>visibleSteps((session?.answers??{}) as Intake),[session?.answers]),step=steps[index]??steps[0],value=step&&session?.answers[step.key];
- if(auth.status==="signedIn"||auth.status==="authenticatedOffline"||auth.status==="reauthRequired")return null;
- if(loading||!session||!step)return <Screen><SthenoLogo/><View style={styles.center}><Text style={styles.muted}>{message??"Restoring your private assessment…"}</Text>{message?<Button onPress={()=>{setMessage(null);setLoading(true);setRetryNonce(current=>current+1)}}>Try again</Button>:null}</View></Screen>;
- const draft=step.options?"":drafts[step.key]??(value===undefined?"":String(value)),effectiveValue=step.options?value:draft,answered=effectiveValue!==undefined&&effectiveValue!==""&&(!Array.isArray(effectiveValue)||effectiveValue.length>0);
- async function commit(nextValue:string|number|string[],advance=false){if(!session||!step)return null;setBusy(true);setMessage(null);try{const answers={...session.answers,[step.key]:nextValue};const nextSteps=visibleSteps(answers as Intake),nextIndex=Math.min(index+(advance?1:0),nextSteps.length-1),nextKey=nextSteps[nextIndex]?.key??null;const saved=await saveAnswers(session,answers,nextKey);setSession(saved);track("assessment_answer_saved");if(advance)setIndex(nextIndex);return saved}catch(error){setMessage(error instanceof Error?error.message:"Your answer was not saved. Try again.");return null}finally{setBusy(false)}}
- async function next(){if(!answered||!session||!step)return;const prepared=step.options?session:await commit(step.type==="number"?Number(draft):draft,index<steps.length-1);if(!prepared)return;if(index<steps.length-1){if(step.options)setIndex(index+1);return}setBusy(true);try{const done=await finalizeSession(prepared);setSession(done);track("assessment_completed");router.push("/blueprint")}catch(error){setMessage(error instanceof Error?error.message:"Your Blueprint could not be created yet.")}finally{setBusy(false)}}
- return <Screen><View style={styles.header}><SthenoLogo/><Pressable accessibilityRole="link" onPress={()=>router.push("/sign-in")}><Text style={styles.signIn}>Already a member? Sign in</Text></Pressable></View><View style={styles.progress}><View style={[styles.progressFill,{width:`${Math.max(3,Math.round((index+1)/steps.length*100))}%`}]} /></View><Text testID={`assessment-step-${step.key}`} accessibilityLabel={`Assessment step ${step.key}`} style={styles.step}>{step.section} · {index+1} of {steps.length}</Text><Text accessibilityRole="header" style={styles.question}>{step.question}</Text><Body muted>{step.help}</Body><View style={styles.control}>{step.options?step.options.map(option=>{const checked=Array.isArray(value)?value.includes(option.value):value===option.value;return <Pressable key={option.value} testID={`assessment-option-${step.key}-${option.value}`} accessibilityLabel={`Select ${option.label} for ${step.key}`} accessibilityRole={step.type==="multi"?"checkbox":"radio"} accessibilityState={{checked}} style={[styles.option,checked&&styles.selected]} onPress={()=>{if(step.type==="multi"){const current=Array.isArray(value)?value:[];void commit(checked?current.filter(x=>x!==option.value):[...current,option.value])}else void commit(option.value,true)}}><View style={styles.optionCopy}><Text style={styles.optionLabel}>{option.label}</Text>{option.detail?<Text style={styles.muted}>{option.detail}</Text>:null}</View><Text style={styles.mark}>{checked?"✓":"→"}</Text></Pressable>}):<Field testID={`assessment-input-${step.key}`} label={step.unit?`Answer (${step.unit})`:"Answer"} value={draft} multiline={step.type==="text"} keyboardType={step.type==="number"?"decimal-pad":"default"} placeholder={step.type==="date"?"YYYY-MM-DD":undefined} onChangeText={text=>setDrafts(current=>({...current,[step.key]:text}))} />}</View>{message?<Notice tone="error">{message}</Notice>:null}{step.type!=="single"?<Button testID={`assessment-continue-${step.key}`} accessibilityLabel={`Continue from ${step.key}`} busy={busy} disabled={!answered} onPress={()=>void next()}>{index===steps.length-1?"Create my Blueprint":"Continue"}</Button>:null}{step.optional&&!answered?<Button variant="text" onPress={()=>{if(index<steps.length-1)setIndex(index+1)}}>Skip for now</Button>:null}</Screen>;
+export default function AssessmentScreen() {
+  const router = useRouter(),
+    auth = useAuth(),
+    [session, setSession] = useState<SessionState | null>(null),
+    [loading, setLoading] = useState(true),
+    [busy, setBusy] = useState(false),
+    [message, setMessage] = useState<string | null>(null),
+    [index, setIndex] = useState(0),
+    [drafts, setDrafts] = useState<Record<string, string>>({}),
+    [retryNonce, setRetryNonce] = useState(0);
+  useEffect(() => {
+    track("app_opened", { route: "/" });
+    if (auth.status === "signedIn") {
+      router.replace("/(member)");
+      return;
+    }
+    if (auth.status === "authenticatedOffline" && auth.session) {
+      void getLocalWorkout(auth.session.user.id).then((local) =>
+        router.replace(local ? "/workout" : "/(member)"),
+      );
+      return;
+    }
+    if (auth.status === "reauthRequired") {
+      router.replace("/sign-in");
+      return;
+    }
+    if (auth.status !== "signedOut") return;
+    void (async () => {
+      try {
+        const capability = await loadCapability();
+        const next = capability
+          ? await resumeSession(capability)
+          : await createSession();
+        setSession(next);
+        if (capability) track("assessment_resumed");
+        else track("assessment_session_created");
+        if (next.state !== "in_progress" && next.blueprint) {
+          router.replace("/blueprint");
+          return;
+        }
+        const steps = visibleSteps(next.answers as Intake),
+          found = steps.findIndex((x) => x.key === next.currentStepKey);
+        setIndex(found >= 0 ? found : 0);
+      } catch {
+        setMessage(
+          "Your assessment could not load. Check your connection and try again.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [auth.session, auth.status, router, retryNonce]);
+  const steps = useMemo(
+      () => visibleSteps((session?.answers ?? {}) as Intake),
+      [session?.answers],
+    ),
+    step = steps[index] ?? steps[0],
+    value = step && session?.answers[step.key];
+  if (
+    auth.status === "signedIn" ||
+    auth.status === "authenticatedOffline" ||
+    auth.status === "reauthRequired"
+  )
+    return null;
+  if (loading || !session || !step)
+    return (
+      <Screen>
+        <SthenoLogo />
+        <View style={styles.center}>
+          <Text style={styles.muted}>
+            {message ?? "Restoring your private assessment…"}
+          </Text>
+          {message ? (
+            <Button
+              onPress={() => {
+                setMessage(null);
+                setLoading(true);
+                setRetryNonce((current) => current + 1);
+              }}
+            >
+              Try again
+            </Button>
+          ) : null}
+        </View>
+      </Screen>
+    );
+  const draft = step.options
+      ? ""
+      : (drafts[step.key] ?? (value === undefined ? "" : String(value))),
+    effectiveValue = step.options ? value : draft,
+    answered =
+      effectiveValue !== undefined &&
+      effectiveValue !== "" &&
+      (!Array.isArray(effectiveValue) || effectiveValue.length > 0);
+  async function commit(
+    nextValue: string | number | string[],
+    advance = false,
+  ) {
+    if (!session || !step) return null;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const answers = { ...session.answers, [step.key]: nextValue };
+      const nextSteps = visibleSteps(answers as Intake),
+        nextIndex = Math.min(index + (advance ? 1 : 0), nextSteps.length - 1),
+        nextKey = nextSteps[nextIndex]?.key ?? null;
+      const saved = await saveAnswers(session, answers, nextKey);
+      setSession(saved);
+      track("assessment_answer_saved");
+      if (advance) setIndex(nextIndex);
+      return saved;
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Your answer was not saved. Try again.",
+      );
+      return null;
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function next() {
+    if (!answered || !session || !step) return;
+    const prepared = step.options
+      ? session
+      : await commit(
+          step.type === "number" ? Number(draft) : draft,
+          index < steps.length - 1,
+        );
+    if (!prepared) return;
+    if (index < steps.length - 1) {
+      if (step.options) setIndex(index + 1);
+      return;
+    }
+    setBusy(true);
+    try {
+      const done = await finalizeSession(prepared);
+      setSession(done);
+      track("assessment_completed");
+      router.push("/blueprint");
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Your Blueprint could not be created yet.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <Screen>
+      <View style={styles.header}>
+        <SthenoLogo />
+        <Pressable
+          testID="assessment-sign-in"
+          accessibilityLabel="Sign in from assessment"
+          accessibilityRole="link"
+          onPress={() => router.push("/sign-in")}
+        >
+          <Text style={styles.signIn}>Already a member? Sign in</Text>
+        </Pressable>
+      </View>
+      <View style={styles.progress}>
+        <View
+          style={[
+            styles.progressFill,
+            {
+              width: `${Math.max(3, Math.round(((index + 1) / steps.length) * 100))}%`,
+            },
+          ]}
+        />
+      </View>
+      <Text
+        testID={`assessment-step-${step.key}`}
+        accessibilityLabel={`Assessment step ${step.key}`}
+        style={styles.step}
+      >
+        {step.section} · {index + 1} of {steps.length}
+      </Text>
+      <Text accessibilityRole="header" style={styles.question}>
+        {step.question}
+      </Text>
+      <Body muted>{step.help}</Body>
+      <View style={styles.control}>
+        {step.options ? (
+          step.options.map((option) => {
+            const checked = Array.isArray(value)
+              ? value.includes(option.value)
+              : value === option.value;
+            return (
+              <Pressable
+                key={option.value}
+                testID={`assessment-option-${step.key}-${option.value}`}
+                accessibilityLabel={`Select ${option.label} for ${step.key}`}
+                accessibilityRole={step.type === "multi" ? "checkbox" : "radio"}
+                accessibilityState={{ checked }}
+                style={[styles.option, checked && styles.selected]}
+                onPress={() => {
+                  if (step.type === "multi") {
+                    const current = Array.isArray(value) ? value : [];
+                    void commit(
+                      checked
+                        ? current.filter((x) => x !== option.value)
+                        : [...current, option.value],
+                    );
+                  } else void commit(option.value, true);
+                }}
+              >
+                <View style={styles.optionCopy}>
+                  <Text style={styles.optionLabel}>{option.label}</Text>
+                  {option.detail ? (
+                    <Text style={styles.muted}>{option.detail}</Text>
+                  ) : null}
+                </View>
+                <Text style={styles.mark}>{checked ? "✓" : "→"}</Text>
+              </Pressable>
+            );
+          })
+        ) : (
+          <Field
+            testID={`assessment-input-${step.key}`}
+            label={step.unit ? `Answer (${step.unit})` : "Answer"}
+            value={draft}
+            multiline={step.type === "text"}
+            keyboardType={step.type === "number" ? "decimal-pad" : "default"}
+            placeholder={step.type === "date" ? "YYYY-MM-DD" : undefined}
+            onChangeText={(text) =>
+              setDrafts((current) => ({ ...current, [step.key]: text }))
+            }
+          />
+        )}
+      </View>
+      {message ? <Notice tone="error">{message}</Notice> : null}
+      {step.type !== "single" ? (
+        <Button
+          testID={`assessment-continue-${step.key}`}
+          accessibilityLabel={`Continue from ${step.key}`}
+          busy={busy}
+          disabled={!answered}
+          onPress={() => void next()}
+        >
+          {index === steps.length - 1 ? "Create my Blueprint" : "Continue"}
+        </Button>
+      ) : null}
+      {step.optional && !answered ? (
+        <Button
+          variant="text"
+          onPress={() => {
+            if (index < steps.length - 1) setIndex(index + 1);
+          }}
+        >
+          Skip for now
+        </Button>
+      ) : null}
+    </Screen>
+  );
 }
-const styles=StyleSheet.create({header:{flexDirection:"row",justifyContent:"space-between",alignItems:"center",gap:spacing.md},signIn:{color:colors.ink,fontWeight:"800",textDecorationLine:"underline",maxWidth:130,textAlign:"right"},center:{flex:1,justifyContent:"center",gap:spacing.md},progress:{height:5,backgroundColor:colors.line,borderRadius:99,marginTop:spacing.xl,overflow:"hidden"},progressFill:{height:5,backgroundColor:colors.orange},step:{marginTop:spacing.lg,color:colors.orangeDark,fontSize:12,fontWeight:"800",letterSpacing:1.4,textTransform:"uppercase"},question:{color:colors.ink,fontSize:34,lineHeight:39,fontWeight:"800",letterSpacing:-1.1,marginVertical:spacing.md},control:{gap:spacing.sm,marginTop:spacing.lg},option:{minHeight:62,flexDirection:"row",alignItems:"center",justifyContent:"space-between",borderWidth:1,borderColor:colors.line,borderRadius:radius.medium,backgroundColor:colors.paper,padding:spacing.md,gap:spacing.md},selected:{borderColor:colors.orange,backgroundColor:"#fff0e9"},optionCopy:{flex:1,gap:2},optionLabel:{fontSize:17,color:colors.ink,fontWeight:"700"},mark:{color:colors.orangeDark,fontSize:20,fontWeight:"900"},muted:{color:colors.muted}});
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: spacing.md,
+  },
+  signIn: {
+    color: colors.ink,
+    fontWeight: "800",
+    textDecorationLine: "underline",
+    maxWidth: 130,
+    textAlign: "right",
+  },
+  center: { flex: 1, justifyContent: "center", gap: spacing.md },
+  progress: {
+    height: 5,
+    backgroundColor: colors.line,
+    borderRadius: 99,
+    marginTop: spacing.xl,
+    overflow: "hidden",
+  },
+  progressFill: { height: 5, backgroundColor: colors.orange },
+  step: {
+    marginTop: spacing.lg,
+    color: colors.orangeDark,
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 1.4,
+    textTransform: "uppercase",
+  },
+  question: {
+    color: colors.ink,
+    fontSize: 34,
+    lineHeight: 39,
+    fontWeight: "800",
+    letterSpacing: -1.1,
+    marginVertical: spacing.md,
+  },
+  control: { gap: spacing.sm, marginTop: spacing.lg },
+  option: {
+    minHeight: 62,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: radius.medium,
+    backgroundColor: colors.paper,
+    padding: spacing.md,
+    gap: spacing.md,
+  },
+  selected: { borderColor: colors.orange, backgroundColor: "#fff0e9" },
+  optionCopy: { flex: 1, gap: 2 },
+  optionLabel: { fontSize: 17, color: colors.ink, fontWeight: "700" },
+  mark: { color: colors.orangeDark, fontSize: 20, fontWeight: "900" },
+  muted: { color: colors.muted },
+});
