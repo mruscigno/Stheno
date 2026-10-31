@@ -555,7 +555,9 @@ async function concurrentServerSet(
 }
 function signInThroughUi(address) {
   input("sign-in-email", address, false);
-  input("sign-in-password", password, false);
+  // Dismiss the IME after the final field. Otherwise API 35 can report the
+  // submit node while the keyboard still occludes it and consume the tap.
+  input("sign-in-password", password);
   tap("sign-in-submit");
   assertVisible("member-today-ready", 60);
 }

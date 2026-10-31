@@ -52,6 +52,7 @@ test("acceptance actions use stable identifiers and split scenario entry points"
   assert.match(workout, /testID=\{`workout-set-\$\{ordinal\}-commit`\}/);
   assert.match(workout, /testID="workout-conflict-notice"/);
   assert.doesNotMatch(journey, /node\.text === identifier/);
+  assert.match(journey, /input\("sign-in-password", password\);/);
   for (const name of [
     "bootstrap",
     "response-loss",
