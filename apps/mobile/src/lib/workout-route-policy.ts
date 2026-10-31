@@ -9,3 +9,12 @@ export function shouldAutoStartWorkout(input: {
     && !input.observedWorkout
     && !input.autoStartAttempted;
 }
+
+export function canOpenNativeWorkout(input: {
+  rolloutEnabled: boolean;
+  authenticatedOffline: boolean;
+  hasPersistedWorkout: boolean;
+}) {
+  return input.rolloutEnabled
+    || (input.authenticatedOffline && input.hasPersistedWorkout);
+}
