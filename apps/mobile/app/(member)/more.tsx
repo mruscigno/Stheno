@@ -18,7 +18,7 @@ export default function MoreScreen() {
     router = useRouter();
   async function completeSignOut() {
     await auth.signOut();
-    router.replace("/");
+    router.replace("/assessment");
   }
   async function signOut() {
     const ownerId = auth.session?.user.id,

@@ -27,6 +27,7 @@ test("native workout sync status remains a stable Android accessibility node", (
 test("acceptance actions use stable identifiers and split scenario entry points", () => {
   const root = fs.readFileSync("apps/mobile/app/_layout.tsx", "utf8");
   const assessment = fs.readFileSync("apps/mobile/app/index.tsx", "utf8");
+  const signedOutAssessment = fs.readFileSync("apps/mobile/app/assessment.tsx", "utf8");
   const signIn = fs.readFileSync("apps/mobile/app/sign-in.tsx", "utf8");
   const more = fs.readFileSync("apps/mobile/app/(member)/more.tsx", "utf8");
   const memberLayout = fs.readFileSync("apps/mobile/app/(member)/_layout.tsx", "utf8");
@@ -45,7 +46,8 @@ test("acceptance actions use stable identifiers and split scenario entry points"
   assert.doesNotMatch(memberLayout, /router\.replace\("\/"\)/);
   assert.match(more, /await auth\.signOut\(\)/);
   assert.doesNotMatch(more, /router\.dismissAll\(\)/);
-  assert.match(more, /router\.replace\("\/"\)/);
+  assert.match(more, /router\.replace\("\/assessment"\)/);
+  assert.match(signedOutAssessment, /export \{ default \} from "\.\/index"/);
   assert.match(authProvider, /await bootstrap\(null\)/);
   assert.match(workout, /testID=\{`workout-set-\$\{ordinal\}-commit`\}/);
   assert.match(workout, /testID="workout-conflict-notice"/);
