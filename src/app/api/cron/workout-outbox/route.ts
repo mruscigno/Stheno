@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { drainWorkoutOutbox } from "@/platform/server/workout-outbox";
+import { drainWorkoutOutbox, workoutOutboxHealth } from "@/platform/server/workout-outbox";
 
 export const maxDuration = 300;
 
@@ -10,8 +10,12 @@ export async function POST(request: Request) {
   const db = createSupabaseAdminClient();
   if (!db) return NextResponse.json({ error: "Backend service is not configured" }, { status: 503 });
   try {
-    return NextResponse.json({ ok: true, ...(await drainWorkoutOutbox(db)) });
+    const before = await workoutOutboxHealth(db), result = await drainWorkoutOutbox(db), after = await workoutOutboxHealth(db);
+    console.info("workout_outbox_run", { before, result, after });
+    return NextResponse.json({ ok: true, before, ...result, after });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "OUTBOX_WORKER_FAILED" }, { status: 503 });
   }
 }
+
+export const GET = POST;

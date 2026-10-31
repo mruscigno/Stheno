@@ -171,9 +171,9 @@ export async function POST(request: Request) {
             ]),
         admin
           .from("entitlements")
-          .update({ is_enabled: false, updated_at: now })
+          .update({ active: false, ends_at: now })
           .eq("user_id", context.user.id)
-          .eq("feature_key", "premium"),
+          .eq("entitlement_key", "premium"),
       ]);
     }
     await captureServerEvent("money_back_refund_completed", context.user.id, {

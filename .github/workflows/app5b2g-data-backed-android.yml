@@ -114,6 +114,7 @@ jobs:
           supabase test db supabase/tests/app5a_workout_atomicity.sql
           supabase test db supabase/tests/app5b1_protocol_integration.sql
           supabase test db supabase/tests/app5b1r_durable_outbox.sql
+          supabase test db supabase/tests/app5b2v_rollout_security.sql
 
       - name: Record acceptance scenario definitions
         shell: bash
@@ -130,6 +131,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          psql "$POSTGRES_URL" -v ON_ERROR_STOP=1 -c "update public.feature_rollout_controls set state='INTERNAL_TEST',updated_at=now() where feature_key='native_workout'"
           mkdir -p artifacts/app5b2u/backend
           nohup pnpm dev --hostname 0.0.0.0 > artifacts/app5b2u/backend/next.log 2>&1 &
           echo $! > artifacts/app5b2u/backend/next.pid

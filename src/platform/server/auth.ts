@@ -4,6 +4,7 @@ import { createClient, type SupabaseClient, type User } from "@supabase/supabase
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { publicEnv } from "@/lib/config/env";
 import { evaluateMemberAccess } from "@/modules/access/trial";
+import { nativeWorkoutAccess } from "@/platform/server/native-workout-rollout";
 
 export type AuthenticatedContext = { db: SupabaseClient; user: User; authMode: "bearer" | "cookie" };
 
@@ -47,4 +48,10 @@ export async function authorizeMemberRequest(request: Request) {
   if (error) throw new Error(`ACCESS_LOOKUP_FAILED:${error.message}`);
   const access = evaluateMemberAccess({ accountCreatedAt: context.user.created_at, subscriptionStatus: subscription?.status });
   return access.hasAccess ? { state: "allowed" as const, context, access } : { state: "expired" as const, context, access };
+}
+
+export async function authorizeNativeWorkoutRequest(request: Request) {
+  const authorization = await authorizeMemberRequest(request);
+  if (authorization.state !== "allowed" || !authorization.context) return { ...authorization, nativeWorkout: null };
+  return { ...authorization, nativeWorkout: await nativeWorkoutAccess(authorization.context.db, authorization.context.user.id) };
 }

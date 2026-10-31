@@ -2,13 +2,15 @@ import "server-only";
 
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { evaluateMemberAccess } from "@/modules/access/trial";
+import { nativeWorkoutAccess } from "@/platform/server/native-workout-rollout";
 
 export async function memberReadModel(db: SupabaseClient, user: User) {
-  const [profile, preferences, subscription, entitlements] = await Promise.all([
+  const [profile, preferences, subscription, entitlements, workoutRollout] = await Promise.all([
     db.from("profiles").select("display_name,lifecycle_state,time_zone,created_at,updated_at").eq("user_id", user.id).maybeSingle(),
     db.from("user_preferences").select("unit_system,locale").eq("user_id", user.id).maybeSingle(),
     db.from("subscriptions").select("status,billing_interval,current_period_ends_at,updated_at").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     db.from("entitlements").select("entitlement_key,active,starts_at,ends_at").eq("user_id", user.id).eq("active", true),
+    nativeWorkoutAccess(db, user.id),
   ]);
   if (profile.error || preferences.error || subscription.error || entitlements.error) throw new Error("MEMBER_READ_FAILED");
   return {
@@ -19,6 +21,7 @@ export async function memberReadModel(db: SupabaseClient, user: User) {
     access: evaluateMemberAccess({ accountCreatedAt: user.created_at, subscriptionStatus: subscription.data?.status }),
     subscription: subscription.data,
     entitlements: entitlements.data ?? [],
+    capabilities: { nativeWorkout: workoutRollout },
   };
 }
 

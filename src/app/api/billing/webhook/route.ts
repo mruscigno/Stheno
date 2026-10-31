@@ -36,8 +36,10 @@ export async function POST(request: Request) {
           converted = event.type === "customer.subscription.updated" && previousStatus === "trialing" && sub.status === "active",
           cancelled = event.type === "customer.subscription.deleted" || (event.type === "customer.subscription.updated" && sub.status === "canceled" && previousStatus !== "canceled"),
           pastDue = event.type === "customer.subscription.updated" && sub.status === "past_due" && previousStatus !== "past_due";
-        await db.from("subscriptions").upsert({ user_id: userId, stripe_customer_id: String(sub.customer), stripe_subscription_id: sub.id, status: sub.status, billing_interval: interval, current_period_end: new Date(sub.items.data[0]?.current_period_end * 1000).toISOString(), updated_at: new Date().toISOString() }, { onConflict: "user_id" });
-        await db.from("entitlements").upsert({ user_id: userId, feature_key: "premium", is_enabled: activeStatuses.includes(sub.status), source: "stripe", updated_at: new Date().toISOString() }, { onConflict: "user_id,feature_key" });
+        const { data: storedSubscription, error: subscriptionError } = await db.from("subscriptions").upsert({ user_id: userId, stripe_customer_id: String(sub.customer), stripe_subscription_id: sub.id, status: sub.status, billing_interval: interval, current_period_ends_at: new Date(sub.items.data[0]?.current_period_end * 1000).toISOString(), updated_at: new Date().toISOString() }, { onConflict: "stripe_subscription_id" }).select("id").single();
+        if (subscriptionError) throw subscriptionError;
+        const { error: entitlementError } = await db.from("entitlements").upsert({ user_id: userId, entitlement_key: "premium", active: activeStatuses.includes(sub.status), starts_at: new Date().toISOString(), ends_at: activeStatuses.includes(sub.status) ? null : new Date().toISOString(), source_subscription_id: storedSubscription.id }, { onConflict: "user_id,entitlement_key" });
+        if (entitlementError) throw entitlementError;
         await analytics.setIdentity(userId, { plan });
         if (becameActive) await Promise.all([analytics.trackEvent("subscription_started", { plan, status: sub.status }, { userId }), captureServerEvent("subscription_started", userId, { plan, status: sub.status }), captureFunnelServer("subscription_complete", userId, { plan, status: sub.status })]);
         if (reactivated) await captureServerEvent("subscription_reactivated", userId, { plan, status: sub.status });

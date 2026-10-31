@@ -7,6 +7,25 @@ import { effectiveWorkout } from "@/modules/workout/logic";
 
 export const WORKOUT_OUTBOX_CONSUMER_VERSION = "app5b1r_v1";
 
+export async function workoutOutboxHealth(db: SupabaseClient) {
+  const [pending, processing, deadLetter, oldest] = await Promise.all([
+    db.from("workout_operation_outbox").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    db.from("workout_operation_outbox").select("id", { count: "exact", head: true }).eq("status", "processing"),
+    db.from("workout_operation_outbox").select("id", { count: "exact", head: true }).eq("status", "dead_letter"),
+    db.from("workout_operation_outbox").select("created_at").eq("status", "pending").order("created_at", { ascending: true }).limit(1).maybeSingle(),
+  ]);
+  const error = pending.error ?? processing.error ?? deadLetter.error ?? oldest.error;
+  if (error) throw new Error(`OUTBOX_HEALTH_FAILED:${error.message}`);
+  const oldestPendingAt = oldest.data?.created_at ?? null;
+  return {
+    pending: pending.count ?? 0,
+    processing: processing.count ?? 0,
+    deadLettered: deadLetter.count ?? 0,
+    oldestPendingAt,
+    oldestPendingAgeSeconds: oldestPendingAt ? Math.max(0, Math.floor((Date.now() - new Date(oldestPendingAt).getTime()) / 1000)) : 0,
+  };
+}
+
 type OutboxEvent = {
   id: string;
   user_id: string;

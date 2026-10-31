@@ -1,12 +1,13 @@
 import { SubstituteWorkoutExerciseInput } from "@/platform/contracts/api";
-import { authorizeMemberRequest } from "@/platform/server/auth";
+import { authorizeNativeWorkoutRequest } from "@/platform/server/auth";
 import { apiError, apiSuccess, parseJson, requestId } from "@/platform/server/http";
 import { applyWorkoutOperation, workoutOperationError } from "@/platform/server/workout-operations";
 
 export async function POST(request:Request,context:{params:Promise<{id:string}>}){
-  const rid=requestId(request),authorization=await authorizeMemberRequest(request);
+  const rid=requestId(request),authorization=await authorizeNativeWorkoutRequest(request);
   if(!authorization.context)return apiError(rid,401,"AUTH_REQUIRED","Authentication is required.");
   if(authorization.state==="expired")return apiError(rid,402,"ACCESS_EXPIRED","Membership access is required.",{upgradeUrl:"/pricing"});
+  if(!authorization.nativeWorkout?.enabled)return apiError(rid,403,"NATIVE_WORKOUT_UNAVAILABLE","Native workouts are not enabled for this account.",{rolloutState:authorization.nativeWorkout?.state??"DISABLED"});
   const parsed=await parseJson(request,SubstituteWorkoutExerciseInput);if(parsed.error)return apiError(rid,400,"VALIDATION_FAILED","Invalid substitution request.",parsed.error);
   const {id}=await context.params,db=authorization.context.db,userId=authorization.context.user.id;
   const [session,exerciseRows]=await Promise.all([

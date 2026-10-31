@@ -5,6 +5,7 @@ export const API_VERSION = "1.0" as const;
 export const ApiErrorCode = z.enum([
   "AUTH_REQUIRED",
   "ACCESS_EXPIRED",
+  "NATIVE_WORKOUT_UNAVAILABLE",
   "NOT_FOUND",
   "VALIDATION_FAILED",
   "CONFLICT",
@@ -113,6 +114,7 @@ export type MemberReadModel = {
   access: { hasAccess: boolean; state: string; trialEndsAt?: string | null; daysRemaining?: number };
   subscription: { status: string; billing_interval: string | null; current_period_ends_at: string | null; updated_at: string } | null;
   entitlements: Array<{ entitlement_key: string; active: boolean; starts_at: string | null; ends_at: string | null }>;
+  capabilities?: { nativeWorkout: { enabled: boolean; state: "DISABLED" | "INTERNAL_TEST" | "LIMITED_PILOT" | "PUBLIC"; cohort: "internal_test" | "limited_pilot" | null; reason: string } };
 };
 
 export type WorkoutSetReadModel = { id: string; exercise_slug: string; set_ordinal: number; set_type: string; prescribed: Record<string, unknown>; load_value: number | null; load_unit: "lb" | "kg"; repetitions: number | null; rir: number | null; rpe: number | null; state: "completed" | "skipped"; performed_at: string; revision: number };

@@ -1,0 +1,14 @@
+begin;
+select plan(10);
+select has_table('public','feature_rollout_controls','rollout control table exists');
+select has_table('public','feature_rollout_members','rollout membership table exists');
+select ok(not has_table_privilege('anon','public.feature_rollout_controls','select'),'anonymous users cannot read rollout state');
+select ok(has_table_privilege('authenticated','public.feature_rollout_controls','select'),'authenticated users can read rollout state');
+select ok(not has_table_privilege('authenticated','public.feature_rollout_controls','update'),'members cannot change rollout state');
+select ok(not has_table_privilege('authenticated','public.feature_rollout_members','insert'),'members cannot enroll themselves');
+select ok(not has_table_privilege('authenticated','public.feature_rollout_members','update'),'members cannot change cohort membership');
+select ok(not has_table_privilege('authenticated','public.feature_rollout_members','delete'),'members cannot remove cohort membership');
+select is((select state from public.feature_rollout_controls where feature_key='native_workout'),'DISABLED','native workout rollout defaults disabled');
+select is((select count(*)::int from public.feature_rollout_members),0,'migration creates no synthetic production members');
+select * from finish();
+rollback;

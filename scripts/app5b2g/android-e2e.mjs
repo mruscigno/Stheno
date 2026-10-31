@@ -504,6 +504,20 @@ async function createSecondUser() {
     );
   return response.json();
 }
+async function authorizeRolloutUser(userId) {
+  if (!serviceRoleKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
+  const response = await fetch(`${supabaseUrl}/rest/v1/feature_rollout_members?on_conflict=feature_key,user_id`, {
+    method: "POST",
+    headers: {
+      apikey: serviceRoleKey,
+      authorization: `Bearer ${serviceRoleKey}`,
+      "content-type": "application/json",
+      prefer: "resolution=merge-duplicates,return=minimal",
+    },
+    body: JSON.stringify({ feature_key: "native_workout", user_id: userId, cohort: "internal_test", active: true }),
+  });
+  if (!response.ok) throw new Error(`Rollout authorization failed: ${response.status} ${await response.text()}`);
+}
 async function armResponseLoss(token) {
   const result = await api("/api/v1/test/native-acceptance", token, {
     method: "POST",
@@ -683,7 +697,11 @@ if (scenario === "bootstrap") {
   await verifyLatestLocalEmail(email);
   assertVisible("member-today-ready", 80);
   const firstSession = await passwordSession(email);
-  await createSecondUser();
+  const secondUser = await createSecondUser();
+  await authorizeRolloutUser(firstSession.user.id);
+  await authorizeRolloutUser(secondUser.id);
+  tap("member-today-ready");
+  assertVisible("today-open-workout", 30);
   snapshot("08-member-today");
   dismissExpoWarning();
   tap("member-plan-tab");

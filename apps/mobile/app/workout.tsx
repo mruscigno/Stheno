@@ -213,6 +213,8 @@ export default function WorkoutScreen() {
   if (auth.status === "signedOut") return <Redirect href="/" />;
   if (auth.status !== "signedIn" && auth.status !== "authenticatedOffline")
     return null;
+  if (!auth.member?.capabilities?.nativeWorkout?.enabled)
+    return <Screen><SthenoLogo/><Eyebrow>Workout</Eyebrow><Title>Native workout logging is unavailable.</Title><Body muted>Your program is safe. STHENO has not enabled native workout logging for this account.</Body><Button onPress={()=>router.replace("/(member)")}>Back to Today</Button></Screen>;
   if (!workout)
     return (
       <Screen>

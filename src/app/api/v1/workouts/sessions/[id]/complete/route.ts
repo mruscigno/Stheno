@@ -1,14 +1,15 @@
 import { CompleteWorkoutInput } from "@/platform/contracts/api";
-import { authorizeMemberRequest } from "@/platform/server/auth";
+import { authorizeNativeWorkoutRequest } from "@/platform/server/auth";
 import { apiError, apiSuccess, parseJson, requestId } from "@/platform/server/http";
 import { applyWorkoutOperation, workoutOperationError } from "@/platform/server/workout-operations";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const requestIdValue = requestId(request), authorization = await authorizeMemberRequest(request);
+  const requestIdValue = requestId(request), authorization = await authorizeNativeWorkoutRequest(request);
   if (!authorization.context) return apiError(requestIdValue, 401, "AUTH_REQUIRED", "Authentication is required.");
   if (authorization.state === "expired") return apiError(requestIdValue, 402, "ACCESS_EXPIRED", "Membership access is required.", { upgradeUrl: "/pricing" });
+  if (!authorization.nativeWorkout?.enabled) return apiError(requestIdValue, 403, "NATIVE_WORKOUT_UNAVAILABLE", "Native workouts are not enabled for this account.", { rolloutState: authorization.nativeWorkout?.state ?? "DISABLED" });
   const context = authorization.context;
   const parsed = await parseJson(request, CompleteWorkoutInput);
   if (parsed.error) return apiError(requestIdValue, 400, "VALIDATION_FAILED", "Invalid completion request.", parsed.error);
