@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCanonicalExercise } from "@/lib/exercises/canonical";
-import { resolveExerciseMedia } from "@/platform/server/exercise-media";
+import { resolveExerciseMedia, resolveExerciseMediaSet } from "@/platform/server/exercise-media";
 
 const releaseGate = {
   status: "production",
@@ -30,4 +30,10 @@ export async function getPublicExerciseMedia(exercise: { id: string; slug: strin
   const db = await createSupabaseServerClient();
   if (!db) return null;
   return resolveExerciseMedia(db, exercise);
+}
+
+export async function getPublicExerciseMediaGallery(exercise: { id: string; slug: string }) {
+  const db = await createSupabaseServerClient();
+  if (!db) return [];
+  return resolveExerciseMediaSet(db, exercise);
 }

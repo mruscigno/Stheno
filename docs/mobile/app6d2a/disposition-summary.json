@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "inventoryRows": 1599,
+  "digest": "3fccbe927eef99e26b033184db109b3e50bf0c7315990c20b00ed8394e7f5579",
+  "counts": {
+    "accepted_existing_exercise_candidate": 100,
+    "accepted_supplemental_candidate": 3,
+    "blocked_source": 1,
+    "duplicate_payload": 181,
+    "pending_manual_review": 1308,
+    "rejected_mismatch": 1,
+    "rejected_visual_review": 5
+  },
+  "importLinks": 103,
+  "importDigest": "e1a916d0cce9485267b09616aae2c8309286c7a75f4e57ec66bc0f58a0cc21f5"
+}

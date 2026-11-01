@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
-import { getPublicExercise, getPublicExerciseAlternatives, getPublicExerciseMedia } from "@/lib/exercises/public-catalog";
+import { getPublicExercise, getPublicExerciseAlternatives, getPublicExerciseMediaGallery } from "@/lib/exercises/public-catalog";
 import { formatExercisePrescription } from "@/modules/training/prescription";
 import { exerciseMetaDescription, exercisePageTitle } from "@/lib/seo";
 async function getExercise(slug: string) {
@@ -35,10 +35,11 @@ export default async function Exercise({
   const primary = e.primary_muscles as string[],
     secondary = e.secondary_muscles as string[],
     education = e.education;
-  const [alternativeRows, media] = await Promise.all([
+  const [alternativeRows, mediaGallery] = await Promise.all([
     getPublicExerciseAlternatives(e.id),
-    getPublicExerciseMedia(e),
+    getPublicExerciseMediaGallery(e),
   ]);
+  const media = mediaGallery[0] ?? null;
   const alternatives = alternativeRows.slice(0, 6);
   return (
     <main className="exercise-profile shell">
@@ -69,6 +70,12 @@ export default async function Exercise({
         <AnatomyMap primary={primary} secondary={secondary} />
       </header>
       <ExerciseVideo slug={e.slug} name={e.name} media={media} />
+      {mediaGallery.slice(1).map((item, index) => (
+        <section className="exercise-supplemental-media" key={`${item.videoPath}-${index}`}>
+          <p className="kicker">{item.role === "technique_tip" ? "Technique tip" : "Alternate demonstration"}</p>
+          <ExerciseVideo slug={e.slug} name={`${e.name} ${item.role.replaceAll("_", " ")}`} media={item} compact />
+        </section>
+      ))}
       <dl className="exercise-facts">
         <div>
           <dt>Equipment</dt>

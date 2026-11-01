@@ -76,6 +76,12 @@ export default function ExerciseGuideScreen() {
       <Title>{exercise.name}</Title>
       <Body>{exercise.purpose}</Body>
       {detail.media ? <MediaPreview media={detail.media} name={exercise.name} /> : <Notice>Written guidance is available. No approved demonstration is currently available.</Notice>}
+      {detail.mediaGallery.slice(1).map((media, index) => (
+        <View key={`${media.videoPath}-${index}`}>
+          <Eyebrow>{media.role === "technique_tip" ? "Technique tip" : "Alternate demonstration"}</Eyebrow>
+          <MediaPreview media={media} name={`${exercise.name} ${media.role.replaceAll("_", " ")}`} />
+        </View>
+      ))}
       <Card>
         <SectionTitle>What you need</SectionTitle>
         <Body>{exercise.required_equipment.join(", ") || "No equipment"}</Body>

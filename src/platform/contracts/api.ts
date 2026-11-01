@@ -46,6 +46,7 @@ export type ExerciseDetailReadModel = {
   exercise: Record<string, unknown>;
   alternatives: Array<{ id: string; slug: string; name: string; primary_muscles: string[]; exercise_role: string }>;
   media: ExerciseMediaReadModel | null;
+  mediaGallery: ExerciseMediaReadModel[];
 };
 
 export const StartWorkoutInput = z.object({
