@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Redirect, useLocalSearchParams, useRouter } from "expo-router";
 import {
   Alert,
-  Linking,
   Pressable,
   StyleSheet,
   Text,
@@ -406,11 +405,10 @@ export default function WorkoutScreen() {
             ))}
             <Row>
               <Button
+                testID={`exercise-guide-${exercise.exerciseSlug}`}
                 variant="text"
                 onPress={() =>
-                  void Linking.openURL(
-                    `https://www.sthenofitness.com/exercises/${exercise.exerciseSlug}`,
-                  )
+                  router.push({ pathname: "/exercise/[slug]", params: { slug: exercise.exerciseSlug } })
                 }
               >
                 Exercise guide

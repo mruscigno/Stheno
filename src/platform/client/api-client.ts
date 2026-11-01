@@ -1,4 +1,4 @@
-import type { AdaptationIntent, AdaptationPreview, AdaptationScope, ApiFailure, ApiSuccess, CoachConversation, CoachReply, MemberReadModel, NutritionReadModel, ProgramReadModel, ProgressReadModel, TodayReadModel, WorkoutOperationReceipt, WorkoutSessionReadModel } from "../contracts/api";
+import type { AdaptationIntent, AdaptationPreview, AdaptationScope, ApiFailure, ApiSuccess, CoachConversation, CoachReply, ExerciseDetailReadModel, MemberReadModel, NutritionReadModel, ProgramReadModel, ProgressReadModel, TodayReadModel, WorkoutOperationReceipt, WorkoutSessionReadModel } from "../contracts/api";
 
 export class SthenoApiError extends Error {
   constructor(public readonly status: number, public readonly response: ApiFailure) {
@@ -73,6 +73,7 @@ export function createSthenoApiClient(options: SthenoApiClientOptions) {
     decideAdaptation: (requestId: string, decision: "confirmed" | "cancelled") => request<{ status: string }>("/api/v1/adaptations/decision", { method: "POST", body: JSON.stringify({ requestId, decision }) }),
     updatePreferences: (preferences: { unitSystem?: "imperial" | "metric"; locale?: string; timeZone?: string }) => request<MemberReadModel>("/api/v1/me", { method: "PATCH", body: JSON.stringify(preferences) }),
     exercises: (query = "") => request<unknown[]>(`/api/v1/exercises${query ? `?${query}` : ""}`),
+    exercise: (slug: string) => request<ExerciseDetailReadModel>(`/api/v1/exercises/${encodeURIComponent(slug)}`),
     startWorkout: (input:{operationId:string;clientSessionKey:string;workoutKey?:string;clientCreatedAt?:string}) => request<WorkoutOperationReceipt<unknown>>("/api/v1/workouts/sessions",{method:"POST",body:JSON.stringify(input)}),
     workoutSession: (sessionId:string) => request<WorkoutSessionReadModel>(`/api/v1/workouts/sessions/${sessionId}`),
     workoutHistory: (exerciseSlugs:string[]) => request<Record<string,Array<{set_ordinal:number;load_value:number|null;load_unit:string;repetitions:number|null;rir:number|null;performed_at:string}>>>(`/api/v1/workouts/history?exerciseSlugs=${encodeURIComponent(exerciseSlugs.join(","))}`),

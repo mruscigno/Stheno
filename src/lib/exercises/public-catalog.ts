@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCanonicalExercise } from "@/lib/exercises/canonical";
+import { resolveExerciseMedia } from "@/platform/server/exercise-media";
 
 const releaseGate = {
   status: "production",
@@ -23,4 +24,10 @@ export async function getPublicExerciseAlternatives(exerciseId: string) {
   const ids=edges.map(edge=>edge.alternative_id),rank=new Map(edges.map(edge=>[edge.alternative_id,edge.rank]));
   const {data}=await db.from("exercises").select("id,slug,name,primary_muscles,exercise_role").in("id",ids).match(releaseGate).eq("prescribable",true);
   return (data??[]).sort((a,b)=>(rank.get(a.id)??99)-(rank.get(b.id)??99));
+}
+
+export async function getPublicExerciseMedia(exercise: { id: string; slug: string }) {
+  const db = await createSupabaseServerClient();
+  if (!db) return null;
+  return resolveExerciseMedia(db, exercise);
 }

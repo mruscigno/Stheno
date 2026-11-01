@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExerciseVideo } from "@/components/exercises/exercise-video";
 import { AnatomyMap } from "@/components/exercises/anatomy-map";
-import { getPublicExercise, getPublicExerciseAlternatives } from "@/lib/exercises/public-catalog";
+import { getPublicExercise, getPublicExerciseAlternatives, getPublicExerciseMedia } from "@/lib/exercises/public-catalog";
 import { formatExercisePrescription } from "@/modules/training/prescription";
 import { exerciseMetaDescription, exercisePageTitle } from "@/lib/seo";
 async function getExercise(slug: string) {
@@ -34,9 +34,12 @@ export default async function Exercise({
   if (!e) notFound();
   const primary = e.primary_muscles as string[],
     secondary = e.secondary_muscles as string[],
-    education = e.education,
-    alternativeRows = await getPublicExerciseAlternatives(e.id),
-    alternatives = alternativeRows.slice(0,6);
+    education = e.education;
+  const [alternativeRows, media] = await Promise.all([
+    getPublicExerciseAlternatives(e.id),
+    getPublicExerciseMedia(e),
+  ]);
+  const alternatives = alternativeRows.slice(0, 6);
   return (
     <main className="exercise-profile shell">
       <nav className="breadcrumbs">
@@ -65,7 +68,7 @@ export default async function Exercise({
         </div>
         <AnatomyMap primary={primary} secondary={secondary} />
       </header>
-      <ExerciseVideo slug={e.slug} name={e.name} />
+      <ExerciseVideo slug={e.slug} name={e.name} media={media} />
       <dl className="exercise-facts">
         <div>
           <dt>Equipment</dt>

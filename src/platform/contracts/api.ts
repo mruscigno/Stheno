@@ -28,6 +28,26 @@ export const ExerciseListQuery = PaginationQuery.extend({
   pattern: z.string().trim().max(40).optional(),
 });
 
+export type ExerciseMediaReadModel = {
+  kind: "reviewed_purchased" | "provider_animation";
+  role: "primary_demo" | "technique_tip" | "alternate_angle" | "comparison";
+  videoPath: string;
+  posterPath: string | null;
+  mimeType: string;
+  width: number | null;
+  height: number | null;
+  durationSeconds: number | null;
+  segmentStartSeconds: number | null;
+  segmentEndSeconds: number | null;
+  fallback: boolean;
+};
+
+export type ExerciseDetailReadModel = {
+  exercise: Record<string, unknown>;
+  alternatives: Array<{ id: string; slug: string; name: string; primary_muscles: string[]; exercise_role: string }>;
+  media: ExerciseMediaReadModel | null;
+};
+
 export const StartWorkoutInput = z.object({
   operationId: z.uuid(),
   schemaVersion: z.literal(1).default(1),
