@@ -1,0 +1,5 @@
+"metric","before","after","delta","note"
+"canonical_exercises","330","330","0","Canonical IDs preserved; no unverified exercise was created."
+"existing_exercises_with_prepared_app6d2a_media","78","78","0","All prepared links remain inactive."
+"approved_media_candidates","103","103","0","100 primary demonstrations and three technique tips."
+"purchased_media_fallback_mappings","298","298","0","Preserved and still authoritative while feature flag is off."
