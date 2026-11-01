@@ -1,0 +1,16 @@
+{
+  "manifest_rows": 1599,
+  "present": 1598,
+  "missing": 1,
+  "exercise_media": 1531,
+  "supplementary_assets": 68,
+  "unique_sha256": 1417,
+  "duplicate_assets": 335,
+  "duplicate_clusters": 154,
+  "exact_name_mappings": 83,
+  "high_similarity_mappings": 32,
+  "review_similarity_mappings": 243,
+  "unresolved_name_mappings": 1241,
+  "visually_reviewed": 0,
+  "safety_reviewed": 0
+}
