@@ -37,7 +37,7 @@ as $$
 declare
   endpoint text;
   bearer text;
-  request_id bigint;
+  v_request_id bigint;
 begin
   select decrypted_secret into endpoint
   from vault.decrypted_secrets
@@ -63,13 +63,13 @@ begin
     ),
     body := jsonb_build_object('source', 'supabase_cron', 'requestedAt', clock_timestamp()),
     timeout_milliseconds := 290000
-  ) into request_id;
+  ) into v_request_id;
 
   insert into private.workout_outbox_scheduler_runs(request_id)
-  values (request_id)
+  values (v_request_id)
   on conflict (request_id) do nothing;
 
-  return request_id;
+  return v_request_id;
 end;
 $$;
 
