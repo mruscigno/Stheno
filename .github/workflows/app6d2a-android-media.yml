@@ -1,0 +1,93 @@
+name: App 6D-2A current-source Android media playback
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-media-playback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: "1"
+      EXPO_PUBLIC_ENVIRONMENT: production
+      EXPO_PUBLIC_API_BASE_URL: https://www.sthenofitness.com
+      EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_123456789012345678901234
+      EXPO_PUBLIC_ENABLE_ASSESSMENT_SCAFFOLD: "true"
+      EXPO_PUBLIC_PROGRESS_V1_ENABLED: "false"
+      EXPO_PUBLIC_NATIVE_JOURNEY_DIAGNOSTICS: "true"
+      STHENO_ANDROID_APP_ID: com.sthenofitness.app
+      STHENO_MEDIA_EVIDENCE: artifacts/app6d2a/android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - run: pnpm install --frozen-lockfile
+      - name: Verify media resolver and mobile contracts
+        run: |
+          pnpm exec vitest run src/platform/server/exercise-media.test.ts src/platform/contracts/exercise-baseline.test.ts
+          pnpm --dir apps/mobile typecheck
+
+      - name: Generate and build current-source Android APK
+        shell: bash
+        run: |
+          sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+          pnpm --dir apps/mobile exec expo prebuild --platform android --clean --no-install
+          mkdir -p "$STHENO_MEDIA_EVIDENCE"
+          (cd apps/mobile/android && ./gradlew --no-daemon --build-cache assembleDebug)
+          cp apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk "$STHENO_MEDIA_EVIDENCE/stheno-current-debug.apk"
+          sha256sum "$STHENO_MEDIA_EVIDENCE/stheno-current-debug.apk" | tee "$STHENO_MEDIA_EVIDENCE/apk-sha256.txt"
+          git rev-parse HEAD | tee "$STHENO_MEDIA_EVIDENCE/source-commit.txt"
+
+      - name: Start Metro
+        shell: bash
+        run: |
+          nohup pnpm --dir apps/mobile exec expo start --localhost --scheme stheno > "$STHENO_MEDIA_EVIDENCE/metro.log" 2>&1 &
+          for attempt in $(seq 1 60); do
+            if (echo > /dev/tcp/localhost/8081) 2>/dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat "$STHENO_MEDIA_EVIDENCE/metro.log"
+          exit 1
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run genuine Android playback validation
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_6
+          cores: 4
+          ram-size: 4096M
+          disable-animations: true
+          emulator-boot-timeout: 600
+          emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader_indirect -camera-back none
+          script: bash scripts/app6d2a/automation-continuation/run-android-media.sh
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app6d2a-android-media-evidence
+          path: artifacts/app6d2a/android
+          retention-days: 14
