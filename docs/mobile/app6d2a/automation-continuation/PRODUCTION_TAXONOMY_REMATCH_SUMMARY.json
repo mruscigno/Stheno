@@ -1,0 +1,10 @@
+{
+  "productionExerciseCount": 567,
+  "heldAssetCount": 1290,
+  "counts": {
+    "existing_exact_taxonomy_match": 40,
+    "existing_high_precision_alias_match": 386,
+    "needs_visual_disambiguation": 193,
+    "new_taxonomy_candidate": 671
+  }
+}
