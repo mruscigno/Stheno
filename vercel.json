@@ -1,6 +1,5 @@
 {
   "crons": [
-    { "path": "/api/cron/activity-reminders", "schedule": "0 13 * * *" },
-    { "path": "/api/cron/workout-outbox", "schedule": "*/10 * * * *" }
+    { "path": "/api/cron/activity-reminders", "schedule": "0 13 * * *" }
   ]
 }
