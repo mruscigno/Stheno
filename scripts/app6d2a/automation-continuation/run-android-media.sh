@@ -22,6 +22,11 @@ adb install -r "$evidence/stheno-current-debug.apk" | tee "$evidence/install.txt
 adb shell am force-stop "$app_id"
 adb shell am start -W -a android.intent.action.VIEW \
   -d "stheno://exercise/barbell-bench-press" "$app_id" | tee "$evidence/deep-link-launch.txt"
+# The headless API-35 Quickstep launcher can enter an unrelated ANR loop and
+# cover the application hierarchy. The established workout acceptance harness
+# stops it after STHENO is foregrounded for the same reason.
+sleep 5
+adb shell am force-stop com.android.launcher3 || true
 
 found="false"
 for attempt in $(seq 1 60); do
