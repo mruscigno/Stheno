@@ -10,7 +10,8 @@
 - Staged and promoted URL: `https://stheno-2zxvtkkmp-ai-path-forge-s-projects.vercel.app`
 - Production application commit: `edd10340665e53d7e12e7678dab06abab7a62299`
 - Scheduler correction commit: `f3adb192746ddb804b0cc74f2ccf007172a36d7e`
-- Android evidence candidate commit: updated by the final Android validation run below.
+- Android evidence candidate commit: `7af5e4e8d22e251c0682fe5556b7f54b64702933`
+- Final scheduler/security correction commit: `de30a15c69c1e384787a1d301164fce11e861d82`
 - Production host: `https://www.sthenofitness.com`
 
 ## Zero-cost scheduler migration
@@ -67,7 +68,10 @@ GitHub Actions workflow `App 6D-2A current-source Android media playback` builds
 
 - Initial diagnostic run: `https://github.com/mruscigno/Stheno/actions/runs/41481094975`
 - Initial result: the genuine app reached the Barbell Bench Press guide and rendered the reviewed purchased demonstration, but the headless emulator's unrelated Quickstep launcher ANR covered the accessibility hierarchy. The captured screenshot and UI/window dumps classified this as automation, not an app defect. The harness now applies the same Quickstep isolation already used by the established workout acceptance suite.
-- Final run: pending at report creation; update required before final release declaration.
+- Final successful run: `https://github.com/mruscigno/Stheno/actions/runs/41484582066`
+- Result: `ANDROID_MEDIA_PLAYBACK_PASS` on a genuine API-35 emulator.
+- APK SHA-256: `dfe7ede02335f4583fe0ecbc88544ea40c8384e6a10b0031cf1d630d930c732d`.
+- Evidence: the native hierarchy contains `Barbell Bench Press`, `exercise-guide-media`, `Reviewed purchased demonstration`, and the `/exercise/barbell-bench-press` navigation state. Two post-play screenshots have different SHA-256 values, proving decoded playback advanced; logcat contains no Android fatal exception.
 
 The workout screen opens this same guide route without unmounting the workout provider, so timers and logged set state remain owned by the persistent root provider. Existing Android offline acceptance remains separately preserved by the App 5B-2U suite.
 
@@ -100,7 +104,7 @@ The approved provider's configured worst-case budget is 40,000 input and 2,000 o
 
 1. Paid multimodal inference is blocked by absent authorization and closed budget controls. This prevents safe automatic recovery of the remaining ambiguous collection, not operation of the 103 live reviewed assets.
 2. No additional canonical exercise is eligible until its multi-frame identity, instructions, safety data, substitutions and demonstration pass the existing review gates.
-3. The Android workflow result must be successful and its artifact inspected before changing this report from implemented-with-external-blockers to complete.
+3. The Android workflow passed and its artifact was independently inspected. The only remaining external blocker is explicit authorization plus configured budget controls for paid inference on the unreviewed expansion set.
 
 ## Media rollback
 
