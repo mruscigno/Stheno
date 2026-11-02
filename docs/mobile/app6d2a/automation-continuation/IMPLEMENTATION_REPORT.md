@@ -2,7 +2,7 @@
 
 ## Verdict
 
-**IMPLEMENTED WITH EXTERNAL BLOCKERS.** The previously approved 103-asset set is now stored, linked, reviewed and enabled at the production data layer. Application rollout and genuine web playback verification are part of this release. The remaining 1,290 held records were reprocessed against the real 567-exercise production taxonomy and no longer share a generic low-confidence reason, but automatic publication is blocked for records that still require fine-grained visual review.
+**IMPLEMENTED WITH EXTERNAL BLOCKERS.** The previously approved 103-asset set is now stored, linked, reviewed and enabled at the production data layer. The remaining 1,290 held records were reprocessed against the real 567-exercise production taxonomy and no longer share a generic low-confidence reason. Automatic publication is blocked for records that still require fine-grained visual review, and the application flag is fail-closed because Vercel refused the production build on the current Hobby plan.
 
 ## Root cause and classifier diagnosis
 
@@ -45,13 +45,16 @@ Current verified production state:
 - public roles can read only approved derivatives and fully approved active links;
 - public roles cannot read provenance/review-event tables or write any catalog table;
 - sampled public MP4 request returned HTTP 200, `video/mp4`, and the expected byte length;
-- the rollout remains instantly reversible through `STHENO_MEDIA_6D2_ENABLED=false` or link deactivation; the 298 Vital fallbacks are unchanged.
+- the rollout remains instantly reversible through `STHENO_MEDIA_6D2_ENABLED=false` or link deactivation; the 298 Vital fallbacks are unchanged;
+- the production application flag is currently `false`, so the existing site continues to use its preserved fallback behavior until a valid deployment passes.
 
 ## External blocker
 
 The repository contains an approved OpenAI visual-inference provider, but its mandatory cost kill switch and monthly/per-run budget variables are not configured. Running 1,290 paid multimodal classifications with the project key would bypass the product's own spend controls. That was not done. The local CLIP model is demonstrably below the required false-positive threshold, so it is not a safe substitute.
 
 This blocker affects only bulk recovery beyond the 103 already-reviewed assets. It does not block the reviewed production activation delivered here.
+
+Vercel also rejected the staged production deployment because this project is currently on Hobby while the preserved workout-outbox cron runs every ten minutes. Hobby deployments permit only daily cron schedules. The cron was not weakened or removed because doing so would regress the existing durable workout synchronization system. No untested build was promoted.
 
 ## Preserved invariants
 
