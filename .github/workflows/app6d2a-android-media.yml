@@ -2,6 +2,14 @@ name: App 6D-2A current-source Android media playback
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - product-13-assessment-contact-us-units-content-depth
+    paths:
+      - ".github/workflows/app6d2a-android-media.yml"
+      - "apps/mobile/**"
+      - "src/platform/server/exercise-media.ts"
+      - "src/platform/contracts/exercise-baseline.test.ts"
 
 permissions:
   contents: read
