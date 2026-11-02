@@ -7,6 +7,7 @@ on:
       - product-13-assessment-contact-us-units-content-depth
     paths:
       - ".github/workflows/app6d2a-android-media.yml"
+      - "scripts/app6d2a/automation-continuation/run-android-media.sh"
       - "apps/mobile/**"
       - "src/platform/server/exercise-media.ts"
       - "src/platform/contracts/exercise-baseline.test.ts"
