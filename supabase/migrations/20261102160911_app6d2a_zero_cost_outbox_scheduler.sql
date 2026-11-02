@@ -8,7 +8,10 @@ create extension if not exists pg_cron with schema pg_catalog;
 create extension if not exists pg_net;
 
 create schema if not exists private;
-revoke all on schema private from public, anon, authenticated;
+-- Preserve the authenticated USAGE grant established by App 5B-1. Public
+-- workout RPCs intentionally resolve reviewed helpers in this schema.
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
 
 create table if not exists private.workout_outbox_scheduler_runs (
   request_id bigint primary key,
