@@ -233,7 +233,7 @@
   .gateway-intro { font-size: .94rem; line-height: 1.4; }
   .gateway-founder { margin-top: 9px; font-size: .8rem; }
   .gateway-brand-photo { left: 20px; height: 70px; border-radius: 14px 0 0 0; }
-  .gateway-brand-photo img { object-position: 50% 28%; }
+  .gateway-brand-photo img { object-position: 50% 45%; }
   .gateway-question { padding: 14px 20px 24px; }
   .gateway-question .kicker { font-size: .82rem; }
   .gateway-question h2 { font-size: clamp(1.65rem, 7vw, 2.2rem); margin: 4px 0 6px; }
