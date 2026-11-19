@@ -65,3 +65,8 @@ export function chooseHomepageEntry({
 export function approvedGatewayVariant(value: string | null): GatewayVariant | null {
   return gatewayVariants.includes(value as GatewayVariant) ? (value as GatewayVariant) : null;
 }
+
+export function forcedHomepageEntry(variant: GatewayVariant | null): HomepageEntryState | null {
+  if (!variant) return null;
+  return variant === "control_homepage" ? "homepage" : "gateway";
+}

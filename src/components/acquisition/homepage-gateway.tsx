@@ -17,6 +17,7 @@ import {
   GATEWAY_VARIANT_STORAGE,
   approvedGatewayVariant,
   chooseHomepageEntry,
+  forcedHomepageEntry,
   readSavedAssessment,
   type GatewayVariant,
   type HomepageEntryState,
@@ -54,8 +55,23 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
       const forced = approvedGatewayVariant(params.get("gateway"));
       const stored = approvedGatewayVariant(localStorage.getItem(GATEWAY_VARIANT_STORAGE));
       const selectedVariant = forced ?? stored ?? "assessment_gateway_v1";
-      localStorage.setItem(GATEWAY_VARIANT_STORAGE, selectedVariant);
+      if (!forced) localStorage.setItem(GATEWAY_VARIANT_STORAGE, selectedVariant);
       setVariant(selectedVariant);
+
+      // An explicit query parameter is a review-only override. It must make
+      // either experience directly inspectable without changing saved visitor
+      // state, authentication, assessment progress, or future routing.
+      const previewEntry = forcedHomepageEntry(forced);
+      if (previewEntry) {
+        setEntry(previewEntry);
+        void captureFunnel("homepage_viewed", { gateway_variant: selectedVariant, experience: `preview_${previewEntry}`, device: device(), referrer: referrerDomain() }, { dedupeKey: "home-preview" });
+        if (previewEntry === "gateway") {
+          const properties = { gateway_variant: selectedVariant, device: device(), new_vs_returning: "returning", referrer: referrerDomain(), preview: true };
+          capture("homepage_gateway_viewed", properties);
+          void captureFunnel("homepage_gateway_viewed", properties);
+        }
+        return;
+      }
 
       // The public marketing page is always available. Authentication may
       // enhance its navigation, but never replaces or redirects its body.

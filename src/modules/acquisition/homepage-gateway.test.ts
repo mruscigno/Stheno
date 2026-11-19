@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { chooseHomepageEntry, readSavedAssessment } from "./homepage-gateway";
+import { chooseHomepageEntry, forcedHomepageEntry, readSavedAssessment } from "./homepage-gateway";
 
 const base = {
   auth: "signed-out" as const,
@@ -33,5 +33,12 @@ describe("homepage assessment gateway entry state", () => {
   it("rejects stale or malformed assessment storage", () => {
     expect(readSavedAssessment("not json")).toBeNull();
     expect(readSavedAssessment('{"version":"old"}')).toBeNull();
+  });
+
+  it("makes explicit review variants directly inspectable", () => {
+    expect(forcedHomepageEntry("assessment_gateway_v1")).toBe("gateway");
+    expect(forcedHomepageEntry("assessment_gateway_v2")).toBe("gateway");
+    expect(forcedHomepageEntry("control_homepage")).toBe("homepage");
+    expect(forcedHomepageEntry(null)).toBeNull();
   });
 });
