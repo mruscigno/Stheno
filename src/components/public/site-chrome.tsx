@@ -16,9 +16,9 @@ export function SiteHeader() {
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           <Link href="/how-it-works">How it works</Link>
-          <Link href="/#training">Training</Link>
-          <Link href="/#nutrition">Nutrition</Link>
-          <Link href="/#progress">Progress</Link>
+          <Link href="/explore#training">Training</Link>
+          <Link href="/explore#nutrition">Nutrition</Link>
+          <Link href="/explore#progress">Progress</Link>
           <Link href="/exercises">Exercises</Link>
           <Link href="/pricing">Pricing</Link>
           <TrackedLink

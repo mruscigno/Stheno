@@ -6,9 +6,9 @@ import { SocialLinks } from "@/components/public/social-links";
 import { capture } from "@/lib/analytics/client";
 const links = [
   ["/how-it-works", "How it works"],
-  ["/#training", "Training"],
-  ["/#nutrition", "Nutrition"],
-  ["/#progress", "Progress"],
+  ["/explore#training", "Training"],
+  ["/explore#nutrition", "Nutrition"],
+  ["/explore#progress", "Progress"],
   ["/exercises", "Exercises"],
   ["/pricing", "Pricing"],
   ["/compare", "Compare"],
