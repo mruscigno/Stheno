@@ -1,2 +1,254 @@
-.homepage-gateway{min-height:calc(100svh - 78px);display:grid;grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr);background:#f8f5ee;color:#181915;border-bottom:12px solid #ff5424}.gateway-brand{padding:clamp(42px,7vw,112px);display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#e9e2d6 0%,#f8f5ee 66%);position:relative;overflow:hidden}.gateway-brand:after{content:"";position:absolute;width:420px;height:420px;border:1px solid rgba(255,84,36,.2);border-radius:50%;right:-250px;bottom:-220px}.gateway-brand .stheno-logo{margin-bottom:auto}.gateway-brand>p:first-of-type,.gateway-question .kicker{font-size:.74rem;letter-spacing:.17em;font-weight:850;color:#a53a1b}.gateway-brand h1{font-family:var(--font-display,serif);font-size:clamp(3.2rem,5.7vw,6.8rem);line-height:.91;letter-spacing:-.055em;max-width:760px;margin:38px 0 30px}.gateway-brand>p:last-child{max-width:590px;font-size:clamp(1rem,1.35vw,1.28rem);line-height:1.6;color:#54554f}.gateway-question{padding:clamp(38px,6vw,96px);display:flex;flex-direction:column;justify-content:center;max-width:830px;width:100%;margin:auto}.gateway-question h2{font-size:clamp(2rem,3.1vw,3.7rem);line-height:1.02;letter-spacing:-.035em;margin:10px 0 30px}.gateway-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.gateway-options button,.gateway-primary{appearance:none;border:1px solid #c9c2b6;background:#fffdf8;color:#181915;border-radius:15px;min-height:78px;padding:18px 20px;font:inherit;font-weight:760;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer;transition:transform .16s,border-color .16s,background .16s}.gateway-options button:hover,.gateway-options button:focus-visible{border-color:#ff5424;transform:translateY(-2px);outline:3px solid rgba(255,84,36,.18);outline-offset:2px}.gateway-options button i{font-style:normal;color:#ff5424;font-size:1.3rem}.gateway-options button.selected{background:#ff5424;color:#111;border-color:#ff5424}.gateway-options button.selected i{color:#111}.gateway-options button:disabled:not(.selected){opacity:.5}.gateway-explore{border:0;background:transparent;color:#181915;font:inherit;font-weight:760;text-decoration:underline;text-decoration-color:#ff5424;text-underline-offset:6px;align-self:flex-start;padding:20px 0 8px;cursor:pointer}.gateway-explore span,.gateway-primary span{color:#ff5424}.gateway-primary{background:#ff5424;border-color:#ff5424;justify-content:center;margin-top:18px}.gateway-primary span{color:#111}.gateway-loading{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px}.gateway-advancing .gateway-question{animation:gateway-confirm .2s ease both}@keyframes gateway-confirm{to{transform:translateX(8px);opacity:.88}}@media(max-width:780px){.homepage-gateway{min-height:calc(100svh - 64px);display:block;border-bottom-width:8px}.gateway-brand{padding:24px 20px 20px;min-height:auto}.gateway-brand .stheno-logo{margin-bottom:34px}.gateway-brand h1{font-size:clamp(2.65rem,13vw,4.35rem);margin:16px 0 16px;max-width:570px}.gateway-brand>p:last-child{font-size:.98rem;line-height:1.48;margin-bottom:0}.gateway-question{padding:24px 20px 32px}.gateway-question h2{font-size:clamp(1.85rem,8vw,2.7rem);margin:7px 0 18px}.gateway-options{grid-template-columns:1fr;gap:9px}.gateway-options button{min-height:58px;padding:13px 16px;border-radius:12px}.gateway-explore{padding-top:19px}}@media(max-width:380px){.gateway-brand{padding-top:18px}.gateway-brand .stheno-logo{margin-bottom:22px}.gateway-brand h1{font-size:2.55rem}.gateway-question{padding-top:20px}.gateway-options button{min-height:54px}}
+.homepage-gateway {
+  min-height: calc(100svh - 78px);
+  display: grid;
+  grid-template-columns: minmax(0, .84fr) minmax(520px, 1.16fr);
+  background: #f8f5ee;
+  color: #181915;
+  border-bottom: 12px solid #ff5424;
+}
 
+.gateway-brand {
+  padding: clamp(34px, 5vw, 84px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(145deg, #e9e2d6 0%, #f8f5ee 66%);
+  position: relative;
+  overflow: hidden;
+}
+
+.gateway-brand:has(.gateway-brand-photo) { padding-bottom: clamp(190px, 24vh, 250px); }
+.gateway-brand > :not(.gateway-brand-photo) { position: relative; z-index: 2; }
+.gateway-brand .stheno-logo { margin-bottom: clamp(24px, 4vh, 52px); }
+
+.gateway-brand h1 {
+  font-family: var(--font-display, serif);
+  font-size: clamp(3rem, 5.2vw, 6.3rem);
+  line-height: .92;
+  letter-spacing: -.055em;
+  max-width: 760px;
+  margin: 0 0 24px;
+}
+
+.gateway-intro {
+  max-width: 650px;
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+  line-height: 1.55;
+  color: #4f504a;
+  margin: 0;
+}
+
+.gateway-founder {
+  max-width: 650px;
+  margin: 14px 0 0;
+  color: #4f504a;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+
+.gateway-founder a {
+  color: #181915;
+  font-weight: 750;
+  text-decoration-color: #ff5424;
+  text-underline-offset: 4px;
+}
+
+.gateway-brand-photo {
+  position: absolute;
+  z-index: 1;
+  left: clamp(22px, 5vw, 84px);
+  right: 0;
+  bottom: 0;
+  height: clamp(145px, 20vh, 210px);
+  overflow: hidden;
+  border-radius: 28px 0 0 0;
+  box-shadow: 0 -18px 44px rgba(69, 35, 20, .12);
+}
+
+.gateway-brand-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(248, 245, 238, .22), transparent 42%);
+}
+
+.gateway-brand-photo img {
+  object-fit: cover;
+  object-position: 50% 18%;
+  transform: scale(1.4);
+}
+
+.gateway-question {
+  padding: clamp(34px, 5vw, 84px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 980px;
+  width: 100%;
+  margin: auto;
+}
+
+.gateway-question .kicker {
+  font-size: .92rem;
+  letter-spacing: 0;
+  font-weight: 800;
+  color: #a53a1b;
+  margin: 0;
+}
+
+.gateway-question h2 {
+  font-size: clamp(2rem, 3vw, 3.55rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  margin: 9px 0 10px;
+}
+
+.gateway-assessment-note {
+  margin: 0 0 24px;
+  color: #5b5953;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.gateway-choice-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(210px, .85fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.gateway-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.gateway-options button,
+.gateway-primary {
+  appearance: none;
+  border: 1px solid #c9c2b6;
+  background: #fffdf8;
+  color: #181915;
+  border-radius: 15px;
+  min-height: 72px;
+  padding: 16px 18px;
+  font: inherit;
+  font-weight: 760;
+  line-height: 1.25;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  cursor: pointer;
+  transition: transform .16s, border-color .16s, background .16s;
+}
+
+.gateway-options button:hover,
+.gateway-options button:focus-visible {
+  border-color: #ff5424;
+  transform: translateY(-2px);
+  outline: 3px solid rgba(255, 84, 36, .18);
+  outline-offset: 2px;
+}
+
+.gateway-options button i {
+  flex: 0 0 auto;
+  font-style: normal;
+  color: #ff5424;
+  font-size: 1.3rem;
+}
+
+.gateway-options button.selected { background: #ff5424; color: #111; border-color: #ff5424; }
+.gateway-options button.selected i { color: #111; }
+.gateway-options button:disabled:not(.selected) { opacity: .5; }
+
+.gateway-workout-example {
+  border-radius: 18px;
+  background: #1b1b18;
+  color: #f8f5ee;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+.gateway-workout-example strong {
+  color: #ff6a3d;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.gateway-workout-example p {
+  margin: 20px 0 0;
+  font-family: var(--font-display, serif);
+  font-size: clamp(1.25rem, 1.6vw, 1.65rem);
+  line-height: 1.15;
+}
+
+.gateway-pricing-note {
+  margin: 18px 0 0;
+  max-width: 760px;
+  color: #454640;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.gateway-explore {
+  border: 0;
+  background: transparent;
+  color: #181915;
+  font: inherit;
+  font-weight: 760;
+  text-decoration: underline;
+  text-decoration-color: #ff5424;
+  text-underline-offset: 6px;
+  align-self: flex-start;
+  padding: 18px 0 8px;
+  cursor: pointer;
+}
+
+.gateway-explore span, .gateway-primary span { color: #ff5424; }
+.gateway-primary { background: #ff5424; border-color: #ff5424; justify-content: center; margin-top: 18px; }
+.gateway-primary span { color: #111; }
+.gateway-advancing .gateway-question { animation: gateway-confirm .2s ease both; }
+
+@keyframes gateway-confirm { to { transform: translateX(8px); opacity: .88; } }
+
+@media (max-width: 980px) {
+  .homepage-gateway { grid-template-columns: minmax(0, .72fr) minmax(500px, 1.28fr); }
+  .gateway-choice-layout { grid-template-columns: 1fr; }
+  .gateway-workout-example { min-height: auto; }
+}
+
+@media (max-width: 780px) {
+  .homepage-gateway { min-height: 100svh; display: block; border-bottom-width: 8px; }
+  .gateway-brand { padding: 16px 20px 14px; }
+  .gateway-brand:has(.gateway-brand-photo) { padding-bottom: 88px; }
+  .gateway-brand .stheno-logo { margin-bottom: 12px; }
+  .gateway-brand h1 { font-size: clamp(2.25rem, 10.5vw, 3.05rem); line-height: .94; margin: 7px 0 10px; }
+  .gateway-intro { font-size: .94rem; line-height: 1.4; }
+  .gateway-founder { margin-top: 9px; font-size: .8rem; }
+  .gateway-brand-photo { left: 20px; height: 70px; border-radius: 14px 0 0 0; }
+  .gateway-brand-photo img { object-position: 50% 28%; }
+  .gateway-question { padding: 14px 20px 24px; }
+  .gateway-question .kicker { font-size: .82rem; }
+  .gateway-question h2 { font-size: clamp(1.65rem, 7vw, 2.2rem); margin: 4px 0 6px; }
+  .gateway-assessment-note { margin-bottom: 13px; font-size: .9rem; }
+  .gateway-choice-layout { grid-template-columns: 1fr; gap: 10px; }
+  .gateway-options { grid-template-columns: 1fr; gap: 8px; }
+  .gateway-options button { min-height: 56px; height: auto; padding: 14px 16px; border-radius: 12px; font-size: .96rem; }
+  .gateway-workout-example { min-height: auto; padding: 17px 18px; }
+  .gateway-workout-example p { margin-top: 8px; font-size: 1.18rem; }
+  .gateway-pricing-note { margin-top: 14px; font-size: .92rem; }
+  .gateway-explore { padding-top: 14px; }
+}
+
+@media (max-width: 380px) {
+  .gateway-brand h1 { font-size: 2.2rem; }
+  .gateway-brand:has(.gateway-brand-photo) { padding-bottom: 80px; }
+  .gateway-brand-photo { height: 62px; }
+}

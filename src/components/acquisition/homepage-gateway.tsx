@@ -2,6 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SthenoLogo } from "@/components/brand/stheno-logo";
 import { usePublicAuthState } from "@/components/public/use-auth-state";
@@ -83,6 +85,10 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
     capture("homepage_gateway_explore_clicked", { gateway_variant: variant, device: device() });
     void captureFunnel("homepage_gateway_explore_clicked", { gateway_variant: variant, device: device() });
     setEntry("homepage");
+    window.history.replaceState(null, "", "/#how-it-works");
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }));
   }
 
   async function selectGoal(choiceId: string, goal: string) {
@@ -114,12 +120,30 @@ export function HomepageEntryGate({ children }: { children: ReactNode }) {
 
   if (entry === "homepage" || entry === "loading" || entry === "member" || entry === "blueprint") return <>{children}</>;
   if (entry === "continue") {
-    return <main className="homepage-gateway"><div className="gateway-brand"><SthenoLogo /><p>YOUR FITNESS. HANDLED.</p><h1>A fitness plan that changes when your life does.</h1></div><section className="gateway-question"><p className="kicker">Your plan is waiting</p><h2>You’ve already started your Assessment.</h2><button className="gateway-primary" type="button" onClick={continueAssessment}>Continue my Assessment <span>→</span></button><button className="gateway-explore" type="button" onClick={explore}>Explore STHENO first <span>→</span></button></section></main>;
+    return <main className="homepage-gateway"><div className="gateway-brand"><SthenoLogo /><h1>A fitness plan that changes when your life does.</h1></div><section className="gateway-question"><p className="kicker">Your plan is waiting</p><h2>You’ve already started your Assessment.</h2><button className="gateway-primary" type="button" onClick={continueAssessment}>Continue my Assessment <span>→</span></button><button className="gateway-explore" type="button" onClick={explore}>See how STHENO works <span>→</span></button></section></main>;
   }
   return (
     <main className={`homepage-gateway ${selected ? "gateway-advancing" : ""}`}>
-      <div className="gateway-brand"><SthenoLogo /><p>YOUR FITNESS. HANDLED.</p><h1>A fitness plan that changes when your life does.</h1><p>Tell us what you want to accomplish. We’ll build your starting plan around your goals, schedule, experience, and real life.</p></div>
-      <section className="gateway-question" aria-labelledby="gateway-question"><p className="kicker">Let’s build around you</p><h2 id="gateway-question">What are you trying to accomplish?</h2><div className="gateway-options">{choices.map(([id, label, goal]) => <button type="button" key={id} className={selected === id ? "selected" : ""} disabled={Boolean(selected)} onClick={() => void selectGoal(id, goal)}><span>{label}</span><i aria-hidden="true">{selected === id ? "✓" : "→"}</i></button>)}</div><button className="gateway-explore" type="button" onClick={explore}>Explore STHENO first <span>→</span></button></section>
+      <div className="gateway-brand">
+        <SthenoLogo />
+        <h1>A fitness plan that changes when your life does.</h1>
+        <p className="gateway-intro">Start with training and nutrition built around your goals, schedule, experience and equipment. STHENO uses completed workouts, missed sessions and check-ins to guide what happens next.</p>
+        <p className="gateway-founder">Founded by Matthew David, Certified Personal Trainer. <Link href="/about">Why STHENO exists</Link></p>
+        <div className="gateway-brand-photo" aria-hidden="true">
+          <Image src="/media/homepage-gateway/dumbbell-hand-concept.jpeg" alt="" fill priority sizes="(max-width: 780px) 100vw, 44vw" />
+        </div>
+      </div>
+      <section className="gateway-question" aria-labelledby="gateway-question">
+        <p className="kicker">Choose your starting goal</p>
+        <h2 id="gateway-question">What are you trying to accomplish?</h2>
+        <p className="gateway-assessment-note">35 questions. No credit card. See your personalized starting plan.</p>
+        <div className="gateway-choice-layout">
+          <div className="gateway-options">{choices.map(([id, label, goal]) => <button type="button" key={id} className={selected === id ? "selected" : ""} disabled={Boolean(selected)} onClick={() => void selectGoal(id, goal)}><span>{label}</span><i aria-hidden="true">{selected === id ? "✓" : "→"}</i></button>)}</div>
+          <aside className="gateway-workout-example" aria-label="Example workout"><strong>Example workout</strong><p>Only have 25 minutes? Keep the squat, press and row. Optional volume moves out.</p></aside>
+        </div>
+        <p className="gateway-pricing-note">Start with a 14-day trial. No payment method required. Membership costs $14.99 per month or $119 annually.</p>
+        <button className="gateway-explore" type="button" onClick={explore}>See how STHENO works <span>→</span></button>
+      </section>
     </main>
   );
 }
